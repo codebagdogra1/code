@@ -845,3 +845,46 @@
             scroll-snap-align: start; /* Optional: for snap scrolling */
           }
         }
+
+
+.testimonials-slider {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 2rem; /* Space between cards */
+  scroll-snap-type: x mandatory;
+  padding-bottom: 2rem; /* Space for scroll bar if needed */
+  -webkit-overflow-scrolling: touch; /* Smooth on iOS */
+}
+.testimonial-card {
+  flex: 0 0 400px; /* Desktop card width */
+  max-width: 90vw;
+  scroll-snap-align: start;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .testimonials-slider {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .testimonial-card {
+    flex: 0 0 85vw;
+    max-width: 85vw;
+    min-width: 85vw;
+  }
+}
+
+/* Optional: Hide scroll bar, style thumb for desktop aesthetics */
+.testimonials-slider::-webkit-scrollbar { height: 8px; background: var(--neutral-100); }
+.testimonials-slider::-webkit-scrollbar-thumb { background: var(--accent-electric); border-radius: 4px; }
+
+.testimonial-dots {
+  display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem;
+}
+.testimonial-dots span {
+  display: block; width: 12px; height: 12px;
+  background: var(--neutral-300); border-radius: 50%;
+  transition: background 0.3s;
+}
+.testimonial-dots span.active { background: var(--accent-electric); }
