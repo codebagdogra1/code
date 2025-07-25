@@ -1,4 +1,4 @@
-* {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -830,6 +830,7 @@
             display: flex;
             flex-direction: row;
             overflow-x: auto;
+            overflow-y: hidden;
             gap: 1rem; /* Optional: adds space between cards */
             padding-bottom: 1rem; /* Optional: add padding below for scrollbar */
             scroll-snap-type: x mandatory; /* Optional: for snap scrolling */
