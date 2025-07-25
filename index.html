@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODE - Computer and Digital Excellence Institute | Bagdogra</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Research-backed optimal color scheme for tech education */
+            --primary-dark: #0B1426; /* Deep navy - trending dark dominant */
+            --primary-blue: #1E3A8A; /* Professional blue */
+            --accent-electric: #3B82F6; /* Electric blue - energy & dynamism */
+            --accent-gold: #F59E0B; /* Gold accent - trending 2025 */
+            --accent-success: #10B981; /* Emerald green */
+            --neutral-50: #F8FAFC;
+            --neutral-100: #F1F5F9;
+            --neutral-200: #E2E8F0;
+            --neutral-300: #CBD5E1;
+            --neutral-400: #94A3B8;
+            --neutral-500: #64748B;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1E293B;
+            --neutral-900: #0F172A;
+            --white: #FFFFFF;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--neutral-800);
+            overflow-x: hidden;
+        }
+
+        /* Modern Header with Glassmorphism */
+        .header {
+            background: rgba(11, 20, 38, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--white);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-gold));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-main {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            color: var(--neutral-300);
+            letter-spacing: 1px;
+            margin-top: -2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-menu a {
+            color: var(--neutral-200);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent-gold);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section with Modern Gradient & Animations */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 50%, var(--accent-electric) 100%);
+            color: var(--white);
+            padding: 140px 0 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: var(--neutral-200);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #F97316);
+            color: var(--white);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--white);
+            padding: 1.2rem 2.5rem;
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-gold);
+            color: var(--white);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .floating-cards {
+            position: relative;
+            width: 500px;
+            height: 400px;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-card:nth-child(1) {
+            top: 0;
+            left: 50px;
+            animation-delay: 0s;
+        }
+
+        .floating-card:nth-child(2) {
+            top: 120px;
+            right: 20px;
+            animation-delay: 2s;
+        }
+
+        .floating-card:nth-child(3) {
+            bottom: 50px;
+            left: 20px;
+            animation-delay: 4s;
+        }
+
+        .floating-card i {
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .floating-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .floating-card p {
+            font-size: 0.9rem;
+            color: var(--neutral-300);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Modern Card-based Sections */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-alt {
+            background: var(--neutral-50);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--accent-electric));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--neutral-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Courses Grid with Modern Cards */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .course-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-gold));
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .course-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-success));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .course-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .course-card p {
+            color: var(--neutral-600);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .course-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .feature-tag {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Why Choose Section with Stats */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: var(--white);
+            font-size: 2.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--neutral-600);
+            line-height: 1.7;
+        }
+
+        /* Modern Testimonials */
+        .testimonials-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            border: 1px solid var(--neutral-200);
+        }
+
+        .testimonial-quote {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--neutral-700);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-success));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--neutral-500);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section with Modern Design */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            color: var(--white);
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            opacity: 0.5;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--white), var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--neutral-200);
+            margin-bottom: 3rem;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            color: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+        }
+
+        .contact-info > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--neutral-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-electric);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-electric), var(--accent-gold));
+            color: var(--white);
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Floating WhatsApp with Animation */
+        .whatsapp-float {
+            position: fixed;
+            width: 70px;
+            height: 70px;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            color: var(--white);
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.4);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3), 0 0 0 10px rgba(37, 211, 102, 0.1); }
+            100% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3); }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: var(--neutral-300);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            border-top: 1px solid var(--neutral-700);
+            padding-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .floating-cards {
+                width: 350px;
+                height: 300px;
+            }
+
+            .floating-card {
+                padding: 1.5rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        /* Scroll Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-animation {
+            transition-delay: 0.1s;
+        }
+
+        .stagger-animation:nth-child(2) { transition-delay: 0.2s; }
+        .stagger-animation:nth-child(3) { transition-delay: 0.3s; }
+        .stagger-animation:nth-child(4) { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">C</div>
+                <div class="logo-text">
+                    <div class="logo-main">CODE</div>
+                    <div class="logo-sub">COMPUTER AND DIGITAL EXCELLENCE</div>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#courses">Programs</a></li>
+                    <li><a href="#why-choose">Why Choose Us</a></li>
+                    <li><a href="#testimonials">Success Stories</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content animate-on-scroll">
+                <h1>Premier Computer Institute for Digital Excellence</h1>
+                <p>Transform your future with industry-leading computer education. Join Bagdogra's most trusted institute offering certified programs, expert faculty, and modern infrastructure for comprehensive digital learning.</p>
+                <div class="cta-buttons">
+                    <a href="https://wa.me/919635809537" class="btn-primary">
+                        <i class="fab fa-whatsapp"></i>
+                        Enroll Now on WhatsApp
+                    </a>
+                    <a href="#courses" class="btn-secondary">
+                        <i class="fas fa-graduation-cap"></i>
+                        Explore Programs
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual animate-on-scroll">
+                <div class="floating-cards">
+                    <div class="floating-card">
+                        <i class="fas fa-code"></i>
+                        <h4>Programming</h4>
+                        <p>Modern languages & frameworks</p>
+                    </div>
+                    <div class="floating-card">
+                        <i class="fas fa-certificate"></i>
+                        <h4>Certification</h4>
+                        <p>Industry-recognized credentials</p>
+                    </div>
+                    <div class="floating-card">
+                        <i class="fas fa-briefcase"></i>
+                        <h4>Career Ready</h4>
+                        <p>Job placement support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="section section-alt">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Our Academic Programs</h2>
+                <p class="section-subtitle">Comprehensive computer education programs designed to meet industry standards and career aspirations</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>CCA (Certificate in Computer Application)</h3>
+                    <p>Foundation certificate program covering computer fundamentals, MS Office suite, internet basics, and digital literacy. Perfect starting point for computer education.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">3 Months</span>
+                        <span class="feature-tag">Beginner Level</span>
+                        <span class="feature-tag">Certificate</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>DCA (Diploma in Computer Application)</h3>
+                    <p>Comprehensive diploma program covering advanced computer applications, programming fundamentals, database concepts, and office automation technologies.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">6 Months</span>
+                        <span class="feature-tag">Intermediate</span>
+                        <span class="feature-tag">Diploma</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>ADCA (Advanced Diploma in Computer Application)</h3>
+                    <p>Advanced diploma program with programming languages, database management, web technologies, and software development methodologies.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">12 Months</span>
+                        <span class="feature-tag">Advanced</span>
+                        <span class="feature-tag">Advanced Diploma</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Tally + GST</h3>
+                    <p>Master accounting software Tally with comprehensive GST implementation. Essential for finance professionals and business accounting.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">2 Months</span>
+                        <span class="feature-tag">Professional</span>
+                        <span class="feature-tag">Certification</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Web Development</h3>
+                    <p>Complete web development course covering HTML, CSS, JavaScript, responsive design, and modern frameworks for building professional websites.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">4 Months</span>
+                        <span class="feature-tag">Technical</span>
+                        <span class="feature-tag">Portfolio Projects</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Prompt Engineering</h3>
+                    <p>Master artificial intelligence tools and prompt engineering techniques. Learn to leverage AI for productivity and innovative solutions.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">2 Months</span>
+                        <span class="feature-tag">Cutting-edge</span>
+                        <span class="feature-tag">AI Certification</span>
+                    </div>
+                </div>
+                <div class="course-card animate-on-scroll stagger-animation">
+                    <div class="course-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Live Project Training</h3>
+                    <p>Hands-on experience with real-world projects under expert mentorship. Build professional portfolio and gain practical industry experience.</p>
+                    <div class="course-features">
+                        <span class="feature-tag">3 Months</span>
+                        <span class="feature-tag">Practical</span>
+                        <span class="feature-tag">Industry Projects</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Section -->
+    <section id="why-choose" class="section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Why Choose CODE Institute?</h2>
+                <p class="section-subtitle">Excellence in computer education with modern infrastructure and industry-focused curriculum</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll stagger-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3>State-of-the-Art Computer Labs</h3>
+                    <p>Modern computer laboratories equipped with latest technology, high-speed internet, and industry-standard software for comprehensive hands-on learning experience.</p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Qualified Faculty & Expert Instructors</h3>
+                    <p>Learn from experienced computer professionals, certified instructors, and industry experts with proven academic excellence and practical expertise.</p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Industry-Recognized Curriculum</h3>
+                    <p>Structured academic programs with certified course modules, regular assessments, and industry-recognized certificates upon successful completion.</p>
+                </div>
+                <div class="feature-card animate-on-scroll stagger-animation">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Career Guidance & Placement Support</h3>
+                    <p>Comprehensive career counseling, placement assistance, interview preparation, and ongoing student support services for successful career transitions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section section-alt">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Success Stories</h2>
+                <p class="section-subtitle">Hear from our successful graduates who transformed their careers with CODE Institute</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonials-grid">
+                    <div class="testimonial-card animate-on-scroll stagger-animation">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-text">CODE Institute provided excellent computer education with a perfect blend of theory and practical knowledge. The structured curriculum and supportive faculty helped me excel in my studies and career.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">PS</div>
+                            <div class="author-info">
+                                <h4>Priya Sharma</h4>
+                                <p>DCA Graduate, Software Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card animate-on-scroll stagger-animation">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-text">The institute's approach to computer education is outstanding. From basic concepts to advanced programming, every topic was covered thoroughly. The practical lab sessions were invaluable for my learning.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">RK</div>
+                            <div class="author-info">
+                                <h4>Rahul Kumar</h4>
+                                <p>ADCA Graduate, Web Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card animate-on-scroll stagger-animation">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                        <p class="testimonial-text">Best computer institute in Bagdogra! The faculty is knowledgeable, the infrastructure is modern, and the course content is very well-structured. Highly recommend for quality computer education.</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AR</div>
+                            <div class="author-info">
+                                <h4>Anjali Roy</h4>
+                                <p>CCA Graduate, Office Administrator</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content animate-on-scroll">
+                <h2>Ready to Begin Your Computer Education Journey?</h2>
+                <p>Join CODE Institute - where academic excellence meets practical computer education and career success</p>
+                <div class="cta-buttons">
+                    <a href="https://wa.me/919635809537" class="btn-primary">
+                        <i class="fab fa-whatsapp"></i>
+                        Chat with Us on WhatsApp
+                    </a>
+                    <a href="#contact" class="btn-secondary">
+                        <i class="fas fa-phone"></i>
+                        Call for Admission
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Ready to start your computer education journey? Contact us for admissions and course information</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info animate-on-scroll">
+                    <h3>Contact Information</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Institute Address</h4>
+                            <p>CODE - Computer and Digital Excellence Institute<br>Bagdogra, Siliguri<br>West Bengal, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Phone Number</h4>
+                            <p>+91 96358 09537</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">WhatsApp</h4>
+                            <p>+91 96358 09537<br>Quick responses for inquiries</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Institute Hours</h4>
+                            <p>Monday - Saturday<br>9:00 AM - 6:00 PM<br>Sunday: Closed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form animate-on-scroll">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 2rem; font-size: 1.8rem; font-weight: 700;">Admission Inquiry</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="course">Course Interest</label>
+                            <select id="course" class="form-control">
+                                <option value="">Select a course</option>
+                                <option value="CCA">CCA - Certificate in Computer Application</option>
+                                <option value="DCA">DCA - Diploma in Computer Application</option>
+                                <option value="ADCA">ADCA - Advanced Diploma in Computer Application</option>
+                                <option value="Tally">Tally + GST</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="AI Prompt Engineering">AI Prompt Engineering</option>
+                                <option value="Live Project Training">Live Project Training</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" rows="4" placeholder="Tell us about your educational background and career goals"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Inquiry
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 CODE - Computer and Digital Excellence Institute. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Excellence in Computer Education | Shaping Digital Careers | Bagdogra, Siliguri</p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--neutral-400);">
+                    Authorized Computer Education Institute | Government Recognized Courses | Industry Certified Programs
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/919635809537" class="whatsapp-float" target="_blank" title="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Advanced scroll animations with intersection observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(11, 20, 38, 0.98)';
+            } else {
+                header.style.background = 'rgba(11, 20, 38, 0.95)';
+            }
+        });
+
+        // Form submission with validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const course = document.getElementById('course').value;
+            const message = document.getElementById('message').value;
+
+            if (name && email && phone) {
+                // Create WhatsApp message
+                const whatsappMessage = `Hi CODE Institute!%0A%0AName: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0APhone: ${encodeURIComponent(phone)}%0ACourse Interest: ${encodeURIComponent(course || 'General Inquiry')}%0AMessage: ${encodeURIComponent(message || 'I am interested in learning more about your computer courses.')}%0A%0APlease provide more information about admissions.`;
+                
+                // Open WhatsApp with pre-filled message
+                window.open(`https://wa.me/919635809537?text=${whatsappMessage}`, '_blank');
+                
+                // Show success message
+                alert('Thank you for your inquiry! You will be redirected to WhatsApp to complete your message.');
+                
+                // Reset form
+                this.reset();
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            if (navMenu.style.display === 'flex') {
+                navMenu.style.display = 'none';
+            } else {
+                navMenu.style.display = 'flex';
+                navMenu.style.flexDirection = 'column';
+                navMenu.style.position = 'absolute';
+                navMenu.style.top = '100%';
+                navMenu.style.left = '0';
+                navMenu.style.right = '0';
+                navMenu.style.background = 'rgba(11, 20, 38, 0.98)';
+                navMenu.style.padding = '2rem';
+                navMenu.style.backdropFilter = 'blur(20px)';
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-menu').style.display = 'none';
+                }
+            });
+        });
+
+        // Preloader effect (optional)
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
