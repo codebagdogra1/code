@@ -833,6 +833,26 @@
         .stagger-animation:nth-child(2) { transition-delay: 0.2s; }
         .stagger-animation:nth-child(3) { transition-delay: 0.3s; }
         .stagger-animation:nth-child(4) { transition-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+          .courses-grid {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            gap: 1rem; /* Optional: adds space between cards */
+            padding-bottom: 1rem; /* Optional: add padding below for scrollbar */
+            scroll-snap-type: x mandatory; /* Optional: for snap scrolling */
+        
+            /* Hide scrollbar (for webkit browsers, optional) */
+            -webkit-overflow-scrolling: touch;
+          }
+          .course-card {
+            min-width: 80vw; /* Card width covers 80% of viewport width */
+            flex: 0 0 auto;  /* Prevent shrinking and growing */
+            scroll-snap-align: start; /* Optional: for snap scrolling */
+          }
+        }
+
     </style>
 </head>
 <body>
