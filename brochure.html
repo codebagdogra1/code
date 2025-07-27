@@ -1,21 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer & Digital Excellence (CODE) - Brochure</title>
+    <meta name="description" content="Explore professional computer, web development, and digital marketing courses at Computer &amp; Digital Excellence (CODE).">
+    <title>Computer &amp; Digital Excellence (CODE) - Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --dark-color: #283e5a;
+            --light-color: #ffffff;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --text-muted: #6c757d;
+            --border-radius-md: 16px;
+            --border-radius-sm: 12px;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
         }
 
         .container {
@@ -24,99 +44,227 @@
             padding: 20px;
         }
 
-        .header {
-            text-align: center;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        /* --- Navigation --- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            position: sticky;
+            top: 15px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: fit-content;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-
-        .header h1 {
-            font-size: 3em;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.5em;
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            font-weight: bold;
         }
 
-        .header .subtitle {
-            font-size: 1.5em;
-            color: #666;
-            margin-bottom: 20px;
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
-        .header .tagline {
-            font-size: 1.1em;
-            color: #888;
-            font-style: italic;
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-color);
         }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+        
+        .nav-cta {
+             background: var(--gradient);
+             color: var(--light-color);
+             padding: 10px 20px;
+             border-radius: 30px;
+             text-decoration: none;
+             font-weight: 500;
+             transition: transform 0.3s ease;
+        }
+        
+        .nav-cta:hover {
+            transform: scale(1.05);
+        }
+        
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            padding: 60px 20px;
             margin-bottom: 40px;
         }
 
-        .course-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid #667eea;
+        .header .logo-main {
+            font-size: 5em;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
         }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: var(--dark-color);
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .header .tagline {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+
+        /* --- Section Header & Filters --- */
+        .section-header {
+            text-align: center;
+            margin: 60px 0 40px 0;
+        }
+
+        .section-header h2 {
+            font-size: 2.8em;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .section-header h2 span {
+             background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--light-color);
+            border: 1px solid #ddd;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .filter-btn.active {
+            background: var(--gradient);
+            color: var(--light-color);
+            border-color: transparent;
+        }
+        
+        /* --- Course Grid & Cards --- */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background: var(--light-color);
+            border-radius: var(--border-radius-md);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .course-card[data-category="foundation"] { border-color: #667eea; }
+        .course-card[data-category="webdev"] { border-color: #764ba2; }
+        .course-card[data-category="specialized"] { border-color: #f093fb; }
+
 
         .course-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-        }
-
-        .course-card:nth-child(2n) {
-            border-left-color: #764ba2;
-        }
-
-        .course-card:nth-child(3n) {
-            border-left-color: #f093fb;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         }
 
         .course-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
+        
+        .course-title span { font-size: 1.8em; }
 
         .course-duration {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 5px 15px;
+            background-color: #e9ecef;
+            color: var(--text-muted);
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            font-weight: 500;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
-
-        .course-content h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+        
+        .details-toggle {
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            margin: 15px 0;
+            transition: all 0.3s ease;
         }
+        .details-toggle:hover { background-color: #f8f9fa; }
+        .details-toggle .arrow { transition: transform 0.3s ease; }
+        .details-toggle.active .arrow { transform: rotate(180deg); }
 
+
+        .course-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        
         .course-content ul {
             list-style: none;
             margin-bottom: 15px;
         }
 
         .course-content li {
-            padding: 5px 0;
-            padding-left: 20px;
+            padding: 6px 0 6px 25px;
             position: relative;
         }
 
@@ -124,467 +272,391 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: #667eea;
+            color: var(--primary-color);
             font-weight: bold;
         }
-
-        .ideal-for {
-            background: #f8f9ff;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border-left: 3px solid #667eea;
+        
+        .course-info-box {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: var(--border-radius-sm);
+            margin-top: 15px;
+            border-left: 3px solid;
+            font-size: 0.95em;
         }
 
-        .outcome {
-            background: #e8f5e8;
-            padding: 10px 15px;
-            border-radius: 10px;
-            border-left: 3px solid #4caf50;
-        }
+        .ideal-for { border-left-color: #17a2b8; }
+        .outcome { border-left-color: #28a745; }
 
-        .footer {
-            background: white;
-            border-radius: 15px;
+        /* --- Special Offer --- */
+        .special-offer {
+            background: var(--gradient);
+            color: var(--light-color);
             padding: 30px;
+            border-radius: var(--border-radius-md);
             text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin: 50px 0;
+            box-shadow: var(--shadow);
+        }
+        .special-offer h2 { margin-bottom: 15px; font-size: 1.8em; }
+        .special-offer p { opacity: 0.9; }
+
+        /* --- Footer --- */
+        .footer {
+            background: var(--dark-color);
+            color: #e9ecef;
+            border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+            padding: 60px 30px 30px 30px;
+            text-align: center;
+            margin-top: 60px;
         }
 
-        .contact-info {
+        .footer h2 {
+            color: var(--light-color);
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .why-choose-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
-
-        .contact-card {
-            background: #f8f9ff;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+        
+        .why-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: var(--border-radius-sm);
+            border-top: 3px solid var(--primary-color);
         }
-
+        .why-card h3 { color: var(--light-color); margin-bottom: 10px; }
+        
+        .footer-cta-buttons { margin: 40px 0; }
         .cta-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 30px;
+            background: var(--gradient);
+            color: var(--light-color);
+            padding: 15px 35px;
             border: none;
             border-radius: 30px;
             font-size: 1.1em;
+            font-weight: 500;
             cursor: pointer;
-            margin: 20px 10px;
-            transition: transform 0.3s ease;
+            margin: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-
         .cta-button:hover {
             transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .footer-contact p {
+            margin-bottom: 10px;
+            color: #adb5bd;
+        }
+        .footer-contact a {
+            color: #e9ecef;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-contact a:hover {
+            color: var(--primary-color);
         }
 
-        .special-offer {
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 30px 0;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+                border-radius: var(--border-radius-md);
             }
-            
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 10px;
-            }
+            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+            .nav-links a { margin: 0 10px; }
+            .header .logo-main { font-size: 3em; }
+            .section-header h2 { font-size: 2.2em; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .container { padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo-section" style="margin-bottom: 20px;">
-                <!-- Replace this with your actual logo -->
-                <div style="background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4em; font-weight: bold; margin-bottom: 10px;">
-                    CODE
-                </div>
-                <div style="font-size: 1.2em; color: #283e5a; font-weight: 600; letter-spacing: 2px;">
-                    COMPUTER AND DIGITAL EXCELLENCE
-                </div>
-            </div>
-            <div class="tagline">Empowering Digital Futures • Building Tomorrow's Skills Today</div>
-        </div>
 
-        <!-- Special Offer -->
+    <nav class="navbar">
+        <div class="nav-logo">CODE</div>
+        <div class="nav-links">
+            <a href="#foundation">Foundation</a>
+            <a href="#webdev">Web Dev</a>
+            <a href="#specialized">Specialized</a>
+        </div>
+        <a href="#contact" class="nav-cta">Contact Us</a>
+    </nav>
+
+    <main class="container">
+        <header class="header">
+            <div class="logo-main">CODE</div>
+            <div class="subtitle">Computer and Digital Excellence</div>
+            <div class="tagline">Empowering Digital Futures • Building Tomorrow's Skills Today</div>
+        </header>
+
         <div class="special-offer">
             <h2>🎉 Grand Opening Special Offers! 🎉</h2>
-            <p><strong>🔥 Limited Time:</strong> Enroll in any course and get <strong>FREE Meta Ads Basic Course</strong> worth ₹5,000</p>
-            <p><strong>📚 Combo Offers:</strong> Take 2 courses together and save up to 25% • Payment plans available</p>
+            <p><strong>🔥 Limited Time:</strong> Enroll in any course and get a <strong>FREE Meta Ads Basic Course</strong> worth ₹5,000.</p>
+            <p><strong>📚 Combo Offers:</strong> Take 2 courses together and save up to 25%. Payment plans available.</p>
+        </div>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Courses</button>
+            <button class="filter-btn" data-filter="foundation">🏢 Foundation</button>
+            <button class="filter-btn" data-filter="webdev">🌐 Web Development</button>
+            <button class="filter-btn" data-filter="specialized">📚 Specialized</button>
         </div>
 
-        <!-- Foundation Courses Section -->
-        <div style="background: white; border-radius: 20px; padding: 30px; margin: 40px 0; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 2.5em; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px;">🏢 Foundation Courses</h2>
-            <p style="font-size: 1.2em; color: #666;">Build your computer skills from basic to advanced levels</p>
-        </div>
-
-        <!-- Foundation Courses Grid -->
+        <section id="foundation" class="section-header">
+            <h2>Our <span>Foundation</span> Courses</h2>
+            <p>Build your computer skills from the ground up, moving from basic to advanced levels with expert guidance.</p>
+        </section>
+        
         <div class="courses-grid">
-            <!-- CCA Course -->
-            <div class="course-card">
-                <div class="course-title">
-                    🧾 CCA - Certificate in Computer Applications
-                </div>
-                <div class="course-duration">⏰ Duration: 3 Months</div>
-                
+            <div class="course-card" data-category="foundation">
+                <h3 class="course-title"><span>🧾</span> CCA - Certificate in Computer Applications</h3>
+                <span class="course-duration">⏰ Duration: 3 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
                         <li>MS Word, Excel, PowerPoint</li>
-                        <li>File Management & Printing</li>
-                        <li>Email, Browsing & Google Tools</li>
+                        <li>File Management &amp; Printing</li>
+                        <li>Email, Browse &amp; Google Tools</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> School/College Students, Beginners
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Foundation skills for everyday computing and office use
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> School/College Students, Beginners.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Strong skills for everyday computing and office use.</div>
             </div>
 
-            <!-- DCA Course -->
-            <div class="course-card">
-                <div class="course-title">
-                    💼 DCA - Diploma in Computer Applications
-                </div>
-                <div class="course-duration">⏰ Duration: 6 Months</div>
-                
+            <div class="course-card" data-category="foundation">
+                <h3 class="course-title"><span>💼</span> DCA - Diploma in Computer Applications</h3>
+                <span class="course-duration">⏰ Duration: 6 Months</span>
+                 <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
                         <li>Full MS Office (Word, Excel, PowerPoint)</li>
-                        <li>Internet Tools & Google Workspace</li>
+                        <li>Internet Tools &amp; Google Workspace</li>
                         <li>File Handling, Email, PDFs, Online Forms</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Job seekers, students, first-time learners
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles.</div>
             </div>
 
-            <!-- ADCA Course -->
-            <div class="course-card">
-                <div class="course-title">
-                    🧮 ADCA - Advanced Diploma in Computer Applications
-                </div>
-                <div class="course-duration">⏰ Duration: 12 Months</div>
-                
+            <div class="course-card" data-category="foundation">
+                <h3 class="course-title"><span>🧮</span> ADCA - Advanced Diploma</h3>
+                <span class="course-duration">⏰ Duration: 12 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
-                    <ul>
-                        <li>All DCA Modules + Advanced Excel (Macros, Pivot Tables)</li>
-                        <li>Tally ERP 9 with GST (Basic to Advanced)</li>
-                        <li>Graphic Design (Photoshop, Canva, Logo Design)</li>
-                        <li>Database Management (MS Access + SQL Basics)</li>
-                        <li>Digital Marketing Fundamentals</li>
-                        <li>Accounting Principles & Financial Reports</li>
+                     <ul>
+                        <li>All DCA Modules + Advanced Excel</li>
+                        <li>Tally ERP 9 with GST</li>
+                        <li>Graphic Design (Photoshop, Canva)</li>
+                        <li>Database Management (MS Access)</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Government exam aspirants, accountants, small business owners
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Complete business-ready skillset with accounting & marketing knowledge
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, accountants, business owners.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with accounting &amp; marketing.</div>
             </div>
         </div>
 
-        <!-- Web Development Courses Section -->
-        <div style="background: white; border-radius: 20px; padding: 30px; margin: 40px 0; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 2.5em; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px;">🌐 Web Development Courses</h2>
-            <p style="font-size: 1.2em; color: #666; margin-bottom: 20px;">Build modern websites and start your freelancing career</p>
-            <div style="background: #f0f8ff; padding: 15px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #667eea;">
-                <strong>💡 Pro Tip:</strong> Start with Basic Web Design, then advance to specialized courses!
-            </div>
-        </div>
+        <section id="webdev" class="section-header">
+            <h2><span>Web Development</span> Courses</h2>
+            <p>Learn to build modern, responsive websites and launch your career as a web developer or freelancer.</p>
+        </section>
 
         <div class="courses-grid">
-            <!-- Basic Web Design -->
-            <div class="course-card">
-                <div class="course-title">
-                    🎨 Basic Web Design
-                </div>
-                <div class="course-duration">⏰ Duration: 3 Months</div>
-                
+             <div class="course-card" data-category="webdev">
+                <h3 class="course-title"><span>🎨</span> Basic Web Design</h3>
+                <span class="course-duration">⏰ Duration: 3 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
-                        <li><strong>HTML5:</strong> Structure, forms, semantic tags, multimedia</li>
-                        <li><strong>CSS3:</strong> Styling, animations, flexbox, responsive design</li>
-                        <li><strong>Bootstrap:</strong> Grid system, components, utilities</li>
-                        <li><strong>JavaScript Basics:</strong> DOM manipulation, form validation</li>
-                        <li><strong>Design Tools:</strong> Figma basics, color theory, typography</li>
-                        <li><strong>Projects:</strong> Portfolio website, business landing page, restaurant site</li>
+                        <li><strong>HTML5 &amp; CSS3:</strong> Structure, styling, responsive design.</li>
+                        <li><strong>Bootstrap 5:</strong> Rapidly build professional layouts.</li>
+                        <li><strong>JavaScript Basics:</strong> Add interactivity to your sites.</li>
+                        <li><strong>Projects:</strong> Build a portfolio, business page, and more.</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Complete beginners, students, small business owners
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Complete beginners, students, small business owners.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create beautiful websites and start freelancing.</div>
+            </div>
+            
+             <div class="course-card" data-category="webdev">
+                <h3 class="course-title"><span>💻</span> Advanced Web Development</h3>
+                <span class="course-duration">⏰ Duration: 4 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
+                <div class="course-content">
+                    <ul>
+                        <li><strong>Advanced JavaScript:</strong> ES6+, APIs, Async/Await.</li>
+                        <li><strong>WordPress Dev:</strong> Custom themes &amp; plugins.</li>
+                        <li><strong>Database &amp; Hosting:</strong> MySQL, PHP basics, cPanel.</li>
+                        <li><strong>Client Projects:</strong> Build 3 live websites with backends.</li>
+                    </ul>
                 </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Create beautiful responsive websites, start freelancing ₹8,000-20,000/month
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Career switchers, serious freelancers.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Become a full-stack capable developer.</div>
             </div>
 
-            <!-- Advanced Web Development -->
-            <div class="course-card">
-                <div class="course-title">
-                    💻 Advanced Web Development
-                </div>
-                <div class="course-duration">⏰ Duration: 4 Months</div>
-                
+            <div class="course-card" data-category="webdev">
+                <h3 class="course-title"><span>🛒</span> Shopify &amp; E-commerce</h3>
+                <span class="course-duration">⏰ Duration: 2 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
-                        <li><strong>Prerequisites:</strong> Basic Web Design or equivalent experience</li>
-                        <li><strong>Advanced JavaScript:</strong> ES6+, APIs, async/await, JSON</li>
-                        <li><strong>WordPress Development:</strong> Custom themes, plugins, ACF</li>
-                        <li><strong>Database Integration:</strong> MySQL basics, PHP fundamentals</li>
-                        <li><strong>Web Hosting:</strong> cPanel, domains, SSL, FTP, Git</li>
-                        <li><strong>SEO & Analytics:</strong> Google Analytics, Search Console</li>
-                        <li><strong>Client Projects:</strong> 3 live websites with backend functionality</li>
+                        <li><strong>Store Setup:</strong> Products, collections, payments.</li>
+                        <li><strong>Theme Customization:</strong> Liquid templating basics.</li>
+                        <li><strong>App Integration:</strong> Marketing, inventory, and more.</li>
+                        <li><strong>Projects:</strong> Build 2 complete e-commerce stores.</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Those with basic web knowledge, career switchers, serious freelancers
-                </div>
-            </div>
-
-            <!-- Shopify Development -->
-            <div class="course-card">
-                <div class="course-title">
-                    🛒 Shopify Development & E-commerce
-                </div>
-                <div class="course-duration">⏰ Duration: 2 Months</div>
-                
-                <div class="course-content">
-                    <h4>What You'll Learn:</h4>
-                    <ul>
-                        <li><strong>Shopify Basics:</strong> Store setup, product management, collections</li>
-                        <li><strong>Theme Customization:</strong> Liquid templating, custom sections</li>
-                        <li><strong>App Integration:</strong> Payment gateways, inventory, marketing tools</li>
-                        <li><strong>Store Optimization:</strong> Speed, SEO, conversion rate optimization</li>
-                        <li><strong>Digital Marketing:</strong> Facebook Pixel, Google Analytics, email marketing</li>
-                        <li><strong>Client Management:</strong> Store migration, maintenance, troubleshooting</li>
-                        <li><strong>Projects:</strong> 2 complete e-commerce stores with payment setup</li>
-                    </ul>
-                </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, those with basic web knowledge
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Launch profitable online stores, Shopify freelancing
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, marketers.</div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch and manage profitable online stores.</div>
             </div>
         </div>
 
-        <!-- Back to Other Courses -->
-        <div style="background: white; border-radius: 20px; padding: 30px; margin: 40px 0; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 2.5em; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px;">📚 Specialized Courses</h2>
-            <p style="font-size: 1.2em; color: #666;">Explore our wide range of specialized digital skills courses</p>
-        </div>
+        <section id="specialized" class="section-header">
+             <h2>Our <span>Specialized</span> Courses</h2>
+             <p>Dive deep into high-demand skills like AI, digital marketing, and professional freelancing.</p>
+        </section>
 
         <div class="courses-grid">
-            <!-- AI Prompt Engineering -->
-            <div class="course-card">
-                <div class="course-title">
-                    🤖 AI Prompt Engineering
-                </div>
-                <div class="course-duration">⏰ Duration: 2 Months</div>
-                
+            <div class="course-card" data-category="specialized">
+                <h3 class="course-title"><span>🤖</span> AI Prompt Engineering</h3>
+                <span class="course-duration">⏰ Duration: 2 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
-                        <li>ChatGPT, MidJourney, Bard, and More</li>
-                        <li>Writing Prompts, Creative Image Generation</li>
-                        <li>Using AI for Writing, Ideas, Automation</li>
+                        <li>Master ChatGPT, MidJourney, Gemini &amp; more.</li>
+                        <li>Write effective prompts for text &amp; images.</li>
+                        <li>Use AI for writing, ideas, and automation.</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Creatives, students, content creators
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Use AI to work smarter or earn online
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Creatives, students, content creators.</div>
             </div>
 
-            <!-- MS Office Mastery -->
-            <div class="course-card">
-                <div class="course-title">
-                    📑 MS Office Professional (Intensive)
-                </div>
-                <div class="course-duration">⏰ Duration: 1 Month (Intensive)</div>
-                
+            <div class="course-card" data-category="specialized">
+                <h3 class="course-title"><span>📱</span> Meta Ads &amp; Digital Marketing</h3>
+                <span class="course-duration">⏰ Duration: 3 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
-                        <li>MS Word: Advanced formatting, mail merge, templates</li>
-                        <li>MS Excel: Advanced formulas, charts, data analysis</li>
-                        <li>MS PowerPoint: Professional presentations, animations</li>
-                        <li>Google Workspace Integration</li>
+                        <li>Facebook &amp; Instagram Ads Manager.</li>
+                        <li>Campaigns, targeting &amp; optimization.</li>
+                        <li>Google Ads &amp; YouTube Advertising.</li>
+                        <li>Analytics, ROI tracking &amp; reporting.</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Working professionals, quick skill upgrade needed
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Master MS Office in just 30 days for immediate job requirements
-                </div>
+                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run profitable ad campaigns, start a marketing agency.</div>
             </div>
-
-            <!-- Digital Literacy -->
-            <div class="course-card">
-                <div class="course-title">
-                    🌍 Digital Literacy & Internet Basics
-                </div>
-                <div class="course-duration">⏰ Duration: 1 Month</div>
-                
+            
+             <div class="course-card" data-category="specialized">
+                <h3 class="course-title"><span>💼</span> Freelancing Starter Pack</h3>
+                <span class="course-duration">⏰ Duration: 2 Months</span>
+                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
                 <div class="course-content">
-                    <h4>What You'll Learn:</h4>
                     <ul>
-                        <li>Email, Google Search, Online Forms</li>
-                        <li>File Sharing, Social Media Basics</li>
-                        <li>Digital Safety & Security</li>
+                        <li>Create profiles on Fiverr &amp; Upwork.</li>
+                        <li>Portfolio building &amp; client communication.</li>
+                        <li>Bidding strategies &amp; pricing services.</li>
+                        <li>Project management &amp; delivery.</li>
                     </ul>
                 </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Housewives, senior citizens, absolute beginners
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Confident and safe digital user
-                </div>
+                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Anyone with a skill looking to earn online.</div>
             </div>
+        </div>
+    </main>
 
-            <!-- Freelancing Starter Pack -->
-            <div class="course-card">
-                <div class="course-title">
-                    💼 Freelancing Starter Pack
-                </div>
-                <div class="course-duration">⏰ Duration: 2 Months</div>
-                
-                <div class="course-content">
-                    <h4>What You'll Learn:</h4>
-                    <ul>
-                        <li>Create Professional Fiverr & Upwork Profiles</li>
-                        <li>Portfolio Building & Client Communication</li>
-                        <li>Bidding Strategies & Pricing Your Services</li>
-                        <li>Project Management & Delivery</li>
-                        <li>Building Long-term Client Relationships</li>
-                    </ul>
-                </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Creatives, developers, designers, stay-at-home professionals
-                </div>
+    <footer id="contact" class="footer">
+        <h2>Why Choose CODE?</h2>
+        <div class="why-choose-grid">
+            <div class="why-card">
+                <h3>🏆 Expert Training</h3>
+                <p>Learn from industry-experienced instructors with a hands-on teaching approach.</p>
             </div>
-
-            <!-- Meta Ads & Digital Marketing -->
-            <div class="course-card">
-                <div class="course-title">
-                    📱 Meta Ads & Digital Marketing Professional
-                </div>
-                <div class="course-duration">⏰ Duration: 3 Months</div>
-                
-                <div class="course-content">
-                    <h4>What You'll Learn:</h4>
-                    <ul>
-                        <li>Facebook & Instagram Ads Manager</li>
-                        <li>Campaign Creation, Targeting & Optimization</li>
-                        <li>Google Ads & YouTube Advertising</li>
-                        <li>Content Marketing & Social Media Strategy</li>
-                        <li>Analytics, ROI Tracking & Reporting</li>
-                        <li>Real Client Projects & Case Studies</li>
-                    </ul>
-                </div>
-                
-                <div class="ideal-for">
-                    <strong>✅ Ideal For:</strong> Business owners, marketers, freelancers, entrepreneurs
-                </div>
-                
-                <div class="outcome">
-                    <strong>🎯 Outcome:</strong> Run profitable ad campaigns, start digital marketing agency
-                </div>
+            <div class="why-card">
+                <h3>💻 Modern Lab</h3>
+                <p>Practice on the latest software in our well-equipped, high-speed internet lab.</p>
+            </div>
+            <div class="why-card">
+                <h3>📜 Certified Courses</h3>
+                <p>Receive recognized certificates upon successful completion to boost your resume.</p>
+            </div>
+            <div class="why-card">
+                <h3>🤝 Job Assistance</h3>
+                <p>Get career guidance and job placement support for eligible students.</p>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <h2>Why Choose Computer & Digital Excellence (CODE)?</h2>
-            <div class="contact-info">
-                <div class="contact-card">
-                    <h3>🏆 Expert Training</h3>
-                    <p>Industry-experienced instructors with hands-on teaching approach</p>
-                </div>
-                <div class="contact-card">
-                    <h3>💻 Modern Lab</h3>
-                    <p>Well-equipped computer lab with latest software and high-speed internet</p>
-                </div>
-                <div class="contact-card">
-                    <h3>📜 Certified Courses</h3>
-                    <p>Get recognized certificates upon successful completion</p>
-                </div>
-                <div class="contact-card">
-                    <h3>🤝 Job Assistance</h3>
-                    <p>Career guidance and job placement support for eligible students</p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <button class="cta-button">📞 Call Now to Enroll</button>
-                <button class="cta-button">🏢 Visit Our Center</button>
-                <button class="cta-button">💬 WhatsApp Inquiry</button>
-            </div>
-            
-            <div style="margin-top: 30px; color: #666;">
-                <p><strong>📍 Address:</strong> Lokenath Nagar, Near -  K1 Fitness Gym, Lower Bagdogra, 734014</p>
-                <p><strong>📞 Phone:</strong> <a href="tel: 9635809537">+91 96 358 09537</a></p>
-                <p><strong>📧 Email:</strong> <a href="mailto: code.bagdogra@gmail.com">code.bagdogra@gmail.com</a></p>
-                <p><strong>🌐 Website:</strong> <a href="https://codebagdogra.netlify.app/" target="_blank">www.codebagdogra.com</a></p>
-            </div>
+        <div class="footer-cta-buttons">
+            <a href="tel:9635809537" class="cta-button">📞 Call to Enroll</a>
+            <a href="https://wa.me/919635809537" target="_blank" class="cta-button">💬 WhatsApp Inquiry</a>
         </div>
-    </div>
+        
+        <div class="footer-contact">
+            <p><strong>📍 Address:</strong> Lokenath Nagar, Near K1 Fitness Gym, Lower Bagdogra, 734014</p>
+            <p><strong>📧 Email:</strong> <a href="mailto:code.bagdogra@gmail.com">code.bagdogra@gmail.com</a></p>
+            <p><strong>🌐 Website:</strong> <a href="https://codebagdogra.netlify.app/" target="_blank">www.codebagdogra.com</a></p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- Course Filtering Logic ---
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const courseCards = document.querySelectorAll('.course-card');
+
+    if (filterButtons.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const filter = button.getAttribute('data-filter');
+
+                courseCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+
+    // --- Accordion Logic for Course Details ---
+    const detailToggles = document.querySelectorAll('.details-toggle');
+
+    if (detailToggles.length > 0) {
+        detailToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                
+                // --- DEBUGGING LINE ---
+                console.log("Details button was clicked!"); 
+                
+                toggle.classList.toggle('active');
+                const content = toggle.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+    } else {
+        console.error("Error: No elements with the class 'details-toggle' were found.");
+    }
+});
+</script>
+
+
 </body>
 </html>
