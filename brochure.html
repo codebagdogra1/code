@@ -336,7 +336,7 @@
         /* --- Course Grid & Cards --- */
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
         }
         
@@ -355,6 +355,7 @@
         
         .course-card[data-category="foundation"] { border-color: var(--primary-color); }
         .course-card[data-category="webdev"] { border-color: var(--accent-color-1); }
+        .course-card[data-category="ecommerce"] { border-color: var(--accent-color-2); }
         .course-card[data-category="specialized"] { border-color: var(--accent-color-2); }
         
         .course-card:hover {
@@ -380,6 +381,7 @@
             text-align: center;
         }
         .course-card[data-category="webdev"] .course-title .fa-solid { color: var(--accent-color-1); }
+        .course-card[data-category="ecommerce"] .course-title .fa-solid { color: var(--accent-color-2); }
         .course-card[data-category="specialized"] .course-title .fa-solid { color: var(--accent-color-2); }
         
         
@@ -696,10 +698,11 @@
 <body>
 
     <nav class="navbar">
-        <div class="nav-logo"><a href="/">CODE</a></div>
+        <div class="nav-logo">CODE</div>
         <div class="nav-links">
             <a href="#foundation-section">Foundation</a>
             <a href="#webdev-section">Web Dev</a>
+            <a href="#ecommerce-section">E-commerce</a>
             <a href="#specialized-section">Specialized</a>
         </div>
         <a href="#contact" class="nav-cta">Contact Us</a>
@@ -722,6 +725,7 @@
             <button class="filter-btn active" data-filter="all">All Courses</button>
             <button class="filter-btn" data-filter="foundation"><i class="fa-solid fa-building-columns"></i> Foundation</button>
             <button class="filter-btn" data-filter="webdev"><i class="fa-solid fa-globe"></i> Web Development</button>
+            <button class="filter-btn" data-filter="ecommerce"><i class="fa-solid fa-store"></i> E-commerce</button>
             <button class="filter-btn" data-filter="specialized"><i class="fa-solid fa-graduation-cap"></i> Specialized</button>
         </div>
 
@@ -733,15 +737,15 @@
 
             <div class="courses-grid">
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-file-invoice"></i> CCA - Certificate in Computer Applications</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-file-invoice"></i> CCA – Certificate in Computer Applications</h3>
                     <span class="course-duration">⏰ Duration: 3 Months</span>
                     <div class="course-content">
                         <ul>
                             <li>Computer Concept & Fundamentals</li>
                             <li>Operating Systems Basics</li>
                             <li>MS Word, Excel, PowerPoint</li>
-                            <li>File Management &amp; Printing</li>
-                            <li>Email, Browse &amp; Google Tools</li>
+                            <li>File Management & Printing</li>
+                            <li>Email, Browse & Google Tools</li>
                         </ul>
                     </div>
                     <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> School/College Students, Beginners.</div>
@@ -749,46 +753,43 @@
                 </div>
 
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-briefcase"></i> DCA - Diploma in Computer Applications</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-briefcase"></i> DCA – Diploma in Computer Applications</h3>
                     <span class="course-duration">⏰ Duration: 6 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Operating Systems (Windows, Linux, iOS)</li>
-                            <li>Familiar with Unix/ Linux Operating Systems</li>
-                            <li><strong>Computer Fundamentals:</strong> Basics of hardware, software, operating systems.</li>
-                            <li><strong>Microsoft Office Suite:</strong> Word, Excel, PowerPoint essentials for daily tasks.</li>
-                            <li><strong>Internet & Email Proficiency:</strong> Effective Browse, email communication, online safety.</li>
-                            <li><strong>Basics of Web Design:</strong> HTML, CSS, and Javascript</li>
+                            <li>Operating Systems (Windows, Linux, iOS) — including Unix-based systems</li>
+                            <li>Computer Fundamentals: Basics of hardware, software, operating systems.</li>
+                            <li>Microsoft Office Suite: Word, Excel, PowerPoint essentials for daily tasks.</li>
+                            <li>Internet & Email Proficiency: Effective Browse, email communication, online safety.</li>
+                            <li>Basics of Web Design: HTML, CSS, and Javascript</li>
                             <li>File Handling, Email, PDFs, Online Forms</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles.</div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, first-time learners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Job-ready for office/data entry roles.</div>
                 </div>
 
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-calculator"></i> ADCA - Advanced Diploma</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-calculator"></i> ADCA – Advanced Diploma in Computer Applications</h3>
                     <span class="course-duration">⏰ Duration: 12 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Operating Systems (Windows, Linux, iOS)</li>
-                            <li>Familiar with Unix/ Linux Operating Systems</li>
-                            <li><strong>Computer Fundamentals:</strong> Basics of hardware, software, operating systems.</li>
-                            <li><strong>Microsoft Office Suite:</strong> Word, Excel, PowerPoint essentials for daily tasks.</li>
-                            <li><strong>Internet & Email Proficiency:</strong> Effective Browse, email communication, online safety.</li>
-                            <li><strong>Basics of Web Design:</strong> HTML, CSS, and Javascript</li>
+                            <li>Operating Systems (Windows, Linux, iOS) — including Unix-based systems</li>
+                            <li>Computer Fundamentals: Basics of hardware, software, operating systems.</li>
+                            <li>Microsoft Office Suite: Word, Excel, PowerPoint essentials for daily tasks.</li>
+                            <li>Internet & Email Proficiency: Effective Browse, email communication, online safety.</li>
+                            <li>Basics of Web Design: HTML, CSS, and Javascript</li>
                             <li>File Handling, Email, PDFs, Online Forms</li>
                             <li>Database Management (SQL & MySQL)</li>
-                            <li><strong>Advanced Concepts of Web Design:</strong> Understanding fundamental web concepts (URLs, domains, server) and a brief introduction to OOP.</li>
-                            <li>Computer Network & Networking</li>
-                            <li>Introduction to Programming Languages (C, C++)</li>
-                            <li>Network Hardware & Software</li>
+                            <li>Computer Networking, Network Hardware & Software</li>
+                            <li>Advanced Web Design Concepts</li>
+                            <li>Programming Languages (C, C++)</li>
                             <li>Web Hosting & Server Maintenance</li>
-                            <li><strong>Basic Data Entry & Management:</strong> Introduction to organized data handling.</li>
+                            <li>Data Entry & Management</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, business analysts, aspiring data entry specialists, marketing assistants.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with data insights &amp; marketing.</div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, data specialists, marketing assistants.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with data insights &amp; marketing skills.</div>
                 </div>
             </div>
         </div>
@@ -796,7 +797,7 @@
         <div class="section-container" id="webdev-section" data-category="webdev">
             <section class="section-header">
                 <h2><span>Web Development</span> Courses</h2>
-                <p>Learn to build modern, responsive websites and launch your career as a web developer or freelancer.</p>
+                <p>Learn to build modern, responsive websites and launch your career as a developer or freelancer.</p>
             </section>
 
             <div class="courses-grid">
@@ -805,94 +806,155 @@
                     <span class="course-duration">⏰ Duration: 3 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li><strong>HTML5 &amp; CSS3:</strong> Structure, styling, responsive design.</li>
-                            <li><strong>Bootstrap 5:</strong> Rapidly build professional layouts.</li>
-                            <li><strong>JavaScript Basics:</strong> Add interactivity to your sites.</li>
-                            <li><strong>Projects:</strong> Build a portfolio, business page, and more.</li>
+                            <li><strong>HTML5 &amp; CSS3:</strong> Structure, Styling</li>
+                            <li><strong>Bootstrap 5:</strong> Professional Layouts</li>
+                            <li><strong>JavaScript Basics</strong></li>
+                            <li><strong>Projects:</strong> Portfolio, Business Page</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Complete beginners, students, small business owners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create beautiful websites and start freelancing.</div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Beginners, students, small business owners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Build websites, start freelancing.</div>
                 </div>
 
                 <div class="course-card" data-category="webdev">
                     <h3 class="course-title"><i class="fa-solid fa-laptop-code"></i> Advanced Web Development</h3>
-                    <span class="course-duration">⏰ Duration: 5 Months</span>
-                    <div class="course-content">
-                        <ul>
-                            <li><strong>Advanced JavaScript:</strong> ES6+, APIs, Async/Await.</li>
-                            <li><strong>Development:</strong> Custom themes &amp; dynamic pages with database.</li>
-                            <li><strong>Database &amp; Hosting:</strong> MySQL, PHP basics, cPanel.</li>
-                            <li><strong>Projects:</strong> Build 3 websites with backends.</li>
-                        </ul>
-                    </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Career switchers, serious freelancers.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Become a full-stack capable developer.</div>
-                </div>
-
-                <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><i class="fa-solid fa-store"></i> E-commerce Expert</h3>
                     <span class="course-duration">⏰ Duration: 6 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li><strong>Shopify Store Setup:</strong> Products, collections, payments.</li>
-                            <li><strong>Shopify Theme Customization:</strong> Liquid templating basics.</li>
-                            <li><strong>App Integration:</strong> Marketing, inventory, and more.</li>
-                            <li><strong>Projects:</strong> Build 3 complete e-commerce stores.</li>
+                            <li>HTML5 &amp; CSS3: Structure, Styling</li>
+                            <li>Bootstrap 5: Professional Layouts</li>
+                            <li>JavaScript Basics</li>
+                            <li>Projects: Portfolio, Business Page</li>
+                            <li>Advanced JavaScript (APIs, Async/Await)</li>
+                            <li>Dynamic websites with backend integration</li>
+                            <li>Hosting, Deployment &amp; CMS Basics</li>
+                            <li>Build a fully functional responsive site</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, marketers.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch and manage profitable online stores.</div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Intermediate learners, aspiring developers.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch-ready web developer, portfolio-ready.</div>
                 </div>
+            </div>
+        </div>
+
+        <div class="section-container" id="ecommerce-section" data-category="ecommerce">
+            <section class="section-header">
+                <h2><span>E-commerce / Shopify</span> Expert Courses</h2>
+                <p>Master the art of online selling, from setting up a Shopify store to advanced dropshipping strategies.</p>
+            </section>
+
+            <div class="courses-grid">
+                <div class="course-card" data-category="ecommerce">
+                    <h3 class="course-title"><i class="fa-solid fa-store"></i> Shopify Store Setup & Management (Industry Level)</h3>
+                    <span class="course-duration">⏰ Duration: 4 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Shopify Dashboard & Ecosystem Overview</li>
+                            <li>Store Design & Theme Customization (Free & Paid Themes)</li>
+                            <li>Understanding Shopify File Structure (Liquid Basics)</li>
+                            <li>Editing Shopify Sections and Blocks</li>
+                            <li>Navigation & Menus</li>
+                            <li>Product Uploads, Tags & Collections</li>
+                            <li>Tax & Shipping Settings</li>
+                            <li>Payment Gateway Integration (Razorpay, Stripe, PayPal)</li>
+                            <li>App Integration (WhatsApp Chat, Review Apps, Wishlist)</li>
+                            <li>Shopify SEO Basics (Meta Tags, Alt Text, Clean URLs)</li>
+                            <li>Conversion Rate Optimization (CRO) Foundations</li>
+                            <li>Setting up Blog & Static Pages</li>
+                            <li>Cart, Checkout & Thank You Page Customization</li>
+                            <li>Basic Analytics & Reports</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, small business owners, aspiring e-commerce managers.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Capable of setting up and managing a professional Shopify store.</div>
+                </div>
+
+                <div class="course-card" data-category="ecommerce">
+                    <h3 class="course-title"><i class="fa-solid fa-truck-fast"></i> Shopify + Dropshipping Advanced (Industry Level)</h3>
+                    <span class="course-duration">⏰ Duration: 9 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Everything in Shopify Setup & Management</li>
+                            <li>Advanced Theme Customization using Liquid</li>
+                            <li>JSON Templates & Dynamic Sections</li>
+                            <li>App Integrations: DSers, Oberlo, Spocket, Zendrop</li>
+                            <li>Supplier & Fulfillment Workflows</li>
+                            <li>Order Automation & Notifications</li>
+                            <li>Multi-Currency & International Selling</li>
+                            <li>Facebook Shop & Instagram Shop Integration</li>
+                            <li>Google Merchant Center Setup & Product Feed</li>
+                            <li>TikTok Shop (if available in region)</li>
+                            <li>Analytics: GA4 Integration, Shopify Reports, Facebook Pixel</li>
+                            <li>Email Marketing Integration (Klaviyo, Mailchimp)</li>
+                            <li>Conversion Funnel Design</li>
+                            <li>Upsell & Cross-sell Implementation</li>
+                            <li>Introduction to Shopify Plus & Headless Commerce</li>
+                            <li>Client Workflows (Client Handover, Proposal Docs)</li>
+                            <li>Troubleshooting: Common Errors & Fixes</li>
+                            <li>Freelancing on Fiverr/Upwork for Shopify Services</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Serious entrepreneurs, advanced freelancers.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Build high-converting Shopify stores and launch your own dropshipping business or serve clients professionally.</div>
+                </div>
+            </div>
+            <div class="course-info-box outcome">
+                <h3>🎁 Value-Added Benefits only for Ecommerce Expert course</h3>
+                <ul>
+                    <li>✅ Free resume & freelancing profile setup support</li>
+                    <li>✅ Completion Certificate with Live Project</li>
+                    <li>✅ Final website or dropshipping store for your portfolio</li>
+                </ul>
             </div>
         </div>
 
         <div class="section-container" id="specialized-section" data-category="specialized">
             <section class="section-header">
                 <h2>Our <span>Specialized</span> Courses</h2>
-                <p>Dive deep into high-demand skills like AI, digital marketing, and professional freelancing.</p>
+                <p>Deep-dive into niche digital skills that are trending and profitable.</p>
             </section>
 
             <div class="courses-grid">
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-robot"></i> AI Prompt Engineering</h3>
-                    <span class="course-duration">⏰ Duration: 1 Month</span>
-                    <div class="course-content">
-                        <ul>
-                            <li>Master ChatGPT, MidJourney, Gemini &amp; more.</li>
-                            <li>Write effective prompts for text &amp; images.</li>
-                            <li>Use AI for writing, ideas, and automation.</li>
-                        </ul>
-                    </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Creatives, students, content creators.</div>
-                </div>
-
-                <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-mobile-screen-button"></i> Meta Ads &amp; Digital Marketing</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-robot"></i> AI Prompt Engineering (Beginner to Pro)</h3>
                     <span class="course-duration">⏰ Duration: 2 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Facebook &amp; Instagram Ads Manager.</li>
-                            <li>Campaigns, targeting &amp; optimization.</li>
-                            <li>Google Ads &amp; YouTube Advertising.</li>
-                            <li>Analytics, ROI tracking &amp; reporting.</li>
+                            <li>Understanding AI Tools (ChatGPT, Gemini, Claude)</li>
+                            <li>Prompt Crafting for Content, Marketing, Development</li>
+                            <li>Building Chatbots & Assistants</li>
+                            <li>Use Cases: Business, Education, Coding</li>
                         </ul>
                     </div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run profitable ad campaigns, start a marketing agency.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create content, automate tasks, build AI-powered tools.</div>
                 </div>
 
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-handshake-angle"></i> Freelancing Starter Pack</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-handshake-angle"></i> Freelancing & Client Handling Masterclass</h3>
                     <span class="course-duration">⏰ Duration: 1 Month</span>
                     <div class="course-content">
                         <ul>
-                            <li>Create profiles on Fiverr &amp; Upwork.</li>
-                            <li>Portfolio building &amp; client communication.</li>
-                            <li>Bidding strategies &amp; pricing services.</li>
-                            <li>Project management &amp; delivery.</li>
+                            <li>Setting Up Profiles (Fiverr, Upwork, LinkedIn)</li>
+                            <li>Finding Clients, Writing Proposals</li>
+                            <li>Invoicing, Payments, Communication</li>
+                            <li>Personal Branding</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Anyone with a skill looking to earn online.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get clients from India & abroad.</div>
+                </div>
+
+                <div class="course-card" data-category="specialized">
+                    <h3 class="course-title"><i class="fa-solid fa-mobile-screen-button"></i> Digital Marketing Basics</h3>
+                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Meta Ads Manager Basics (Facebook/Instagram Ads)</li>
+                            <li>Campaign Strategy, Budgeting</li>
+                            <li>Google My Business & Local SEO</li>
+                            <li>Social Media Optimization</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run campaigns, promote your own or client businesses.</div>
                 </div>
             </div>
         </div>
@@ -902,7 +964,7 @@
         <h2>Why Choose CODE?</h2>
         <div class="why-choose-grid">
             <div class="why-card">
-                <h3><i class="fa-solid fa-award"></i> Expert Training</h3>
+                <h3><i class="fa-solid fa-award"></i> Expert-Led Training</h3>
                 <p>Learn from industry-experienced instructors with a hands-on teaching approach.</p>
             </div>
             <div class="why-card">
@@ -916,6 +978,14 @@
             <div class="why-card">
                 <h3><i class="fa-solid fa-handshake"></i> Job Assistance</h3>
                 <p>Get career guidance and job placement support for eligible students.</p>
+            </div>
+            <div class="why-card">
+                <h3><i class="fa-solid fa-clock"></i> Flexible Timings</h3>
+                <p>Study at your own pace with schedules that fit your lifestyle.</p>
+            </div>
+            <div class="why-card">
+                <h3><i class="fa-solid fa-user-check"></i> No Prior Experience Required</h3>
+                <p>Our courses are designed for all levels, from beginners to advanced learners.</p>
             </div>
         </div>
 
