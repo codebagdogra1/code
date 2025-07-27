@@ -1,4 +1,5 @@
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Explore professional computer, web development, and digital marketing courses at Computer &amp; Digital Excellence (CODE).">
@@ -8,610 +9,558 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <style>
         :root {
-    --primary-color: #667eea; /* Original Purple */
-    --secondary-color: #764ba2; /* Original Darker Purple */
-    --accent-color-1: #4CAF50; /* New: Vibrant Green */
-    --accent-color-2: #FFC107; /* New: Amber/Orange */
-    --dark-color: #283e5a;
-    --light-color: #ffffff;
-    --bg-color: #f8f9fa;
-    --text-color: #333;
-    --text-muted: #6c757d;
-    --border-radius-md: 16px;
-    --border-radius-sm: 12px;
-    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.07);
-    --shadow-strong: 0 15px 35px rgba(0, 0, 0, 0.1);
-    --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    --gradient-light: linear-gradient(135deg, #a7baff 0%, #c1a2e2 100%); /* Lighter version */
-}
-
-/* Base Styles (mostly retained) */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Inter', sans-serif;
-    line-height: 1.7;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* --- Navigation --- */
-.navbar {
-    background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
-    backdrop-filter: blur(12px); /* Slightly more blur */
-    -webkit-backdrop-filter: blur(12px);
-    padding: 15px 30px;
-    border-radius: 50px;
-    position: sticky;
-    top: 15px;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: fit-content;
-    margin: 0 auto 30px auto;
-    box-shadow: var(--shadow-md); /* Consistent shadow */
-}
-
-.nav-logo {
-    font-weight: 700;
-    font-size: 1.6em; /* Slightly larger */
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.nav-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    margin: 0 15px;
-    font-weight: 500;
-    transition: all 0.3s ease; /* Smooth transition for color and transform */
-    position: relative; /* For underline effect */
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-    color: var(--primary-color);
-    transform: translateY(-2px); /* Subtle lift on hover */
-}
-
-/* Underline effect for active/hover nav links */
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    display: block;
-    margin: auto;
-    background: var(--primary-color);
-    transition: width 0.3s ease;
-    left: 0;
-    bottom: -5px;
-}
-
-.nav-links a:hover::after,
-.nav-links a.active::after {
-    width: 100%;
-}
-
-
-.nav-cta {
-    background: var(--gradient);
-    color: var(--light-color);
-    padding: 10px 22px; /* Slightly more padding */
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 600; /* Bolder */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: var(--shadow-light); /* Added subtle shadow */
-}
-
-.nav-cta:hover {
-    transform: translateY(-3px); /* More pronounced lift */
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); /* Stronger shadow on hover */
-}
-
-/* --- Header --- */
-.header {
-    text-align: center;
-    padding: 80px 20px; /* More vertical padding */
-    margin-bottom: 40px;
-    background: radial-gradient(circle at top left, var(--bg-color) 0%, rgba(240, 248, 255, 0.5) 100%); /* Subtle background */
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-light);
-}
-
-.header .logo-main {
-    font-size: 5.5em; /* Slightly larger */
-    font-weight: 800; /* Bolder */
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.1;
-    letter-spacing: -2px; /* Tighter letter spacing */
-}
-
-.header .subtitle {
-    font-size: 1.3em; /* Slightly larger */
-    color: var(--dark-color);
-    font-weight: 600; /* Bolder */
-    letter-spacing: 2px; /* More distinct spacing */
-    margin-top: 10px; /* More space */
-    text-transform: uppercase;
-}
-
-.header .tagline {
-    font-size: 1.25em; /* Slightly larger */
-    color: var(--text-muted);
-    margin-top: 25px; /* More space */
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* --- Section Header & Filters --- */
-.section-header {
-    text-align: center;
-    margin: 80px 0 40px 0; /* More vertical space */
-    position: relative;
-}
-
-.section-header h2 {
-    font-size: 3em; /* Larger */
-    color: var(--dark-color);
-    margin-bottom: 15px; /* More space */
-    font-weight: 700;
-}
-
-.section-header h2 span {
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.section-header p {
-    font-size: 1.25em; /* Slightly larger */
-    color: var(--text-muted);
-    max-width: 700px; /* Wider text */
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-.filter-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 50px; /* More space below */
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    background-color: var(--light-color);
-    border: 1px solid #ddd;
-    padding: 12px 30px; /* More padding */
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 600; /* Bolder text */
-    transition: all 0.3s ease;
-    color: var(--text-color); /* Default text color */
-    box-shadow: var(--shadow-light); /* Subtle shadow */
-    display: flex; /* For icon alignment */
-    align-items: center;
-    gap: 8px; /* Space between icon and text */
-}
-
-.filter-btn:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-    transform: translateY(-2px); /* Subtle lift */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-}
-
-.filter-btn.active {
-    background: var(--gradient);
-    color: var(--light-color);
-    border-color: transparent;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); /* Stronger shadow for active */
-    transform: translateY(-3px); /* More pronounced lift */
-}
-
-/* --- Course Grid & Cards --- */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* Slightly wider min-width */
-    gap: 30px;
-}
-
-.course-card {
-    background: var(--light-color);
-    border-radius: var(--border-radius-md);
-    padding: 30px; /* More padding */
-    box-shadow: var(--shadow-md);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Added border-color transition */
-    border-top: 5px solid; /* Slightly thicker border */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Ensures content doesn't spill out on transform */
-}
-
-.course-card[data-category="foundation"] { border-color: var(--primary-color); } /* Using var */
-.course-card[data-category="webdev"] { border-color: var(--accent-color-1); } /* New accent color */
-.course-card[data-category="specialized"] { border-color: var(--accent-color-2); } /* New accent color */
-
-.course-card:hover {
-    transform: translateY(-10px); /* More pronounced lift */
-    box-shadow: var(--shadow-strong); /* Stronger shadow */
-}
-
-.course-title {
-    font-size: 1.6em; /* Slightly larger */
-    font-weight: 700; /* Bolder */
-    color: var(--dark-color);
-    margin-bottom: 15px; /* More space */
-    display: flex;
-    align-items: center;
-    gap: 15px; /* More space for icon */
-}
-
-.course-title span {
-    font-size: 2em; /* Larger icon */
-    line-height: 1; /* Ensure icon is aligned well */
-}
-
-.course-duration {
-    background-color: #e9ecef;
-    color: var(--text-muted);
-    padding: 6px 15px; /* More padding */
-    border-radius: 25px; /* More rounded */
-    font-size: 0.9em; /* Slightly larger */
-    font-weight: 600; /* Bolder */
-    display: inline-block;
-    margin-bottom: 20px;
-}
-
-.details-toggle {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 10px; /* More rounded */
-    padding: 10px 15px; /* More padding */
-    cursor: pointer;
-    text-align: left;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600; /* Bolder text */
-    margin: 20px 0 15px 0; /* Adjusted margins */
-    transition: all 0.3s ease;
-    color: var(--text-color);
-}
-.details-toggle:hover {
-    background-color: var(--bg-color);
-    border-color: var(--primary-color); /* Border color change on hover */
-    color: var(--primary-color);
-}
-.details-toggle .arrow {
-    transition: transform 0.3s ease;
-    font-size: 1.2em; /* Larger arrow */
-}
-.details-toggle.active .arrow {
-    transform: rotate(180deg);
-}
-
-
-.course-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out;
-    border-left: 2px solid rgba(0,0,0,0.05); /* Subtle left border */
-    padding-left: 10px; /* Padding for the border */
-}
-
-.course-content ul {
-    list-style: none;
-    margin-bottom: 15px;
-    padding-left: 0; /* Reset default padding */
-}
-
-.course-content li {
-    padding: 8px 0 8px 30px; /* More padding and space for checkmark */
-    position: relative;
-    font-size: 0.98em;
-}
-
-.course-content li:before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: var(--primary-color); /* Consistent primary color */
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.course-info-box {
-    background: var(--bg-color);
-    padding: 18px; /* More padding */
-    border-radius: var(--border-radius-sm);
-    margin-top: 15px;
-    border-left: 4px solid; /* Thicker border */
-    font-size: 1em; /* Slightly larger font */
-    line-height: 1.5;
-    box-shadow: var(--shadow-light); /* Subtle shadow */
-}
-
-.ideal-for { border-left-color: var(--accent-color-1); } /* Using accent color */
-.outcome { border-left-color: var(--accent-color-2); } /* Using accent color */
-
-/* --- Special Offer --- */
-.special-offer {
-    background: var(--gradient);
-    color: var(--light-color);
-    padding: 40px; /* More padding */
-    border-radius: var(--border-radius-md);
-    text-align: center;
-    margin: 60px 0; /* More vertical space */
-    box-shadow: var(--shadow-strong); /* Stronger shadow */
-    position: relative;
-    overflow: hidden; /* For pseudo-elements */
-}
-.special-offer::before {
-    content: '✨'; /* Add a subtle decorative element */
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    font-size: 6em;
-    opacity: 0.15;
-    transform: rotate(-20deg);
-}
-.special-offer::after {
-    content: '🚀';
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    font-size: 6em;
-    opacity: 0.15;
-    transform: rotate(20deg);
-}
-
-.special-offer h2 {
-    margin-bottom: 20px; /* More space */
-    font-size: 2.2em; /* Larger */
-    font-weight: 700;
-    line-height: 1.3;
-}
-.special-offer p {
-    opacity: 0.95; /* Less transparent */
-    font-size: 1.1em; /* Larger text */
-    margin-bottom: 10px;
-}
-.special-offer p strong {
-    color: var(--accent-color-2); /* Highlight discount text */
-    text-shadow: 0 0 5px rgba(255, 193, 7, 0.5); /* Subtle glow */
-}
-
-/* --- Footer --- */
-.footer {
-    background: var(--dark-color);
-    color: #e9ecef;
-    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
-    padding: 70px 30px 40px 30px; /* More padding */
-    text-align: center;
-    margin-top: 80px; /* More margin */
-    position: relative;
-    overflow: hidden;
-}
-
-.footer h2 {
-    color: var(--light-color);
-    margin-bottom: 40px; /* More space */
-    font-size: 2.5em; /* Larger */
-    font-weight: 700;
-}
-
-.why-choose-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly wider min-width */
-    gap: 30px; /* More gap */
-    margin-bottom: 50px; /* More margin */
-}
-
-.why-card {
-    background: rgba(255, 255, 255, 0.07); /* Slightly less transparent */
-    padding: 30px; /* More padding */
-    border-radius: var(--border-radius-sm);
-    border-top: 4px solid var(--primary-color); /* Thicker border */
-    text-align: left; /* Align text left */
-    box-shadow: var(--shadow-light); /* Subtle shadow */
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-.why-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.12); /* Brighter on hover */
-}
-.why-card h3 {
-    color: var(--light-color);
-    margin-bottom: 12px;
-    font-size: 1.4em; /* Larger */
-    font-weight: 600;
-}
-.why-card p {
-    color: #ced4da; /* Lighter text for readability */
-    font-size: 0.95em;
-}
-
-.footer-cta-buttons {
-    margin: 50px 0; /* More margin */
-}
-.cta-button {
-    background: var(--gradient);
-    color: var(--light-color);
-    padding: 16px 40px; /* More padding */
-    border: none;
-    border-radius: 35px; /* More rounded */
-    font-size: 1.15em; /* Slightly larger */
-    font-weight: 600; /* Bolder */
-    cursor: pointer;
-    margin: 12px; /* More margin */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Stronger initial shadow */
-}
-.cta-button:hover {
-    transform: translateY(-5px); /* More pronounced lift */
-    box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5); /* Stronger shadow */
-}
-
-.footer-contact p {
-    margin-bottom: 12px; /* More space */
-    color: #adb5bd;
-    font-size: 1em;
-}
-.footer-contact a {
-    color: #f8f9fa; /* Lighter color */
-    text-decoration: none;
-    transition: color 0.3s ease;
-    font-weight: 500;
-}
-.footer-contact a:hover {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-        border-radius: var(--border-radius-md);
-        padding: 15px 20px;
-        top: 0; /* Stick to top on mobile */
-    }
-    .nav-links {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px; /* More gap for mobile */
-    }
-    .nav-links a {
-        margin: 0 8px;
-        font-size: 0.95em;
-    }
-    .header {
-        padding: 50px 15px;
-    }
-    .header .logo-main {
-        font-size: 3.5em;
-    }
-    .header .subtitle {
-        font-size: 1.1em;
-    }
-    .section-header h2 {
-        font-size: 2.5em;
-    }
-    .section-header p {
-        font-size: 1.1em;
-    }
-    .filter-buttons {
-        gap: 10px;
-        margin-bottom: 30px;
-    }
-    .filter-btn {
-        padding: 10px 20px;
-        font-size: 0.9em;
-    }
-    .courses-grid {
-        grid-template-columns: 1fr;
-    }
-    .course-card {
-        padding: 25px;
-    }
-    .course-title {
-        font-size: 1.4em;
-        gap: 10px;
-    }
-    .course-title span {
-        font-size: 1.8em;
-    }
-    .special-offer {
-        padding: 30px 20px;
-    }
-    .special-offer h2 {
-        font-size: 1.8em;
-    }
-    .special-offer p {
-        font-size: 1em;
-    }
-    .footer {
-        padding: 50px 20px 30px 20px;
-    }
-    .footer h2 {
-        font-size: 2em;
-    }
-    .why-choose-grid {
-        grid-template-columns: 1fr;
-    }
-    .why-card {
-        text-align: center; /* Center text on mobile */
-    }
-    .footer-cta-buttons {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .cta-button {
-        width: 90%;
-        margin: 0 auto 15px auto;
-    }
-}
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            --primary-color: #667eea; /* Original Purple */
+            --secondary-color: #764ba2; /* Original Darker Purple */
+            --accent-color-1: #4CAF50; /* New: Vibrant Green */
+            --accent-color-2: #FFC107; /* New: Amber/Orange */
+            --dark-color: #283e5a;
+            --light-color: #ffffff;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --text-muted: #6c757d;
+            --border-radius-md: 16px;
+            --border-radius-sm: 12px;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.07);
+            --shadow-strong: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-light: linear-gradient(135deg, #a7baff 0%, #c1a2e2 100%); /* Lighter version */
         }
-        
-        .footer-contact p {
+
+        /* Base Styles (mostly retained) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Navigation --- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+            backdrop-filter: blur(12px); /* Slightly more blur */
+            -webkit-backdrop-filter: blur(12px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            position: sticky;
+            top: 15px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: fit-content;
+            margin: 0 auto 30px auto;
+            box-shadow: var(--shadow-md); /* Consistent shadow */
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.6em; /* Slightly larger */
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: all 0.3s ease; /* Smooth transition for color and transform */
+            position: relative; /* For underline effect */
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px); /* Subtle lift on hover */
+        }
+
+        /* Underline effect for active/hover nav links */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin: auto;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+            left: 0;
+            bottom: -5px;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+
+        .nav-cta {
+            background: var(--gradient);
+            color: var(--light-color);
+            padding: 10px 22px; /* Slightly more padding */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600; /* Bolder */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-light); /* Added subtle shadow */
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); /* Stronger shadow on hover */
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            padding: 80px 20px; /* More vertical padding */
+            margin-bottom: 40px;
+            background: radial-gradient(circle at top left, var(--bg-color) 0%, rgba(240, 248, 255, 0.5) 100%); /* Subtle background */
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-light);
+        }
+
+        .header .logo-main {
+            font-size: 5.5em; /* Slightly larger */
+            font-weight: 800; /* Bolder */
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            letter-spacing: -2px; /* Tighter letter spacing */
+        }
+
+        .header .subtitle {
+            font-size: 1.3em; /* Slightly larger */
+            color: var(--dark-color);
+            font-weight: 600; /* Bolder */
+            letter-spacing: 2px; /* More distinct spacing */
+            margin-top: 10px; /* More space */
+            text-transform: uppercase;
+        }
+
+        .header .tagline {
+            font-size: 1.25em; /* Slightly larger */
+            color: var(--text-muted);
+            margin-top: 25px; /* More space */
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- Section Header & Filters --- */
+        .section-container {
+            /* This will wrap section-header and courses-grid for easier filtering */
+            display: none; /* Hidden by default, shown by JS */
+            margin-bottom: 60px; /* Space between sections */
+        }
+        .section-container.active {
+            display: block; /* Show active section */
+        }
+
+
+        .section-header {
+            text-align: center;
+            margin: 80px 0 40px 0; /* More vertical space */
+            position: relative;
+        }
+
+        .section-header h2 {
+            font-size: 3em; /* Larger */
+            color: var(--dark-color);
+            margin-bottom: 15px; /* More space */
+            font-weight: 700;
+        }
+
+        .section-header h2 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.25em; /* Slightly larger */
+            color: var(--text-muted);
+            max-width: 700px; /* Wider text */
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px; /* More space below */
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--light-color);
+            border: 1px solid #ddd;
+            padding: 12px 30px; /* More padding */
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600; /* Bolder text */
+            transition: all 0.3s ease;
+            color: var(--text-color); /* Default text color */
+            box-shadow: var(--shadow-light); /* Subtle shadow */
+            display: flex; /* For icon alignment */
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-btn.active {
+            background: var(--gradient);
+            color: var(--light-color);
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); /* Stronger shadow for active */
+            transform: translateY(-3px); /* More pronounced lift */
+        }
+
+        /* --- Course Grid & Cards --- */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* Slightly wider min-width */
+            gap: 30px;
+            /* No longer hiding/showing individual cards, but the entire grid section */
+        }
+
+        .course-card {
+            background: var(--light-color);
+            border-radius: var(--border-radius-md);
+            padding: 30px; /* More padding */
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Added border-color transition */
+            border-top: 5px solid; /* Slightly thicker border */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Ensures content doesn't spill out on transform */
+        }
+
+        .course-card[data-category="foundation"] { border-color: var(--primary-color); } /* Using var */
+        .course-card[data-category="webdev"] { border-color: var(--accent-color-1); } /* New accent color */
+        .course-card[data-category="specialized"] { border-color: var(--accent-color-2); } /* New accent color */
+
+        .course-card:hover {
+            transform: translateY(-10px); /* More pronounced lift */
+            box-shadow: var(--shadow-strong); /* Stronger shadow */
+        }
+
+        .course-title {
+            font-size: 1.6em; /* Slightly larger */
+            font-weight: 700; /* Bolder */
+            color: var(--dark-color);
+            margin-bottom: 15px; /* More space */
+            display: flex;
+            align-items: center;
+            gap: 15px; /* More space for icon */
+        }
+
+        .course-title span {
+            font-size: 2em; /* Larger icon */
+            line-height: 1; /* Ensure icon is aligned well */
+        }
+
+        .course-duration {
+            background-color: #e9ecef;
+            color: var(--text-muted);
+            padding: 6px 15px; /* More padding */
+            border-radius: 25px; /* More rounded */
+            font-size: 0.9em; /* Slightly larger */
+            font-weight: 600; /* Bolder */
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        /* --- Course Content (Always Visible) --- */
+        .course-content {
+            /* No max-height or overflow: hidden for accordion effect */
+            border-left: 2px solid rgba(0,0,0,0.05); /* Subtle left border */
+            padding-left: 10px; /* Padding for the border */
+            margin-top: 15px; /* Add some space above content */
+        }
+
+        .course-content ul {
+            list-style: none;
+            margin-bottom: 15px;
+            padding-left: 0; /* Reset default padding */
+        }
+
+        .course-content li {
+            padding: 8px 0 8px 30px; /* More padding and space for checkmark */
+            position: relative;
+            font-size: 0.98em;
+        }
+
+        .course-content li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color); /* Consistent primary color */
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .course-info-box {
+            background: var(--bg-color);
+            padding: 18px; /* More padding */
+            border-radius: var(--border-radius-sm);
+            margin-top: 15px;
+            border-left: 4px solid; /* Thicker border */
+            font-size: 1em; /* Slightly larger font */
+            line-height: 1.5;
+            box-shadow: var(--shadow-light); /* Subtle shadow */
+        }
+
+        .ideal-for { border-left-color: var(--accent-color-1); } /* Using accent color */
+        .outcome { border-left-color: var(--accent-color-2); } /* Using accent color */
+
+        /* --- Special Offer --- */
+        .special-offer {
+            background: var(--gradient);
+            color: var(--light-color);
+            padding: 40px; /* More padding */
+            border-radius: var(--border-radius-md);
+            text-align: center;
+            margin: 60px 0; /* More vertical space */
+            box-shadow: var(--shadow-strong); /* Stronger shadow */
+            position: relative;
+            overflow: hidden; /* For pseudo-elements */
+        }
+        .special-offer::before {
+            content: '✨'; /* Add a subtle decorative element */
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 6em;
+            opacity: 0.15;
+            transform: rotate(-20deg);
+        }
+        .special-offer::after {
+            content: '🚀';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 6em;
+            opacity: 0.15;
+            transform: rotate(20deg);
+        }
+
+        .special-offer h2 {
+            margin-bottom: 20px; /* More space */
+            font-size: 2.2em; /* Larger */
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .special-offer p {
+            opacity: 0.95; /* Less transparent */
+            font-size: 1.1em; /* Larger text */
             margin-bottom: 10px;
+        }
+        .special-offer p strong {
+            color: var(--accent-color-2); /* Highlight discount text */
+            text-shadow: 0 0 5px rgba(255, 193, 7, 0.5); /* Subtle glow */
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background: var(--dark-color);
+            color: #e9ecef;
+            border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+            padding: 70px 30px 40px 30px; /* More padding */
+            text-align: center;
+            margin-top: 80px; /* More margin */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer h2 {
+            color: var(--light-color);
+            margin-bottom: 40px; /* More space */
+            font-size: 2.5em; /* Larger */
+            font-weight: 700;
+        }
+
+        .why-choose-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly wider min-width */
+            gap: 30px; /* More gap */
+            margin-bottom: 50px; /* More margin */
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.07); /* Slightly less transparent */
+            padding: 30px; /* More padding */
+            border-radius: var(--border-radius-sm);
+            border-top: 4px solid var(--primary-color); /* Thicker border */
+            text-align: left; /* Align text left */
+            box-shadow: var(--shadow-light); /* Subtle shadow */
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .why-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12); /* Brighter on hover */
+        }
+        .why-card h3 {
+            color: var(--light-color);
+            margin-bottom: 12px;
+            font-size: 1.4em; /* Larger */
+            font-weight: 600;
+        }
+        .why-card p {
+            color: #ced4da; /* Lighter text for readability */
+            font-size: 0.95em;
+        }
+
+        .footer-cta-buttons {
+            margin: 50px 0; /* More margin */
+        }
+        .cta-button {
+            background: var(--gradient);
+            color: var(--light-color);
+            padding: 16px 40px; /* More padding */
+            border: none;
+            border-radius: 35px; /* More rounded */
+            font-size: 1.15em; /* Slightly larger */
+            font-weight: 600; /* Bolder */
+            cursor: pointer;
+            margin: 12px; /* More margin */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Stronger initial shadow */
+        }
+        .cta-button:hover {
+            transform: translateY(-5px); /* More pronounced lift */
+            box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5); /* Stronger shadow */
+        }
+
+        .footer-contact p {
+            margin-bottom: 12px; /* More space */
             color: #adb5bd;
+            font-size: 1em;
         }
         .footer-contact a {
-            color: #e9ecef;
+            color: #f8f9fa; /* Lighter color */
             text-decoration: none;
             transition: color 0.3s ease;
+            font-weight: 500;
         }
         .footer-contact a:hover {
             color: var(--primary-color);
+            text-decoration: underline;
         }
 
-
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
                 gap: 15px;
                 width: 100%;
                 border-radius: var(--border-radius-md);
+                padding: 15px 20px;
+                top: 0; /* Stick to top on mobile */
             }
-            .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
-            .nav-links a { margin: 0 10px; }
-            .header .logo-main { font-size: 3em; }
-            .section-header h2 { font-size: 2.2em; }
-            .courses-grid { grid-template-columns: 1fr; }
-            .container { padding: 15px; }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px; /* More gap for mobile */
+            }
+            .nav-links a {
+                margin: 0 8px;
+                font-size: 0.95em;
+            }
+            .header {
+                padding: 50px 15px;
+            }
+            .header .logo-main {
+                font-size: 3.5em;
+            }
+            .header .subtitle {
+                font-size: 1.1em;
+            }
+            .section-header h2 {
+                font-size: 2.5em;
+            }
+            .section-header p {
+                font-size: 1.1em;
+            }
+            .filter-buttons {
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            .course-card {
+                padding: 25px;
+            }
+            .course-title {
+                font-size: 1.4em;
+                gap: 10px;
+            }
+            .course-title span {
+                font-size: 1.8em;
+            }
+            .special-offer {
+                padding: 30px 20px;
+            }
+            .special-offer h2 {
+                font-size: 1.8em;
+            }
+            .special-offer p {
+                font-size: 1em;
+            }
+            .footer {
+                padding: 50px 20px 30px 20px;
+            }
+            .footer h2 {
+                font-size: 2em;
+            }
+            .why-choose-grid {
+                grid-template-columns: 1fr;
+            }
+            .why-card {
+                text-align: center; /* Center text on mobile */
+            }
+            .footer-cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .cta-button {
+                width: 90%;
+                margin: 0 auto 15px auto;
+            }
         }
     </style>
 </head>
@@ -620,9 +569,9 @@ body {
     <nav class="navbar">
         <div class="nav-logo">CODE</div>
         <div class="nav-links">
-            <a href="#foundation">Foundation</a>
-            <a href="#webdev">Web Dev</a>
-            <a href="#specialized">Specialized</a>
+            <a href="#foundation-section">Foundation</a>
+            <a href="#webdev-section">Web Dev</a>
+            <a href="#specialized-section">Specialized</a>
         </div>
         <a href="#contact" class="nav-cta">Contact Us</a>
     </nav>
@@ -639,7 +588,7 @@ body {
             <p><strong>🔥 Limited Time:</strong> Enroll in any course and get a <strong>FREE Meta Ads Basic Course</strong> worth ₹5,000.</p>
             <p><strong>📚 Combo Offers:</strong> Take 2 courses together and save up to 25%. Payment plans available.</p>
         </div>
-        
+
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">All Courses</button>
             <button class="filter-btn" data-filter="foundation">🏢 Foundation</button>
@@ -647,162 +596,159 @@ body {
             <button class="filter-btn" data-filter="specialized">📚 Specialized</button>
         </div>
 
-        <section id="foundation" class="section-header">
-            <h2>Our <span>Foundation</span> Courses</h2>
-            <p>Build your computer skills from the ground up, moving from basic to advanced levels with expert guidance.</p>
-        </section>
-        
-        <div class="courses-grid">
-            <div class="course-card" data-category="foundation">
-                <h3 class="course-title"><span>🧾</span> CCA - Certificate in Computer Applications</h3>
-                <span class="course-duration">⏰ Duration: 3 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li>MS Word, Excel, PowerPoint</li>
-                        <li>File Management &amp; Printing</li>
-                        <li>Email, Browse &amp; Google Tools</li>
-                    </ul>
-                </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> School/College Students, Beginners.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Strong skills for everyday computing and office use.</div>
-            </div>
+        <div class="section-container" id="foundation-section" data-category="foundation">
+            <section class="section-header">
+                <h2>Our <span>Foundation</span> Courses</h2>
+                <p>Build your computer skills from the ground up, moving from basic to advanced levels with expert guidance.</p>
+            </section>
 
-            <div class="course-card" data-category="foundation">
-                <h3 class="course-title"><span>💼</span> DCA - Diploma in Computer Applications</h3>
-                <span class="course-duration">⏰ Duration: 6 Months</span>
-                 <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li>Full MS Office (Word, Excel, PowerPoint)</li>
-                        <li>Internet Tools &amp; Google Workspace</li>
-                        <li>File Handling, Email, PDFs, Online Forms</li>
-                    </ul>
+            <div class="courses-grid">
+                <div class="course-card" data-category="foundation">
+                    <h3 class="course-title"><span>🧾</span> CCA - Certificate in Computer Applications</h3>
+                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>MS Word, Excel, PowerPoint</li>
+                            <li>File Management &amp; Printing</li>
+                            <li>Email, Browse &amp; Google Tools</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> School/College Students, Beginners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Strong skills for everyday computing and office use.</div>
                 </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles.</div>
-            </div>
 
-            <div class="course-card" data-category="foundation">
-                <h3 class="course-title"><span>🧮</span> ADCA - Advanced Diploma</h3>
-                <span class="course-duration">⏰ Duration: 12 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                     <ul>
-                        <li>All DCA Modules + Advanced Excel</li>
-                        <li>Tally ERP 9 with GST</li>
-                        <li>Graphic Design (Photoshop, Canva)</li>
-                        <li>Database Management (MS Access)</li>
-                    </ul>
+                <div class="course-card" data-category="foundation">
+                    <h3 class="course-title"><span>💼</span> DCA - Diploma in Computer Applications</h3>
+                    <span class="course-duration">⏰ Duration: 6 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Full MS Office (Word, Excel, PowerPoint)</li>
+                            <li>Internet Tools &amp; Google Workspace</li>
+                            <li>File Handling, Email, PDFs, Online Forms</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles.</div>
                 </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, accountants, business owners.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with accounting &amp; marketing.</div>
-            </div>
-        </div>
 
-        <section id="webdev" class="section-header">
-            <h2><span>Web Development</span> Courses</h2>
-            <p>Learn to build modern, responsive websites and launch your career as a web developer or freelancer.</p>
-        </section>
-
-        <div class="courses-grid">
-             <div class="course-card" data-category="webdev">
-                <h3 class="course-title"><span>🎨</span> Basic Web Design</h3>
-                <span class="course-duration">⏰ Duration: 3 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li><strong>HTML5 &amp; CSS3:</strong> Structure, styling, responsive design.</li>
-                        <li><strong>Bootstrap 5:</strong> Rapidly build professional layouts.</li>
-                        <li><strong>JavaScript Basics:</strong> Add interactivity to your sites.</li>
-                        <li><strong>Projects:</strong> Build a portfolio, business page, and more.</li>
-                    </ul>
+                <div class="course-card" data-category="foundation">
+                    <h3 class="course-title"><span>🧮</span> ADCA - Advanced Diploma</h3>
+                    <span class="course-duration">⏰ Duration: 12 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>All DCA Modules + Advanced Excel</li>
+                            <li>Tally ERP 9 with GST</li>
+                            <li>Graphic Design (Photoshop, Canva)</li>
+                            <li>Database Management (MS Access)</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, accountants, business owners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with accounting &amp; marketing.</div>
                 </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Complete beginners, students, small business owners.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create beautiful websites and start freelancing.</div>
-            </div>
-            
-             <div class="course-card" data-category="webdev">
-                <h3 class="course-title"><span>💻</span> Advanced Web Development</h3>
-                <span class="course-duration">⏰ Duration: 4 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li><strong>Advanced JavaScript:</strong> ES6+, APIs, Async/Await.</li>
-                        <li><strong>WordPress Dev:</strong> Custom themes &amp; plugins.</li>
-                        <li><strong>Database &amp; Hosting:</strong> MySQL, PHP basics, cPanel.</li>
-                        <li><strong>Client Projects:</strong> Build 3 live websites with backends.</li>
-                    </ul>
-                </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Career switchers, serious freelancers.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Become a full-stack capable developer.</div>
-            </div>
-
-            <div class="course-card" data-category="webdev">
-                <h3 class="course-title"><span>🛒</span> Shopify &amp; E-commerce</h3>
-                <span class="course-duration">⏰ Duration: 2 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li><strong>Store Setup:</strong> Products, collections, payments.</li>
-                        <li><strong>Theme Customization:</strong> Liquid templating basics.</li>
-                        <li><strong>App Integration:</strong> Marketing, inventory, and more.</li>
-                        <li><strong>Projects:</strong> Build 2 complete e-commerce stores.</li>
-                    </ul>
-                </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, marketers.</div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch and manage profitable online stores.</div>
             </div>
         </div>
 
-        <section id="specialized" class="section-header">
-             <h2>Our <span>Specialized</span> Courses</h2>
-             <p>Dive deep into high-demand skills like AI, digital marketing, and professional freelancing.</p>
-        </section>
+        <div class="section-container" id="webdev-section" data-category="webdev">
+            <section class="section-header">
+                <h2><span>Web Development</span> Courses</h2>
+                <p>Learn to build modern, responsive websites and launch your career as a web developer or freelancer.</p>
+            </section>
 
-        <div class="courses-grid">
-            <div class="course-card" data-category="specialized">
-                <h3 class="course-title"><span>🤖</span> AI Prompt Engineering</h3>
-                <span class="course-duration">⏰ Duration: 2 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li>Master ChatGPT, MidJourney, Gemini &amp; more.</li>
-                        <li>Write effective prompts for text &amp; images.</li>
-                        <li>Use AI for writing, ideas, and automation.</li>
-                    </ul>
+            <div class="courses-grid">
+                <div class="course-card" data-category="webdev">
+                    <h3 class="course-title"><span>🎨</span> Basic Web Design</h3>
+                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li><strong>HTML5 &amp; CSS3:</strong> Structure, styling, responsive design.</li>
+                            <li><strong>Bootstrap 5:</strong> Rapidly build professional layouts.</li>
+                            <li><strong>JavaScript Basics:</strong> Add interactivity to your sites.</li>
+                            <li><strong>Projects:</strong> Build a portfolio, business page, and more.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Complete beginners, students, small business owners.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create beautiful websites and start freelancing.</div>
                 </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Creatives, students, content creators.</div>
-            </div>
 
-            <div class="course-card" data-category="specialized">
-                <h3 class="course-title"><span>📱</span> Meta Ads &amp; Digital Marketing</h3>
-                <span class="course-duration">⏰ Duration: 3 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li>Facebook &amp; Instagram Ads Manager.</li>
-                        <li>Campaigns, targeting &amp; optimization.</li>
-                        <li>Google Ads &amp; YouTube Advertising.</li>
-                        <li>Analytics, ROI tracking &amp; reporting.</li>
-                    </ul>
+                <div class="course-card" data-category="webdev">
+                    <h3 class="course-title"><span>💻</span> Advanced Web Development</h3>
+                    <span class="course-duration">⏰ Duration: 4 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li><strong>Advanced JavaScript:</strong> ES6+, APIs, Async/Await.</li>
+                            <li><strong>WordPress Dev:</strong> Custom themes &amp; plugins.</li>
+                            <li><strong>Database &amp; Hosting:</strong> MySQL, PHP basics, cPanel.</li>
+                            <li><strong>Client Projects:</strong> Build 3 live websites with backends.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Career switchers, serious freelancers.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Become a full-stack capable developer.</div>
                 </div>
-                <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run profitable ad campaigns, start a marketing agency.</div>
+
+                <div class="course-card" data-category="webdev">
+                    <h3 class="course-title"><span>🛒</span> Shopify &amp; E-commerce</h3>
+                    <span class="course-duration">⏰ Duration: 2 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li><strong>Store Setup:</strong> Products, collections, payments.</li>
+                            <li><strong>Theme Customization:</strong> Liquid templating basics.</li>
+                            <li><strong>App Integration:</strong> Marketing, inventory, and more.</li>
+                            <li><strong>Projects:</strong> Build 2 complete e-commerce stores.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, marketers.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch and manage profitable online stores.</div>
+                </div>
             </div>
-            
-             <div class="course-card" data-category="specialized">
-                <h3 class="course-title"><span>💼</span> Freelancing Starter Pack</h3>
-                <span class="course-duration">⏰ Duration: 2 Months</span>
-                <button class="details-toggle">View Details <span class="arrow">▼</span></button>
-                <div class="course-content">
-                    <ul>
-                        <li>Create profiles on Fiverr &amp; Upwork.</li>
-                        <li>Portfolio building &amp; client communication.</li>
-                        <li>Bidding strategies &amp; pricing services.</li>
-                        <li>Project management &amp; delivery.</li>
-                    </ul>
+        </div>
+
+        <div class="section-container" id="specialized-section" data-category="specialized">
+            <section class="section-header">
+                <h2>Our <span>Specialized</span> Courses</h2>
+                <p>Dive deep into high-demand skills like AI, digital marketing, and professional freelancing.</p>
+            </section>
+
+            <div class="courses-grid">
+                <div class="course-card" data-category="specialized">
+                    <h3 class="course-title"><span>🤖</span> AI Prompt Engineering</h3>
+                    <span class="course-duration">⏰ Duration: 2 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Master ChatGPT, MidJourney, Gemini &amp; more.</li>
+                            <li>Write effective prompts for text &amp; images.</li>
+                            <li>Use AI for writing, ideas, and automation.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Creatives, students, content creators.</div>
                 </div>
-                <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Anyone with a skill looking to earn online.</div>
+
+                <div class="course-card" data-category="specialized">
+                    <h3 class="course-title"><span>📱</span> Meta Ads &amp; Digital Marketing</h3>
+                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Facebook &amp; Instagram Ads Manager.</li>
+                            <li>Campaigns, targeting &amp; optimization.</li>
+                            <li>Google Ads &amp; YouTube Advertising.</li>
+                            <li>Analytics, ROI tracking &amp; reporting.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run profitable ad campaigns, start a marketing agency.</div>
+                </div>
+
+                <div class="course-card" data-category="specialized">
+                    <h3 class="course-title"><span>💼</span> Freelancing Starter Pack</h3>
+                    <span class="course-duration">⏰ Duration: 2 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>Create profiles on Fiverr &amp; Upwork.</li>
+                            <li>Portfolio building &amp; client communication.</li>
+                            <li>Bidding strategies &amp; pricing services.</li>
+                            <li>Project management &amp; delivery.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Anyone with a skill looking to earn online.</div>
+                </div>
             </div>
         </div>
     </main>
@@ -832,7 +778,7 @@ body {
             <a href="tel:9635809537" class="cta-button">📞 Call to Enroll</a>
             <a href="https://wa.me/919635809537" target="_blank" class="cta-button">💬 WhatsApp Inquiry</a>
         </div>
-        
+
         <div class="footer-contact">
             <p><strong>📍 Address:</strong> Lokenath Nagar, Near K1 Fitness Gym, Lower Bagdogra, 734014</p>
             <p><strong>📧 Email:</strong> <a href="mailto:code.bagdogra@gmail.com">code.bagdogra@gmail.com</a></p>
@@ -840,56 +786,65 @@ body {
         </div>
     </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // --- Course Filtering Logic ---
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const courseCards = document.querySelectorAll('.course-card');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-    if (filterButtons.length > 0) {
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                const filter = button.getAttribute('data-filter');
+            // --- Course Filtering Logic ---
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const sectionContainers = document.querySelectorAll('.section-container'); // Get all section wrappers
 
-                courseCards.forEach(card => {
-                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
+            function applyFilter(filter) {
+                // Hide all sections first
+                sectionContainers.forEach(container => {
+                    container.style.display = 'none';
                 });
-            });
-        });
-    }
 
-    // --- Accordion Logic for Course Details ---
-    const detailToggles = document.querySelectorAll('.details-toggle');
-
-    if (detailToggles.length > 0) {
-        detailToggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                
-                // --- DEBUGGING LINE ---
-                console.log("Details button was clicked!"); 
-                
-                toggle.classList.toggle('active');
-                const content = toggle.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
+                if (filter === 'all') {
+                    // Show all sections
+                    sectionContainers.forEach(container => {
+                        container.style.display = 'block';
+                    });
                 } else {
-                    content.style.maxHeight = content.scrollHeight + 'px';
+                    // Show only the section matching the filter
+                    const targetSection = document.querySelector(`.section-container[data-category="${filter}"]`);
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                    }
                 }
-            });
+            }
+
+            if (filterButtons.length > 0) {
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active')); // Deactivate all filter buttons
+                        button.classList.add('active'); // Activate clicked button
+                        const filter = button.getAttribute('data-filter'); // Get filter category
+
+                        applyFilter(filter); // Apply the filter
+                    });
+                });
+
+                // Initial load: show all courses
+                applyFilter('all');
+                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            }
+
+            // Remove accordion logic as requested
+            // const detailToggles = document.querySelectorAll('.details-toggle');
+            // if (detailToggles.length > 0) {
+            //     detailToggles.forEach(toggle => {
+            //         toggle.addEventListener('click', () => {
+            //             toggle.classList.toggle('active');
+            //             const content = toggle.nextElementSibling;
+            //             if (content.style.maxHeight) {
+            //                 content.style.maxHeight = null;
+            //             } else {
+            //                 content.style.maxHeight = content.scrollHeight + 'px';
+            //             }
+            //         });
+            //     });
+            // }
         });
-    } else {
-        console.error("Error: No elements with the class 'details-toggle' were found.");
-    }
-});
-</script>
-
-
+    </script>
 </body>
 </html>
