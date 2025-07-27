@@ -7,7 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* ALL CSS from previous response goes here.
+           No major changes needed to CSS for the icons themselves,
+           as Font Awesome icons are styled like text.
+           I'll include the full CSS block below for completeness.
+        */
         :root {
             --primary-color: #667eea; /* Original Purple */
             --secondary-color: #764ba2; /* Original Darker Purple */
@@ -281,10 +287,18 @@
             gap: 15px; /* More space for icon */
         }
 
-        .course-title span {
-            font-size: 2em; /* Larger icon */
-            line-height: 1; /* Ensure icon is aligned well */
+        /* Styling for the Font Awesome icons within course titles */
+        .course-title .fa-solid,
+        .course-title .fa-brands {
+            font-size: 1.2em; /* Smaller relative to emoji, adjust as needed */
+            color: var(--primary-color); /* Or other accent color for icons */
+            width: 1.2em; /* Ensure consistent width */
+            text-align: center;
         }
+        /* Override specific course icon colors based on category if desired */
+        .course-card[data-category="webdev"] .course-title .fa-solid { color: var(--accent-color-1); }
+        .course-card[data-category="specialized"] .course-title .fa-solid { color: var(--accent-color-2); }
+
 
         .course-duration {
             background-color: #e9ecef;
@@ -432,6 +446,12 @@
             font-size: 1.4em; /* Larger */
             font-weight: 600;
         }
+        /* Styling for the Font Awesome icons within why-card titles */
+        .why-card h3 .fa-solid {
+            margin-right: 10px; /* Space between icon and text */
+            color: var(--accent-color-1); /* Example color */
+        }
+
         .why-card p {
             color: #ced4da; /* Lighter text for readability */
             font-size: 0.95em;
@@ -459,6 +479,12 @@
             transform: translateY(-5px); /* More pronounced lift */
             box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5); /* Stronger shadow */
         }
+        /* Styling for Font Awesome icons within CTA buttons */
+        .cta-button .fa-solid,
+        .cta-button .fa-brands {
+            margin-right: 10px; /* Space between icon and text */
+        }
+
 
         .footer-contact p {
             margin-bottom: 12px; /* More space */
@@ -529,8 +555,10 @@
                 font-size: 1.4em;
                 gap: 10px;
             }
-            .course-title span {
-                font-size: 1.8em;
+            /* Adjust icon size on mobile */
+            .course-title .fa-solid,
+            .course-title .fa-brands {
+                font-size: 1em;
             }
             .special-offer {
                 padding: 30px 20px;
@@ -560,6 +588,11 @@
             .cta-button {
                 width: 90%;
                 margin: 0 auto 15px auto;
+            }
+            /* Adjust icon spacing for mobile CTA buttons */
+            .cta-button .fa-solid,
+            .cta-button .fa-brands {
+                margin-right: 8px;
             }
         }
     </style>
@@ -591,9 +624,9 @@
 
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">All Courses</button>
-            <button class="filter-btn" data-filter="foundation">🏢 Foundation</button>
-            <button class="filter-btn" data-filter="webdev">🌐 Web Development</button>
-            <button class="filter-btn" data-filter="specialized">📚 Specialized</button>
+            <button class="filter-btn" data-filter="foundation"><i class="fa-solid fa-building-columns"></i> Foundation</button>
+            <button class="filter-btn" data-filter="webdev"><i class="fa-solid fa-globe"></i> Web Development</button>
+            <button class="filter-btn" data-filter="specialized"><i class="fa-solid fa-graduation-cap"></i> Specialized</button>
         </div>
 
         <div class="section-container" id="foundation-section" data-category="foundation">
@@ -604,7 +637,7 @@
 
             <div class="courses-grid">
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><span>🧾</span> CCA - Certificate in Computer Applications</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-file-invoice"></i> CCA - Certificate in Computer Applications</h3>
                     <span class="course-duration">⏰ Duration: 3 Months</span>
                     <div class="course-content">
                         <ul>
@@ -618,7 +651,7 @@
                 </div>
 
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><span>💼</span> DCA - Diploma in Computer Applications</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-briefcase"></i> DCA - Diploma in Computer Applications</h3>
                     <span class="course-duration">⏰ Duration: 6 Months</span>
                     <div class="course-content">
                         <ul>
@@ -632,7 +665,7 @@
                 </div>
 
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><span>🧮</span> ADCA - Advanced Diploma</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-calculator"></i> ADCA - Advanced Diploma</h3>
                     <span class="course-duration">⏰ Duration: 12 Months</span>
                     <div class="course-content">
                         <ul>
@@ -656,7 +689,7 @@
 
             <div class="courses-grid">
                 <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><span>🎨</span> Basic Web Design</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-palette"></i> Basic Web Design</h3>
                     <span class="course-duration">⏰ Duration: 3 Months</span>
                     <div class="course-content">
                         <ul>
@@ -671,7 +704,7 @@
                 </div>
 
                 <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><span>💻</span> Advanced Web Development</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-laptop-code"></i> Advanced Web Development</h3>
                     <span class="course-duration">⏰ Duration: 4 Months</span>
                     <div class="course-content">
                         <ul>
@@ -686,7 +719,7 @@
                 </div>
 
                 <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><span>🛒</span> Shopify &amp; E-commerce</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-store"></i> Shopify &amp; E-commerce</h3>
                     <span class="course-duration">⏰ Duration: 2 Months</span>
                     <div class="course-content">
                         <ul>
@@ -710,7 +743,7 @@
 
             <div class="courses-grid">
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><span>🤖</span> AI Prompt Engineering</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-robot"></i> AI Prompt Engineering</h3>
                     <span class="course-duration">⏰ Duration: 2 Months</span>
                     <div class="course-content">
                         <ul>
@@ -723,7 +756,7 @@
                 </div>
 
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><span>📱</span> Meta Ads &amp; Digital Marketing</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-mobile-screen-button"></i> Meta Ads &amp; Digital Marketing</h3>
                     <span class="course-duration">⏰ Duration: 3 Months</span>
                     <div class="course-content">
                         <ul>
@@ -737,7 +770,7 @@
                 </div>
 
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><span>💼</span> Freelancing Starter Pack</h3>
+                    <h3 class="course-title"><i class="fa-solid fa-handshake-angle"></i> Freelancing Starter Pack</h3>
                     <span class="course-duration">⏰ Duration: 2 Months</span>
                     <div class="course-content">
                         <ul>
@@ -757,26 +790,26 @@
         <h2>Why Choose CODE?</h2>
         <div class="why-choose-grid">
             <div class="why-card">
-                <h3>🏆 Expert Training</h3>
+                <h3><i class="fa-solid fa-award"></i> Expert Training</h3>
                 <p>Learn from industry-experienced instructors with a hands-on teaching approach.</p>
             </div>
             <div class="why-card">
-                <h3>💻 Modern Lab</h3>
+                <h3><i class="fa-solid fa-flask-vial"></i> Modern Lab</h3>
                 <p>Practice on the latest software in our well-equipped, high-speed internet lab.</p>
             </div>
             <div class="why-card">
-                <h3>📜 Certified Courses</h3>
+                <h3><i class="fa-solid fa-certificate"></i> Certified Courses</h3>
                 <p>Receive recognized certificates upon successful completion to boost your resume.</p>
             </div>
             <div class="why-card">
-                <h3>🤝 Job Assistance</h3>
+                <h3><i class="fa-solid fa-handshake"></i> Job Assistance</h3>
                 <p>Get career guidance and job placement support for eligible students.</p>
             </div>
         </div>
 
         <div class="footer-cta-buttons">
-            <a href="tel:9635809537" class="cta-button">📞 Call to Enroll</a>
-            <a href="https://wa.me/919635809537" target="_blank" class="cta-button">💬 WhatsApp Inquiry</a>
+            <a href="tel:9635809537" class="cta-button"><i class="fa-solid fa-phone"></i> Call to Enroll</a>
+            <a href="https://wa.me/919635809537" target="_blank" class="cta-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp Inquiry</a>
         </div>
 
         <div class="footer-contact">
@@ -828,22 +861,6 @@
                 applyFilter('all');
                 document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
             }
-
-            // Remove accordion logic as requested
-            // const detailToggles = document.querySelectorAll('.details-toggle');
-            // if (detailToggles.length > 0) {
-            //     detailToggles.forEach(toggle => {
-            //         toggle.addEventListener('click', () => {
-            //             toggle.classList.toggle('active');
-            //             const content = toggle.nextElementSibling;
-            //             if (content.style.maxHeight) {
-            //                 content.style.maxHeight = null;
-            //             } else {
-            //                 content.style.maxHeight = content.scrollHeight + 'px';
-            //             }
-            //         });
-            //     });
-            // }
         });
     </script>
 </body>
