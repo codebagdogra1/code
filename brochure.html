@@ -9,11 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* ALL CSS from previous response goes here.
-           No major changes needed to CSS for the icons themselves,
-           as Font Awesome icons are styled like text.
-           I'll include the full CSS block below for completeness.
-        */
         :root {
             --primary-color: #667eea; /* Original Purple */
             --secondary-color: #764ba2; /* Original Darker Purple */
@@ -31,6 +26,11 @@
             --shadow-strong: 0 15px 35px rgba(0, 0, 0, 0.1);
             --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             --gradient-light: linear-gradient(135deg, #a7baff 0%, #c1a2e2 100%); /* Lighter version */
+
+            /* New: Section specific background colors */
+            --section-bg-foundation: #f0f3ff; /* Very light purple/blue */
+            --section-bg-webdev: #f0fff0;    /* Very light green */
+            --section-bg-specialized: #fffbf0; /* Very light amber */
         }
 
         /* Base Styles (mostly retained) */
@@ -174,18 +174,32 @@
 
         /* --- Section Header & Filters --- */
         .section-container {
-            /* This will wrap section-header and courses-grid for easier filtering */
             display: none; /* Hidden by default, shown by JS */
             margin-bottom: 60px; /* Space between sections */
+            padding: 40px; /* Consistent padding for all sections */
+            border-radius: var(--border-radius-md); /* Consistent border-radius */
+            box-shadow: var(--shadow-light); /* Optional: add a subtle shadow for depth */
+            transition: background-color 0.3s ease; /* Smooth transition for background if changing */
         }
         .section-container.active {
             display: block; /* Show active section */
         }
 
+        /* Specific background colors for each section */
+        .section-container[data-category="foundation"] {
+            background-color: var(--section-bg-foundation);
+        }
+        .section-container[data-category="webdev"] {
+            background-color: var(--section-bg-webdev);
+        }
+        .section-container[data-category="specialized"] {
+            background-color: var(--section-bg-specialized);
+        }
+
 
         .section-header {
             text-align: center;
-            margin: 80px 0 40px 0; /* More vertical space */
+            margin: 0 0 40px 0; /* Adjusted margin, padding is now on section-container */
             position: relative;
         }
 
@@ -253,7 +267,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); /* Slightly wider min-width */
             gap: 30px;
-            /* No longer hiding/showing individual cards, but the entire grid section */
         }
 
         .course-card {
@@ -313,7 +326,6 @@
 
         /* --- Course Content (Always Visible) --- */
         .course-content {
-            /* No max-height or overflow: hidden for accordion effect */
             border-left: 2px solid rgba(0,0,0,0.05); /* Subtle left border */
             padding-left: 10px; /* Padding for the border */
             margin-top: 15px; /* Add some space above content */
@@ -594,6 +606,10 @@
             .cta-button .fa-brands {
                 margin-right: 8px;
             }
+            /* Adjust section padding for mobile */
+            .section-container {
+                padding: 25px;
+            }
         }
     </style>
 </head>
@@ -611,7 +627,7 @@
 
     <main class="container">
         <header class="header">
-            <div class="logo-main"><a href="/">CODE</a></div>
+            <div class="logo-main">CODE</div>
             <div class="subtitle">Computer and Digital Excellence</div>
             <div class="tagline">Empowering Digital Futures • Building Tomorrow's Skills Today</div>
         </header>
@@ -658,6 +674,8 @@
                             <li>Full MS Office (Word, Excel, PowerPoint)</li>
                             <li>Internet Tools &amp; Google Workspace</li>
                             <li>File Handling, Email, PDFs, Online Forms</li>
+                            <li>Types of OS (Windows, Linux, iOS)</li>
+                            <li>Unix Basics</li>
                         </ul>
                     </div>
                     <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
@@ -670,13 +688,13 @@
                     <div class="course-content">
                         <ul>
                             <li>All DCA Modules + Advanced Excel</li>
-                            <li>Tally ERP 9 with GST</li>
+                            <li>Data Analysis Fundamentals</li>
                             <li>Graphic Design (Photoshop, Canva)</li>
                             <li>Database Management (MS Access)</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, accountants, business owners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with accounting &amp; marketing.</div>
+                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, business analysts, aspiring data entry specialists, marketing assistants.</div>
+                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with data insights &amp; marketing.</div>
                 </div>
             </div>
         </div>
@@ -771,7 +789,7 @@
 
                 <div class="course-card" data-category="specialized">
                     <h3 class="course-title"><i class="fa-solid fa-handshake-angle"></i> Freelancing Starter Pack</h3>
-                    <span class="course-duration">⏰ Duration: 2 weeks</span>
+                    <span class="course-duration">⏰ Duration: 2 Months</span>
                     <div class="course-content">
                         <ul>
                             <li>Create profiles on Fiverr &amp; Upwork.</li>
