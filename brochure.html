@@ -695,271 +695,331 @@
 </head>
 <body>
 
+    <div class="container">
     <nav class="navbar">
-        <div class="nav-logo">CODE</div>
+        <a href="#" class="nav-logo">SkillBuilder Pro</a>
         <div class="nav-links">
-            <a href="#foundation-section">Foundation</a>
-            <a href="#webdev-section">Web Dev</a>
-            <a href="#specialized-section">Specialized</a>
+            <a href="#courses" class="active">Courses</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
         </div>
-        <a href="#contact" class="nav-cta">Contact Us</a>
+        <a href="#" class="nav-cta">Enroll Now</a>
     </nav>
 
-    <main class="container">
-        <header class="header">
-            <div class="logo-main">CODE</div>
-            <div class="subtitle">Computer and Digital Excellence</div>
-            <div class="tagline">Empowering Digital Futures • Building Tomorrow's Skills Today</div>
-        </header>
+    <header class="header">
+        <h1 class="logo-main">SkillBuilder Pro</h1>
+        <p class="subtitle">Empowering Your Digital Future</p>
+        <p class="tagline">Unlock your potential with industry-leading computer courses designed for real-world success. From foundational skills to advanced specializations, we've got your future covered.</p>
+    </header>
 
-        <div class="special-offer">
-            <h2>🎉 Grand Opening Special Offers! 🎉</h2>
-            <p><strong>🔥 Limited Time:</strong> Enroll in any course and get a <strong>FREE Meta Ads Basic Course</strong> worth ₹5,000.</p>
-            <p><strong>📚 Combo Offers:</strong> Take 2 courses together and save up to 25%. Payment plans available.</p>
+    <section id="courses">
+        <div class="section-header">
+            <h2>Our Dynamic <span>Course Catalog</span></h2>
+            <p>Explore a diverse range of courses tailored to meet the demands of today's digital world. Whether you're a beginner or looking to upskill, find your perfect learning path.</p>
         </div>
 
         <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">All Courses</button>
-            <button class="filter-btn" data-filter="foundation"><i class="fa-solid fa-building-columns"></i> Foundation</button>
-            <button class="filter-btn" data-filter="webdev"><i class="fa-solid fa-globe"></i> Web Development</button>
-            <button class="filter-btn" data-filter="specialized"><i class="fa-solid fa-graduation-cap"></i> Specialized</button>
+            <button class="filter-btn active" data-category="all">
+                <i class="fa-solid fa-layer-group"></i> All Courses
+            </button>
+            <button class="filter-btn" data-category="foundation">
+                <i class="fa-solid fa-graduation-cap"></i> Foundational
+            </button>
+            <button class="filter-btn" data-category="webdev">
+                <i class="fa-solid fa-code"></i> Web Development
+            </button>
+            <button class="filter-btn" data-category="specialized">
+                <i class="fa-solid fa-laptop-code"></i> Specialized
+            </button>
         </div>
 
-        <div class="section-container" id="foundation-section" data-category="foundation">
-            <section class="section-header">
-                <h2>Our <span>Foundation</span> Courses</h2>
-                <p>Build your computer skills from the ground up, moving from basic to advanced levels with expert guidance.</p>
-            </section>
-
+        <div class="section-container active" data-category="foundation">
             <div class="courses-grid">
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-file-invoice"></i> CCA - Certificate in Computer Applications</h3>
-                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-computer"></i> Diploma in Computer Applications (DCA)</h3>
+                    <span class="course-duration">Duration: 6 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>MS Word, Excel, PowerPoint</li>
-                            <li>File Management &amp; Printing</li>
-                            <li>Email, Browse &amp; Google Tools</li>
+                            <li>**Computer Fundamentals:** Basics of hardware, software, operating systems.</li>
+                            <li>**Microsoft Office Suite:** Word, Excel, PowerPoint essentials for daily tasks.</li>
+                            <li>**Internet & Email Proficiency:** Effective Browse, email communication, online safety.</li>
+                            <li>**Basics of Web Design:** Understanding fundamental web concepts (URLs, domains) and a brief introduction to HTML.</li>
+                            <li>**Digital Literacy & Typing Skills:** Building essential digital navigation and speed typing.</li>
+                            <li>**Basic Data Entry & Management:** Introduction to organized data handling.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> School/College Students, Beginners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Strong skills for everyday computing and office use.</div>
-                </div>
-
-                <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-briefcase"></i> DCA - Diploma in Computer Applications</h3>
-                    <span class="course-duration">⏰ Duration: 6 Months</span>
-                    <div class="course-content">
-                        <ul>
-                            <li>Full MS Office (Word, Excel, PowerPoint)</li>
-                            <li>Internet Tools &amp; Google Workspace</li>
-                            <li>File Handling, Email, PDFs, Online Forms</li>
-                            <li>Types of OS (Windows, Linux, iOS)</li>
-                            <li>Unix Basics</li>
-                        </ul>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Beginners, students, job seekers needing essential computer literacy for office roles, government exams, and everyday digital tasks.</p>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Job seekers, students, first-time learners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Get job-ready for office and data entry roles.</div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Proficient in basic computer operations, MS Office, and internet usage, with foundational understanding of web basics, ready for entry-level clerical or administrative positions.</p>
+                    </div>
                 </div>
 
                 <div class="course-card" data-category="foundation">
-                    <h3 class="course-title"><i class="fa-solid fa-calculator"></i> ADCA - Advanced Diploma</h3>
-                    <span class="course-duration">⏰ Duration: 12 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-pen-nib"></i> Diploma in Desktop Publishing (DTP)</h3>
+                    <span class="course-duration">Duration: 6 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>All DCA Modules + Advanced Excel</li>
-                            <li>Data Analysis Fundamentals</li>
-                            <li>Graphic Design (Photoshop, Canva)</li>
-                            <li>Database Management (MS Access)</li>
+                            <li>**Graphics & Image Editing:** Mastering Adobe Photoshop for photo manipulation and basic design.</li>
+                            <li>**Vector Graphics Design:** CorelDraw/Illustrator for creating logos, illustrations, and vector artwork.</li>
+                            <li>**Page Layout & Designing:** Adobe InDesign/PageMaker for brochures, flyers, and document layouts.</li>
+                            <li>**Typography & Color Theory:** Principles of effective visual communication.</li>
+                            <li>**Pre-press & Printing Basics:** Understanding print production processes and file preparation.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Govt. exam aspirants, business analysts, aspiring data entry specialists, marketing assistants.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Business-ready skillset with data insights &amp; marketing.</div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Aspiring graphic designers, marketing professionals, content creators, and anyone interested in visual communication.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Ability to design and produce high-quality visual content for print and digital media, ready for roles in publishing houses, advertising agencies, or freelance design.</p>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="foundation">
+                    <h3 class="course-title"><i class="fa-solid fa-file-invoice-dollar"></i> Certificate in Financial Accounting with Tally Prime & GST</h3>
+                    <span class="course-duration">Duration: 3 Months</span>
+                    <div class="course-content">
+                        <ul>
+                            <li>**Accounting Fundamentals:** Basic accounting principles, debits, credits, ledgers.</li>
+                            <li>**Tally Prime Basics:** Introduction to Tally software, company creation, masters.</li>
+                            <li>**Voucher Entry & Transactions:** Recording sales, purchases, payments, receipts.</li>
+                            <li>**GST Implementation:** Understanding Goods and Services Tax, GST returns, e-way bill.</li>
+                            <li>**Financial Reporting:** Generating basic financial statements like P&L and Balance Sheet.</li>
+                        </ul>
+                    </div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Individuals seeking entry-level accounting roles, small business owners, and those preparing for computerized accounting jobs.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Competent in handling day-to-day accounting operations and GST compliance using Tally Prime, suitable for junior accountant or bookkeeper roles.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="section-container" id="webdev-section" data-category="webdev">
-            <section class="section-header">
-                <h2><span>Web Development</span> Courses</h2>
-                <p>Learn to build modern, responsive websites and launch your career as a web developer or freelancer.</p>
-            </section>
-
+        <div class="section-container" data-category="webdev">
             <div class="courses-grid">
                 <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><i class="fa-solid fa-palette"></i> Basic Web Design</h3>
-                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-code"></i> Diploma in Web Development</h3>
+                    <span class="course-duration">Duration: 9 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li><strong>HTML5 &amp; CSS3:</strong> Structure, styling, responsive design.</li>
-                            <li><strong>Bootstrap 5:</strong> Rapidly build professional layouts.</li>
-                            <li><strong>JavaScript Basics:</strong> Add interactivity to your sites.</li>
-                            <li><strong>Projects:</strong> Build a portfolio, business page, and more.</li>
+                            <li>**Frontend Development (HTML5, CSS3, JavaScript):** Building interactive and responsive user interfaces.</li>
+                            <li>**Backend Development (Node.js/PHP Basics):** Server-side scripting, handling data, and basic APIs.</li>
+                            <li>**Database Integration (SQL/MongoDB Basics):** Connecting web applications to databases.</li>
+                            <li>**Frameworks Introduction (React/Bootstrap):** Speeding up development with popular libraries/frameworks.</li>
+                            <li>**Deployment & Hosting:** Making websites live and accessible online.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Complete beginners, students, small business owners.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Create beautiful websites and start freelancing.</div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Aspiring web designers, developers, and entrepreneurs looking to build dynamic websites and web applications.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Ability to design, develop, and deploy full-stack web applications, suitable for junior web developer roles or freelance projects.</p>
+                    </div>
                 </div>
 
                 <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><i class="fa-solid fa-laptop-code"></i> Advanced Web Development</h3>
-                    <span class="course-duration">⏰ Duration: 4 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Certificate in Digital Marketing</h3>
+                    <span class="course-duration">Duration: 4 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li><strong>Advanced JavaScript:</strong> ES6+, APIs, Async/Await.</li>
-                            <li><strong>WordPress Dev:</strong> Custom themes &amp; plugins.</li>
-                            <li><strong>Database &amp; Hosting:</strong> MySQL, PHP basics, cPanel.</li>
-                            <li><strong>Client Projects:</strong> Build 3 live websites with backends.</li>
+                            <li>**Search Engine Optimization (SEO):** On-page, off-page, and technical SEO for better rankings.</li>
+                            <li>**Social Media Marketing (SMM):** Strategies for engaging audiences on popular platforms.</li>
+                            <li>**Content Marketing:** Creating compelling content to attract and retain customers.</li>
+                            <li>**Email Marketing & Automation:** Building email lists and running effective campaigns.</li>
+                            <li>**Google Ads & Analytics:** Running paid campaigns and tracking website performance.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Career switchers, serious freelancers.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Become a full-stack capable developer.</div>
-                </div>
-
-                <div class="course-card" data-category="webdev">
-                    <h3 class="course-title"><i class="fa-solid fa-store"></i> Shopify &amp; E-commerce</h3>
-                    <span class="course-duration">⏰ Duration: 2 Months</span>
-                    <div class="course-content">
-                        <ul>
-                            <li><strong>Store Setup:</strong> Products, collections, payments.</li>
-                            <li><strong>Theme Customization:</strong> Liquid templating basics.</li>
-                            <li><strong>App Integration:</strong> Marketing, inventory, and more.</li>
-                            <li><strong>Projects:</strong> Build 2 complete e-commerce stores.</li>
-                        </ul>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Business owners, marketing enthusiasts, and individuals aiming for a career in online marketing and brand promotion.</p>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Entrepreneurs, freelancers, marketers.</div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Launch and manage profitable online stores.</div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Skilled in implementing various digital marketing strategies to increase online visibility and drive business growth.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="section-container" id="specialized-section" data-category="specialized">
-            <section class="section-header">
-                <h2>Our <span>Specialized</span> Courses</h2>
-                <p>Dive deep into high-demand skills like AI, digital marketing, and professional freelancing.</p>
-            </section>
-
+        <div class="section-container" data-category="specialized">
             <div class="courses-grid">
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-robot"></i> AI Prompt Engineering</h3>
-                    <span class="course-duration">⏰ Duration: 2 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-laptop-code"></i> Advanced Diploma in Computer Applications & Professional Skills (ADCAPS)</h3>
+                    <span class="course-duration">Duration: 12 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Master ChatGPT, MidJourney, Gemini &amp; more.</li>
-                            <li>Write effective prompts for text &amp; images.</li>
-                            <li>Use AI for writing, ideas, and automation.</li>
+                            <li>**Advanced Office Productivity & Automation:** Mastering MS Office (Advanced Excel, VBA basics) & Google Workspace for complex tasks.</li>
+                            <li>**Data Management & Database Fundamentals:** Relational database concepts (MS Access), Introduction to SQL for data handling.</li>
+                            <li>**Web Essentials & Online Presence:** Foundations of HTML5, CSS3, JavaScript, **understanding Desktop vs. Mobile Design (Responsive Design concepts)**.</li>
+                            <li>**Operating System & Basic IT Support:** Advanced Windows/Linux usage, hardware/software troubleshooting, networking basics.</li>
+                            <li>**Professional Development & Soft Skills:** Communication, problem-solving, **Introduction to Version Control (e.g., Git basics)**, and workplace etiquette for diverse roles.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Creatives, students, content creators.</div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Individuals aiming for higher-level administrative, data analyst support, or junior IT roles in government and corporate sectors.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Comprehensive IT proficiency and professional skills for a wide range of advanced office and basic IT support positions, enhancing career progression, including an understanding of modern web design principles and collaboration tools.</p>
+                    </div>
                 </div>
 
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-mobile-screen-button"></i> Meta Ads &amp; Digital Marketing</h3>
-                    <span class="course-duration">⏰ Duration: 3 Months</span>
+                    <h3 class="course-title"><i class="fa-brands fa-python"></i> Certificate in Python Programming</h3>
+                    <span class="course-duration">Duration: 4 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Facebook &amp; Instagram Ads Manager.</li>
-                            <li>Campaigns, targeting &amp; optimization.</li>
-                            <li>Google Ads &amp; YouTube Advertising.</li>
-                            <li>Analytics, ROI tracking &amp; reporting.</li>
+                            <li>**Python Fundamentals:** Syntax, data types, control flow.</li>
+                            <li>**Data Structures & Algorithms:** Lists, dictionaries, tuples, basic algorithms.</li>
+                            <li>**Object-Oriented Programming (OOP):** Classes, objects, inheritance.</li>
+                            <li>**File Handling & Modules:** Reading/writing files, using standard libraries.</li>
+                            <li>**Introduction to Web Scraping/Data Analysis:** Practical applications with popular libraries.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box outcome"><strong>🎯 Outcome:</strong> Run profitable ad campaigns, start a marketing agency.</div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Students, researchers, and professionals looking to enter data science, automation, or web development fields.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Foundational knowledge in Python programming, enabling participants to write scripts, automate tasks, and begin exploring specialized areas like data analysis or web development.</p>
+                    </div>
                 </div>
 
                 <div class="course-card" data-category="specialized">
-                    <h3 class="course-title"><i class="fa-solid fa-handshake-angle"></i> Freelancing Starter Pack</h3>
-                    <span class="course-duration">⏰ Duration: 2 Months</span>
+                    <h3 class="course-title"><i class="fa-solid fa-chart-line"></i> Diploma in Data Science Fundamentals</h3>
+                    <span class="course-duration">Duration: 8 Months</span>
                     <div class="course-content">
                         <ul>
-                            <li>Create profiles on Fiverr &amp; Upwork.</li>
-                            <li>Portfolio building &amp; client communication.</li>
-                            <li>Bidding strategies &amp; pricing services.</li>
-                            <li>Project management &amp; delivery.</li>
+                            <li>**Introduction to Data Science:** Concepts, lifecycle, and applications.</li>
+                            <li>**Statistical Foundations:** Probability, hypothesis testing, regression.</li>
+                            <li>**Data Manipulation (Pandas/R):** Cleaning, transforming, and preparing data.</li>
+                            <li>**Data Visualization (Matplotlib/Seaborn/ggplot2):** Creating insightful plots and graphs.</li>
+                            <li>**Machine Learning Basics:** Introduction to supervised and unsupervised learning algorithms.</li>
                         </ul>
                     </div>
-                    <div class="course-info-box ideal-for"><strong>✅ Ideal For:</strong> Anyone with a skill looking to earn online.</div>
+                    <div class="course-info-box ideal-for">
+                        <p><strong>Ideal For:</strong> Graduates interested in careers as Data Analysts, Business Intelligence Analysts, or pursuing further studies in AI/ML.</p>
+                    </div>
+                    <div class="course-info-box outcome">
+                        <p><strong>Outcome:</strong> Core skills in data analysis, statistical modeling, and machine learning, preparing for entry-level data roles.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer id="contact" class="footer">
-        <h2>Why Choose CODE?</h2>
-        <div class="why-choose-grid">
-            <div class="why-card">
-                <h3><i class="fa-solid fa-award"></i> Expert Training</h3>
-                <p>Learn from industry-experienced instructors with a hands-on teaching approach.</p>
-            </div>
-            <div class="why-card">
-                <h3><i class="fa-solid fa-flask-vial"></i> Modern Lab</h3>
-                <p>Practice on the latest software in our well-equipped, high-speed internet lab.</p>
-            </div>
-            <div class="why-card">
-                <h3><i class="fa-solid fa-certificate"></i> Certified Courses</h3>
-                <p>Receive recognized certificates upon successful completion to boost your resume.</p>
-            </div>
-            <div class="why-card">
-                <h3><i class="fa-solid fa-handshake"></i> Job Assistance</h3>
-                <p>Get career guidance and job placement support for eligible students.</p>
-            </div>
-        </div>
+    <section class="special-offer">
+        <h2>Limited Time Offer!</h2>
+        <p>Enroll in any <strong style="color: var(--accent-color-2);">Advanced Diploma Course</strong> this month and get a **20% discount** on your total fees!</p>
+        <p>Don't miss this chance to invest in your future at an unbeatable price.</p>
+    </section>
 
-        <div class="footer-cta-buttons">
-            <a href="tel:9635809537" class="cta-button"><i class="fa-solid fa-phone"></i> Call to Enroll</a>
-            <a href="https://wa.me/919635809537" target="_blank" class="cta-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp Inquiry</a>
-        </div>
+    <footer class="footer" id="contact">
+        <div class="container">
+            <h2>Why Choose <span>SkillBuilder Pro?</span></h2>
+            <div class="why-choose-grid">
+                <div class="why-card">
+                    <h3><i class="fa-solid fa-chalkboard-user"></i> Expert Instructors</h3>
+                    <p>Learn from industry professionals with years of practical experience and a passion for teaching.</p>
+                </div>
+                <div class="why-card">
+                    <h3><i class="fa-solid fa-handshake-angle"></i> Practical & Job-Oriented</h3>
+                    <p>Our curriculum focuses on hands-on training and real-world projects to make you job-ready.</p>
+                </div>
+                <div class="why-card">
+                    <h3><i class="fa-solid fa-certificate"></i> Certified & Recognized</h3>
+                    <p>Receive industry-recognized certifications that open doors to new career opportunities.</p>
+                </div>
+                <div class="why-card">
+                    <h3><i class="fa-solid fa-graduation-cap"></i> Placement Assistance</h3>
+                    <p>We provide guidance and support to help our graduates secure rewarding jobs.</p>
+                </div>
+            </div>
 
-        <div class="footer-contact">
-            <p><strong>📍 Address:</strong> Lokenath Nagar, Near K1 Fitness Gym, Lower Bagdogra, 734014</p>
-            <p><strong>📧 Email:</strong> <a href="mailto:code.bagdogra@gmail.com">code.bagdogra@gmail.com</a></p>
-            <p><strong>🌐 Website:</strong> <a href="https://codebagdogra.netlify.app/" target="_blank">www.codebagdogra.com</a></p>
+            <div class="footer-cta-buttons">
+                <a href="tel:+919876543210" class="cta-button">
+                    <i class="fa-solid fa-phone"></i> Call Us: +91 98765 43210
+                </a>
+                <a href="https://wa.me/919876543210" target="_blank" class="cta-button">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
+                </a>
+            </div>
+
+            <div class="footer-contact">
+                <p>Email: <a href="mailto:info@skillbuilderpro.com">info@skillbuilderpro.com</a></p>
+                <p>Address: 123 Digital Drive, Tech City, West Bengal, India</p>
+            </div>
+            <p>&copy; 2025 SkillBuilder Pro. All rights reserved.</p>
         </div>
     </footer>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const sectionContainers = document.querySelectorAll('.section-container');
+        const navLinks = document.querySelectorAll('.nav-links a');
 
-            // --- Course Filtering Logic ---
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const sectionContainers = document.querySelectorAll('.section-container'); // Get all section wrappers
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
 
-            function applyFilter(filter) {
-                // Hide all sections first
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
                 sectionContainers.forEach(container => {
-                    container.style.display = 'none';
-                });
-
-                if (filter === 'all') {
-                    // Show all sections
-                    sectionContainers.forEach(container => {
-                        container.style.display = 'block';
-                    });
-                } else {
-                    // Show only the section matching the filter
-                    const targetSection = document.querySelector(`.section-container[data-category="${filter}"]`);
-                    if (targetSection) {
-                        targetSection.style.display = 'block';
+                    if (category === 'all' || container.dataset.category === category) {
+                        container.classList.add('active');
+                    } else {
+                        container.classList.remove('active');
                     }
-                }
-            }
-
-            if (filterButtons.length > 0) {
-                filterButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        filterButtons.forEach(btn => btn.classList.remove('active')); // Deactivate all filter buttons
-                        button.classList.add('active'); // Activate clicked button
-                        const filter = button.getAttribute('data-filter'); // Get filter category
-
-                        applyFilter(filter); // Apply the filter
-                    });
                 });
-
-                // Initial load: show all courses
-                applyFilter('all');
-                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
-            }
+            });
         });
-    </script>
+
+        // Set initial active state for "All Courses"
+        document.querySelector('.filter-btn[data-category="all"]').click();
+
+        // Smooth scroll for navigation links and active class
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+
+                if (targetSection) {
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 80, // Adjust for fixed navbar height
+                        behavior: 'smooth'
+                    });
+
+                    // Remove active from all and add to clicked
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Optional: Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sectionContainers.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100 && pageYOffset < sectionTop + sectionHeight - 100) {
+                    current = section.dataset.category;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}` || (current === '' && link.getAttribute('href') === '#courses')) {
+                   link.classList.add('active'); // Keep courses active if any course section is in view or if it's the default view
+                } else if (link.getAttribute('href') === '#courses' && ['foundation', 'webdev', 'specialized'].includes(current)) {
+                   link.classList.add('active'); // Ensure "Courses" remains active if any sub-category is active
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
