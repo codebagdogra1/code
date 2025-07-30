@@ -161,6 +161,159 @@
             display: none;
         }
 
+        .print-receipt {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .print-receipt .print-header {
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .print-receipt .print-company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .print-receipt .print-company-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .print-receipt .print-company-address {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .print-receipt .print-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .print-receipt .print-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .print-receipt .print-info-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .print-receipt .print-info-section:last-child {
+            margin-right: 0;
+        }
+
+        .print-receipt .print-info-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 8px;
+        }
+
+        .print-receipt .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .print-receipt .print-table th {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .print-receipt .print-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .print-receipt .print-totals {
+            float: right;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .print-receipt .print-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .print-receipt .print-grand-total {
+            font-weight: bold;
+            font-size: 16px;
+            border-top: 2px solid #2c3e50;
+            border-bottom: double 3px #2c3e50;
+            padding: 10px 0;
+            margin-top: 5px;
+        }
+
+        .print-receipt .print-payment {
+            clear: both;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .print-receipt .print-footer {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .print-receipt, .print-receipt * {
+                visibility: visible;
+            }
+            
+            .print-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                display: block !important;
+                margin: 0;
+                padding: 20px;
+            }
+            
+            .button-group {
+                display: none !important;
+            }
+        }
+
         .course-selection {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -376,6 +529,81 @@
                 Pin Code: 734014<br>
                 Phone: +91 XXXXX XXXXX | Email: info@code.com
             </div>
+
+    <!-- Print-only Receipt Layout -->
+    <div class="print-receipt" id="printReceipt">
+        <div class="print-header">
+            <div class="print-company-name">Computer & Digital Excellence</div>
+            <div class="print-company-subtitle">(CODE)</div>
+            <div class="print-company-address">
+                Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
+                Phone: +91 XXXXX XXXXX | Email: info@code.com
+            </div>
+        </div>
+
+        <div class="print-title">Course Registration & Payment Receipt</div>
+
+        <div class="print-info">
+            <div class="print-info-section">
+                <div class="print-info-title">Receipt Details</div>
+                <div>
+                    <strong>Receipt No:</strong> <span id="printReceiptNo"></span><br>
+                    <strong>Date:</strong> <span id="printCurrentDate"></span><br>
+                    <strong>Time:</strong> <span id="printCurrentTime"></span>
+                </div>
+            </div>
+            <div class="print-info-section">
+                <div class="print-info-title">Student Information</div>
+                <div>
+                    <strong>Name:</strong> <span id="printStudentName"></span><br>
+                    <strong>Phone:</strong> <span id="printStudentPhone"></span><br>
+                    <strong>Email:</strong> <span id="printStudentEmail"></span><br>
+                    <strong>Address:</strong> <span id="printStudentAddress"></span>
+                </div>
+            </div>
+        </div>
+
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th>Course Description</th>
+                    <th>Duration</th>
+                    <th>Fee (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="printCourseTable">
+            </tbody>
+        </table>
+
+        <div class="print-totals">
+            <div class="print-total-row">
+                <span>Subtotal:</span>
+                <span id="printSubtotal">₹ 0.00</span>
+            </div>
+            <div class="print-total-row">
+                <span>Discount:</span>
+                <span id="printDiscount">₹ 0.00</span>
+            </div>
+            <div class="print-total-row print-grand-total">
+                <span>Grand Total:</span>
+                <span id="printGrandTotal">₹ 0.00</span>
+            </div>
+        </div>
+
+        <div class="print-payment">
+            <strong>Payment Method:</strong> <span id="printPaymentMethod"></span><br>
+            <strong>Payment Status:</strong> ✅ PAID
+        </div>
+
+        <div class="print-footer">
+            <div style="font-weight: bold; margin-bottom: 10px;">Thank You for Choosing CODE!</div>
+            <p>For any queries, please contact us at the above details.<br>
+            This is a computer-generated receipt.</p>
+            <p style="margin-top: 10px; font-style: italic;">
+                "Your Digital Solutions Partner"
+            </p>
+        </div>
+    </div>
         </div>
 
         <div class="receipt-body">
@@ -434,16 +662,7 @@
                             <textarea class="form-input" id="address" rows="3" placeholder="Complete address with PIN code" required></textarea>
                         </div>
                         
-                        <div class="form-group full-width">
-                            <label class="form-label">Photo</label>
-                            <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
-                                <input type="file" id="photoInput" accept="image/*">
-                                <div>
-                                    📷 Click to upload photo<br>
-                                    <small>Supported formats: JPG, PNG, GIF (Max 5MB)</small>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -544,14 +763,29 @@
                         </tbody>
                     </table>
 
+                    <div class="form-grid" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Payment Method <span class="required">*</span></label>
+                            <select class="form-input" id="paymentMethod" onchange="updatePaymentMethod()" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Card">Credit/Debit Card</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Discount Amount (₹)</label>
+                            <input type="number" class="form-input" id="discountAmount" placeholder="Enter discount amount" min="0" oninput="updateTotals()">
+                        </div>
+                    </div>
+
                     <div class="total-section">
                         <div class="total-row">
                             <span>Subtotal:</span>
                             <span id="subtotal">₹ 0.00</span>
-                        </div>
-                        <div class="total-row">
-                            <span>GST (18%):</span>
-                            <span id="gst">₹ 0.00</span>
                         </div>
                         <div class="total-row">
                             <span>Discount:</span>
@@ -564,7 +798,7 @@
                     </div>
 
                     <div class="payment-method">
-                        <strong>Payment Method:</strong> Cash/UPI/Card<br>
+                        <strong>Payment Method:</strong> <span id="displayPaymentMethod">[Select payment method above]</span><br>
                         <strong>Payment Status:</strong> ✅ PAID
                     </div>
 
@@ -583,7 +817,7 @@
 
     <div class="button-group">
         <button class="btn btn-success" onclick="generateReceipt()">📋 Generate Receipt</button>
-        <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
+        <button class="btn btn-print" onclick="printReceipt()">🖨️ Print Receipt</button>
     </div>
 
     <script>
@@ -672,17 +906,30 @@
                 tableBody.innerHTML += row;
             });
             
-            updateTotals(subtotal);
+            updateTotals();
         }
 
         // Update totals
-        function updateTotals(subtotal) {
-            const gstAmount = Math.round(subtotal * 0.18);
-            const grandTotal = subtotal + gstAmount;
+        function updateTotals() {
+            let subtotal = 0;
+            
+            selectedCourses.forEach(courseName => {
+                const course = courseData[courseName];
+                subtotal += course.price;
+            });
+            
+            const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
+            const grandTotal = Math.max(0, subtotal - discountAmount);
             
             document.getElementById('subtotal').textContent = '₹ ' + subtotal.toLocaleString('en-IN') + '.00';
-            document.getElementById('gst').textContent = '₹ ' + gstAmount.toLocaleString('en-IN') + '.00';
+            document.getElementById('discount').textContent = '₹ ' + discountAmount.toLocaleString('en-IN') + '.00';
             document.getElementById('grandTotal').textContent = '₹ ' + grandTotal.toLocaleString('en-IN') + '.00';
+        }
+
+        // Update payment method display
+        function updatePaymentMethod() {
+            const paymentMethod = document.getElementById('paymentMethod').value || '[Select payment method above]';
+            document.getElementById('displayPaymentMethod').textContent = paymentMethod;
         }
 
         // Update student info in receipt
@@ -700,11 +947,67 @@
         function generateReceipt() {
             updateStudentInfo();
             updateReceipt();
+            updatePaymentMethod();
+            populatePrintReceipt();
             
             // Scroll to receipt section
             document.querySelector('.form-section:last-child').scrollIntoView({ 
                 behavior: 'smooth' 
             });
+        }
+
+        // Populate print receipt with current data
+        function populatePrintReceipt() {
+            // Copy receipt details
+            document.getElementById('printReceiptNo').textContent = document.getElementById('receiptNo').textContent;
+            document.getElementById('printCurrentDate').textContent = document.getElementById('currentDate').textContent;
+            document.getElementById('printCurrentTime').textContent = document.getElementById('currentTime').textContent;
+            
+            // Copy student information
+            document.getElementById('printStudentName').textContent = document.getElementById('studentName').value || '[Not provided]';
+            document.getElementById('printStudentPhone').textContent = document.getElementById('phoneNumber').value || '[Not provided]';
+            document.getElementById('printStudentEmail').textContent = document.getElementById('email').value || '[Not provided]';
+            document.getElementById('printStudentAddress').textContent = document.getElementById('address').value || '[Not provided]';
+            
+            // Copy course table
+            const printTableBody = document.getElementById('printCourseTable');
+            printTableBody.innerHTML = '';
+            
+            if (selectedCourses.length === 0) {
+                printTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 20px;">
+                            No courses selected
+                        </td>
+                    </tr>
+                `;
+            } else {
+                selectedCourses.forEach(courseName => {
+                    const course = courseData[courseName];
+                    const row = `
+                        <tr>
+                            <td>${courseName}</td>
+                            <td>${course.duration}</td>
+                            <td>₹ ${course.price.toLocaleString('en-IN')}</td>
+                        </tr>
+                    `;
+                    printTableBody.innerHTML += row;
+                });
+            }
+            
+            // Copy totals
+            document.getElementById('printSubtotal').textContent = document.getElementById('subtotal').textContent;
+            document.getElementById('printDiscount').textContent = document.getElementById('discount').textContent;
+            document.getElementById('printGrandTotal').textContent = document.getElementById('grandTotal').textContent;
+            
+            // Copy payment method
+            document.getElementById('printPaymentMethod').textContent = document.getElementById('paymentMethod').value || '[Not selected]';
+        }
+
+        // Print receipt function
+        function printReceipt() {
+            populatePrintReceipt();
+            window.print();
         }
 
         // Add event listeners for real-time updates
@@ -713,13 +1016,13 @@
         document.getElementById('email').addEventListener('input', updateStudentInfo);
 
         // Photo upload handling
-        document.getElementById('photoInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const uploadDiv = document.querySelector('.photo-upload div');
-                uploadDiv.innerHTML = `📷 Photo selected: ${file.name}<br><small>Click to change photo</small>`;
-            }
-        });
+        // document.getElementById('photoInput').addEventListener('change', function(e) {
+        //     const file = e.target.files[0];
+        //     if (file) {
+        //         const uploadDiv = document.querySelector('.photo-upload div');
+        //         uploadDiv.innerHTML = `📷 Photo selected: ${file.name}<br><small>Click to change photo</small>`;
+        //     }
+        // });
 
         // Initialize
         setDateTime();
