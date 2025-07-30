@@ -183,6 +183,11 @@
         }
 
         @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: white !important;
+            }
             body * {
                 visibility: hidden;
             }
@@ -193,10 +198,25 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
+                width: 100% !important;
+                margin: 0 !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+            .receipt-header {
+                background: #2c3e50 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .receipt-row.total {
+                border-top: 2px solid #2c3e50 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .print-btn, .back-btn {
-                display: none;
+                display: none !important;
             }
         }
 
@@ -204,11 +224,57 @@
             color: #e74c3c;
         }
 
-        .course-fees {
-            background: #f8f9fa;
-            padding: 15px;
+        .google-sheets-setup {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
             border-radius: 8px;
-            margin-top: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .setup-steps {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .setup-steps ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .setup-steps code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .webhook-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -221,6 +287,25 @@
         </div>
 
         <div class="form-container" id="formContainer">
+            <div class="google-sheets-setup">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">📊 Google Sheets Integration Setup</h3>
+                <div class="setup-steps">
+                    <p><strong>To save data to Google Sheets, follow these steps:</strong></p>
+                    <ol>
+                        <li>Go to <a href="https://script.google.com" target="_blank">script.google.com</a></li>
+                        <li>Create a new project and paste the provided Google Apps Script code</li>
+                        <li>Deploy as web app and copy the web app URL</li>
+                        <li>Paste the URL below to enable data saving</li>
+                    </ol>
+                    <div style="margin: 15px 0;">
+                        <label for="webhookUrl"><strong>Google Apps Script Web App URL:</strong></label>
+                        <input type="url" id="webhookUrl" class="webhook-input" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" value="">
+                        <small style="color: #666; display: block; margin-top: 5px;">Leave empty to disable Google Sheets integration</small>
+                    </div>
+                    <div class="status-message" id="statusMessage"></div>
+                </div>
+            </div>
+
             <form id="admissionForm">
                 <div class="form-section">
                     <h2 class="section-title">Personal Information</h2>
@@ -386,13 +471,17 @@
                 </div>
             </div>
             <div style="padding: 20px; text-align: center;">
-                <button class="print-btn" onclick="window.print()">Print Receipt</button>
-                <button class="back-btn" onclick="showForm()">New Admission</button>
+                <button class="print-btn" onclick="printReceipt()">🖨️ Print Receipt</button>
+                <button class="download-btn" onclick="downloadReceipt()">📄 Download PDF</button>
+                <button class="back-btn" onclick="showForm()">➕ New Admission</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Store form data globally
+        let currentFormData = {};
+
         // Calculate total fees
         function updateTotalFees() {
             const checkboxes = document.querySelectorAll('input[name="courses"]:checked');
@@ -419,8 +508,56 @@
             return `CODE${year}${month}${day}${time}`;
         }
 
+        // Send data to Google Sheets
+        async function sendToGoogleSheets(data) {
+            const webhookUrl = document.getElementById('webhookUrl').value.trim();
+            if (!webhookUrl) {
+                return { success: true, message: 'Google Sheets integration not configured' };
+            }
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                return { success: true, message: 'Data saved to Google Sheets successfully!' };
+            } catch (error) {
+                console.error('Error sending to Google Sheets:', error);
+                return { success: false, message: 'Failed to save to Google Sheets: ' + error.message };
+            }
+        }
+
+        // Show status message
+        function showStatus(message, isSuccess) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = 'status-message ' + (isSuccess ? 'success' : 'error');
+            statusEl.style.display = 'block';
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // Enhanced print function
+        function printReceipt() {
+            window.print();
+        }
+
+        // Download receipt as PDF (using browser's print to PDF)
+        function downloadReceipt() {
+            const originalTitle = document.title;
+            document.title = `Receipt_${document.getElementById('receiptNo').textContent}`;
+            window.print();
+            document.title = originalTitle;
+        }
+
         // Form submission
-        document.getElementById('admissionForm').addEventListener('submit', function(e) {
+        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Validate course selection
@@ -437,6 +574,43 @@
             const receiptNo = generateReceiptNumber();
             const currentDate = new Date().toLocaleDateString('en-IN');
             
+            // Prepare data for Google Sheets
+            const coursesList = [];
+            const courseFees = [];
+            selectedCourses.forEach(course => {
+                const [courseName, fee] = course.value.split('|');
+                coursesList.push(courseName);
+                courseFees.push(fee);
+            });
+
+            currentFormData = {
+                receiptNo: receiptNo,
+                date: currentDate,
+                studentName: formData.get('studentName'),
+                fatherName: formData.get('fatherName'),
+                motherName: formData.get('motherName'),
+                dob: formData.get('dob'),
+                gender: formData.get('gender'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                qualification: formData.get('qualification'),
+                address: formData.get('address'),
+                courses: coursesList.join(', '),
+                totalCourseFees: courseFees.reduce((sum, fee) => sum + parseInt(fee), 0),
+                paymentMode: formData.get('paymentMode'),
+                amountPaid: formData.get('amountPaid'),
+                remarks: formData.get('remarks')
+            };
+
+            // Send to Google Sheets
+            const result = await sendToGoogleSheets(currentFormData);
+            if (result.success) {
+                showStatus(result.message, true);
+            } else {
+                showStatus(result.message, false);
+            }
+
+            // Update receipt display
             document.getElementById('receiptNo').textContent = receiptNo;
             document.getElementById('receiptDate').textContent = currentDate;
             document.getElementById('receiptStudentName').textContent = formData.get('studentName');
@@ -444,12 +618,6 @@
             document.getElementById('receiptPhone').textContent = formData.get('phone');
             document.getElementById('receiptPaymentMode').textContent = formData.get('paymentMode');
             document.getElementById('receiptAmount').textContent = '₹' + formData.get('amountPaid');
-            
-            // Get selected courses
-            const coursesList = [];
-            selectedCourses.forEach(course => {
-                coursesList.push(course.value.split('|')[0]);
-            });
             document.getElementById('receiptCourses').textContent = coursesList.join(', ');
             
             // Show receipt, hide form
