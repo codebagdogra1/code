@@ -452,68 +452,54 @@
             body {
                 background-color: white;
                 padding: 0;
-                margin: 0; /* Ensure no default body margins */
+                margin: 0;
             }
             
-            .receipt-container {
-                box-shadow: none;
-                border-radius: 0;
-                max-width: 100% !important; /* Ensure it takes full width of print area */
-                width: 100% !important;
-                margin: 0; /* Remove auto margins for print */
-                padding: 0; /* Remove outer padding from container */
-            }
-
-            .receipt-body {
-                padding: 0; /* Remove padding from .receipt-body for print */
-            }
-            
-            /* Hide non-print elements */
-            .form-section,
-            .button-group {
+            /* Hide everything in the body by default for print */
+            body > *:not(.print-receipt) {
                 display: none !important;
             }
 
             /* Make only the print-receipt visible and styled for print */
             .print-receipt {
                 display: block !important;
-                position: static; /* Remove absolute positioning for normal flow in print */
+                position: static;
                 left: auto;
                 top: auto;
-                width: 100%; /* Ensure full width */
-                max-width: none; /* Override any max-width */
-                margin: 0 auto; /* Center content on page */
+                width: 100%;
+                max-width: none;
+                margin: 0 auto;
                 padding: 20mm; /* Use actual print units for consistent padding */
                 box-shadow: none;
                 border-radius: 0;
-                background-color: white; /* Ensure white background */
-                color: #000; /* Ensure black text for maximum contrast */
-                font-size: 11pt; /* Set a default print font size */
+                background-color: white;
+                color: #000;
+                font-size: 11pt;
                 line-height: 1.3;
             }
 
             .print-receipt * {
-                color: inherit !important; /* Force black text for all elements */
-                background-color: transparent !important; /* Remove all backgrounds */
-                box-shadow: none !important; /* Remove all shadows */
-                text-shadow: none !important; /* Remove any text shadows */
+                color: inherit !important;
+                background-color: transparent !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
             }
 
             /* Specific print header adjustments */
             .print-receipt .print-header {
-                border-bottom: 1px solid #000; /* Solid black line for header */
+                border-bottom: 1px solid #000;
                 padding-bottom: 15px;
                 margin-bottom: 20px;
             }
             .print-receipt .print-company-name {
-                font-size: 20pt; /* Larger font for company name */
+                font-size: 20pt;
                 color: #000;
             }
             .print-receipt .print-company-subtitle,
             .print-receipt .print-company-address {
                 font-size: 9pt;
                 color: #333;
-                opacity: 1; /* Ensure full opacity */
+                opacity: 1;
             }
             .print-receipt .print-title {
                 font-size: 16pt;
@@ -526,23 +512,23 @@
             /* Print info sections */
             .print-receipt .print-info {
                 display: flex;
-                flex-wrap: wrap; /* Allow wrapping on smaller print pages */
+                flex-wrap: wrap;
                 justify-content: space-between;
                 margin-bottom: 20px;
                 gap: 15px;
             }
             .print-receipt .print-info-section {
-                flex: 1 1 45%; /* Allow sections to shrink/grow but prefer 45% width */
-                padding: 5px; /* Small padding */
+                flex: 1 1 45%;
+                padding: 5px;
             }
             .print-receipt .print-info-title {
                 font-size: 10pt;
                 color: #000;
-                border-bottom: 1px dashed #666; /* Dashed line for subtle separation */
+                border-bottom: 1px dashed #666;
                 padding-bottom: 3px;
                 margin-bottom: 5px;
             }
-            .print-receipt .print-info-section div { /* For the actual info lines */
+            .print-receipt .print-info-section div {
                 font-size: 9pt;
             }
             .print-receipt .print-info-section strong {
@@ -557,30 +543,30 @@
             }
             .print-receipt .print-table th,
             .print-receipt .print-table td {
-                border: 1px solid #666; /* Clearer borders */
-                padding: 8px; /* Slightly less padding */
+                border: 1px solid #666;
+                padding: 8px;
                 font-size: 9pt;
             }
             .print-receipt .print-table th {
-                background-color: #f2f2f2 !important; /* Light gray background for headers */
+                background-color: #f2f2f2 !important;
             }
             .print-receipt .print-table tr:nth-child(even) {
-                background-color: #fafafa !important; /* Slightly alternate row color */
+                background-color: #fafafa !important;
             }
 
             /* Print totals adjustments */
             .print-receipt .print-totals {
                 float: right;
-                width: 250px; /* Adjust width if needed */
+                width: 250px;
                 margin-bottom: 25px;
-                border: 1px solid #999; /* Clearer border for totals */
+                border: 1px solid #999;
                 padding: 10px;
-                clear: both; /* Ensure it's below the table if floated */
+                clear: both;
             }
             .print-receipt .print-total-row {
                 padding: 3px 0;
                 font-size: 10pt;
-                border-bottom: 1px dashed #ccc; /* Lighter dashed line */
+                border-bottom: 1px dashed #ccc;
             }
             .print-receipt .print-total-row:last-of-type {
                 border-bottom: none;
@@ -591,7 +577,7 @@
                 border-bottom: double 3px #000;
                 padding: 8px 0;
                 margin-top: 8px;
-                background-color: #e6e6e6 !important; /* Slightly darker background for grand total */
+                background-color: #e6e6e6 !important;
                 font-weight: bold;
             }
 
