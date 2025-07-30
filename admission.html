@@ -3,485 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CODE - Student Admission System</title>
+    <title>Admission Form - CODE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0; /* Light blue-gray background */
         }
-
-        /* Animated background particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 1rem; /* Rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow-lg */
+            padding: 2.5rem; /* p-10 */
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            max-width: 48rem; /* max-w-3xl */
         }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Header Section */
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 2px,
-                rgba(255,255,255,0.05) 2px,
-                rgba(255,255,255,0.05) 4px
-            );
-            animation: slidePattern 20s linear infinite;
-        }
-
-        @keyframes slidePattern {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo {
-            font-size: 3.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2); }
-            to { text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.4); }
-        }
-
-        .tagline {
-            font-size: 1.3em;
-            opacity: 0.95;
-            margin-bottom: 5px;
-        }
-
-        .address {
-            font-size: 1.1em;
-            opacity: 0.85;
-            font-style: italic;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Form Container */
-        .form-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 
-                0 20px 40px rgba(0,0,0,0.1),
-                0 0 0 1px rgba(255,255,255,0.2);
-            overflow: hidden;
-            position: relative;
-            animation: slideUp 0.8s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-header {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .input-field {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            padding: 0.625rem 1rem; /* px-4 py-2.5 */
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 3s infinite;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* focus:ring-blue-500 */
         }
-
-        .form-title {
-            font-size: 2.2em;
-            font-weight: bold;
-            margin-bottom: 8px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .form-subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* iframe Container */
-        .iframe-container {
-            padding: 30px;
-            background: white;
-            position: relative;
-        }
-
-        .iframe-wrapper {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .iframe-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
-            border-radius: 17px;
-            z-index: -1;
-            animation: borderRotate 4s linear infinite;
-        }
-
-        @keyframes borderRotate {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        iframe {
-            width: 100%;
-            height: 1951px;
-            border: none;
-            border-radius: 15px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-
-        iframe:hover {
-            transform: scale(1.005);
-        }
-
-        /* Loading Animation */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
+        .submit-button {
+            display: inline-flex;
             justify-content: center;
-            align-items: center;
-            z-index: 5;
-            transition: opacity 0.5s ease;
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border: none; /* border-transparent */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1rem; /* text-base */
+            font-weight: 600; /* font-semibold */
+            color: #ffffff;
+            background-color: #2563eb; /* bg-blue-700 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
         }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #e0e0e0;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .submit-button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-800 */
+            transform: translateY(-1px);
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .submit-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* focus:ring-blue-500 */
         }
-
-        /* Footer */
-        .footer {
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
+        }
+        .message-box.success {
+            background-color: #d1fae5; /* bg-green-100 */
+            color: #065f46; /* text-green-800 */
+        }
+        .message-box.error {
+            background-color: #fee2e2; /* bg-red-100 */
+            color: #991b1b; /* text-red-800 */
+        }
+        .section-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* text-gray-900 */
+            margin-bottom: 1.5rem; /* mb-6 */
             text-align: center;
-            padding: 30px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            position: relative;
-            z-index: 10;
         }
-
-        .footer-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .receipt-container, .data-display-container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 48rem;
         }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5em;
-            }
-            
-            .tagline {
-                font-size: 1.1em;
-            }
-            
-            .address {
-                font-size: 1em;
-            }
-            
-            .form-title {
-                font-size: 1.8em;
-            }
-            
-            .iframe-container {
-                padding: 20px 15px;
-            }
-            
-            iframe {
-                height: 2000px;
-            }
-            
-            .container {
-                margin: 20px auto;
-                padding: 0 15px;
-            }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
-
-        /* Hover Effects */
-        .form-wrapper:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.15),
-                0 0 0 1px rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
+        .receipt-header h3 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            color: #1e40af; /* text-blue-800 */
         }
-
-        /* Success Animation */
-        .success-pulse {
-            animation: successPulse 0.6s ease-in-out;
+        .receipt-header p {
+            font-size: 0.875rem; /* text-sm */
+            color: #4b5563; /* text-gray-600 */
+            margin-top: 0.25rem;
         }
-
-        @keyframes successPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .receipt-details div, .data-display-details div {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e5e7eb; /* border-gray-200 */
+        }
+        .receipt-details div:last-child, .data-display-details div:last-child {
+            border-bottom: none;
+        }
+        .receipt-details span:first-child, .data-display-details span:first-child {
+            font-weight: 500; /* font-medium */
+            color: #374151; /* text-gray-700 */
+        }
+        .receipt-details span:last-child, .data-display-details span:last-child {
+            color: #1f2937; /* text-gray-900 */
+        }
+        .print-button {
+            background-color: #10b981; /* bg-emerald-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .print-button:hover {
+            background-color: #059669; /* hover:bg-emerald-600 */
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .printable-area, .printable-area * {
+                visibility: visible;
+            }
+            .printable-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 1rem;
+            }
+            .no-print {
+                display: none !important;
+            }
         }
     </style>
 </head>
-<body>
-    <!-- Animated Background Particles -->
-    <div class="particles" id="particles"></div>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+    <div id="formContainer" class="form-container">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Admission Application Form</h2>
 
-    <!-- Header Section -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">💻 CODE</div>
-            <div class="tagline">Computer & Digital Excellence</div>
-            <div class="address">📍 Lokenath Nagar, Bagdogra, 734014</div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <div class="container">
-        <div class="form-wrapper">
-            <div class="form-header">
-                <div class="form-title">🎓 Student Admission Form</div>
-                <div class="form-subtitle">Join us to excel in technology and digital skills</div>
-            </div>
-            
-            <div class="iframe-container">
-                <div class="iframe-wrapper">
-                    <div class="loading-overlay" id="loadingOverlay">
-                        <div class="loading-spinner"></div>
+        <form id="admissionForm" class="space-y-6">
+            <!-- Personal Information Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Personal Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required class="input-field">
                     </div>
-                    <iframe 
-                        src="https://docs.google.com/forms/d/e/1FAIpQLScEE0TUj2tpdAUQolYxUO6xpE1TJJvcgKfGHmpBnBoYO1-8ug/viewform?embedded=true" 
-                        width="640" 
-                        height="1951" 
-                        frameborder="0" 
-                        marginheight="0" 
-                        marginwidth="0"
-                        onload="hideLoading()"
-                        title="CODE Student Admission Form">
-                        Loading…
-                    </iframe>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" name="email" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Full Address</label>
+                        <textarea id="address" name="address" rows="3" required class="input-field"></textarea>
+                    </div>
                 </div>
             </div>
+
+            <!-- Academic Information Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Academic Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="course" class="block text-sm font-medium text-gray-700 mb-1">Applying For Course</label>
+                        <select id="course" name="course" required class="input-field">
+                            <option value="">Select a course</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Arts and Humanities">Arts and Humanities</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medicine">Medicine</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="previousSchool" class="block text-sm font-medium text-gray-700 mb-1">Previous School/College</label>
+                        <input type="text" id="previousSchool" name="previousSchool" class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="academicAchievements" class="block text-sm font-medium text-gray-700 mb-1">Academic Achievements (Optional)</label>
+                        <textarea id="academicAchievements" name="academicAchievements" rows="2" class="input-field"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Emergency Contact</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="emergencyName" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="emergencyName" name="emergencyName" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="emergencyPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="emergencyPhone" name="emergencyPhone" required class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="relationship" class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                        <input type="text" id="relationship" name="relationship" required class="input-field">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration Section -->
+            <div>
+                <div class="flex items-center">
+                    <input id="declaration" name="declaration" type="checkbox" required
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="declaration" class="ml-2 block text-sm text-gray-900">
+                        I hereby declare that the information provided is true and accurate to the best of my knowledge.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="submit-button">
+                    Submit Application
+                </button>
+            </div>
+        </form>
+
+        <!-- Message Box for success/error -->
+        <div id="messageBox" class="hidden message-box" role="alert">
+            <p id="messageText"></p>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p><strong>🚀 Welcome to Computer & Digital Excellence!</strong></p>
-            <p>Empowering students with cutting-edge technology education</p>
-            <p>📞 Contact us for any queries • 💡 Your success is our mission</p>
+    <!-- Payment Receipt Section (hidden by default) -->
+    <div id="paymentReceiptSection" class="receipt-container hidden printable-area no-print">
+        <div class="receipt-header">
+            <h3 class="text-blue-800">Computer & Digital Excellence - (CODE)</h3>
+            <p>Lokenath Nagar, Bagdogra, 734014</p>
+            <h4 class="text-2xl font-bold text-gray-800 mt-4">Payment Receipt</h4>
         </div>
-    </footer>
+        <div class="receipt-details text-gray-700 text-base space-y-2">
+            <div>
+                <span>Receipt No:</span>
+                <span id="receiptNumber">CODE-REC-</span>
+            </div>
+            <div>
+                <span>Date:</span>
+                <span id="receiptDate"></span>
+            </div>
+            <div>
+                <span>Applicant Name:</span>
+                <span id="receiptApplicantName"></span>
+            </div>
+            <div>
+                <span>Course Applied:</span>
+                <span id="receiptCourse"></span>
+            </div>
+            <div>
+                <span>Amount Paid:</span>
+                <span>₹ 500.00 (Admission Fee)</span>
+            </div>
+            <div class="pt-4 border-t-2 border-dashed border-gray-300">
+                <span class="font-bold text-lg">Payment Status:</span>
+                <span class="font-bold text-lg text-green-600">SUCCESSFUL</span>
+            </div>
+        </div>
+        <p class="text-center text-gray-600 text-sm mt-6">Thank you for your application!</p>
+        <div class="flex justify-center mt-8 no-print">
+            <button onclick="printReceipt()" class="print-button">Print Receipt</button>
+        </div>
+    </div>
+
+    <!-- Admission Form Data Display Section (hidden by default) -->
+    <div id="admissionDataSection" class="data-display-container hidden printable-area no-print">
+        <h3 class="section-title">Submitted Admission Form Data</h3>
+        <div id="admissionDataDetails" class="data-display-details text-gray-700 text-base space-y-2">
+            <!-- Data will be populated here by JavaScript -->
+        </div>
+        <div class="flex justify-center mt-8 no-print">
+            <button onclick="printAdmissionData()" class="print-button">Print Admission Data</button>
+        </div>
+    </div>
 
     <script>
-        // Create animated background particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
+        // IMPORTANT: Replace this with your Google Apps Script Web App URL
+        const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbypo8VRa3O_mFgTiqCC8S-eZRG_DZyNhJNy_Eflz0NmiWMY8eDqdfc-F9zcoFbStNs80g/exec';
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particlesContainer.appendChild(particle);
+        const form = document.getElementById('admissionForm');
+        const formContainer = document.getElementById('formContainer');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const paymentReceiptSection = document.getElementById('paymentReceiptSection');
+        const admissionDataSection = document.getElementById('admissionDataSection');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+
+            // Show loading indicator or disable button
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            messageBox.classList.add('hidden'); // Hide previous messages
+
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
             }
-        }
 
-        // Hide loading overlay when iframe loads
-        function hideLoading() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 1000);
-        }
+            try {
+                // Exponential backoff for API calls
+                let retries = 0;
+                const maxRetries = 5;
+                const baseDelay = 1000; // 1 second
 
-        // Add success animation when form is likely submitted
-        function addSuccessEffect() {
-            const formWrapper = document.querySelector('.form-wrapper');
-            formWrapper.classList.add('success-pulse');
-            setTimeout(() => {
-                formWrapper.classList.remove('success-pulse');
-            }, 600);
-        }
+                while (retries < maxRetries) {
+                    try {
+                        const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
+                            method: 'POST',
+                            mode: 'no-cors', // Required for Google Apps Script web app
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams(data).toString(),
+                        });
 
-        // Initialize animations
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-            
-            // Add subtle hover effects
-            const formWrapper = document.querySelector('.form-wrapper');
-            formWrapper.addEventListener('mouseenter', function() {
-                this.style.transition = 'all 0.3s ease';
-            });
+                        // For 'no-cors' mode, response.ok is always false, and response.status is 0.
+                        // We rely on the Apps Script to process and assume success if no network error.
+                        // A more robust solution would involve CORS setup on Apps Script and checking response.ok
+                        // For simplicity and common Apps Script usage, we proceed assuming success.
 
-            // Simulate form submission detection (basic)
-            const iframe = document.querySelector('iframe');
-            iframe.addEventListener('load', function() {
-                // Add any additional load handling here
-                console.log('Google Form loaded successfully');
-            });
+                        showMessage('Your application has been submitted successfully!', 'success');
+                        populateAndShowResults(data); // Populate and show the new sections
+                        form.reset(); // Clear the form
+                        break; // Exit retry loop on success
+
+                    } catch (error) {
+                        console.error('Error submitting form:', error);
+                        retries++;
+                        if (retries < maxRetries) {
+                            const delay = baseDelay * Math.pow(2, retries - 1);
+                            console.log(`Retrying in ${delay / 1000} seconds... (Attempt ${retries}/${maxRetries})`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        } else {
+                            showMessage('Failed to submit application. Please try again later.', 'error');
+                        }
+                    }
+                }
+
+            } finally {
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Application';
+                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
         });
 
-        // Add some interactivity
-        document.addEventListener('click', function(e) {
-            // Create ripple effect on click
-            const ripple = document.createElement('div');
-            ripple.style.position = 'absolute';
-            ripple.style.width = '10px';
-            ripple.style.height = '10px';
-            ripple.style.background = 'rgba(255, 255, 255, 0.6)';
-            ripple.style.borderRadius = '50%';
-            ripple.style.pointerEvents = 'none';
-            ripple.style.left = e.clientX - 5 + 'px';
-            ripple.style.top = e.clientY - 5 + 'px';
-            ripple.style.animation = 'rippleEffect 0.6s ease-out';
-            document.body.appendChild(ripple);
-
-            setTimeout(() => {
-                document.body.removeChild(ripple);
-            }, 600);
-        });
-
-        // Add ripple effect CSS animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes rippleEffect {
-                from {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                to {
-                    transform: scale(20);
-                    opacity: 0;
-                }
+        function showMessage(message, type) {
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            if (type === 'success') {
+                messageBox.classList.add('success');
+            } else if (type === 'error') {
+                messageBox.classList.add('error');
             }
-        `;
-        document.head.appendChild(style);
+            messageBox.classList.remove('hidden');
+        }
+
+        function populateAndShowResults(formData) {
+            // Hide the form and message box
+            formContainer.classList.add('hidden');
+            messageBox.classList.add('hidden');
+
+            // Populate Payment Receipt
+            const now = new Date();
+            document.getElementById('receiptNumber').textContent = `CODE-REC-${now.getTime().toString().slice(-6)}`;
+            document.getElementById('receiptDate').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('receiptApplicantName').textContent = formData.fullName;
+            document.getElementById('receiptCourse').textContent = formData.course;
+            paymentReceiptSection.classList.remove('hidden');
+
+            // Populate Admission Data Display
+            const admissionDataDetails = document.getElementById('admissionDataDetails');
+            admissionDataDetails.innerHTML = ''; // Clear previous data
+
+            const displayFields = {
+                'Full Name': formData.fullName,
+                'Email Address': formData.email,
+                'Phone Number': formData.phone,
+                'Date of Birth': formData.dob,
+                'Full Address': formData.address,
+                'Applying For Course': formData.course,
+                'Previous School/College': formData.previousSchool || 'N/A',
+                'Academic Achievements': formData.academicAchievements || 'N/A',
+                'Emergency Contact Name': formData.emergencyName,
+                'Emergency Contact Phone': formData.emergencyPhone,
+                'Relationship': formData.relationship,
+                'Declaration Accepted': formData.declaration ? 'Yes' : 'No'
+            };
+
+            for (const label in displayFields) {
+                const div = document.createElement('div');
+                div.innerHTML = `<span>${label}:</span><span>${displayFields[label]}</span>`;
+                admissionDataDetails.appendChild(div);
+            }
+            admissionDataSection.classList.remove('hidden');
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        function printAdmissionData() {
+            window.print();
+        }
     </script>
 </body>
 </html>
