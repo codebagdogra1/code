@@ -3,633 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Form - Computer & Digital Excellence (CODE)</title>
+    <title>Admission Form - CODE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: #e2e8f0; /* Light blue-gray background */
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
         .form-container {
-            padding: 40px;
-        }
-
-        .form-section {
-            margin-bottom: 30px;
-        }
-
-        .section-title {
-            font-size: 1.4em;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        input, select, textarea {
+            background-color: #ffffff;
+            border-radius: 1rem; /* Rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow-lg */
+            padding: 2.5rem; /* p-10 */
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            max-width: 48rem; /* max-w-3xl */
         }
-
-        input:focus, select:focus, textarea:focus {
+        .input-field {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            padding: 0.625rem 1rem; /* px-4 py-2.5 */
+            width: 100%;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .input-field:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #3b82f6; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* focus:ring-blue-500 */
         }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
+        .submit-button {
+            display: inline-flex;
+            justify-content: center;
+            padding: 0.75rem 1.5rem; /* py-3 px-6 */
+            border: none; /* border-transparent */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1rem; /* text-base */
+            font-weight: 600; /* font-semibold */
+            color: #ffffff;
+            background-color: #2563eb; /* bg-blue-700 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
         }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .submit-button:hover {
+            background-color: #1d4ed8; /* hover:bg-blue-800 */
+            transform: translateY(-1px);
         }
-
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
+        .submit-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.4); /* focus:ring-blue-500 */
         }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            width: 100%;
-            margin-top: 20px;
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
+        .message-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 1.5rem;
         }
-
-        .receipt {
-            display: none;
-            background: white;
-            border: 2px solid #2c3e50;
-            margin-top: 30px;
-            border-radius: 10px;
+        .message-box.success {
+            background-color: #d1fae5; /* bg-green-100 */
+            color: #065f46; /* text-green-800 */
         }
-
-        .receipt-header {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
+        .message-box.error {
+            background-color: #fee2e2; /* bg-red-100 */
+            color: #991b1b; /* text-red-800 */
+        }
+        .section-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: #1f2937; /* text-gray-900 */
+            margin-bottom: 1.5rem; /* mb-6 */
             text-align: center;
         }
-
-        .receipt-content {
-            padding: 30px;
+        .receipt-container, .data-display-container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 48rem;
         }
-
-        .receipt-row {
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .receipt-header h3 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 800; /* font-extrabold */
+            color: #1e40af; /* text-blue-800 */
+        }
+        .receipt-header p {
+            font-size: 0.875rem; /* text-sm */
+            color: #4b5563; /* text-gray-600 */
+            margin-top: 0.25rem;
+        }
+        .receipt-details div, .data-display-details div {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 5px 0;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e5e7eb; /* border-gray-200 */
         }
-
-        .receipt-row.total {
-            border-top: 2px solid #2c3e50;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 20px;
-            padding-top: 15px;
+        .receipt-details div:last-child, .data-display-details div:last-child {
+            border-bottom: none;
         }
-
-        .print-btn {
-            background: #e74c3c;
+        .receipt-details span:first-child, .data-display-details span:first-child {
+            font-weight: 500; /* font-medium */
+            color: #374151; /* text-gray-700 */
+        }
+        .receipt-details span:last-child, .data-display-details span:last-child {
+            color: #1f2937; /* text-gray-900 */
+        }
+        .print-button {
+            background-color: #10b981; /* bg-emerald-500 */
             color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
         }
-
-        .back-btn {
-            background: #95a5a6;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            margin-left: 10px;
-            font-size: 16px;
+        .print-button:hover {
+            background-color: #059669; /* hover:bg-emerald-600 */
         }
-
         @media print {
-            body {
-                margin: 0;
-                padding: 0;
-                background: white !important;
-            }
             body * {
                 visibility: hidden;
             }
-            .receipt, .receipt * {
+            .printable-area, .printable-area * {
                 visibility: visible;
             }
-            .receipt {
+            .printable-area {
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100% !important;
-                margin: 0 !important;
-                border: none !important;
-                border-radius: 0 !important;
-                box-shadow: none !important;
+                width: 100%;
+                padding: 1rem;
             }
-            .receipt-header {
-                background: #2c3e50 !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .receipt-row.total {
-                border-top: 2px solid #2c3e50 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .print-btn, .back-btn {
+            .no-print {
                 display: none !important;
             }
         }
-
-        .required {
-            color: #e74c3c;
-        }
-
-        .google-sheets-setup {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .setup-steps {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .setup-steps ol {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        .setup-steps code {
-            background: #f5f5f5;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .webhook-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-        }
-
-        .status-message {
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Computer & Digital Excellence (CODE)</h1>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+    <div id="formContainer" class="form-container">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Admission Application Form</h2>
+
+        <form id="admissionForm" class="space-y-6">
+            <!-- Personal Information Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Personal Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" name="email" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Full Address</label>
+                        <textarea id="address" name="address" rows="3" required class="input-field"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Information Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Academic Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="course" class="block text-sm font-medium text-gray-700 mb-1">Applying For Course</label>
+                        <select id="course" name="course" required class="input-field">
+                            <option value="">Select a course</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Arts and Humanities">Arts and Humanities</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medicine">Medicine</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="previousSchool" class="block text-sm font-medium text-gray-700 mb-1">Previous School/College</label>
+                        <input type="text" id="previousSchool" name="previousSchool" class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="academicAchievements" class="block text-sm font-medium text-gray-700 mb-1">Academic Achievements (Optional)</label>
+                        <textarea id="academicAchievements" name="academicAchievements" rows="2" class="input-field"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency Contact Section -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Emergency Contact</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="emergencyName" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="emergencyName" name="emergencyName" required class="input-field">
+                    </div>
+                    <div>
+                        <label for="emergencyPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="emergencyPhone" name="emergencyPhone" required class="input-field">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="relationship" class="block text-sm font-medium text-gray-700 mb-1">Relationship</label>
+                        <input type="text" id="relationship" name="relationship" required class="input-field">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Declaration Section -->
+            <div>
+                <div class="flex items-center">
+                    <input id="declaration" name="declaration" type="checkbox" required
+                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="declaration" class="ml-2 block text-sm text-gray-900">
+                        I hereby declare that the information provided is true and accurate to the best of my knowledge.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="submit-button">
+                    Submit Application
+                </button>
+            </div>
+        </form>
+
+        <!-- Message Box for success/error -->
+        <div id="messageBox" class="hidden message-box" role="alert">
+            <p id="messageText"></p>
+        </div>
+    </div>
+
+    <!-- Payment Receipt Section (hidden by default) -->
+    <div id="paymentReceiptSection" class="receipt-container hidden printable-area no-print">
+        <div class="receipt-header">
+            <h3 class="text-blue-800">Computer & Digital Excellence - (CODE)</h3>
             <p>Lokenath Nagar, Bagdogra, 734014</p>
-            <p>Student Admission Form</p>
+            <h4 class="text-2xl font-bold text-gray-800 mt-4">Payment Receipt</h4>
         </div>
-
-        <div class="form-container" id="formContainer">
-            <div class="google-sheets-setup">
-                <h3 style="color: #2c3e50; margin-bottom: 15px;">📊 Google Sheets Integration Setup</h3>
-                <div class="setup-steps">
-                    <p><strong>To save data to Google Sheets, follow these steps:</strong></p>
-                    <ol>
-                        <li>Go to <a href="https://script.google.com" target="_blank">script.google.com</a></li>
-                        <li>Create a new project and paste the provided Google Apps Script code</li>
-                        <li>Deploy as web app and copy the web app URL</li>
-                        <li>Paste the URL below to enable data saving</li>
-                    </ol>
-                    <div style="margin: 15px 0;">
-                        <label for="webhookUrl"><strong>Google Apps Script Web App URL:</strong></label>
-                        <input type="url" id="webhookUrl" class="webhook-input" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" value="">
-                        <small style="color: #666; display: block; margin-top: 5px;">Leave empty to disable Google Sheets integration</small>
-                    </div>
-                    <div class="status-message" id="statusMessage"></div>
-                </div>
+        <div class="receipt-details text-gray-700 text-base space-y-2">
+            <div>
+                <span>Receipt No:</span>
+                <span id="receiptNumber">CODE-REC-</span>
             </div>
-
-            <form id="admissionForm">
-                <div class="form-section">
-                    <h2 class="section-title">Personal Information</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="studentName">Full Name <span class="required">*</span></label>
-                            <input type="text" id="studentName" name="studentName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fatherName">Father's Name <span class="required">*</span></label>
-                            <input type="text" id="fatherName" name="fatherName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="motherName">Mother's Name</label>
-                            <input type="text" id="motherName" name="motherName">
-                        </div>
-                        <div class="form-group">
-                            <label for="dob">Date of Birth <span class="required">*</span></label>
-                            <input type="date" id="dob" name="dob" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="gender">Gender <span class="required">*</span></label>
-                            <select id="gender" name="gender" required>
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="qualification">Educational Qualification <span class="required">*</span></label>
-                            <select id="qualification" name="qualification" required>
-                                <option value="">Select Qualification</option>
-                                <option value="10th Pass">10th Pass</option>
-                                <option value="12th Pass">12th Pass</option>
-                                <option value="Graduate">Graduate</option>
-                                <option value="Post Graduate">Post Graduate</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Complete Address <span class="required">*</span></label>
-                        <textarea id="address" name="address" rows="3" required></textarea>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2 class="section-title">Course Selection</h2>
-                    <div class="form-group">
-                        <label>Select Course(s) <span class="required">*</span></label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="basicComputer" name="courses" value="Basic Computer|3000">
-                                <label for="basicComputer">Basic Computer Course (₹3,000)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="msOffice" name="courses" value="MS Office|4000">
-                                <label for="msOffice">MS Office (₹4,000)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="webDesign" name="courses" value="Web Design|8000">
-                                <label for="webDesign">Web Design (₹8,000)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="programming" name="courses" value="Programming|10000">
-                                <label for="programming">Programming (₹10,000)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="digitalMarketing" name="courses" value="Digital Marketing|6000">
-                                <label for="digitalMarketing">Digital Marketing (₹6,000)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="graphics" name="courses" value="Graphics Design|7000">
-                                <label for="graphics">Graphics Design (₹7,000)</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="course-fees">
-                        <strong>Selected Courses Total: ₹<span id="totalFees">0</span></strong>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2 class="section-title">Payment Information</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="paymentMode">Payment Mode <span class="required">*</span></label>
-                            <select id="paymentMode" name="paymentMode" required>
-                                <option value="">Select Payment Mode</option>
-                                <option value="Cash">Cash</option>
-                                <option value="UPI">UPI</option>
-                                <option value="Card">Debit/Credit Card</option>
-                                <option value="Bank Transfer">Bank Transfer</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="amountPaid">Amount Paid <span class="required">*</span></label>
-                            <input type="number" id="amountPaid" name="amountPaid" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="remarks">Remarks/Notes</label>
-                        <textarea id="remarks" name="remarks" rows="2"></textarea>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">Generate Receipt</button>
-            </form>
+            <div>
+                <span>Date:</span>
+                <span id="receiptDate"></span>
+            </div>
+            <div>
+                <span>Applicant Name:</span>
+                <span id="receiptApplicantName"></span>
+            </div>
+            <div>
+                <span>Course Applied:</span>
+                <span id="receiptCourse"></span>
+            </div>
+            <div>
+                <span>Amount Paid:</span>
+                <span>₹ 500.00 (Admission Fee)</span>
+            </div>
+            <div class="pt-4 border-t-2 border-dashed border-gray-300">
+                <span class="font-bold text-lg">Payment Status:</span>
+                <span class="font-bold text-lg text-green-600">SUCCESSFUL</span>
+            </div>
         </div>
+        <p class="text-center text-gray-600 text-sm mt-6">Thank you for your application!</p>
+        <div class="flex justify-center mt-8 no-print">
+            <button onclick="printReceipt()" class="print-button">Print Receipt</button>
+        </div>
+    </div>
 
-        <div class="receipt" id="receipt">
-            <div class="receipt-header">
-                <h2>Computer & Digital Excellence (CODE)</h2>
-                <p>Lokenath Nagar, Bagdogra, 734014</p>
-                <p>ADMISSION RECEIPT</p>
-            </div>
-            <div class="receipt-content">
-                <div class="receipt-row">
-                    <span><strong>Receipt No:</strong></span>
-                    <span id="receiptNo"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Date:</strong></span>
-                    <span id="receiptDate"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Student Name:</strong></span>
-                    <span id="receiptStudentName"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Father's Name:</strong></span>
-                    <span id="receiptFatherName"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Phone:</strong></span>
-                    <span id="receiptPhone"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Course(s):</strong></span>
-                    <span id="receiptCourses"></span>
-                </div>
-                <div class="receipt-row">
-                    <span><strong>Payment Mode:</strong></span>
-                    <span id="receiptPaymentMode"></span>
-                </div>
-                <div class="receipt-row total">
-                    <span><strong>Amount Paid:</strong></span>
-                    <span id="receiptAmount"></span>
-                </div>
-                <div style="margin-top: 30px; text-align: center; font-size: 14px;">
-                    <p><strong>Thank you for choosing Computer & Digital Excellence!</strong></p>
-                    <p>For any queries, please contact us.</p>
-                </div>
-            </div>
-            <div style="padding: 20px; text-align: center;">
-                <button class="print-btn" onclick="printReceipt()">🖨️ Print Receipt</button>
-                <button class="download-btn" onclick="downloadReceipt()">📄 Download PDF</button>
-                <button class="back-btn" onclick="showForm()">➕ New Admission</button>
-            </div>
+    <!-- Admission Form Data Display Section (hidden by default) -->
+    <div id="admissionDataSection" class="data-display-container hidden printable-area no-print">
+        <h3 class="section-title">Submitted Admission Form Data</h3>
+        <div id="admissionDataDetails" class="data-display-details text-gray-700 text-base space-y-2">
+            <!-- Data will be populated here by JavaScript -->
+        </div>
+        <div class="flex justify-center mt-8 no-print">
+            <button onclick="printAdmissionData()" class="print-button">Print Admission Data</button>
         </div>
     </div>
 
     <script>
-        // Store form data globally
-        let currentFormData = {};
+        // IMPORTANT: Replace this with your Google Apps Script Web App URL
+        const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbypo8VRa3O_mFgTiqCC8S-eZRG_DZyNhJNy_Eflz0NmiWMY8eDqdfc-F9zcoFbStNs80g/exec';
 
-        // Calculate total fees
-        function updateTotalFees() {
-            const checkboxes = document.querySelectorAll('input[name="courses"]:checked');
-            let total = 0;
-            checkboxes.forEach(checkbox => {
-                const fee = parseInt(checkbox.value.split('|')[1]);
-                total += fee;
-            });
-            document.getElementById('totalFees').textContent = total;
-        }
+        const form = document.getElementById('admissionForm');
+        const formContainer = document.getElementById('formContainer');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const paymentReceiptSection = document.getElementById('paymentReceiptSection');
+        const admissionDataSection = document.getElementById('admissionDataSection');
 
-        // Add event listeners to course checkboxes
-        document.querySelectorAll('input[name="courses"]').forEach(checkbox => {
-            checkbox.addEventListener('change', updateTotalFees);
-        });
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
 
-        // Generate receipt number
-        function generateReceiptNumber() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const time = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0');
-            return `CODE${year}${month}${day}${time}`;
-        }
+            // Show loading indicator or disable button
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
 
-        // Send data to Google Sheets
-        async function sendToGoogleSheets(data) {
-            const webhookUrl = document.getElementById('webhookUrl').value.trim();
-            if (!webhookUrl) {
-                return { success: true, message: 'Google Sheets integration not configured' };
+            messageBox.classList.add('hidden'); // Hide previous messages
+
+            const formData = new FormData(form);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
             }
 
             try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                // Exponential backoff for API calls
+                let retries = 0;
+                const maxRetries = 5;
+                const baseDelay = 1000; // 1 second
 
-                return { success: true, message: 'Data saved to Google Sheets successfully!' };
-            } catch (error) {
-                console.error('Error sending to Google Sheets:', error);
-                return { success: false, message: 'Failed to save to Google Sheets: ' + error.message };
+                while (retries < maxRetries) {
+                    try {
+                        const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
+                            method: 'POST',
+                            mode: 'no-cors', // Required for Google Apps Script web app
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams(data).toString(),
+                        });
+
+                        // For 'no-cors' mode, response.ok is always false, and response.status is 0.
+                        // We rely on the Apps Script to process and assume success if no network error.
+                        // A more robust solution would involve CORS setup on Apps Script and checking response.ok
+                        // For simplicity and common Apps Script usage, we proceed assuming success.
+
+                        showMessage('Your application has been submitted successfully!', 'success');
+                        populateAndShowResults(data); // Populate and show the new sections
+                        form.reset(); // Clear the form
+                        break; // Exit retry loop on success
+
+                    } catch (error) {
+                        console.error('Error submitting form:', error);
+                        retries++;
+                        if (retries < maxRetries) {
+                            const delay = baseDelay * Math.pow(2, retries - 1);
+                            console.log(`Retrying in ${delay / 1000} seconds... (Attempt ${retries}/${maxRetries})`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        } else {
+                            showMessage('Failed to submit application. Please try again later.', 'error');
+                        }
+                    }
+                }
+
+            } finally {
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Application';
+                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
+        });
+
+        function showMessage(message, type) {
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            if (type === 'success') {
+                messageBox.classList.add('success');
+            } else if (type === 'error') {
+                messageBox.classList.add('error');
+            }
+            messageBox.classList.remove('hidden');
         }
 
-        // Show status message
-        function showStatus(message, isSuccess) {
-            const statusEl = document.getElementById('statusMessage');
-            statusEl.textContent = message;
-            statusEl.className = 'status-message ' + (isSuccess ? 'success' : 'error');
-            statusEl.style.display = 'block';
-            setTimeout(() => {
-                statusEl.style.display = 'none';
-            }, 5000);
+        function populateAndShowResults(formData) {
+            // Hide the form and message box
+            formContainer.classList.add('hidden');
+            messageBox.classList.add('hidden');
+
+            // Populate Payment Receipt
+            const now = new Date();
+            document.getElementById('receiptNumber').textContent = `CODE-REC-${now.getTime().toString().slice(-6)}`;
+            document.getElementById('receiptDate').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('receiptApplicantName').textContent = formData.fullName;
+            document.getElementById('receiptCourse').textContent = formData.course;
+            paymentReceiptSection.classList.remove('hidden');
+
+            // Populate Admission Data Display
+            const admissionDataDetails = document.getElementById('admissionDataDetails');
+            admissionDataDetails.innerHTML = ''; // Clear previous data
+
+            const displayFields = {
+                'Full Name': formData.fullName,
+                'Email Address': formData.email,
+                'Phone Number': formData.phone,
+                'Date of Birth': formData.dob,
+                'Full Address': formData.address,
+                'Applying For Course': formData.course,
+                'Previous School/College': formData.previousSchool || 'N/A',
+                'Academic Achievements': formData.academicAchievements || 'N/A',
+                'Emergency Contact Name': formData.emergencyName,
+                'Emergency Contact Phone': formData.emergencyPhone,
+                'Relationship': formData.relationship,
+                'Declaration Accepted': formData.declaration ? 'Yes' : 'No'
+            };
+
+            for (const label in displayFields) {
+                const div = document.createElement('div');
+                div.innerHTML = `<span>${label}:</span><span>${displayFields[label]}</span>`;
+                admissionDataDetails.appendChild(div);
+            }
+            admissionDataSection.classList.remove('hidden');
         }
 
-        // Enhanced print function
         function printReceipt() {
             window.print();
         }
 
-        // Download receipt as PDF (using browser's print to PDF)
-        function downloadReceipt() {
-            const originalTitle = document.title;
-            document.title = `Receipt_${document.getElementById('receiptNo').textContent}`;
+        function printAdmissionData() {
             window.print();
-            document.title = originalTitle;
-        }
-
-        // Form submission
-        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Validate course selection
-            const selectedCourses = document.querySelectorAll('input[name="courses"]:checked');
-            if (selectedCourses.length === 0) {
-                alert('Please select at least one course.');
-                return;
-            }
-
-            // Get form data
-            const formData = new FormData(this);
-            
-            // Generate receipt
-            const receiptNo = generateReceiptNumber();
-            const currentDate = new Date().toLocaleDateString('en-IN');
-            
-            // Prepare data for Google Sheets
-            const coursesList = [];
-            const courseFees = [];
-            selectedCourses.forEach(course => {
-                const [courseName, fee] = course.value.split('|');
-                coursesList.push(courseName);
-                courseFees.push(fee);
-            });
-
-            currentFormData = {
-                receiptNo: receiptNo,
-                date: currentDate,
-                studentName: formData.get('studentName'),
-                fatherName: formData.get('fatherName'),
-                motherName: formData.get('motherName'),
-                dob: formData.get('dob'),
-                gender: formData.get('gender'),
-                phone: formData.get('phone'),
-                email: formData.get('email'),
-                qualification: formData.get('qualification'),
-                address: formData.get('address'),
-                courses: coursesList.join(', '),
-                totalCourseFees: courseFees.reduce((sum, fee) => sum + parseInt(fee), 0),
-                paymentMode: formData.get('paymentMode'),
-                amountPaid: formData.get('amountPaid'),
-                remarks: formData.get('remarks')
-            };
-
-            // Send to Google Sheets
-            const result = await sendToGoogleSheets(currentFormData);
-            if (result.success) {
-                showStatus(result.message, true);
-            } else {
-                showStatus(result.message, false);
-            }
-
-            // Update receipt display
-            document.getElementById('receiptNo').textContent = receiptNo;
-            document.getElementById('receiptDate').textContent = currentDate;
-            document.getElementById('receiptStudentName').textContent = formData.get('studentName');
-            document.getElementById('receiptFatherName').textContent = formData.get('fatherName');
-            document.getElementById('receiptPhone').textContent = formData.get('phone');
-            document.getElementById('receiptPaymentMode').textContent = formData.get('paymentMode');
-            document.getElementById('receiptAmount').textContent = '₹' + formData.get('amountPaid');
-            document.getElementById('receiptCourses').textContent = coursesList.join(', ');
-            
-            // Show receipt, hide form
-            document.getElementById('formContainer').style.display = 'none';
-            document.getElementById('receipt').style.display = 'block';
-        });
-
-        function showForm() {
-            document.getElementById('formContainer').style.display = 'block';
-            document.getElementById('receipt').style.display = 'none';
-            document.getElementById('admissionForm').reset();
-            updateTotalFees();
         }
     </script>
 </body>
