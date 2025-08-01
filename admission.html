@@ -741,6 +741,10 @@
                 <div class="section-description">
                     Select your preferred course(s) and payment plan
                 </div>
+                <!-- Place this button somewhere above or beside the course selection -->
+                <div style="margin-bottom: 12px; text-align: right;">
+                    <button class="btn" style="background: #f87171; color: white;" onclick="clearAllCourses()">Clear All Courses</button>
+                </div>
                 <div class="section-content">
                     <div class="course-selection" id="courseSelection">
                         <!-- Courses will be populated by JavaScript -->
@@ -1077,19 +1081,27 @@
             document.getElementById('receiptNo').textContent = receiptNo;
         }
 
-        // Create course selection options
+        // Updated createCourseOptions to fix badge wording
         function createCourseOptions() {
             const courseSelection = document.getElementById('courseSelection');
             courseSelection.innerHTML = '';
-
+        
             Object.keys(courseData).forEach(courseName => {
                 const course = courseData[courseName];
-                const savings = course.monthlyPrice - course.fullPrice;
-                
+                const diff = course.fullPrice - course.monthlyPrice;
+                let badgeText = '';
+                if (diff > 0) {
+                    badgeText = `Save ₹${diff.toLocaleString('en-IN')}`;
+                } else if (diff < 0) {
+                    badgeText = `Extra ₹${Math.abs(diff).toLocaleString('en-IN')}`;
+                } else {
+                    badgeText = 'No Difference';
+                }
+        
                 const courseDiv = document.createElement('div');
                 courseDiv.className = 'course-option';
                 courseDiv.onclick = () => toggleCourse(courseDiv, courseName);
-                
+        
                 courseDiv.innerHTML = `
                     <input type="checkbox" name="courses" value="${courseName}">
                     <div class="course-header">
@@ -1101,7 +1113,7 @@
                             <input type="radio" name="${courseName}_plan" value="full">
                             <div class="price-label">Full Payment</div>
                             <div class="price-amount">₹${course.fullPrice.toLocaleString('en-IN')}</div>
-                            <div class="savings-badge">Save ₹${savings.toLocaleString('en-IN')}</div>
+                            <div class="savings-badge">${badgeText}</div>
                         </div>
                         <div class="price-option" onclick="selectPaymentPlan(event, '${courseName}', 'monthly')">
                             <input type="radio" name="${courseName}_plan" value="monthly">
@@ -1113,59 +1125,66 @@
                         </div>
                     </div>
                 `;
-                
+        
                 courseSelection.appendChild(courseDiv);
             });
         }
-
-        // Toggle course selection
-        function toggleCourse(element, courseName) {
-            const checkbox = element.querySelector('input[type="checkbox"]');
-            
-            if (checkbox.checked) {
-                // Deselecting course
-                checkbox.checked = false;
-                element.classList.remove('selected');
-                selectedCourses = selectedCourses.filter(course => course !== courseName);
-                delete coursePaymentPlans[courseName];
-            } else {
-                // Selecting course - default to full payment
-                checkbox.checked = true;
-                element.classList.add('selected');
-                selectedCourses.push(courseName);
-                coursePaymentPlans[courseName] = 'full';
-                
-                // Select full payment option by default
-                const fullOption = element.querySelector('.price-option');
-                fullOption.classList.add('selected');
-                fullOption.querySelector('input[type="radio"]').checked = true;
-            }
-            
-            updateReceipt();
-        }
-
-        // Select payment plan
+        
+        // Fix: ensure plan selection triggers full update
         function selectPaymentPlan(event, courseName, plan) {
             event.stopPropagation();
-            
+        
             const courseOption = event.target.closest('.course-option');
             const priceOptions = courseOption.querySelectorAll('.price-option');
-            
+        
             // Remove selection from all options
             priceOptions.forEach(option => {
                 option.classList.remove('selected');
-                option.querySelector('input[type="radio"]').checked = false;
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
             });
-            
+        
             // Select current option
             const currentOption = event.target.closest('.price-option');
             currentOption.classList.add('selected');
-            currentOption.querySelector('input[type="radio"]').checked = true;
-            
+            const currentRadio = currentOption.querySelector('input[type="radio"]');
+            if (currentRadio) currentRadio.checked = true;
+        
             // Update payment plan
             coursePaymentPlans[courseName] = plan;
+        
+            // Ensure the course is marked selected visually and in data
+            const checkbox = courseOption.querySelector('input[type="checkbox"]');
+            if (checkbox && !checkbox.checked) {
+                checkbox.checked = true;
+                courseOption.classList.add('selected');
+                if (!selectedCourses.includes(courseName)) {
+                    selectedCourses.push(courseName);
+                }
+            }
+        
+            updateReceipt(); // <--- missing previously
+        }
+        
+        // New: clear all selected courses
+        function clearAllCourses() {
+            selectedCourses = [];
+            coursePaymentPlans = {};
+        
+            document.querySelectorAll('.course-option').forEach(option => {
+                option.classList.remove('selected');
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                if (checkbox) checkbox.checked = false;
+                option.querySelectorAll('.price-option').forEach(po => {
+                    po.classList.remove('selected');
+                    const radio = po.querySelector('input[type="radio"]');
+                    if (radio) radio.checked = false;
+                });
+            });
+        
             updateReceipt();
         }
+
 
         // Update receipt with selected courses
         function updateReceipt() {
