@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CODE — Computer & Digital Excellence Institute | Bagdogra</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <meta name="description" content="Bagdogra's #1 Computer Institute — CCA, DCA, ADCA, Web Development, Meta Ads, AI Prompt Engineering. Govt-registered. Placement support." />
+  <style>
+    :root{
+      --bg:#0b1426;           /* Navy */
+      --bg-2:#0f1c33;         /* Deeper Navy */
+      --text:#eaf0ff;         /* Soft white */
+      --muted:#a8b2d6;        /* Muted text */
+      --gold:#f9b233;         /* Accent gold */
+      --gold-2:#ffd166;       /* Lighter accent */
+      --teal:#49d2d6;         /* Accent */
+      --card:#0f1a2f80;       /* Glassy */
+      --border:#223055;       /* Subtle border */
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:22px;
+      --radius-lg:28px;
+      --ring:0 0 0 3px rgba(249,178,51,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      color:var(--text); background:linear-gradient(180deg,var(--bg),var(--bg-2));
+      overflow-x:hidden;
+    }
+    a{color:inherit; text-decoration:none}
+
+    /* ---------- Header ---------- */
+    .header{position:sticky; top:0; z-index:1000; backdrop-filter:saturate(140%) blur(10px);
+      background:linear-gradient(90deg,rgba(11,20,38,.7),rgba(15,28,51,.4)); border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{max-width:1200px; margin:auto; display:flex; align-items:center; gap:20px; padding:14px 16px;}
+    .logo{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.5px}
+    .logo-mark{width:42px; height:42px; border-radius:14px; background:radial-gradient(90% 90% at 20% 20%,var(--gold),var(--gold-2)); color:#111; display:grid; place-items:center; font-weight:900}
+    .nav ul{list-style:none; display:flex; gap:18px; margin:0 0 0 auto; padding:0}
+    .nav a{padding:10px 12px; border-radius:12px; color:var(--muted)}
+    .nav a:hover{background:rgba(255,255,255,.06); color:var(--text)}
+    .nav-cta{display:flex; gap:10px}
+    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--border); padding:10px 14px; border-radius:14px; box-shadow:var(--shadow); backdrop-filter:blur(6px); transition:transform .12s ease, box-shadow .2s ease, background .2s;}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 12px 30px rgba(0,0,0,.4)}
+    .btn-primary{background:linear-gradient(180deg,var(--gold),var(--gold-2)); color:#111; border:none}
+    .btn-ghost{background:rgba(255,255,255,.06)}
+
+    /* ---------- Hero ---------- */
+    .hero{position:relative; isolation:isolate}
+    .hero-inner{max-width:1200px; margin:0 auto; padding:80px 16px 40px; display:grid; grid-template-columns:1.2fr 1fr; gap:36px;}
+    .hero h1{font-size: clamp(30px, 4.5vw, 56px); line-height:1.05; margin:0 0 12px;}
+    .hero p{font-size: clamp(16px,1.6vw,18px); color:var(--muted); margin:0 0 18px;}
+    .trust{display:flex; gap:14px; flex-wrap:wrap; margin:10px 0 26px}
+    .trust .chip{background:rgba(73,210,214,.12); border:1px solid rgba(73,210,214,.35); color:#b9f6ff; padding:8px 12px; border-radius:999px; font-weight:600;}
+
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .cta-note{font-size:13px; color:var(--muted)}
+
+    .mini-form{margin-top:18px; display:flex; gap:10px; flex-wrap:wrap}
+    .mini-form input{flex:1 1 220px; background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--text); padding:12px 14px; border-radius:12px; outline:none}
+    .mini-form button{cursor:pointer}
+
+    /* Decorative visual */
+    .hero-visual{position:relative; border-radius:var(--radius-lg); overflow:hidden; min-height:340px; background:linear-gradient(180deg,#0f213f,#0c274f); border:1px solid var(--border); box-shadow:var(--shadow)}
+    .floating-cards{position:absolute; inset:auto 0 0 0; display:flex; justify-content:center; gap:14px; padding:16px;}
+    .float-card{background:rgba(255,255,255,.08); border:1px solid var(--border); padding:14px 16px; border-radius:16px; display:flex; gap:10px; align-items:center; transform:translateY(30px); animation:rise 1.2s ease .3s forwards; backdrop-filter:blur(8px)}
+    .float-card i{font-size:18px; color:var(--gold-2)}
+    @keyframes rise {to{transform:translateY(0)}}
+
+    /* Particle canvas behind hero */
+    #particles{position:absolute; inset:0; z-index:-1;}
+
+    /* ---------- Stats ---------- */
+    .stats{max-width:1200px; margin:18px auto 0; padding:0 16px 26px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+    .stat{background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:18px; padding:22px; text-align:center}
+    .stat .num{font-size: clamp(28px,4vw,44px); font-weight:800; letter-spacing:.3px}
+    .stat p{margin:6px 0 0; color:var(--muted)}
+
+    /* ---------- Sections ---------- */
+    section{padding:70px 16px}
+    .container{max-width:1200px; margin:auto}
+    .section-title{font-size: clamp(24px,3.2vw,36px); margin:0 0 10px}
+    .section-sub{color:var(--muted); margin:0 0 26px}
+
+    /* ---------- Courses grid ---------- */
+    .grid{display:grid; gap:16px}
+    .grid.courses{grid-template-columns:repeat(3,1fr)}
+    .card{background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:20px; padding:20px; box-shadow:var(--shadow); position:relative; overflow:hidden; transition:transform .2s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 30px 60px rgba(0,0,0,.45)}
+    .card .badge{position:absolute; top:14px; right:-36px; transform:rotate(35deg); background:linear-gradient(180deg,var(--gold),var(--gold-2)); color:#111; padding:8px 50px; font-weight:800}
+    .card h3{margin:12px 0 8px; font-size:20px}
+    .tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+    .tag{font-size:12px; border:1px solid var(--border); padding:6px 10px; border-radius:999px; color:var(--muted); background:rgba(255,255,255,.04)}
+    .card .enroll{margin-top:14px}
+
+    /* ---------- Why choose ---------- */
+    .grid.features{grid-template-columns:repeat(4,1fr)}
+    .feature{display:flex; gap:12px; align-items:flex-start}
+    .feature i{font-size:20px; color:var(--gold-2)}
+
+    /* ---------- Testimonials slider ---------- */
+    .slider{position:relative; overflow:hidden; border-radius:22px; border:1px solid var(--border); background:rgba(255,255,255,.04)}
+    .track{display:flex; gap:16px; padding:16px; animation:slide 28s linear infinite}
+    .tcard{min-width:340px; background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:18px; padding:18px}
+    .tcard .q{color:var(--gold-2); margin-bottom:8px}
+    @keyframes slide{to{transform:translateX(-50%)}}
+
+    /* ---------- CTA banner ---------- */
+    .cta{background:linear-gradient(90deg,#1b2c50,#163567); border-top:1px solid var(--border); border-bottom:1px solid var(--border)}
+    .cta .row{display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between}
+
+    /* ---------- Contact ---------- */
+    .contact{display:grid; grid-template-columns:1.1fr 1fr; gap:20px}
+    .form .field{display:flex; flex-direction:column; gap:8px}
+    .form input,.form select,.form textarea{background:rgba(255,255,255,.06); border:1px solid var(--border); color:var(--text); padding:12px 14px; border-radius:12px; outline:none}
+    .map{min-height:360px; border:1px solid var(--border); border-radius:20px; overflow:hidden}
+
+    /* ---------- Footer ---------- */
+    footer{border-top:1px solid var(--border); background:#0a1223; padding:24px 16px; color:var(--muted)}
+
+    /* ---------- Sticky Mobile Bar ---------- */
+    .sticky-bar{position:fixed; bottom:12px; left:50%; transform:translateX(-50%); z-index:1200; display:flex; gap:10px}
+    .sticky-bar .btn{padding:12px 16px}
+
+    /* ---------- Reveal on scroll ---------- */
+    .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 980px){
+      .hero-inner{grid-template-columns:1fr; padding-top:56px}
+      .grid.courses{grid-template-columns:repeat(2,1fr)}
+      .grid.features{grid-template-columns:repeat(2,1fr)}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .contact{grid-template-columns:1fr}
+    }
+    @media (max-width: 640px){
+      .grid.courses{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .nav ul{display:none}
+      .sticky-bar{width:calc(100% - 24px)}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-mark">C</div>
+        <div>
+          <div style="font-weight:900; font-size:18px; line-height:1">CODE</div>
+          <div style="font-size:11px; opacity:.75">Computer & Digital Excellence</div>
+        </div>
+      </div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#courses">Programs</a></li>
+        <li><a href="#why">Why CODE</a></li>
+        <li><a href="#success">Success Stories</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="tel:+919635809537"><i class="fas fa-phone"></i> Call</a>
+        <a class="btn btn-primary" href="https://wa.me/919635809537" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <canvas id="particles" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <div>
+        <h1 class="reveal">Bagdogra’s #1 Computer Institute</h1>
+        <p class="reveal" style="transition-delay:.05s">1000+ students trained · Govt‑registered · Career‑focused learning with placements.</p>
+        <div class="trust reveal" style="transition-delay:.1s">
+          <span class="chip"><i class="fa-solid fa-shield-halved"></i> Govt Registered</span>
+          <span class="chip"><i class="fa-solid fa-certificate"></i> Industry Certificates</span>
+          <span class="chip"><i class="fa-solid fa-briefcase"></i> Placement Support</span>
+        </div>
+        <div class="cta-row reveal" style="transition-delay:.15s">
+          <a class="btn btn-primary" href="#courses"><i class="fas fa-graduation-cap"></i> Explore Courses</a>
+          <a class="btn" href="/brochure.html"><i class="fas fa-file-arrow-down"></i> Download Brochure</a>
+        </div>
+        <form class="mini-form reveal" id="miniForm" style="transition-delay:.18s">
+          <input type="text" id="mf-name" placeholder="Your Name" required />
+          <input type="tel" id="mf-phone" placeholder="Phone Number" required />
+          <button class="btn btn-ghost" type="submit"><i class="fa-solid fa-comments"></i> Get Free Counseling</button>
+          <div class="cta-note">We respond within 10 minutes on WhatsApp.</div>
+        </form>
+      </div>
+      <div class="hero-visual reveal" style="transition-delay:.1s">
+        <!-- Replace this with your lab/class photo if available -->
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop" alt="Computer Lab" style="width:100%; height:100%; object-fit:cover; opacity:.9" />
+        <div class="floating-cards">
+          <div class="float-card"><i class="fa-solid fa-code"></i> Programming</div>
+          <div class="float-card"><i class="fa-solid fa-certificate"></i> Certification</div>
+          <div class="float-card"><i class="fa-solid fa-briefcase"></i> Career Ready</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal">
+        <div class="num" data-count="1000">0</div>
+        <p>Students Trained</p>
+      </div>
+      <div class="stat reveal" style="transition-delay:.05s">
+        <div class="num" data-count="300">0</div>
+        <p>Career Placements</p>
+      </div>
+      <div class="stat reveal" style="transition-delay:.1s">
+        <div class="num" data-count="1">0</div>
+        <p>Rated #1 in Bagdogra</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURSES -->
+  <section id="courses">
+    <div class="container">
+      <h2 class="section-title reveal">Our Programs</h2>
+      <p class="section-sub reveal" style="max-width:780px">Comprehensive programs designed for real‑world skills and certifications. Flexible scheduling and EMI available.</p>
+      <div class="grid courses">
+        <article class="card reveal">
+          <i class="fa-solid fa-user-graduate"></i>
+          <h3>CCA (Certificate in Computer Application)</h3>
+          <p>Computer fundamentals, MS Office, internet basics and digital literacy — the perfect start.</p>
+          <div class="tags">
+            <span class="tag">3 Months</span><span class="tag">Beginner</span><span class="tag">Certificate</span>
+          </div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20CCA">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <span class="badge">POPULAR</span>
+          <h3>DCA (Diploma in Computer Application)</h3>
+          <p>Advanced applications, programming basics, office automation and productivity workflows.</p>
+          <div class="tags">
+            <span class="tag">6 Months</span><span class="tag">Intermediate</span><span class="tag">Diploma</span>
+          </div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20DCA">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <h3>ADCA (Advanced Diploma in Computer Application)</h3>
+          <p>Programming languages, database management, web tech and software development methods.</p>
+          <div class="tags">
+            <span class="tag">12 Months</span><span class="tag">Advanced</span><span class="tag">Advanced Diploma</span>
+          </div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20ADCA">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <h3>Meta Ads (Facebook & Instagram)</h3>
+          <p>Plan, launch and optimize high‑converting campaigns with hands‑on projects.</p>
+          <div class="tags"><span class="tag">1.5 Months</span><span class="tag">Digital Marketing</span><span class="tag">Meta Training</span></div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20Meta%20Ads">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <h3>Web Development</h3>
+          <p>HTML, CSS, JavaScript, responsive design and modern frameworks to build real sites.</p>
+          <div class="tags"><span class="tag">4 Months</span><span class="tag">Technical</span><span class="tag">Portfolio Projects</span></div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20Web%20Development">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <h3>AI Prompt Engineering</h3>
+          <p>Leverage AI tools and prompt design to supercharge productivity and creativity.</p>
+          <div class="tags"><span class="tag">2 Months</span><span class="tag">Cutting‑edge</span><span class="tag">AI Certification</span></div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20AI%20Prompt%20Engineering">Enroll Now</a></div>
+        </article>
+        <article class="card reveal">
+          <h3>Live Project Training</h3>
+          <p>Work on real‑world projects with mentorship and build a job‑ready portfolio.</p>
+          <div class="tags"><span class="tag">3 Months</span><span class="tag">Practical</span><span class="tag">Industry Projects</span></div>
+          <div class="enroll"><a class="btn btn-primary" href="https://wa.me/919635809537?text=Interested%20in%20Live%20Project%20Training">Enroll Now</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE -->
+  <section id="why">
+    <div class="container">
+      <h2 class="section-title reveal">Why Choose CODE?</h2>
+      <p class="section-sub reveal">Excellence in computer education with modern infrastructure and industry‑focused curriculum.</p>
+      <div class="grid features">
+        <div class="card feature reveal"><i class="fas fa-desktop"></i><div><h3>Modern Labs</h3><p class="section-sub">High‑speed internet and industry software for hands‑on practice.</p></div></div>
+        <div class="card feature reveal"><i class="fas fa-chalkboard-teacher"></i><div><h3>Expert Faculty</h3><p class="section-sub">Certified instructors with real industry experience.</p></div></div>
+        <div class="card feature reveal"><i class="fas fa-medal"></i><div><h3>Recognized Curriculum</h3><p class="section-sub">Certified modules, assessments and credentials.</p></div></div>
+        <div class="card feature reveal"><i class="fas fa-handshake"></i><div><h3>Placement Support</h3><p class="section-sub">Career counseling, interviews and job assistance.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUCCESS STORIES -->
+  <section id="success">
+    <div class="container">
+      <h2 class="section-title reveal">Success Stories</h2>
+      <div class="slider reveal">
+        <div class="track">
+          <div class="tcard"><div class="q"><i class="fas fa-quote-left"></i></div>CODE blended theory with practicals perfectly. I landed my first role within 2 months of graduation. <br><br><strong>Priya Sharma</strong> · DCA → Software Developer</div>
+          <div class="tcard">Superb labs and supportive faculty. The portfolio projects were game‑changers.<br><br><strong>Rahul Kumar</strong> · ADCA → Web Developer</div>
+          <div class="tcard">Best institute in Bagdogra. Clean, clear teaching and real guidance.<br><br><strong>Anjali Roy</strong> · CCA → Office Admin</div>
+          <!-- duplicate for smooth loop -->
+          <div class="tcard"><div class="q"><i class="fas fa-quote-left"></i></div>CODE blended theory with practicals perfectly. I landed my first role within 2 months of graduation. <br><br><strong>Priya Sharma</strong> · DCA → Software Developer</div>
+          <div class="tcard">Superb labs and supportive faculty. The portfolio projects were game‑changers.<br><br><strong>Rahul Kumar</strong> · ADCA → Web Developer</div>
+          <div class="tcard">Best institute in Bagdogra. Clean, clear teaching and real guidance.<br><br><strong>Anjali Roy</strong> · CCA → Office Admin</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta">
+    <div class="container">
+      <div class="row">
+        <h3>🎉 Limited Offer: Enroll before <span style="color:var(--gold-2)">Sept 30</span> and get <strong>10% off</strong> admission fee!</h3>
+        <div>
+          <a class="btn btn-primary" href="https://wa.me/919635809537?text=I%20want%20to%20claim%20the%20Sept%20offer">Claim on WhatsApp</a>
+          <a class="btn" href="#contact">Talk to Counselor</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container contact">
+      <div>
+        <h2 class="section-title reveal">Get in Touch</h2>
+        <p class="section-sub reveal">Reach us for admissions, fees, schedules or custom guidance.</p>
+        <form id="contactForm" class="form card reveal">
+          <div class="field"><label for="name">Full Name *</label><input id="name" required placeholder="Enter your full name" /></div>
+          <div class="field"><label for="email">Email *</label><input id="email" type="email" required placeholder="Enter your email" /></div>
+          <div class="field"><label for="phone">Phone *</label><input id="phone" type="tel" required placeholder="Enter your phone number" /></div>
+          <div class="field"><label for="course">Course Interest</label>
+            <select id="course">
+              <option value="">Select a course</option>
+              <option>CCA</option><option>DCA</option><option>ADCA</option><option>Web Development</option><option>AI Prompt Engineering</option><option>Meta Ads</option><option>Live Project Training</option>
+            </select>
+          </div>
+          <div class="field"><label for="message">Message</label><textarea id="message" rows="4" placeholder="Tell us your background and goals"></textarea></div>
+          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Inquiry</button>
+        </form>
+      </div>
+      <div class="map reveal" aria-label="CODE Location">
+        <iframe width="100%" height="100%" style="border:0" loading="lazy" allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=Bagdogra%2C%20Siliguri&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap">
+      <div>© 2025 CODE — Computer & Digital Excellence Institute. All rights reserved.</div>
+      <div>Excellence in Computer Education · Bagdogra, Siliguri</div>
+    </div>
+  </footer>
+
+  <!-- Sticky mobile CTA -->
+  <div class="sticky-bar">
+    <a class="btn btn-primary" href="tel:+919635809537"><i class="fa-solid fa-phone"></i> Call</a>
+    <a class="btn" href="https://wa.me/919635809537" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+  </div>
+
+  <script>
+    // -------- Particles background (lightweight) --------
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let w,h,particles; const COUNT = 48;
+    function resize(){ w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
+    function init(){ particles = Array.from({length:COUNT},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+1})); }
+    function draw(){ ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(249,178,51,.85)'; ctx.fill(); }); requestAnimationFrame(draw); }
+    window.addEventListener('resize',()=>{resize(); init();}); resize(); init(); draw();
+
+    // -------- Reveal on scroll --------
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); } }); },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // -------- Counter up numbers --------
+    const counters = document.querySelectorAll('.num');
+    const io2 = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ const el=e.target; const end=+el.dataset.count; let cur=0; const inc=Math.max(1,Math.ceil(end/120));
+          const t=setInterval(()=>{ cur+=inc; if(cur>=end){cur=end; clearInterval(t);} el.textContent = end>=100 ? cur+'+' : cur; },16);
+          io2.unobserve(el);
+        }
+      });
+    },{threshold:.6});
+    counters.forEach(c=>io2.observe(c));
+
+    // -------- Mini form -> WhatsApp lead --------
+    document.getElementById('miniForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name=document.getElementById('mf-name').value.trim();
+      const phone=document.getElementById('mf-phone').value.trim();
+      const msg = encodeURIComponent(`Hi CODE!\n\nName: ${name}\nPhone: ${phone}\nI want free counseling about courses.`);
+      window.open(`https://wa.me/919635809537?text=${msg}`, '_blank');
+    });
+
+    // -------- Contact form -> WhatsApp --------
+    document.getElementById('contactForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name=document.getElementById('name').value; const email=document.getElementById('email').value; const phone=document.getElementById('phone').value; const course=document.getElementById('course').value||'General'; const message=document.getElementById('message').value||'Please share details.';
+      const text=encodeURIComponent(`Hi CODE Institute!%0A%0AName: ${name}%0AEmail: ${email}%0APhone: ${phone}%0ACourse: ${course}%0AMessage: ${message}`);
+      window.open(`https://wa.me/919635809537?text=${text}`, '_blank');
+      alert('Thanks! We opened WhatsApp with your message.');
+      this.reset();
+    });
+
+    // -------- Tilt effect on course cards --------
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('mousemove', (e)=>{
+        const r=card.getBoundingClientRect();
+        const x=e.clientX - (r.left + r.width/2);
+        const y=e.clientY - (r.top + r.height/2);
+        card.style.transform = `rotateX(${(-y/r.height)*6}deg) rotateY(${(x/r.width)*6}deg) translateY(-6px)`;
+      });
+      card.addEventListener('mouseleave', ()=>{ card.style.transform='translateY(0)'; });
+    });
+
+    // -------- Magnetic buttons (subtle) --------
+    document.querySelectorAll('.btn').forEach(btn=>{
+      btn.addEventListener('mousemove', (e)=>{
+        const r=btn.getBoundingClientRect();
+        btn.style.transform = `translate(${(e.clientX - (r.left + r.width/2))/18}px, ${(e.clientY - (r.top + r.height/2))/18}px)`;
+      });
+      btn.addEventListener('mouseleave', ()=>{ btn.style.transform='translate(0,0)'; });
+    });
+  </script>
+
+  <!-- FAQ Schema (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Do you provide placement support?","acceptedAnswer":{"@type":"Answer","text":"Yes. We offer resume prep, mock interviews and job assistance for eligible programs."}},
+      {"@type":"Question","name":"Is EMI available?","acceptedAnswer":{"@type":"Answer","text":"Yes, flexible payment options are available for selected programs."}},
+      {"@type":"Question","name":"What are the class timings?","acceptedAnswer":{"@type":"Answer","text":"Monday to Saturday, 9 AM – 6 PM. Weekend and evening batches are available based on demand."}}
+    ]
+  }
+  </script>
+</body>
+</html>
