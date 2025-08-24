@@ -616,18 +616,7 @@
                         <div class="registration_details" style="margin-bottom: 20px;">
                             <h3>Registration Details</h3>
                             <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
-                            <p><strong>Date:</strong> 
-                              ${new Date(registration.registration_date).toLocaleString("en-US", {
-                                month: "long",
-                                day: "numeric",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                second: "2-digit",
-                                hour12: false
-                              }).replace(",", "")}
-                            </p>
-
+                            <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
                             <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
                         </div>
                     </div>
