@@ -263,6 +263,42 @@
             font-size: 14px;
         }
 
+        .student_information {
+            background-color: #dfffee;
+            padding: 20px 10px;
+            display: flex;
+            gap: 14px;
+            border-radius: 10px;
+            flex-direction: column;
+        }
+
+        .registration_details {
+            background-color: #f0edff;
+            padding: 20px 10px;
+            display: flex;
+            gap: 20px;
+            border-radius: 10px;
+            flex-direction: column;
+        }
+
+        .couser_details_view {
+            background-color: #ffffd0;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 10px;
+        }
+
+        .payment_summary {
+            background: #fbfbfb;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+        }
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -558,7 +594,7 @@
                         <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">&times;</button>
                     </div>
                     
-                    <div style="margin-bottom: 20px;">
+                    <div class="student_information" style="margin-bottom: 20px;">
                         <h3>Student Information</h3>
                         <p><strong>Name:</strong> ${registration.full_name}</p>
                         <p><strong>Phone:</strong> ${registration.phone_number}</p>
@@ -567,19 +603,19 @@
                         <p><strong>Address:</strong> ${registration.address}</p>
                     </div>
                     
-                    <div style="margin-bottom: 20px;">
+                    <div class="registration_details" style="margin-bottom: 20px;">
                         <h3>Registration Details</h3>
                         <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
                         <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
                         <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
                     </div>
                     
-                    <div style="margin-bottom: 20px;">
+                    <div class="couser_details_view" style="margin-bottom: 20px;">
                         <h3>Courses</h3>
                         <p>${coursesHtml}</p>
                     </div>
                     
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                    <div class="payment_summary" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
                         <h3>Payment Summary</h3>
                         <p><strong>Total Amount:</strong> ₹${registration.total_amount.toLocaleString()}</p>
                         <p><strong>Discount:</strong> ₹${registration.discount_amount.toLocaleString()}</p>
