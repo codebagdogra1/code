@@ -645,7 +645,7 @@
             ).join('');
         
             const detailsHtml = `
-                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 100vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
                         <h2 style="color: #667eea; margin: 0;">Registration Details</h2>
                         <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
@@ -804,7 +804,7 @@
         }
         
         // Process payment
-        function processPayment(receiptNo) {
+        async function processPayment(receiptNo) {
             const amount = parseFloat(document.getElementById('paymentAmount').value);
             const method = document.getElementById('paymentMethodUpdate').value;
             
@@ -813,16 +813,50 @@
                 return;
             }
             
-            if (confirm(`Record payment of ₹${amount.toLocaleString()} via ${method} for ${receiptNo}?`)) {
-                closePaymentModal();
+            if (confirm(`Confirm payment of ₹${amount.toLocaleString()} via ${method} for ${receiptNo}?`)) {
+                const processBtn = event.target;
+                const originalText = processBtn.textContent;
                 
-                // Show success message (for now, until we create the update function)
-                showAlert(`Payment of ₹${amount.toLocaleString()} recorded for ${receiptNo}!`, 'success');
-                
-                // Refresh the data
-                setTimeout(() => {
-                    loadData();
-                }, 1000);
+                try {
+                    // Show loading
+                    processBtn.disabled = true;
+                    processBtn.textContent = 'Processing...';
+                    
+                    // Call the payment update API
+                    const response = await fetch('/.netlify/functions/update-payment', {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({
+                            receipt_no: receiptNo,
+                            additional_payment: amount,
+                            payment_method: method
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        closePaymentModal();
+                        showAlert(`✅ Payment of ₹${amount.toLocaleString()} added successfully to ${receiptNo}!`, 'success');
+                        
+                        // Refresh the dashboard data
+                        setTimeout(() => {
+                            loadData();
+                        }, 1000);
+                    } else {
+                        throw new Error(result.error || 'Payment update failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('Payment error:', error);
+                    showAlert(`❌ Payment failed: ${error.message}`, 'error');
+                } finally {
+                    // Reset button
+                    processBtn.disabled = false;
+                    processBtn.textContent = originalText;
+                }
             }
         }
         
