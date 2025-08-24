@@ -189,6 +189,10 @@
             gap: 5px;
         }
 
+        .btn-print-primary {
+            background: #82755d;
+        }
+
         .btn-sm {
             padding: 5px 10px;
             font-size: 11px;
@@ -522,7 +526,7 @@ function displayRegistrations(registrations) {
                             💳 Pay
                         </button>
                     ` : ''}
-                    <button class="btn btn-primary btn-sm" onclick="printReceipt('${reg.receipt_no}')" title="Print Receipt">
+                    <button class="btn btn-primary btn-sm btn-print-primary" onclick="printReceipt('${reg.receipt_no}')" title="Print Receipt">
                         🖨️ Print
                     </button>
                     <button class="btn btn-warning btn-sm" onclick="showPaymentHistory('${reg.receipt_no}')" title="Payment History">
