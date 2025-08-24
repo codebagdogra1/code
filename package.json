@@ -1,0 +1,8 @@
+{
+  "name": "course-registration-system",
+  "version": "1.0.0",
+  "description": "Course registration system for CODE",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CODE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .main-content {
+            padding: 0 30px 30px;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-pending {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 800px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Computer & Digital Excellence</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary">➕ New Registration</a>
+                <button class="btn btn-primary" onclick="loadData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="alert" id="alertBox"></div>
+
+        <!-- Statistics -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading statistics...
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Search Section -->
+            <div class="search-section">
+                <h3 style="margin-bottom: 15px;">Search Registrations</h3>
+                <div class="search-controls">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search by name, phone, email, or receipt number...">
+                    <button class="btn btn-primary" onclick="searchRegistrations()">🔍 Search</button>
+                    <button class="btn btn-secondary" onclick="clearSearch()">✕ Clear</button>
+                </div>
+            </div>
+
+            <!-- Registrations Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receipt No</th>
+                            <th>Student Name</th>
+                            <th>Phone</th>
+                            <th>Date</th>
+                            <th>Total Amount</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrationsTable">
+                        <tr>
+                            <td colspan="9" class="loading">
+                                <div class="spinner"></div>
+                                Loading registrations...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+    <script>
+        let currentPage = 1;
+        let isSearchMode = false;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+        });
+
+        // Load all data
+        async function loadData() {
+            await Promise.all([
+                loadStatistics(),
+                loadRegistrations(currentPage)
+            ]);
+        }
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/.netlify/functions/dashboard-stats');
+                const stats = await response.json();
+                
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="stat-card">
+                        <span class="stat-number">${stats.totalRegistrations}</span>
+                        <div class="stat-label">Total Registrations</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${stats.totalStudents}</span>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">₹${stats.totalRevenue.toLocaleString()}</span>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">₹${stats.pendingPayments.toLocaleString()}</span>
+                        <div class="stat-label">Pending Payments</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">${stats.registrationsThisMonth}</span>
+                        <div class="stat-label">This Month</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                document.getElementById('statsGrid').innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: red;">Failed to load statistics</div>';
+            }
+        }
+
+        // Load registrations
+        async function loadRegistrations(page = 1) {
+            try {
+                const response = await fetch(`/.netlify/functions/registrations?page=${page}&limit=10`);
+                const data = await response.json();
+                
+                displayRegistrations(data.registrations);
+                displayPagination(data.pagination);
+                
+                currentPage = page;
+            } catch (error) {
+                console.error('Error loading registrations:', error);
+                document.getElementById('registrationsTable').innerHTML = '<tr><td colspan="9" style="text-align: center; color: red; padding: 20px;">Failed to load registrations</td></tr>';
+            }
+        }
+
+        // Display registrations
+        function displayRegistrations(registrations) {
+            const tableBody = document.getElementById('registrationsTable');
+            
+            if (registrations.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px; color: #666;">No registrations found</td></tr>';
+                return;
+            }
+            
+            tableBody.innerHTML = registrations.map(reg => `
+                <tr>
+                    <td><strong>${reg.receipt_no}</strong></td>
+                    <td>${reg.full_name}</td>
+                    <td>${reg.phone_number}</td>
+                    <td>${new Date(reg.registration_date).toLocaleDateString()}</td>
+                    <td>₹${reg.total_amount.toLocaleString()}</td>
+                    <td>₹${reg.paid_amount.toLocaleString()}</td>
+                    <td>₹${reg.due_amount.toLocaleString()}</td>
+                    <td>
+                        <span class="status-badge ${getStatusClass(reg.due_amount)}">
+                            ${getStatusText(reg.due_amount)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-info btn-sm" onclick="viewRegistration('${reg.receipt_no}')">👁️ View</button>
+                            ${reg.due_amount > 0 ? `<button class="btn btn-success btn-sm" onclick="addPayment('${reg.receipt_no}')">💳 Pay</button>` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Get status class
+        function getStatusClass(dueAmount) {
+            if (dueAmount === 0) return 'status-paid';
+            if (dueAmount > 0) return 'status-partial';
+            return 'status-pending';
+        }
+
+        // Get status text
+        function getStatusText(dueAmount) {
+            if (dueAmount === 0) return 'Paid';
+            if (dueAmount > 0) return 'Partial';
+            return 'Pending';
+        }
+
+        // Display pagination
+        function displayPagination(pagination) {
+            const paginationContainer = document.getElementById('pagination');
+            
+            let paginationHtml = `
+                <div class="pagination-info">
+                    Showing page ${pagination.currentPage} of ${pagination.totalPages} (${pagination.totalRecords} total records)
+                </div>
+            `;
+            
+            if (pagination.totalPages > 1) {
+                paginationHtml += '<div style="display: flex; gap: 10px;">';
+                
+                // Previous button
+                if (pagination.hasPrev) {
+                    paginationHtml += `<button class="btn btn-secondary btn-sm" onclick="loadRegistrations(${pagination.currentPage - 1})">‹ Previous</button>`;
+                }
+                
+                // Page numbers
+                const startPage = Math.max(1, pagination.currentPage - 2);
+                const endPage = Math.min(pagination.totalPages, pagination.currentPage + 2);
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const activeClass = i === pagination.currentPage ? 'btn-primary' : 'btn-secondary';
+                    paginationHtml += `<button class="btn ${activeClass} btn-sm" onclick="loadRegistrations(${i})">${i}</button>`;
+                }
+                
+                // Next button
+                if (pagination.hasNext) {
+                    paginationHtml += `<button class="btn btn-secondary btn-sm" onclick="loadRegistrations(${pagination.currentPage + 1})">Next ›</button>`;
+                }
+                
+                paginationHtml += '</div>';
+            }
+            
+            paginationContainer.innerHTML = paginationHtml;
+        }
+
+        // Search registrations (simplified)
+        async function searchRegistrations() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                showAlert('Please enter a search term', 'error');
+                return;
+            }
+            
+            showAlert('Search functionality will be fully active after backend setup', 'success');
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            isSearchMode = false;
+            loadRegistrations(1);
+        }
+
+        // View registration details
+        async function viewRegistration(receiptNo) {
+            try {
+                const response = await fetch(`/.netlify/functions/registrations/${receiptNo}`);
+                const registration = await response.json();
+                
+                if (response.ok) {
+                    showRegistrationDetails(registration);
+                } else {
+                    showAlert('Registration not found', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading registration:', error);
+                showAlert('Failed to load registration details', 'error');
+            }
+        }
+
+        // Show registration details
+        function showRegistrationDetails(registration) {
+            const coursesHtml = registration.courses.map(course => 
+                `• ${course.course_name} (${course.duration}) - ${course.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment'}: ₹${course.course_fee.toLocaleString()}`
+            ).join('<br>');
+
+            const detailsHtml = `
+                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Registration Details</h2>
+                        <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">&times;</button>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3>Student Information</h3>
+                        <p><strong>Name:</strong> ${registration.full_name}</p>
+                        <p><strong>Phone:</strong> ${registration.phone_number}</p>
+                        <p><strong>Email:</strong> ${registration.email || 'Not provided'}</p>
+                        <p><strong>Date of Birth:</strong> ${new Date(registration.date_of_birth).toLocaleDateString()}</p>
+                        <p><strong>Address:</strong> ${registration.address}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3>Registration Details</h3>
+                        <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
+                        <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
+                        <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3>Courses</h3>
+                        <p>${coursesHtml}</p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <h3>Payment Summary</h3>
+                        <p><strong>Total Amount:</strong> ₹${registration.total_amount.toLocaleString()}</p>
+                        <p><strong>Discount:</strong> ₹${registration.discount_amount.toLocaleString()}</p>
+                        <p><strong>Paid Amount:</strong> ₹${registration.paid_amount.toLocaleString()}</p>
+                        <p style="color: ${registration.due_amount > 0 ? '#dc3545' : '#28a745'};"><strong>Due Amount:</strong> ₹${registration.due_amount.toLocaleString()}</p>
+                    </div>
+                </div>
+            `;
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'detailsOverlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            `;
+            overlay.innerHTML = detailsHtml;
+            document.body.appendChild(overlay);
+        }
+
+        // Close details
+        function closeDetails() {
+            const overlay = document.getElementById('detailsOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+
+        // Add payment (simplified)
+        function addPayment(receiptNo) {
+            const amount = prompt(`Add payment for receipt ${receiptNo}:\nEnter payment amount (₹):`);
+            
+            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                showAlert(`Payment of ₹${amount} will be added for ${receiptNo} once fully connected to backend.`, 'success');
+            } else if (amount !== null) {
+                showAlert('Please enter a valid amount', 'error');
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert ${type}`;
+            alertBox.textContent = message;
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchRegistrations();
+                }
+            });
+
+            // Close details when clicking outside
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'detailsOverlay') {
+                    closeDetails();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
