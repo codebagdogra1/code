@@ -270,6 +270,7 @@
             gap: 14px;
             border-radius: 10px;
             flex-direction: column;
+            width: 50%;
         }
 
         .registration_details {
@@ -279,6 +280,7 @@
             gap: 20px;
             border-radius: 10px;
             flex-direction: column;
+            width: 50%;
         }
 
         .couser_details_view {
@@ -297,6 +299,13 @@
             display: flex;
             gap: 20px;
             flex-direction: column;
+        }
+
+        .student_information--container {
+            display: flex;
+            gap: 20px;
+            width: 990px;
+            justify-content: space-around;
         }
 
         @media (max-width: 768px) {
@@ -588,26 +597,28 @@
             ).join('<br>');
 
             const detailsHtml = `
-                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 1080px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h2>Registration Details</h2>
                         <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">&times;</button>
                     </div>
-                    
-                    <div class="student_information" style="margin-bottom: 20px;">
-                        <h3>Student Information</h3>
-                        <p><strong>Name:</strong> ${registration.full_name}</p>
-                        <p><strong>Phone:</strong> ${registration.phone_number}</p>
-                        <p><strong>Email:</strong> ${registration.email || 'Not provided'}</p>
-                        <p><strong>Date of Birth:</strong> ${new Date(registration.date_of_birth).toLocaleDateString()}</p>
-                        <p><strong>Address:</strong> ${registration.address}</p>
-                    </div>
-                    
-                    <div class="registration_details" style="margin-bottom: 20px;">
-                        <h3>Registration Details</h3>
-                        <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
-                        <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
-                        <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
+
+                    <div class="student_information--container">
+                        <div class="student_information" style="margin-bottom: 20px;">
+                            <h3>Student Information</h3>
+                            <p><strong>Name:</strong> ${registration.full_name}</p>
+                            <p><strong>Phone:</strong> ${registration.phone_number}</p>
+                            <p><strong>Email:</strong> ${registration.email || 'Not provided'}</p>
+                            <p><strong>Date of Birth:</strong> ${new Date(registration.date_of_birth).toLocaleDateString()}</p>
+                            <p><strong>Address:</strong> ${registration.address}</p>
+                        </div>
+                        
+                        <div class="registration_details" style="margin-bottom: 20px;">
+                            <h3>Registration Details</h3>
+                            <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
+                            <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
+                            <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
+                        </div>
                     </div>
                     
                     <div class="couser_details_view" style="margin-bottom: 20px;">
