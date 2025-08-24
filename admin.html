@@ -404,6 +404,7 @@
     </div>
     <script>
         // Replace the entire <script> section in your admin.html file with this updated version:
+
         let currentPage = 1;
         let isSearchMode = false;
         let allRegistrations = []; // Store all registrations for search
@@ -645,7 +646,7 @@
             ).join('');
         
             const detailsHtml = `
-                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 100vh; overflow-y: auto;">
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
                         <h2 style="color: #667eea; margin: 0;">Registration Details</h2>
                         <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
@@ -804,34 +805,27 @@
         }
         
         // Process payment
+        // Enhanced processPayment function
         async function processPayment(receiptNo) {
             const amount = parseFloat(document.getElementById('paymentAmount').value);
             const method = document.getElementById('paymentMethodUpdate').value;
+            const notes = document.getElementById('paymentNotes') ? document.getElementById('paymentNotes').value : '';
             
             if (!amount || amount <= 0) {
                 alert('Please enter a valid payment amount');
                 return;
             }
             
-            if (confirm(`Confirm payment of ₹${amount.toLocaleString()} via ${method} for ${receiptNo}?`)) {
-                const processBtn = event.target;
-                const originalText = processBtn.textContent;
-                
+            if (confirm(`Record payment of ₹${amount.toLocaleString()} via ${method} for ${receiptNo}?`)) {
                 try {
-                    // Show loading
-                    processBtn.disabled = true;
-                    processBtn.textContent = 'Processing...';
-                    
-                    // Call the payment update API
-                    const response = await fetch('/.netlify/functions/update-payment', {
-                        method: 'PUT',
-                        headers: { 
-                            'Content-Type': 'application/json' 
-                        },
+                    const response = await fetch('/.netlify/functions/record-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            receipt_no: receiptNo,
-                            additional_payment: amount,
-                            payment_method: method
+                            registration_receipt_no: receiptNo,
+                            payment_amount: amount,
+                            payment_method: method,
+                            notes: notes
                         })
                     });
                     
@@ -839,25 +833,190 @@
                     
                     if (response.ok) {
                         closePaymentModal();
-                        showAlert(`✅ Payment of ₹${amount.toLocaleString()} added successfully to ${receiptNo}!`, 'success');
+                        showAlert(`✅ Payment recorded! Receipt: ${result.payment_receipt_no}`, 'success');
                         
-                        // Refresh the dashboard data
                         setTimeout(() => {
-                            loadData();
+                            if (confirm('Would you like to print the payment receipt?')) {
+                                printMonthlyReceipt(result.payment_receipt_no);
+                            }
                         }, 1000);
+                        
+                        loadData();
                     } else {
-                        throw new Error(result.error || 'Payment update failed');
+                        throw new Error(result.error);
                     }
                     
                 } catch (error) {
-                    console.error('Payment error:', error);
                     showAlert(`❌ Payment failed: ${error.message}`, 'error');
-                } finally {
-                    // Reset button
-                    processBtn.disabled = false;
-                    processBtn.textContent = originalText;
                 }
             }
+        }
+        
+        // Enhanced payment modal with notes
+        function addPayment(receiptNo, currentDue) {
+            const paymentHtml = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+                        <h2 style="color: #28a745; margin: 0;">💳 Record Payment</h2>
+                        <button onclick="closePaymentModal()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p><strong>Registration:</strong> ${receiptNo}</p>
+                        <p><strong>Current Due:</strong> <span style="color: #dc3545; font-weight: bold;">₹${currentDue.toLocaleString()}</span></p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Amount (₹)</label>
+                        <input type="number" id="paymentAmount" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;" 
+                               placeholder="Enter amount" min="1" max="${currentDue}">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Method</label>
+                        <select id="paymentMethodUpdate" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Credit/Debit Card</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Notes</label>
+                        <input type="text" id="paymentNotes" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;" 
+                               placeholder="Monthly installment, etc.">
+                    </div>
+                    
+                    <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="processPayment('${receiptNo}')" class="btn btn-success" style="padding: 12px 20px;">✅ Record Payment</button>
+                        <button onclick="showPaymentHistory('${receiptNo}')" class="btn btn-primary" style="padding: 12px 20px;">📋 History</button>
+                        <button onclick="closePaymentModal()" class="btn btn-secondary" style="padding: 12px 20px;">✕ Cancel</button>
+                    </div>
+                </div>
+            `;
+        
+            const overlay = document.createElement('div');
+            overlay.id = 'paymentOverlay';
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); z-index: 1001; display: flex;
+                align-items: center; justify-content: center; padding: 20px;
+                backdrop-filter: blur(5px);
+            `;
+            overlay.innerHTML = paymentHtml;
+            document.body.appendChild(overlay);
+        }
+        
+        // Show payment history
+        async function showPaymentHistory(receiptNo) {
+            try {
+                const response = await fetch(`/.netlify/functions/record-payment?receipt_no=${receiptNo}`);
+                const data = await response.json();
+                
+                const payments = data.payments || [];
+                let historyHtml = '';
+                
+                if (payments.length === 0) {
+                    historyHtml = '<p style="text-align: center; color: #666;">No payment history found</p>';
+                } else {
+                    historyHtml = `
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Date</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Amount</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Method</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px;">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${payments.map(payment => `
+                                    <tr>
+                                        <td style="border: 1px solid #ddd; padding: 10px;">${new Date(payment.payment_date).toLocaleDateString('en-IN')}</td>
+                                        <td style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">₹${payment.payment_amount.toLocaleString()}</td>
+                                        <td style="border: 1px solid #ddd; padding: 10px;">${payment.payment_method}</td>
+                                        <td style="border: 1px solid #ddd; padding: 10px;">
+                                            <span style="background: ${payment.payment_type === 'initial' ? '#007bff' : '#28a745'}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px;">
+                                                ${payment.payment_type.toUpperCase()}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                }
+                
+                const historyModal = `
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 600px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="color: #007bff; margin: 0;">📋 Payment History</h2>
+                            <button onclick="closeHistoryModal()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <p><strong>Registration:</strong> ${receiptNo}</p>
+                            <p><strong>Total Payments:</strong> ${payments.length}</p>
+                        </div>
+                        
+                        ${historyHtml}
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button onclick="closeHistoryModal()" class="btn btn-secondary">Close</button>
+                        </div>
+                    </div>
+                `;
+                
+                const overlay = document.createElement('div');
+                overlay.id = 'historyOverlay';
+                overlay.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); z-index: 1002; display: flex;
+                    align-items: center; justify-content: center; padding: 20px;
+                    backdrop-filter: blur(5px);
+                `;
+                overlay.innerHTML = historyModal;
+                document.body.appendChild(overlay);
+                
+            } catch (error) {
+                showAlert('Failed to load payment history', 'error');
+            }
+        }
+        
+        // Close history modal
+        function closeHistoryModal() {
+            const overlay = document.getElementById('historyOverlay');
+            if (overlay) overlay.remove();
+        }
+        
+        // Simple monthly receipt print
+        function printMonthlyReceipt(paymentReceiptNo) {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head><title>Payment Receipt - ${paymentReceiptNo}</title></head>
+                <body style="font-family: Arial; padding: 20px;">
+                    <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
+                        <h1>Computer & Digital Excellence (CODE)</h1>
+                        <p>Monthly Payment Receipt</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h2>Payment Receipt: ${paymentReceiptNo}</h2>
+                        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        <p><strong>Time:</strong> ${new Date().toLocaleTimeString()}</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px;">Print Receipt</button>
+                        <button onclick="window.close()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; margin-left: 10px;">Close</button>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         }
         
         // Close payment modal
