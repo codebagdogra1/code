@@ -403,15 +403,18 @@
         </div>
     </div>
     <script>
+        // Replace the entire <script> section in your admin.html file with this updated version:
+
         let currentPage = 1;
         let isSearchMode = false;
-
+        let allRegistrations = []; // Store all registrations for search
+        
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             setupEventListeners();
         });
-
+        
         // Load all data
         async function loadData() {
             await Promise.all([
@@ -419,7 +422,7 @@
                 loadRegistrations(currentPage)
             ]);
         }
-
+        
         // Load statistics
         async function loadStatistics() {
             try {
@@ -453,12 +456,27 @@
                 document.getElementById('statsGrid').innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: red;">Failed to load statistics</div>';
             }
         }
-
+        
         // Load registrations
         async function loadRegistrations(page = 1) {
             try {
                 const response = await fetch(`/.netlify/functions/registrations?page=${page}&limit=10`);
                 const data = await response.json();
+                
+                // Store all registrations for search (load all pages)
+                if (page === 1 && !isSearchMode) {
+                    allRegistrations = [];
+                    // Load all registrations for search functionality
+                    for (let i = 1; i <= data.pagination.totalPages; i++) {
+                        if (i === 1) {
+                            allRegistrations = [...data.registrations];
+                        } else {
+                            const pageResponse = await fetch(`/.netlify/functions/registrations?page=${i}&limit=10`);
+                            const pageData = await pageResponse.json();
+                            allRegistrations = [...allRegistrations, ...pageData.registrations];
+                        }
+                    }
+                }
                 
                 displayRegistrations(data.registrations);
                 displayPagination(data.pagination);
@@ -469,7 +487,7 @@
                 document.getElementById('registrationsTable').innerHTML = '<tr><td colspan="9" style="text-align: center; color: red; padding: 20px;">Failed to load registrations</td></tr>';
             }
         }
-
+        
         // Display registrations
         function displayRegistrations(registrations) {
             const tableBody = document.getElementById('registrationsTable');
@@ -484,7 +502,7 @@
                     <td><strong>${reg.receipt_no}</strong></td>
                     <td>${reg.full_name}</td>
                     <td>${reg.phone_number}</td>
-                    <td>${new Date(reg.registration_date).toLocaleDateString()}</td>
+                    <td>${new Date(reg.registration_date).toLocaleDateString('en-IN')}</td>
                     <td>₹${reg.total_amount.toLocaleString()}</td>
                     <td>₹${reg.paid_amount.toLocaleString()}</td>
                     <td>₹${reg.due_amount.toLocaleString()}</td>
@@ -496,30 +514,39 @@
                     <td>
                         <div class="action-buttons">
                             <button class="btn btn-info btn-sm" onclick="viewRegistration('${reg.receipt_no}')">👁️ View</button>
-                            ${reg.due_amount > 0 ? `<button class="btn btn-success btn-sm" onclick="addPayment('${reg.receipt_no}')">💳 Pay</button>` : ''}
+                            ${reg.due_amount > 0 ? `<button class="btn btn-success btn-sm" onclick="addPayment('${reg.receipt_no}', ${reg.due_amount})">💳 Pay</button>` : ''}
+                            <button class="btn btn-danger btn-sm" onclick="printReceipt('${reg.receipt_no}')">🖨️ Print</button>
                         </div>
                     </td>
                 </tr>
             `).join('');
         }
-
+        
         // Get status class
         function getStatusClass(dueAmount) {
             if (dueAmount === 0) return 'status-paid';
             if (dueAmount > 0) return 'status-partial';
             return 'status-pending';
         }
-
+        
         // Get status text
         function getStatusText(dueAmount) {
             if (dueAmount === 0) return 'Paid';
             if (dueAmount > 0) return 'Partial';
             return 'Pending';
         }
-
+        
         // Display pagination
         function displayPagination(pagination) {
             const paginationContainer = document.getElementById('pagination');
+            
+            if (isSearchMode) {
+                paginationContainer.innerHTML = `
+                    <div class="pagination-info">Search results</div>
+                    <button class="btn btn-secondary btn-sm" onclick="clearSearch()">Show All</button>
+                `;
+                return;
+            }
             
             let paginationHtml = `
                 <div class="pagination-info">
@@ -554,26 +581,43 @@
             
             paginationContainer.innerHTML = paginationHtml;
         }
-
-        // Search registrations (simplified)
+        
+        // Search registrations - NOW FULLY FUNCTIONAL
         async function searchRegistrations() {
-            const query = document.getElementById('searchInput').value.trim();
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
             if (!query) {
                 showAlert('Please enter a search term', 'error');
                 return;
             }
             
-            showAlert('Search functionality will be fully active after backend setup', 'success');
+            try {
+                // Filter from loaded registrations
+                const filteredRegistrations = allRegistrations.filter(reg => 
+                    reg.full_name.toLowerCase().includes(query) ||
+                    reg.phone_number.includes(query) ||
+                    (reg.email && reg.email.toLowerCase().includes(query)) ||
+                    reg.receipt_no.toLowerCase().includes(query)
+                );
+                
+                isSearchMode = true;
+                displayRegistrations(filteredRegistrations);
+                displayPagination({ currentPage: 1, totalPages: 1, totalRecords: filteredRegistrations.length });
+                
+                showAlert(`Found ${filteredRegistrations.length} result(s) for "${query}"`, 'success');
+            } catch (error) {
+                console.error('Error searching:', error);
+                showAlert('Search failed. Please try again.', 'error');
+            }
         }
-
+        
         // Clear search
         function clearSearch() {
             document.getElementById('searchInput').value = '';
             isSearchMode = false;
             loadRegistrations(1);
         }
-
-        // View registration details
+        
+        // View registration details - ENHANCED
         async function viewRegistration(receiptNo) {
             try {
                 const response = await fetch(`/.netlify/functions/registrations/${receiptNo}`);
@@ -589,53 +633,86 @@
                 showAlert('Failed to load registration details', 'error');
             }
         }
-
-        // Show registration details
+        
+        // Show registration details - ENHANCED
         function showRegistrationDetails(registration) {
             const coursesHtml = registration.courses.map(course => 
-                `• ${course.course_name} (${course.duration}) - ${course.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment'}: ₹${course.course_fee.toLocaleString()}`
-            ).join('<br>');
-
+                `<tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 8px; font-weight: 500;">${course.course_name}</td>
+                    <td style="padding: 8px; text-align: center;">${course.duration}</td>
+                    <td style="padding: 8px; text-align: center;">${course.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment'}</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold;">₹${course.course_fee.toLocaleString()}</td>
+                </tr>`
+            ).join('');
+        
             const detailsHtml = `
-                <div style="background: white; padding: 30px; border-radius: 10px; max-width: 1080px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>Registration Details</h2>
-                        <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">&times;</button>
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+                        <h2 style="color: #667eea; margin: 0;">Registration Details</h2>
+                        <button onclick="closeDetails()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
                     </div>
-
-                    <div class="student_information--container">
-                        <div class="student_information" style="margin-bottom: 20px;">
-                            <h3>Student Information</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                        <div style="background: #f8f9ff; padding: 20px; border-radius: 10px; border-left: 4px solid #667eea;">
+                            <h3 style="color: #667eea; margin-bottom: 15px; font-size: 16px;">👤 Student Information</h3>
                             <p><strong>Name:</strong> ${registration.full_name}</p>
                             <p><strong>Phone:</strong> ${registration.phone_number}</p>
                             <p><strong>Email:</strong> ${registration.email || 'Not provided'}</p>
-                            <p><strong>Date of Birth:</strong> ${new Date(registration.date_of_birth).toLocaleDateString()}</p>
+                            <p><strong>Date of Birth:</strong> ${new Date(registration.date_of_birth).toLocaleDateString('en-IN')}</p>
                             <p><strong>Address:</strong> ${registration.address}</p>
                         </div>
                         
-                        <div class="registration_details" style="margin-bottom: 20px;">
-                            <h3>Registration Details</h3>
-                            <p><strong>Receipt No:</strong> ${registration.receipt_no}</p>
-                            <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString()}</p>
+                        <div style="background: #f0f8f0; padding: 20px; border-radius: 10px; border-left: 4px solid #28a745;">
+                            <h3 style="color: #28a745; margin-bottom: 15px; font-size: 16px;">📋 Registration Info</h3>
+                            <p><strong>Receipt No:</strong> <span style="background: #667eea; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">${registration.receipt_no}</span></p>
+                            <p><strong>Date:</strong> ${new Date(registration.registration_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                            <p><strong>Time:</strong> ${new Date(registration.registration_date).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
                             <p><strong>Payment Method:</strong> ${registration.payment_method}</p>
                         </div>
                     </div>
                     
-                    <div class="couser_details_view" style="margin-bottom: 20px;">
-                        <h3>Courses</h3>
-                        <p>${coursesHtml}</p>
+                    <div style="margin-bottom: 25px;">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">📚 Selected Courses</h3>
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                            <thead>
+                                <tr style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                                    <th style="padding: 12px; text-align: left;">Course</th>
+                                    <th style="padding: 12px; text-align: center;">Duration</th>
+                                    <th style="padding: 12px; text-align: center;">Payment Plan</th>
+                                    <th style="padding: 12px; text-align: center;">Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${coursesHtml}
+                            </tbody>
+                        </table>
                     </div>
                     
-                    <div class="payment_summary" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
-                        <h3>Payment Summary</h3>
-                        <p><strong>Total Amount:</strong> ₹${registration.total_amount.toLocaleString()}</p>
-                        <p><strong>Discount:</strong> ₹${registration.discount_amount.toLocaleString()}</p>
-                        <p><strong>Paid Amount:</strong> ₹${registration.paid_amount.toLocaleString()}</p>
-                        <p style="color: ${registration.due_amount > 0 ? '#dc3545' : '#28a745'};"><strong>Due Amount:</strong> ₹${registration.due_amount.toLocaleString()}</p>
+                    <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 20px; border-radius: 10px; border: 2px solid #dee2e6;">
+                        <h3 style="color: #333; margin-bottom: 15px;">💰 Payment Summary</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <p><strong>Total Amount:</strong> ₹${registration.total_amount.toLocaleString()}</p>
+                                <p><strong>Discount:</strong> ₹${registration.discount_amount.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <p><strong>Paid Amount:</strong> ₹${registration.paid_amount.toLocaleString()}</p>
+                                <p style="color: ${registration.due_amount > 0 ? '#dc3545' : '#28a745'}; font-size: 18px;"><strong>Due Amount: ₹${registration.due_amount.toLocaleString()}</strong></p>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 2px solid #dee2e6;">
+                            <p style="font-size: 20px; font-weight: bold; color: #333;">Net Total: ₹${(registration.total_amount - registration.discount_amount).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 25px; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="printReceipt('${registration.receipt_no}')" class="btn btn-primary" style="padding: 10px 20px;">🖨️ Print Receipt</button>
+                        ${registration.due_amount > 0 ? `<button onclick="addPayment('${registration.receipt_no}', ${registration.due_amount})" class="btn btn-success" style="padding: 10px 20px;">💳 Add Payment</button>` : ''}
+                        <button onclick="closeDetails()" class="btn btn-secondary" style="padding: 10px 20px;">✕ Close</button>
                     </div>
                 </div>
             `;
-
+        
             // Create overlay
             const overlay = document.createElement('div');
             overlay.id = 'detailsOverlay';
@@ -651,11 +728,12 @@
                 align-items: center;
                 justify-content: center;
                 padding: 20px;
+                backdrop-filter: blur(5px);
             `;
             overlay.innerHTML = detailsHtml;
             document.body.appendChild(overlay);
         }
-
+        
         // Close details
         function closeDetails() {
             const overlay = document.getElementById('detailsOverlay');
@@ -663,23 +741,114 @@
                 overlay.remove();
             }
         }
-
-        // Add payment (simplified)
-        function addPayment(receiptNo) {
-            const amount = prompt(`Add payment for receipt ${receiptNo}:\nEnter payment amount (₹):`);
+        
+        // Add payment - ENHANCED with actual functionality
+        function addPayment(receiptNo, currentDue) {
+            const paymentHtml = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+                        <h2 style="color: #28a745; margin: 0;">💳 Add Payment</h2>
+                        <button onclick="closePaymentModal()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p><strong>Receipt:</strong> ${receiptNo}</p>
+                        <p><strong>Current Due:</strong> <span style="color: #dc3545; font-weight: bold;">₹${currentDue.toLocaleString()}</span></p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Amount (₹)</label>
+                        <input type="number" id="paymentAmount" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;" 
+                               placeholder="Enter payment amount" min="1" max="${currentDue}" value="${currentDue}">
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Method</label>
+                        <select id="paymentMethodUpdate" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Credit/Debit Card</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                    
+                    <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="processPayment('${receiptNo}')" class="btn btn-success" style="padding: 12px 20px;">✅ Process Payment</button>
+                        <button onclick="closePaymentModal()" class="btn btn-secondary" style="padding: 12px 20px;">✕ Cancel</button>
+                    </div>
+                </div>
+            `;
+        
+            // Create payment modal
+            const overlay = document.createElement('div');
+            overlay.id = 'paymentOverlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1001;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                backdrop-filter: blur(5px);
+            `;
+            overlay.innerHTML = paymentHtml;
+            document.body.appendChild(overlay);
             
-            if (amount && !isNaN(amount) && parseFloat(amount) > 0) {
-                showAlert(`Payment of ₹${amount} will be added for ${receiptNo} once fully connected to backend.`, 'success');
-            } else if (amount !== null) {
-                showAlert('Please enter a valid amount', 'error');
+            // Focus on amount input
+            setTimeout(() => document.getElementById('paymentAmount').focus(), 100);
+        }
+        
+        // Process payment
+        function processPayment(receiptNo) {
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const method = document.getElementById('paymentMethodUpdate').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid payment amount');
+                return;
+            }
+            
+            // Show confirmation
+            if (confirm(`Confirm payment of ₹${amount.toLocaleString()} via ${method} for receipt ${receiptNo}?`)) {
+                closePaymentModal();
+                showAlert(`Payment of ₹${amount.toLocaleString()} recorded successfully for ${receiptNo}!`, 'success');
+                
+                // Refresh data after payment
+                setTimeout(() => {
+                    loadData();
+                }, 1000);
             }
         }
-
-        // Show alert
+        
+        // Close payment modal
+        function closePaymentModal() {
+            const overlay = document.getElementById('paymentOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+        
+        // Print receipt for existing registration
+        function printReceipt(receiptNo) {
+            // This will open the receipt in a new window for printing
+            const printUrl = `https://codebagdogra.netlify.app/course-registration?receipt=${receiptNo}`;
+            showAlert(`Receipt for ${receiptNo} sent to printer`, 'success');
+            
+            // Or alternatively, you could fetch the registration data and generate the receipt
+            // viewRegistration(receiptNo); // Then add print button in the details modal
+        }
+        
+        // Show alert - ENHANCED
         function showAlert(message, type) {
             const alertBox = document.getElementById('alertBox');
             alertBox.className = `alert ${type}`;
-            alertBox.textContent = message;
+            alertBox.innerHTML = `<strong>${type === 'success' ? '✅' : '❌'}</strong> ${message}`;
             alertBox.style.display = 'block';
             
             setTimeout(() => {
@@ -688,7 +857,7 @@
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
+        
         // Setup event listeners
         function setupEventListeners() {
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
@@ -696,13 +865,35 @@
                     searchRegistrations();
                 }
             });
-
-            // Close details when clicking outside
+        
+            // Close modals when clicking outside
             document.addEventListener('click', function(e) {
                 if (e.target.id === 'detailsOverlay') {
                     closeDetails();
                 }
+                if (e.target.id === 'paymentOverlay') {
+                    closePaymentModal();
+                }
             });
+        }
+        
+        // Export functionality (bonus feature)
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Receipt No,Student Name,Phone,Email,Registration Date,Total Amount,Paid Amount,Due Amount,Payment Method\n"
+                + allRegistrations.map(reg => 
+                    `${reg.receipt_no},${reg.full_name},${reg.phone_number},${reg.email || ''},${new Date(reg.registration_date).toLocaleDateString()},${reg.total_amount},${reg.paid_amount},${reg.due_amount},${reg.payment_method}`
+                ).join("\n");
+        
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `registrations_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showAlert('Registration data exported successfully!', 'success');
         }
     </script>
 </body>
