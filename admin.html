@@ -726,7 +726,7 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
                 })
             });
             
-            if (response.ok) {
+            /* if (response.ok) {
                 showAlert(`✅ Registration ${receiptNo} and all related data deleted successfully`, 'success');
                 
                 // Refresh the dashboard
@@ -737,6 +737,22 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
                 // For demo purposes, show success message even if API doesn't exist yet
                 showAlert(`⚠️ Delete function not yet implemented in backend. Registration ${receiptNo} marked for deletion.`, 'warning');
             }
+            */
+
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                showAlert(`✅ ${data.message}`, 'success');
+            
+                // Refresh the dashboard
+                setTimeout(() => {
+                    loadData();
+                }, 1500);
+            } else {
+                showAlert(`❌ Failed to delete registration: ${data.error || 'Unknown error'}`, 'error');
+            }
+
             
         } catch (error) {
             console.error('Delete error:', error);
