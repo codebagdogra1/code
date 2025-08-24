@@ -688,26 +688,423 @@
             }
         }
 
-        // Generate receipt (simplified version)
+        // Replace the existing generateReceipt function in your course-registration.html file
+        // Find the generateReceipt function and replace it with this enhanced version:
+        
         function generateReceipt(receiptNo, studentData, coursesData, paymentDetails) {
+            const now = new Date();
+            
+            // Create courses table HTML
+            let coursesHtml = '';
+            let coursesList = [];
+            
+            selectedCourses.forEach(courseName => {
+                const course = coursesData.find(c => coursesData[courseName] && coursesData[courseName].id === c.course_id) || coursesData[courseName];
+                const courseData = coursesData.find(c => c.course_id === course.id);
+                const plan = courseData ? courseData.payment_plan : coursePaymentPlans[courseName];
+                const planText = plan === 'full' ? 'Full Payment' : 'Monthly Payment';
+                const fee = courseData ? courseData.course_fee : (plan === 'full' ? course.full_price : course.monthly_price);
+                
+                coursesList.push({
+                    name: courseName,
+                    duration: course.duration,
+                    plan: planText,
+                    fee: fee
+                });
+                
+                coursesHtml += `
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 13px;">${courseName}</td>
+                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 13px; text-align: center;">${course.duration}</td>
+                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 13px; text-align: center;">${planText}</td>
+                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 13px; text-align: right; font-weight: bold;">₹${fee.toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+        
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
+                <!DOCTYPE html>
                 <html>
-                <head><title>Receipt - ${receiptNo}</title></head>
-                <body style="font-family: Arial; padding: 20px;">
-                    <h2>Computer & Digital Excellence</h2>
-                    <h3>Registration Receipt</h3>
-                    <p><strong>Receipt No:</strong> ${receiptNo}</p>
-                    <p><strong>Student:</strong> ${studentData.full_name}</p>
-                    <p><strong>Phone:</strong> ${studentData.phone_number}</p>
-                    <p><strong>Total:</strong> ₹${paymentDetails.total_amount.toLocaleString()}</p>
-                    <p><strong>Paid:</strong> ₹${paymentDetails.paid_amount.toLocaleString()}</p>
-                    <p><strong>Due:</strong> ₹${paymentDetails.due_amount.toLocaleString()}</p>
+                <head>
+                    <title>Registration Receipt - ${receiptNo}</title>
+                    <style>
+                        @media print {
+                            @page {
+                                margin: 0.5in;
+                                size: A4;
+                            }
+                            
+                            body {
+                                -webkit-print-color-adjust: exact;
+                                color-adjust: exact;
+                            }
+                        }
+                        
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        
+                        body {
+                            font-family: 'Arial', 'Helvetica', sans-serif;
+                            line-height: 1.4;
+                            color: #333;
+                            background: white;
+                            padding: 20px;
+                            max-width: 800px;
+                            margin: 0 auto;
+                        }
+                        
+                        .receipt-header {
+                            text-align: center;
+                            border-bottom: 3px solid #667eea;
+                            padding-bottom: 20px;
+                            margin-bottom: 30px;
+                            background: linear-gradient(135deg, #f8f9ff, #e8eaff);
+                            padding: 25px;
+                            border-radius: 10px;
+                        }
+                        
+                        .company-logo {
+                            font-size: 32px;
+                            font-weight: bold;
+                            color: #667eea;
+                            margin-bottom: 8px;
+                            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+                        }
+                        
+                        .company-subtitle {
+                            font-size: 16px;
+                            color: #764ba2;
+                            font-weight: 600;
+                            margin-bottom: 15px;
+                        }
+                        
+                        .company-address {
+                            font-size: 14px;
+                            color: #666;
+                            line-height: 1.6;
+                        }
+                        
+                        .receipt-title {
+                            text-align: center;
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #333;
+                            margin: 30px 0;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            border: 2px solid #667eea;
+                            padding: 15px;
+                            background: #f0f4ff;
+                            border-radius: 8px;
+                        }
+                        
+                        .info-section {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 30px;
+                            gap: 30px;
+                        }
+                        
+                        .info-box {
+                            flex: 1;
+                            background: #f8f9fa;
+                            padding: 20px;
+                            border-radius: 8px;
+                            border-left: 4px solid #667eea;
+                        }
+                        
+                        .info-title {
+                            font-weight: bold;
+                            font-size: 16px;
+                            color: #333;
+                            border-bottom: 2px solid #e9ecef;
+                            padding-bottom: 8px;
+                            margin-bottom: 12px;
+                        }
+                        
+                        .info-content {
+                            font-size: 14px;
+                            line-height: 1.8;
+                        }
+                        
+                        .info-content p {
+                            margin-bottom: 6px;
+                        }
+                        
+                        .courses-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 30px;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            border-radius: 8px;
+                            overflow: hidden;
+                        }
+                        
+                        .courses-table th {
+                            background: linear-gradient(135deg, #667eea, #764ba2);
+                            color: white;
+                            padding: 15px 8px;
+                            text-align: left;
+                            font-weight: bold;
+                            font-size: 14px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+                        
+                        .courses-table td {
+                            border: 1px solid #ddd;
+                            padding: 12px 8px;
+                            font-size: 13px;
+                        }
+                        
+                        .courses-table tr:nth-child(even) {
+                            background-color: #f8f9fa;
+                        }
+                        
+                        .courses-table tr:hover {
+                            background-color: #e3f2fd;
+                        }
+                        
+                        .totals-section {
+                            float: right;
+                            width: 350px;
+                            margin-bottom: 30px;
+                            background: #f8f9fa;
+                            border: 2px solid #e9ecef;
+                            border-radius: 8px;
+                            padding: 20px;
+                        }
+                        
+                        .total-row {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 8px 0;
+                            border-bottom: 1px solid #dee2e6;
+                            font-size: 15px;
+                        }
+                        
+                        .total-row:last-child {
+                            border-bottom: none;
+                        }
+                        
+                        .total-row.subtotal {
+                            font-weight: 600;
+                        }
+                        
+                        .grand-total {
+                            display: flex;
+                            justify-content: space-between;
+                            font-weight: bold;
+                            font-size: 18px;
+                            border-top: 3px solid #667eea;
+                            border-bottom: 3px double #667eea;
+                            padding: 15px 0 12px 0;
+                            margin-top: 10px;
+                            background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            border-radius: 5px;
+                            color: #2c3e50;
+                        }
+                        
+                        .payment-info {
+                            clear: both;
+                            text-align: center;
+                            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+                            border: 2px solid #28a745;
+                            padding: 20px;
+                            margin-bottom: 30px;
+                            border-radius: 8px;
+                            font-size: 16px;
+                        }
+                        
+                        .payment-status {
+                            font-weight: bold;
+                            color: #155724;
+                        }
+                        
+                        .footer {
+                            text-align: center;
+                            border-top: 2px solid #e9ecef;
+                            padding-top: 20px;
+                            margin-top: 30px;
+                            font-size: 13px;
+                            color: #666;
+                        }
+                        
+                        .footer-title {
+                            font-size: 18px;
+                            color: #667eea;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .watermark {
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%) rotate(-45deg);
+                            font-size: 120px;
+                            color: rgba(102, 126, 234, 0.05);
+                            font-weight: bold;
+                            z-index: -1;
+                            pointer-events: none;
+                        }
+                        
+                        .receipt-number {
+                            background: #667eea;
+                            color: white;
+                            padding: 8px 15px;
+                            border-radius: 20px;
+                            font-weight: bold;
+                            display: inline-block;
+                            margin-bottom: 10px;
+                        }
+                        
+                        .print-date {
+                            position: absolute;
+                            top: 20px;
+                            right: 20px;
+                            font-size: 12px;
+                            color: #666;
+                        }
+                        
+                        @media print {
+                            .print-date {
+                                position: fixed;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="watermark">CODE</div>
+                    <div class="print-date">Printed on: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}</div>
+                    
+                    <div class="receipt-header">
+                        <div class="company-logo">Computer & Digital Excellence</div>
+                        <div class="company-subtitle">(CODE)</div>
+                        <div class="company-address">
+                            Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
+                            Phone: +91 96358 09537 | Email: code.bagdogra@gmail.com<br>
+                            <em>"Your Digital Solutions Partner"</em>
+                        </div>
+                    </div>
+                    
+                    <div class="receipt-title">Course Registration & Payment Receipt</div>
+                    
+                    <div class="info-section">
+                        <div class="info-box">
+                            <div class="info-title">📋 Receipt Details</div>
+                            <div class="info-content">
+                                <p><strong>Receipt No:</strong> <span class="receipt-number">${receiptNo}</span></p>
+                                <p><strong>Date:</strong> ${now.toLocaleDateString('en-IN', { 
+                                    day: 'numeric', 
+                                    month: 'long', 
+                                    year: 'numeric' 
+                                })}</p>
+                                <p><strong>Time:</strong> ${now.toLocaleTimeString('en-IN', { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit',
+                                    hour12: true 
+                                })}</p>
+                                <p><strong>Generated By:</strong> Online Registration System</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-title">👤 Student Information</div>
+                            <div class="info-content">
+                                <p><strong>Name:</strong> ${studentData.full_name}</p>
+                                <p><strong>Phone:</strong> ${studentData.phone_number}</p>
+                                <p><strong>Email:</strong> ${studentData.email || 'Not provided'}</p>
+                                <p><strong>Address:</strong> ${studentData.address}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="courses-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Course Name</th>
+                                <th style="width: 20%; text-align: center;">Duration</th>
+                                <th style="width: 20%; text-align: center;">Payment Plan</th>
+                                <th style="width: 20%; text-align: center;">Fee (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${coursesHtml}
+                        </tbody>
+                    </table>
+                    
+                    <div class="totals-section">
+                        <div class="total-row subtotal">
+                            <span>Course Fee Total:</span>
+                            <span>₹${paymentDetails.total_amount.toLocaleString()}</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Discount Applied:</span>
+                            <span>- ₹${paymentDetails.discount_amount.toLocaleString()}</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Amount Paid Today:</span>
+                            <span>₹${paymentDetails.paid_amount.toLocaleString()}</span>
+                        </div>
+                        <div class="total-row">
+                            <span style="color: ${paymentDetails.due_amount > 0 ? '#dc3545' : '#28a745'};">Due Amount:</span>
+                            <span style="color: ${paymentDetails.due_amount > 0 ? '#dc3545' : '#28a745'};">₹${paymentDetails.due_amount.toLocaleString()}</span>
+                        </div>
+                        <div class="grand-total">
+                            <span>Net Payable:</span>
+                            <span>₹${(paymentDetails.total_amount - paymentDetails.discount_amount).toLocaleString()}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-info">
+                        <div class="payment-status">
+                            💳 Payment Method: ${paymentDetails.payment_method} | 
+                            ✅ Payment Status: ${paymentDetails.due_amount > 0 ? 'PARTIAL PAYMENT' : 'PAID IN FULL'}
+                        </div>
+                        ${paymentDetails.due_amount > 0 ? 
+                            `<div style="margin-top: 10px; color: #856404; font-weight: bold;">
+                                ⚠️ Remaining Balance: ₹${paymentDetails.due_amount.toLocaleString()} - Please complete payment before course commencement
+                            </div>` : 
+                            `<div style="margin-top: 10px; color: #155724;">
+                                🎉 Payment Complete - Welcome to CODE!
+                            </div>`
+                        }
+                    </div>
+                    
+                    <div class="footer">
+                        <div class="footer-title">Thank You for Choosing Computer & Digital Excellence!</div>
+                        <p><strong>Important Notes:</strong></p>
+                        <p>• Please keep this receipt for your records</p>
+                        <p>• Course schedule and joining details will be shared separately</p>
+                        <p>• For any queries, contact us at +91 96358 09537 or code.bagdogra@gmail.com</p>
+                        <p style="margin-top: 15px; font-style: italic; color: #667eea;">
+                            <strong>"Empowering Digital Dreams, One Student at a Time"</strong>
+                        </p>
+                        <p style="margin-top: 10px; font-size: 11px;">
+                            This is a computer-generated receipt and does not require a signature.
+                        </p>
+                    </div>
                 </body>
                 </html>
             `);
+            
             printWindow.document.close();
-            printWindow.print();
+            printWindow.focus();
+            
+            // Auto print after a short delay
+            setTimeout(() => {
+                printWindow.print();
+                // Close the print window after printing
+                printWindow.onafterprint = function() {
+                    printWindow.close();
+                };
+            }, 1000);
         }
 
         // Reset form
