@@ -604,7 +604,7 @@ async function showPaymentHistory(receiptNo) {
                                     </span>
                                 </td>
                                 <td style="border: 1px solid #ddd; padding: 12px; text-align: center;">
-                                    <button onclick="printIndividualPaymentReceipt('${payment.receipt_no}')" 
+                                    <button onclick="printIndividualPaymentReceipt('${payment.receipt_no}', '${receiptNo}', '${payments[0]?.full_name}', '${payments[0]?.phone_number}', ${payment.payment_amount}, '${payment.payment_method}')" 
                                             style="background: #17a2b8; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; cursor: pointer;" 
                                             title="Print Payment Receipt">
                                         🖨️ Print
@@ -749,9 +749,8 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
     }
     
     // New function: Print individual payment receipt
-    function printIndividualPaymentReceipt(paymentReceiptNo) {
-        // This will use the enhanced monthly receipt function
-        printMonthlyReceipt(paymentReceiptNo);
+    function printIndividualPaymentReceipt(paymentReceiptNo, registrationReceiptNo, studentName, phone, amount, method) {
+        generateEnhancedMonthlyReceipt(paymentReceiptNo, registrationReceiptNo, studentName, phone, amount, method);
     }
     
     // New function: Export payment history
@@ -1268,280 +1267,232 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
             }
         }
         
-        function generateEnhancedMonthlyReceipt(payment) {
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Monthly Payment Receipt - ${payment.receipt_no}</title>
-                    <style>
-                        @media print {
-                            @page { margin: 0.5in; size: A4; }
-                            body { -webkit-print-color-adjust: exact; color-adjust: exact; }
-                        }
-                        
-                        * { margin: 0; padding: 0; box-sizing: border-box; }
-                        
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.4;
-                            color: #333;
-                            background: white;
-                            padding: 20px;
-                            max-width: 700px;
-                            margin: 0 auto;
-                        }
-                        
-                        .header {
-                            text-align: center;
-                            border-bottom: 3px solid #28a745;
-                            padding: 25px;
-                            margin-bottom: 30px;
-                            background: linear-gradient(135deg, #f8fff8, #e8f5e8);
-                            border-radius: 10px;
-                        }
-                        
-                        .company-name {
-                            font-size: 28px;
-                            font-weight: bold;
-                            color: #28a745;
-                            margin-bottom: 5px;
-                        }
-                        
-                        .company-subtitle {
-                            font-size: 16px;
-                            color: #666;
-                            margin-bottom: 15px;
-                        }
-                        
-                        .company-address {
-                            font-size: 14px;
-                            color: #666;
-                            line-height: 1.6;
-                        }
-                        
-                        .receipt-title {
-                            text-align: center;
-                            font-size: 24px;
-                            font-weight: bold;
-                            color: white;
-                            margin: 20px 0 30px 0;
-                            padding: 15px;
-                            background: linear-gradient(135deg, #28a745, #20c997);
-                            border-radius: 10px;
-                            text-transform: uppercase;
-                            letter-spacing: 1px;
-                            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-                        }
-                        
-                        .payment-highlight {
-                            text-align: center;
-                            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-                            border: 3px solid #ffc107;
-                            border-radius: 15px;
-                            padding: 25px;
-                            margin-bottom: 30px;
-                            position: relative;
-                            overflow: hidden;
-                        }
-                        
-                        .payment-highlight::before {
-                            content: '💳';
-                            position: absolute;
-                            top: -10px;
-                            right: -10px;
-                            font-size: 80px;
-                            opacity: 0.1;
-                        }
-                        
-                        .payment-amount {
-                            font-size: 48px;
-                            font-weight: bold;
-                            color: #28a745;
-                            margin-bottom: 10px;
-                            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-                        }
-                        
-                        .payment-label {
-                            font-size: 18px;
-                            color: #856404;
-                            font-weight: bold;
-                            margin-bottom: 15px;
-                        }
-                        
-                        .payment-method-display {
-                            background: #28a745;
-                            color: white;
-                            padding: 8px 20px;
-                            border-radius: 25px;
-                            font-weight: bold;
-                            display: inline-block;
-                        }
-                        
-                        .info-grid {
-                            display: grid;
-                            grid-template-columns: 1fr 1fr;
-                            gap: 30px;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .info-box {
-                            background: #f8f9fa;
-                            padding: 20px;
-                            border-radius: 10px;
-                            border-left: 5px solid #28a745;
-                        }
-                        
-                        .info-title {
-                            font-weight: bold;
-                            font-size: 16px;
-                            color: #28a745;
-                            margin-bottom: 15px;
-                            display: flex;
-                            align-items: center;
-                            gap: 8px;
-                        }
-                        
-                        .info-content {
-                            font-size: 14px;
-                            line-height: 1.8;
-                        }
-                        
-                        .info-content p {
-                            margin-bottom: 8px;
-                        }
-                        
-                        .status-section {
-                            background: linear-gradient(135deg, #d4edda, #c3e6cb);
-                            border: 2px solid #28a745;
-                            border-radius: 15px;
-                            padding: 20px;
-                            text-align: center;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .status-title {
-                            font-size: 20px;
-                            font-weight: bold;
-                            color: #155724;
-                            margin-bottom: 10px;
-                        }
-                        
-                        .status-message {
-                            font-size: 16px;
-                            color: #155724;
-                        }
-                        
-                        .important-notes {
-                            background: #fff3cd;
-                            border: 1px solid #ffeaa7;
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .notes-title {
-                            font-weight: bold;
-                            color: #856404;
-                            margin-bottom: 15px;
-                            font-size: 16px;
-                        }
-                        
-                        .notes-list {
-                            color: #856404;
-                            font-size: 14px;
-                            line-height: 1.6;
-                        }
-                        
-                        .notes-list li {
-                            margin-bottom: 8px;
-                        }
-                        
-                        .footer {
-                            text-align: center;
-                            border-top: 2px solid #28a745;
-                            padding-top: 20px;
-                            margin-top: 30px;
-                            background: #f8fff8;
-                            border-radius: 10px;
-                            padding: 20px;
-                        }
-                        
-                        .thank-you {
-                            font-size: 20px;
-                            font-weight: bold;
-                            color: #28a745;
-                            margin-bottom: 10px;
-                        }
-                        
-                        .print-buttons {
-                            text-align: center;
-                            margin: 30px 0;
-                        }
-                        
-                        .btn {
-                            padding: 15px 30px;
-                            margin: 0 10px;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            font-weight: bold;
-                            cursor: pointer;
-                            transition: all 0.3s ease;
-                        }
-                        
-                        .btn-print {
-                            background: linear-gradient(135deg, #28a745, #20c997);
-                            color: white;
-                            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-                        }
-                        
-                        .btn-print:hover {
-                            transform: translateY(-2px);
-                            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-                        }
-                        
-                        .btn-close {
-                            background: #6c757d;
-                            color: white;
-                        }
-                        
-                        .watermark {
-                            position: fixed;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%) rotate(-45deg);
-                            font-size: 150px;
-                            color: rgba(40, 167, 69, 0.03);
-                            font-weight: bold;
-                            z-index: -1;
-                            pointer-events: none;
-                        }
-                        
-                        @media print {
-                            .print-buttons { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="watermark">PAID</div>
-                    
-                    <div class="header">
-                        <div class="company-name">Computer & Digital Excellence</div>
-                        <div class="company-subtitle">(CODE)</div>
-                        <div class="company-address">
-                            Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
-                            Phone: +91 96358 09537 | Email: code.bagdogra@gmail.com
-                        </div>
+        async function generateEnhancedMonthlyReceipt(paymentReceiptNo, registrationReceiptNo, studentName, phone, amount, method) {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Monthly Payment Receipt - ${paymentReceiptNo}</title>
+            <style>
+                @media print {
+                    @page { margin: 0.3in; size: A4; }
+                    body { -webkit-print-color-adjust: exact; color-adjust: exact; }
+                    .print-buttons { display: none !important; }
+                }
+                
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.3;
+                    color: #333;
+                    background: white;
+                    padding: 15px;
+                    font-size: 14px;
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .receipt-container {
+                    max-width: 700px;
+                    margin: 0 auto;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .header {
+                    text-align: center;
+                    border-bottom: 2px solid #28a745;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    background: linear-gradient(135deg, #f8fff8, #e8f5e8);
+                }
+                
+                .company-name {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #28a745;
+                    margin-bottom: 3px;
+                }
+                
+                .company-subtitle {
+                    font-size: 14px;
+                    color: #666;
+                    margin-bottom: 8px;
+                }
+                
+                .company-address {
+                    font-size: 12px;
+                    color: #666;
+                    line-height: 1.4;
+                }
+                
+                .receipt-title {
+                    text-align: center;
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: white;
+                    margin: 15px 0;
+                    padding: 12px;
+                    background: linear-gradient(135deg, #28a745, #20c997);
+                    border-radius: 8px;
+                    text-transform: uppercase;
+                }
+                
+                .main-content {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .info-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                }
+                
+                .info-box {
+                    background: #f8f9fa;
+                    padding: 15px;
+                    border-radius: 8px;
+                    border-left: 4px solid #28a745;
+                }
+                
+                .info-title {
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: #28a745;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                
+                .info-content {
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
+                
+                .info-content p {
+                    margin-bottom: 6px;
+                }
+                
+                .payment-highlight {
+                    text-align: center;
+                    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+                    border: 2px solid #ffc107;
+                    border-radius: 10px;
+                    padding: 20px;
+                    position: relative;
+                }
+                
+                .payment-amount {
+                    font-size: 36px;
+                    font-weight: bold;
+                    color: #28a745;
+                    margin-bottom: 8px;
+                }
+                
+                .payment-label {
+                    font-size: 16px;
+                    color: #856404;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                
+                .payment-method-display {
+                    background: #28a745;
+                    color: white;
+                    padding: 6px 15px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    display: inline-block;
+                    font-size: 14px;
+                }
+                
+                .status-section {
+                    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+                    border: 2px solid #28a745;
+                    border-radius: 8px;
+                    padding: 15px;
+                    text-align: center;
+                }
+                
+                .status-title {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #155724;
+                    margin-bottom: 6px;
+                }
+                
+                .status-message {
+                    font-size: 14px;
+                    color: #155724;
+                }
+                
+                .footer {
+                    text-align: center;
+                    border-top: 1px solid #28a745;
+                    padding: 15px 0;
+                    background: #f8fff8;
+                    margin-top: auto;
+                }
+                
+                .thank-you {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #28a745;
+                    margin-bottom: 8px;
+                }
+                
+                .print-buttons {
+                    text-align: center;
+                    margin: 15px 0;
+                }
+                
+                .btn {
+                    padding: 12px 24px;
+                    margin: 0 8px;
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+                
+                .btn-print {
+                    background: #28a745;
+                    color: white;
+                }
+                
+                .btn-close {
+                    background: #6c757d;
+                    color: white;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="receipt-container">
+                <div class="header">
+                    <div class="company-name">Computer & Digital Excellence</div>
+                    <div class="company-subtitle">(CODE)</div>
+                    <div class="company-address">
+                        Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
+                        Phone: +91 96358 09537 | Email: code.bagdogra@gmail.com
                     </div>
-                    
-                    <div class="receipt-title">💳 Monthly Payment Receipt</div>
-                    
+                </div>
+                
+                <div class="receipt-title">💳 Monthly Payment Receipt</div>
+                
+                <div class="main-content">
                     <div class="payment-highlight">
                         <div class="payment-label">Payment Received</div>
-                        <div class="payment-amount">₹${payment.payment_amount.toLocaleString()}</div>
-                        <div class="payment-method-display">via ${payment.payment_method}</div>
+                        <div class="payment-amount">₹${amount.toLocaleString()}</div>
+                        <div class="payment-method-display">via ${method}</div>
                     </div>
                     
                     <div class="info-grid">
@@ -1550,18 +1501,18 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
                                 <span>📋</span> Payment Details
                             </div>
                             <div class="info-content">
-                                <p><strong>Payment Receipt No:</strong><br>${payment.receipt_no}</p>
-                                <p><strong>Payment Date:</strong><br>${new Date(payment.payment_date).toLocaleDateString('en-IN', { 
+                                <p><strong>Payment Receipt No:</strong><br>${paymentReceiptNo}</p>
+                                <p><strong>Payment Date:</strong><br>${new Date().toLocaleDateString('en-IN', { 
                                     day: 'numeric', 
                                     month: 'long', 
                                     year: 'numeric' 
                                 })}</p>
-                                <p><strong>Payment Time:</strong><br>${new Date(payment.payment_date).toLocaleTimeString('en-IN', { 
+                                <p><strong>Payment Time:</strong><br>${new Date().toLocaleTimeString('en-IN', { 
                                     hour: '2-digit', 
                                     minute: '2-digit',
                                     hour12: true 
                                 })}</p>
-                                <p><strong>Registration Receipt:</strong><br>${payment.registration_receipt_no}</p>
+                                <p><strong>Registration Receipt:</strong><br>${registrationReceiptNo}</p>
                             </div>
                         </div>
                         
@@ -1570,9 +1521,9 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
                                 <span>👤</span> Student Information
                             </div>
                             <div class="info-content">
-                                <p><strong>Name:</strong><br>${payment.full_name}</p>
-                                <p><strong>Phone:</strong><br>${payment.phone_number}</p>
-                                <p><strong>Payment Method:</strong><br>${payment.payment_method}</p>
+                                <p><strong>Name:</strong><br>${studentName}</p>
+                                <p><strong>Phone:</strong><br>${phone}</p>
+                                <p><strong>Payment Method:</strong><br>${method}</p>
                                 <p><strong>Payment Type:</strong><br>Monthly Installment</p>
                             </div>
                         </div>
@@ -1581,44 +1532,30 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
                     <div class="status-section">
                         <div class="status-title">✅ PAYMENT SUCCESSFULLY RECEIVED</div>
                         <div class="status-message">
-                            Your monthly payment of ₹${payment.payment_amount.toLocaleString()} has been successfully processed and recorded in our system.
+                            Monthly payment of ₹${amount.toLocaleString()} has been processed and recorded.
                         </div>
                     </div>
-                    
-                    <div class="important-notes">
-                        <div class="notes-title">📌 Important Notes</div>
-                        <ul class="notes-list">
-                            <li>Please keep this receipt for your records</li>
-                            <li>This payment has been applied to your course registration: ${payment.registration_receipt_no}</li>
-                            <li>You will receive your next payment reminder before the due date</li>
-                            <li>For any queries regarding payments, contact us at +91 96358 09537</li>
-                            <li>Course progress and attendance updates will be shared separately</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="print-buttons">
-                        <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
-                        <button class="btn btn-close" onclick="window.close()">✕ Close Window</button>
-                    </div>
-                    
-                    <div class="footer">
-                        <div class="thank-you">Thank You for Your Payment! 🙏</div>
-                        <p><strong>Computer & Digital Excellence (CODE)</strong></p>
-                        <p>Continue your digital learning journey with confidence!</p>
-                        <p style="margin-top: 15px; font-style: italic; color: #28a745;">
-                            <em>"Your Digital Solutions Partner"</em>
-                        </p>
-                        <p style="margin-top: 10px; font-size: 12px; color: #666;">
-                            This is a computer-generated receipt. Generated on ${new Date().toLocaleString('en-IN')}
-                        </p>
-                    </div>
-                </body>
-                </html>
-            `);
-            
-            printWindow.document.close();
-            printWindow.focus();
-        }
+                </div>
+                
+                <div class="print-buttons">
+                    <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
+                    <button class="btn btn-close" onclick="window.close()">✕ Close</button>
+                </div>
+                
+                <div class="footer">
+                    <div class="thank-you">Thank You for Your Payment! 🙏</div>
+                    <p style="font-size: 12px; color: #666;">
+                        This is a computer-generated receipt. Generated on ${new Date().toLocaleString('en-IN')}
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+}
         
         // Close payment modal
         function closePaymentModal() {
