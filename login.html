@@ -201,7 +201,7 @@
             }, 5000);
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
             
             const username = document.getElementById('username').value.trim();
@@ -212,64 +212,67 @@
             // Show loading
             loginBtn.disabled = true;
             btnText.innerHTML = '<span class="spinner"></span>Logging in...';
-            
-            // Hide previous errors
             document.getElementById('errorAlert').style.display = 'none';
             
-            // Simple authentication
-            setTimeout(() => {
-                let isValid = false;
-                let userType = '';
-                let redirectPage = '';
+            try {
+                const response = await fetch('/.netlify/functions/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        action: 'login'
+                    })
+                });
                 
-                // Check credentials
-                if (username === 'admin' && password === 'admin123') {
-                    isValid = true;
-                    userType = 'admin';
-                    redirectPage = 'admin.html';
-                } else if (username === 'student' && password === 'code2024') {
-                    isValid = true;
-                    userType = 'student';
-                    redirectPage = 'course-registration.html';
-                }
+                const result = await response.json();
                 
-                if (isValid) {
-                    // Store login state
+                if (response.ok && result.success) {
+                    // Store authentication data
+                    sessionStorage.setItem('authToken', result.token);
                     sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('userType', userType);
-                    sessionStorage.setItem('username', username);
+                    sessionStorage.setItem('userType', result.user.userType);
+                    sessionStorage.setItem('username', result.user.username);
+                    sessionStorage.setItem('userId', result.user.id);
                     sessionStorage.setItem('loginTime', new Date().toISOString());
                     
                     // Success feedback
                     btnText.innerHTML = '✅ Login Successful!';
                     
-                    // Redirect after short delay
+                    // Redirect based on user type and requested page
                     setTimeout(() => {
                         const requestedPage = new URLSearchParams(window.location.search).get('page');
                         
-                        if (requestedPage === 'admin' && userType === 'admin') {
+                        if (requestedPage === 'admin' && result.user.userType === 'admin') {
                             window.location.href = 'admin.html';
                         } else if (requestedPage === 'registration') {
                             window.location.href = 'course-registration.html';
                         } else {
                             // Default redirect based on user type
-                            window.location.href = redirectPage;
+                            if (result.user.userType === 'admin') {
+                                window.location.href = 'admin.html';
+                            } else {
+                                window.location.href = 'course-registration.html';
+                            }
                         }
                     }, 1000);
                     
                 } else {
-                    // Reset button
-                    loginBtn.disabled = false;
-                    btnText.textContent = '🔐 Login';
-                    
-                    // Show error
-                    showError('❌ Invalid username or password. Please check the credentials above.');
-                    
-                    // Clear password field
-                    document.getElementById('password').value = '';
-                    document.getElementById('password').focus();
+                    throw new Error(result.error || 'Login failed');
                 }
-            }, 1500); // Simulate loading time
+                
+            } catch (error) {
+                // Reset button
+                loginBtn.disabled = false;
+                btnText.textContent = '🔐 Login';
+                
+                // Show error
+                showError(error.message);
+                
+                // Clear password
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
         }
     </script>
 </body>
