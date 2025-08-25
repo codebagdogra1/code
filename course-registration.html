@@ -786,27 +786,36 @@
             }
         }
 
-        // Replace the existing generateReceipt function in your course-registration.html file
-        // Find the generateReceipt function and replace it with this enhanced version:
+        // ALSO UPDATE: Make coursesData globally accessible in the submitRegistration function
+        // Change this line in your submitRegistration function:
+        // let coursesData = {};
+        // TO:
+        // window.coursesData = coursesData; // Make it globally accessible
         
-        // Replace the generateReceipt function in your course-registration.html with this:
-        function generateReceipt(receiptNo, studentData, coursesData, paymentDetails) {
+        // Replace the existing generateReceipt function with this corrected version
+        function generateReceipt(receiptNo, studentData, selectedCoursesData, paymentDetails) {
             const now = new Date();
             
             // Create courses table HTML
             let coursesHtml = '';
-            let coursesList = [];
             
-            selectedCourses.forEach(courseName => {
-                const course = coursesData[courseName];
-                const plan = coursePaymentPlans[courseName];
-                const planText = plan === 'full' ? 'Full Payment' : 'Monthly Payment';
-                const fee = plan === 'full' ? course.full_price : course.monthly_price;
+            // coursesData here is actually the selectedCoursesData array passed from submitRegistration
+            coursesData.forEach(courseData => {
+                // Get course name from the global coursesData object using course_id
+                const courseName = Object.keys(window.coursesData || {}).find(name => 
+                    window.coursesData[name].id === courseData.course_id
+                ) || 'Unknown Course';
+                
+                // Get course details
+                const courseDetails = window.coursesData[courseName];
+                const duration = courseDetails ? courseDetails.duration : 'N/A';
+                const planText = courseData.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment';
+                const fee = courseData.course_fee;
                 
                 coursesHtml += `
                     <tr>
                         <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px;">${courseName}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${course.duration}</td>
+                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${duration}</td>
                         <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${planText}</td>
                         <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: right; font-weight: bold;">₹${fee.toLocaleString()}</td>
                     </tr>
