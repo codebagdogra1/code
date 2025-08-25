@@ -267,36 +267,95 @@
 <body>
 
 <!-- For Login Starts Here -->
-<script>
-// Login protection for course registration
-(function() {
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-    const userType = sessionStorage.getItem('userType');
-    
-    if (!isLoggedIn || (userType !== 'student' && userType !== 'admin')) {
-        // Redirect to login page with return parameter
-        window.location.href = 'login.html?page=registration';
-    }
-})();
-
-// Add logout functionality
-function logout() {
-    if (confirm('Are you sure you want to logout?')) {
-        sessionStorage.clear();
-        window.location.href = 'login.html';
-    }
-}
-
-// Session timeout (optional - 2 hours)
-setTimeout(function() {
-    alert('Session expired. Please login again.');
-    logout();
-}, 2 * 60 * 60 * 1000); // 2 hours
-</script>
-
-<!--    For course-registration.html - Add this logout button in the header: -->
-<!--    Add this after the company header, before the form: -->
-
+    <script>
+        // Enhanced login protection with database authentication
+        (function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const authToken = sessionStorage.getItem('authToken');
+            const userType = sessionStorage.getItem('userType');
+            
+            if (!isLoggedIn || !authToken) {
+                redirectToLogin();
+                return;
+            }
+            
+            // Validate token format and expiration
+            try {
+                const tokenData = JSON.parse(atob(authToken));
+                const loginTime = new Date(tokenData.loginTime);
+                const expirationTime = new Date(loginTime.getTime() + (2 * 60 * 60 * 1000)); // 2 hours
+                
+                if (new Date() > expirationTime) {
+                    alert('Session expired. Please login again.');
+                    logout();
+                    return;
+                }
+                
+                // Check user type for page access
+                const currentPage = window.location.pathname;
+                if (currentPage.includes('admin.html') && userType !== 'admin') {
+                    alert('Access denied. Admin privileges required.');
+                    logout();
+                    return;
+                }
+                
+            } catch (error) {
+                console.error('Invalid auth token');
+                logout();
+                return;
+            }
+            
+            function redirectToLogin() {
+                const currentPage = window.location.pathname;
+                let pageParam = '';
+                
+                if (currentPage.includes('admin.html')) {
+                    pageParam = '?page=admin';
+                } else if (currentPage.includes('course-registration.html')) {
+                    pageParam = '?page=registration';
+                }
+                
+                window.location.href = 'login.html' + pageParam;
+            }
+        })();
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Session validation
+        function validateSession() {
+            const authToken = sessionStorage.getItem('authToken');
+            if (!authToken) {
+                logout();
+                return false;
+            }
+            
+            try {
+                const tokenData = JSON.parse(atob(authToken));
+                const loginTime = new Date(tokenData.loginTime);
+                const expirationTime = new Date(loginTime.getTime() + (2 * 60 * 60 * 1000));
+                
+                if (new Date() > expirationTime) {
+                    alert('Session expired. Please login again.');
+                    logout();
+                    return false;
+                }
+                
+                return true;
+            } catch (error) {
+                logout();
+                return false;
+            }
+        }
+        
+        // Check session every 5 minutes
+        setInterval(validateSession, 5 * 60 * 1000);
+        </script>
+<!-- Add this after the company header, before the form: -->
 <div style="text-align: right; margin: 10px 0;">
     <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
         🚪 Logout
