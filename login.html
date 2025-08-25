@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Computer & Digital Excellence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+
+        .access-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .access-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">Computer & Digital Excellence</div>
+        <div class="subtitle">Secure Access Portal</div>
+
+        <div class="alert error" id="errorAlert"></div>
+
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" id="username" required placeholder="Enter username">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="password" required placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span id="btnText">🔐 Login</span>
+            </button>
+        </form>
+
+        <div class="access-info">
+            <h4>🔑 Access Credentials</h4>
+            <p><strong>Student Registration:</strong><br>
+            Username: <code>student</code><br>
+            Password: <code>code2024</code></p>
+            
+            <p style="margin-top: 15px;"><strong>Admin Dashboard:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>admin123</code></p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = new URLSearchParams(window.location.search).get('page');
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const userType = sessionStorage.getItem('userType');
+            
+            if (isLoggedIn) {
+                if (currentPage === 'admin' && userType === 'admin') {
+                    window.location.href = 'admin.html';
+                } else if (currentPage === 'registration' && (userType === 'student' || userType === 'admin')) {
+                    window.location.href = 'course-registration.html';
+                }
+            }
+        });
+
+        function showError(message) {
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.textContent = message;
+            errorAlert.style.display = 'block';
+            
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            
+            // Show loading
+            loginBtn.disabled = true;
+            btnText.innerHTML = '<span class="spinner"></span>Logging in...';
+            
+            // Hide previous errors
+            document.getElementById('errorAlert').style.display = 'none';
+            
+            // Simple authentication
+            setTimeout(() => {
+                let isValid = false;
+                let userType = '';
+                let redirectPage = '';
+                
+                // Check credentials
+                if (username === 'admin' && password === 'admin123') {
+                    isValid = true;
+                    userType = 'admin';
+                    redirectPage = 'admin.html';
+                } else if (username === 'student' && password === 'code2024') {
+                    isValid = true;
+                    userType = 'student';
+                    redirectPage = 'course-registration.html';
+                }
+                
+                if (isValid) {
+                    // Store login state
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userType', userType);
+                    sessionStorage.setItem('username', username);
+                    sessionStorage.setItem('loginTime', new Date().toISOString());
+                    
+                    // Success feedback
+                    btnText.innerHTML = '✅ Login Successful!';
+                    
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        const requestedPage = new URLSearchParams(window.location.search).get('page');
+                        
+                        if (requestedPage === 'admin' && userType === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else if (requestedPage === 'registration') {
+                            window.location.href = 'course-registration.html';
+                        } else {
+                            // Default redirect based on user type
+                            window.location.href = redirectPage;
+                        }
+                    }, 1000);
+                    
+                } else {
+                    // Reset button
+                    loginBtn.disabled = false;
+                    btnText.textContent = '🔐 Login';
+                    
+                    // Show error
+                    showError('❌ Invalid username or password. Please check the credentials above.');
+                    
+                    // Clear password field
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
+                }
+            }, 1500); // Simulate loading time
+        }
+    </script>
+</body>
+</html>
