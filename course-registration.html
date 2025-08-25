@@ -496,22 +496,22 @@
         });
 
         // Load courses from Netlify function
-        async function loadCourses() {
-            try {
-                const response = await fetch('/.netlify/functions/courses');
-                const courses = await response.json();
+        // async function loadCourses() {
+        //     try {
+        //         const response = await fetch('/.netlify/functions/courses');
+        //         const courses = await response.json();
                 
-                coursesData = {};
-                courses.forEach(course => {
-                    coursesData[course.name] = course;
-                });
+        //         coursesData = {};
+        //         courses.forEach(course => {
+        //             coursesData[course.name] = course;
+        //         });
                 
-                displayCourses(courses);
-            } catch (error) {
-                console.error('Error loading courses:', error);
-                showAlert('Failed to load courses. Please refresh the page.', 'error');
-            }
-        }
+        //         displayCourses(courses);
+        //     } catch (error) {
+        //         console.error('Error loading courses:', error);
+        //         showAlert('Failed to load courses. Please refresh the page.', 'error');
+        //     }
+        // }
 
         // Display courses
         function displayCourses(courses) {
@@ -692,23 +692,119 @@
         }
 
         // Submit registration
+        // async function submitRegistration() {
+        //     if (!validateForm()) return;
+
+        //     const submitBtn = document.getElementById('submitBtn');
+        //     const originalText = submitBtn.textContent;
+
+        //     try {
+        //         // Show loading
+        //         submitBtn.disabled = true;
+        //         submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
+
+        //         // Prepare student data
+        //         const dobMonth = document.getElementById('dobMonth').value.padStart(2, '0');
+        //         const dobDay = document.getElementById('dobDay').value.padStart(2, '0');
+        //         const dobYear = document.getElementById('dobYear').value;
+        //         const dateOfBirth = `${dobYear}-${dobMonth}-${dobDay}`;
+
+        //         const studentData = {
+        //             full_name: document.getElementById('studentName').value.trim(),
+        //             phone_number: document.getElementById('phoneNumber').value.trim(),
+        //             email: document.getElementById('email').value.trim() || null,
+        //             date_of_birth: dateOfBirth,
+        //             address: document.getElementById('address').value.trim()
+        //         };
+
+        //         // Prepare course selections
+        //         const selectedCoursesData = selectedCourses.map(courseName => {
+        //             const course = coursesData[courseName];
+        //             const plan = coursePaymentPlans[courseName];
+        //             const price = plan === 'full' ? course.full_price : course.monthly_price;
+                    
+        //             return {
+        //                 course_id: course.id,
+        //                 payment_plan: plan,
+        //                 course_fee: price
+        //             };
+        //         });
+
+        //         // Prepare payment details
+        //         const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
+        //         const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
+        //         const totalAmount = selectedCoursesData.reduce((sum, course) => sum + course.course_fee, 0);
+        //         const grandTotal = Math.max(0, totalAmount - discountAmount);
+        //         const dueAmount = Math.max(0, grandTotal - paidAmount);
+
+        //         const paymentDetails = {
+        //             total_amount: totalAmount,
+        //             discount_amount: discountAmount,
+        //             paid_amount: paidAmount,
+        //             due_amount: dueAmount,
+        //             payment_method: document.getElementById('paymentMethod').value
+        //         };
+
+        //         // Submit to Netlify function
+        //         const response = await fetch('/.netlify/functions/registrations', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 studentData,
+        //                 selectedCourses: selectedCoursesData,
+        //                 paymentDetails
+        //             })
+        //         });
+
+        //         const result = await response.json();
+
+        //         if (response.ok) {
+        //             showAlert(`Registration successful! Your receipt number is: ${result.receipt_no}`, 'success');
+                    
+        //             // Reset form
+        //             resetForm();
+                    
+        //             // Show success message with print option
+        //             setTimeout(() => {
+        //                 if (confirm('Registration completed! Would you like to print the receipt?')) {
+        //                     generateReceipt(result.receipt_no, studentData, selectedCoursesData, paymentDetails);
+        //                 }
+        //             }, 1000);
+        //         } else {
+        //             throw new Error(result.error || 'Registration failed');
+        //         }
+
+        //     } catch (error) {
+        //         console.error('Error:', error);
+        //         showAlert(error.message || 'Registration failed. Please try again.', 'error');
+        //     } finally {
+        //         // Reset button
+        //         submitBtn.disabled = false;
+        //         submitBtn.textContent = originalText;
+        //     }
+        // }
+
+
+        // Replace your existing submitRegistration function with this corrected version
         async function submitRegistration() {
             if (!validateForm()) return;
-
+        
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
-
+        
             try {
                 // Show loading
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
-
+        
                 // Prepare student data
                 const dobMonth = document.getElementById('dobMonth').value.padStart(2, '0');
                 const dobDay = document.getElementById('dobDay').value.padStart(2, '0');
                 const dobYear = document.getElementById('dobYear').value;
                 const dateOfBirth = `${dobYear}-${dobMonth}-${dobDay}`;
-
+        
                 const studentData = {
                     full_name: document.getElementById('studentName').value.trim(),
                     phone_number: document.getElementById('phoneNumber').value.trim(),
@@ -716,27 +812,29 @@
                     date_of_birth: dateOfBirth,
                     address: document.getElementById('address').value.trim()
                 };
-
+        
                 // Prepare course selections
                 const selectedCoursesData = selectedCourses.map(courseName => {
-                    const course = coursesData[courseName];
+                    const course = coursesData[courseName]; // This uses the global coursesData
                     const plan = coursePaymentPlans[courseName];
                     const price = plan === 'full' ? course.full_price : course.monthly_price;
                     
                     return {
                         course_id: course.id,
+                        course_name: courseName, // Add course name for receipt
                         payment_plan: plan,
-                        course_fee: price
+                        course_fee: price,
+                        duration: course.duration // Add duration for receipt
                     };
                 });
-
+        
                 // Prepare payment details
                 const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
                 const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
                 const totalAmount = selectedCoursesData.reduce((sum, course) => sum + course.course_fee, 0);
                 const grandTotal = Math.max(0, totalAmount - discountAmount);
                 const dueAmount = Math.max(0, grandTotal - paidAmount);
-
+        
                 const paymentDetails = {
                     total_amount: totalAmount,
                     discount_amount: discountAmount,
@@ -744,7 +842,7 @@
                     due_amount: dueAmount,
                     payment_method: document.getElementById('paymentMethod').value
                 };
-
+        
                 // Submit to Netlify function
                 const response = await fetch('/.netlify/functions/registrations', {
                     method: 'POST',
@@ -757,25 +855,26 @@
                         paymentDetails
                     })
                 });
-
+        
                 const result = await response.json();
-
+        
                 if (response.ok) {
                     showAlert(`Registration successful! Your receipt number is: ${result.receipt_no}`, 'success');
                     
                     // Reset form
                     resetForm();
                     
-                    // Show success message with print option
+                    // Show success message with print option - Fixed timing and parameters
                     setTimeout(() => {
                         if (confirm('Registration completed! Would you like to print the receipt?')) {
+                            // Pass the correct data structure to generateReceipt
                             generateReceipt(result.receipt_no, studentData, selectedCoursesData, paymentDetails);
                         }
                     }, 1000);
                 } else {
                     throw new Error(result.error || 'Registration failed');
                 }
-
+        
             } catch (error) {
                 console.error('Error:', error);
                 showAlert(error.message || 'Registration failed. Please try again.', 'error');
@@ -785,7 +884,25 @@
                 submitBtn.textContent = originalText;
             }
         }
-
+        
+        // Also update the loadCourses function to make coursesData globally accessible
+        async function loadCourses() {
+            try {
+                const response = await fetch('/.netlify/functions/courses');
+                const courses = await response.json();
+                
+                // Make coursesData globally accessible
+                window.coursesData = coursesData = {};
+                courses.forEach(course => {
+                    coursesData[course.name] = course;
+                });
+                
+                displayCourses(courses);
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                showAlert('Failed to load courses. Please refresh the page.', 'error');
+            }
+        }
         // ALSO UPDATE: Make coursesData globally accessible in the submitRegistration function
         // Change this line in your submitRegistration function:
         // let coursesData = {};
