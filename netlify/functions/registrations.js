@@ -1,4 +1,4 @@
-// netlify/functions/registrations.js
+// Updated netlify/functions/registrations.js with monthly installment creation
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -72,13 +72,48 @@ exports.handler = async (event, context) => {
             );
             const registrationId = registrationResult.rows[0].id;
             
-            // Insert course registrations
+            // Insert course registrations and create monthly installments
             for (const courseSelection of selectedCourses) {
                 await client.query(
                     `INSERT INTO course_registrations (registration_id, course_id, payment_plan, course_fee) 
                     VALUES ($1, $2, $3, $4)`,
                     [registrationId, courseSelection.course_id, courseSelection.payment_plan, courseSelection.course_fee]
                 );
+                
+                // Create monthly installments for monthly payment plans
+                if (courseSelection.payment_plan === 'monthly') {
+                    // Get course details for monthly installments
+                    const courseResult = await client.query(
+                        'SELECT monthly_installments FROM courses WHERE id = $1',
+                        [courseSelection.course_id]
+                    );
+                    
+                    if (courseResult.rows.length > 0) {
+                        const monthlyInstallments = courseResult.rows[0].monthly_installments || 12;
+                        const installmentAmount = courseSelection.course_fee / monthlyInstallments;
+                        const registrationDate = new Date();
+                        
+                        // Create monthly installments
+                        for (let monthNumber = 1; monthNumber <= monthlyInstallments; monthNumber++) {
+                            const dueDate = new Date(registrationDate);
+                            dueDate.setMonth(dueDate.getMonth() + (monthNumber - 1));
+                            
+                            await client.query(`
+                                INSERT INTO monthly_installments 
+                                (registration_id, course_id, month_number, month_name, due_date, installment_amount, payment_status)
+                                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                            `, [
+                                registrationId,
+                                courseSelection.course_id,
+                                monthNumber,
+                                `Month ${monthNumber}`,
+                                dueDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
+                                installmentAmount,
+                                'PENDING'
+                            ]);
+                        }
+                    }
+                }
             }
             
             // Record initial payment in payment history if payment was made
@@ -100,7 +135,7 @@ exports.handler = async (event, context) => {
                     success: true, 
                     receipt_no: receiptNo,
                     registration_id: registrationId,
-                    message: 'Registration created successfully' 
+                    message: 'Registration created successfully with monthly tracking' 
                 })
             };
         }
@@ -110,23 +145,40 @@ exports.handler = async (event, context) => {
             const receiptNo = pathParts[pathParts.length - 1];
             
             if (receiptNo && receiptNo !== 'registrations') {
-                // Get specific registration with admission fees
+                // Get specific registration with admission fees and monthly installments
                 const result = await client.query(`
                     SELECT 
                         r.*,
                         s.full_name, s.phone_number, s.email, s.address, s.date_of_birth,
                         json_agg(
-                            json_build_object(
+                            DISTINCT jsonb_build_object(
                                 'course_name', c.name,
                                 'payment_plan', cr.payment_plan,
                                 'course_fee', cr.course_fee,
                                 'duration', c.duration
                             )
-                        ) as courses
+                        ) FILTER (WHERE c.id IS NOT NULL) as courses,
+                        COALESCE(
+                            json_agg(
+                                DISTINCT jsonb_build_object(
+                                    'id', mi.id,
+                                    'month_number', mi.month_number,
+                                    'month_name', mi.month_name,
+                                    'due_date', mi.due_date,
+                                    'installment_amount', mi.installment_amount,
+                                    'paid_amount', mi.paid_amount,
+                                    'payment_status', mi.payment_status,
+                                    'payment_date', mi.payment_date,
+                                    'course_name', c.name
+                                )
+                            ) FILTER (WHERE mi.id IS NOT NULL), 
+                            '[]'::json
+                        ) as monthly_installments
                     FROM registrations r
                     JOIN students s ON r.student_id = s.id
                     LEFT JOIN course_registrations cr ON r.id = cr.registration_id
                     LEFT JOIN courses c ON cr.course_id = c.id
+                    LEFT JOIN monthly_installments mi ON r.id = mi.registration_id
                     WHERE r.receipt_no = $1
                     GROUP BY r.id, s.id
                 `, [receiptNo]);
@@ -154,9 +206,12 @@ exports.handler = async (event, context) => {
                     SELECT 
                         r.id, r.receipt_no, r.registration_date, r.total_amount, r.admission_fees,
                         r.paid_amount, r.due_amount, r.payment_method, r.payment_status,
-                        s.full_name, s.phone_number, s.email
+                        s.full_name, s.phone_number, s.email,
+                        COUNT(mi.id) FILTER (WHERE mi.payment_status = 'OVERDUE') as overdue_months
                     FROM registrations r
                     JOIN students s ON r.student_id = s.id
+                    LEFT JOIN monthly_installments mi ON r.id = mi.registration_id
+                    GROUP BY r.id, s.id
                     ORDER BY r.registration_date DESC
                     LIMIT $1 OFFSET $2
                 `, [limit, offset]);
@@ -188,7 +243,7 @@ exports.handler = async (event, context) => {
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Server error' })
+            body: JSON.stringify({ error: 'Server error: ' + error.message })
         };
     } finally {
         client.release();
