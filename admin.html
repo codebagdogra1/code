@@ -524,10 +524,6 @@
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const authToken = sessionStorage.getItem('authToken');
             const userType = sessionStorage.getItem('userType');
-
-            // Enhanced payment functionality for monthly tracking
-            let selectedMonthlyPayments = {}; // {course_id: [month_ids]}
-            let courseInstallments = {}; // Store installment data
             
             if (!isLoggedIn || !authToken) {
                 redirectToLogin();
@@ -1705,66 +1701,6 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
         }
         
         // Add payment - ENHANCED with actual functionality
-        function addPayment(receiptNo, currentDue) {
-            const paymentHtml = `
-                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
-                        <h2 style="color: #28a745; margin: 0;">💳 Add Payment</h2>
-                        <button onclick="closePaymentModal()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 50%; cursor: pointer; font-size: 18px; width: 40px; height: 40px;">&times;</button>
-                    </div>
-                    
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <p><strong>Receipt:</strong> ${receiptNo}</p>
-                        <p><strong>Current Due:</strong> <span style="color: #dc3545; font-weight: bold;">₹${currentDue.toLocaleString()}</span></p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Amount (₹)</label>
-                        <input type="number" id="paymentAmount" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;" 
-                               placeholder="Enter payment amount" min="1" max="${currentDue}" value="${currentDue}">
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Payment Method</label>
-                        <select id="paymentMethodUpdate" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
-                            <option value="Cash">Cash</option>
-                            <option value="UPI">UPI</option>
-                            <option value="Card">Credit/Debit Card</option>
-                            <option value="Bank Transfer">Bank Transfer</option>
-                            <option value="Cheque">Cheque</option>
-                        </select>
-                    </div>
-                    
-                    <div style="text-align: center; display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="processPayment('${receiptNo}')" class="btn btn-success" style="padding: 12px 20px;">✅ Process Payment</button>
-                        <button onclick="closePaymentModal()" class="btn btn-secondary" style="padding: 12px 20px;">✕ Cancel</button>
-                    </div>
-                </div>
-            `;
-        
-            // Create payment modal
-            const overlay = document.createElement('div');
-            overlay.id = 'paymentOverlay';
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.5);
-                z-index: 1001;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 20px;
-                backdrop-filter: blur(5px);
-            `;
-            overlay.innerHTML = paymentHtml;
-            document.body.appendChild(overlay);
-            
-            // Focus on amount input
-            setTimeout(() => document.getElementById('paymentAmount').focus(), 100);
-        }
         
         // Process payment
         // Enhanced processPayment function
