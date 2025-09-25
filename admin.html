@@ -1753,12 +1753,12 @@ async function deleteRegistration(registrationId, receiptNo, studentName) {
         // Enhanced payment modal with notes
         // REPLACE your existing addPayment function with this enhanced version
 // Enhanced payment functionality for monthly tracking
-
+var selectedMonthlyPayments = {}; // {course_id: [month_ids]}
+var courseInstallments = {}; // Store installment data
 // Enhanced addPayment function - REPLACES your current one
 async function addPayment(receiptNo, currentDue) {
     try {
-        let selectedMonthlyPayments = {}; // {course_id: [month_ids]}
-        let courseInstallments = {}; // Store installment data
+        
         // First load monthly installment data
         const response = await fetch(`/.netlify/functions/record-payment?receipt_no=${receiptNo}&action=monthly_installments`);
         const data = await response.json();
