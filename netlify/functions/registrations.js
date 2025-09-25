@@ -60,14 +60,15 @@ exports.handler = async (event, context) => {
                 studentId = studentResult.rows[0].id;
             }
             
-            // Create registration
+            // Create registration with admission fees
             const receiptNo = generateReceiptNo();
             const registrationResult = await client.query(
                 `INSERT INTO registrations 
-                (receipt_no, student_id, total_amount, discount_amount, paid_amount, due_amount, payment_method) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
-                [receiptNo, studentId, paymentDetails.total_amount, paymentDetails.discount_amount,
-                 paymentDetails.paid_amount, paymentDetails.due_amount, paymentDetails.payment_method]
+                (receipt_no, student_id, total_amount, admission_fees, discount_amount, paid_amount, due_amount, payment_method) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+                [receiptNo, studentId, paymentDetails.total_amount, paymentDetails.admission_fees || 0, 
+                 paymentDetails.discount_amount, paymentDetails.paid_amount, paymentDetails.due_amount, 
+                 paymentDetails.payment_method]
             );
             const registrationId = registrationResult.rows[0].id;
             
@@ -78,6 +79,16 @@ exports.handler = async (event, context) => {
                     VALUES ($1, $2, $3, $4)`,
                     [registrationId, courseSelection.course_id, courseSelection.payment_plan, courseSelection.course_fee]
                 );
+            }
+            
+            // Record initial payment in payment history if payment was made
+            if (paymentDetails.paid_amount > 0) {
+                await client.query(`
+                    INSERT INTO payment_history 
+                    (registration_id, payment_amount, payment_method, payment_type, receipt_no, notes)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                `, [registrationId, paymentDetails.paid_amount, paymentDetails.payment_method, 
+                    'initial', receiptNo, 'Initial payment during registration']);
             }
             
             await client.query('COMMIT');
@@ -99,7 +110,7 @@ exports.handler = async (event, context) => {
             const receiptNo = pathParts[pathParts.length - 1];
             
             if (receiptNo && receiptNo !== 'registrations') {
-                // Get specific registration
+                // Get specific registration with admission fees
                 const result = await client.query(`
                     SELECT 
                         r.*,
@@ -114,8 +125,8 @@ exports.handler = async (event, context) => {
                         ) as courses
                     FROM registrations r
                     JOIN students s ON r.student_id = s.id
-                    JOIN course_registrations cr ON r.id = cr.registration_id
-                    JOIN courses c ON cr.course_id = c.id
+                    LEFT JOIN course_registrations cr ON r.id = cr.registration_id
+                    LEFT JOIN courses c ON cr.course_id = c.id
                     WHERE r.receipt_no = $1
                     GROUP BY r.id, s.id
                 `, [receiptNo]);
@@ -134,14 +145,14 @@ exports.handler = async (event, context) => {
                     body: JSON.stringify(result.rows[0])
                 };
             } else {
-                // Get all registrations with pagination
+                // Get all registrations with pagination (including admission fees)
                 const page = parseInt(event.queryStringParameters?.page) || 1;
                 const limit = parseInt(event.queryStringParameters?.limit) || 10;
                 const offset = (page - 1) * limit;
                 
                 const result = await client.query(`
                     SELECT 
-                        r.id, r.receipt_no, r.registration_date, r.total_amount, 
+                        r.id, r.receipt_no, r.registration_date, r.total_amount, r.admission_fees,
                         r.paid_amount, r.due_amount, r.payment_method, r.payment_status,
                         s.full_name, s.phone_number, s.email
                     FROM registrations r

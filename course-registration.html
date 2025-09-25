@@ -167,6 +167,13 @@
             margin: 20px 0;
         }
 
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
         .totals-table {
             width: 100%;
             margin-top: 20px;
@@ -175,6 +182,11 @@
         .totals-table td {
             padding: 8px 0;
             border-bottom: 1px solid #ddd;
+        }
+
+        .admission-fees-row {
+            background: #fff3cd;
+            font-weight: bold;
         }
 
         .grand-total {
@@ -261,178 +273,130 @@
             .pricing-options {
                 flex-direction: column;
             }
+
+            .payment-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- For Login Starts Here -->
-    <script>
-        // Enhanced login protection with database authentication
-        (function() {
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-            const authToken = sessionStorage.getItem('authToken');
-            const userType = sessionStorage.getItem('userType');
-            
-            if (!isLoggedIn || !authToken) {
-                redirectToLogin();
-                return;
-            }
-            
-            // Validate token format and expiration
-            try {
-                const tokenData = JSON.parse(atob(authToken));
-                const loginTime = new Date(tokenData.loginTime);
-                const expirationTime = new Date(loginTime.getTime() + (2 * 60 * 60 * 1000)); // 2 hours
-                
-                if (new Date() > expirationTime) {
-                    alert('Session expired. Please login again.');
-                    logout();
-                    return;
-                }
-                
-                // Check user type for page access
-                const currentPage = window.location.pathname;
-                if (currentPage.includes('admin.html') && userType !== 'admin') {
-                    alert('Access denied. Admin privileges required.');
-                    logout();
-                    return;
-                }
-                
-            } catch (error) {
-                console.error('Invalid auth token');
-                logout();
-                return;
-            }
-            
-            function redirectToLogin() {
-                const currentPage = window.location.pathname;
-                let pageParam = '';
-                
-                if (currentPage.includes('admin.html')) {
-                    pageParam = '?page=admin';
-                } else if (currentPage.includes('course-registration.html')) {
-                    pageParam = '?page=registration';
-                }
-                
-                window.location.href = 'login.html' + pageParam;
-            }
-        })();
+<!-- Login Protection Script -->
+<script>
+    (function() {
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        const authToken = sessionStorage.getItem('authToken');
         
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
+        if (!isLoggedIn || !authToken) {
+            window.location.href = 'login.html?page=registration';
+            return;
+        }
+        
+        try {
+            const tokenData = JSON.parse(atob(authToken));
+            const loginTime = new Date(tokenData.loginTime);
+            const expirationTime = new Date(loginTime.getTime() + (2 * 60 * 60 * 1000));
+            
+            if (new Date() > expirationTime) {
+                alert('Session expired. Please login again.');
                 sessionStorage.clear();
                 window.location.href = 'login.html';
+                return;
             }
+        } catch (error) {
+            console.error('Invalid auth token');
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+            return;
         }
-        
-        // Session validation
-        function validateSession() {
-            const authToken = sessionStorage.getItem('authToken');
-            if (!authToken) {
-                logout();
-                return false;
-            }
-            
-            try {
-                const tokenData = JSON.parse(atob(authToken));
-                const loginTime = new Date(tokenData.loginTime);
-                const expirationTime = new Date(loginTime.getTime() + (2 * 60 * 60 * 1000));
-                
-                if (new Date() > expirationTime) {
-                    alert('Session expired. Please login again.');
-                    logout();
-                    return false;
-                }
-                
-                return true;
-            } catch (error) {
-                logout();
-                return false;
-            }
+    })();
+    
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
         }
-        
-        // Check session every 5 minutes
-        setInterval(validateSession, 5 * 60 * 1000);
-        </script>
-<!-- Add this after the company header, before the form: -->
+    }
+</script>
+
 <div style="text-align: right; margin: 10px 0;">
     <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;">
         🚪 Logout
     </button>
 </div>
 
-<!-- For Login Ends Here -->
-    <div class="container">
-        <div class="header">
-            <h1>Computer & Digital Excellence</h1>
-            <p>Course Registration Form</p>
+<div class="container">
+    <div class="header">
+        <h1>Computer & Digital Excellence</h1>
+        <p>Course Registration Form</p>
+    </div>
+
+    <div class="form-container">
+        <div class="alert" id="alertBox"></div>
+
+        <!-- Personal Information -->
+        <h3>Personal Information</h3>
+        
+        <div class="form-group">
+            <label class="form-label">Full Name <span class="required">*</span></label>
+            <input type="text" class="form-input" id="studentName" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Phone Number <span class="required">*</span></label>
+            <input type="tel" class="form-input" id="phoneNumber" placeholder="+91 XXXXX XXXXX" required>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="email" placeholder="your.email@example.com">
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Date of Birth <span class="required">*</span></label>
+            <div class="date-group">
+                <select class="form-select" id="dobMonth" required>
+                    <option value="">Select Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <input type="number" class="form-input" id="dobDay" placeholder="Day" min="1" max="31" required>
+                <input type="number" class="form-input" id="dobYear" placeholder="Year" min="1950" max="2010" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Complete Address <span class="required">*</span></label>
+            <textarea class="form-input" id="address" rows="3" placeholder="Enter your complete address with PIN code" required></textarea>
         </div>
 
-        <div class="form-container">
-            <div class="alert" id="alertBox"></div>
-
-            <!-- Personal Information -->
-            <h3>Personal Information</h3>
-            
-            <div class="form-group">
-                <label class="form-label">Full Name <span class="required">*</span></label>
-                <input type="text" class="form-input" id="studentName" placeholder="Enter your full name" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Phone Number <span class="required">*</span></label>
-                <input type="tel" class="form-input" id="phoneNumber" placeholder="+91 XXXXX XXXXX" required>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="email" placeholder="your.email@example.com">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Date of Birth <span class="required">*</span></label>
-                <div class="date-group">
-                    <select class="form-select" id="dobMonth" required>
-                        <option value="">Select Month</option>
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                    <input type="number" class="form-input" id="dobDay" placeholder="Day" min="1" max="31" required>
-                    <input type="number" class="form-input" id="dobYear" placeholder="Year" min="1950" max="2010" required>
+        <!-- Course Selection -->
+        <div class="course-section">
+            <h3>Select Your Courses</h3>
+            <div id="coursesContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading courses...
                 </div>
             </div>
+        </div>
+
+        <!-- Payment Details -->
+        <div class="payment-section">
+            <h3>Payment Details</h3>
             
-            <div class="form-group">
-                <label class="form-label">Complete Address <span class="required">*</span></label>
-                <textarea class="form-input" id="address" rows="3" placeholder="Enter your complete address with PIN code" required></textarea>
-            </div>
-
-            <!-- Course Selection -->
-            <div class="course-section">
-                <h3>Select Your Courses</h3>
-                <div id="coursesContainer">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        Loading courses...
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Details -->
-            <div class="payment-section">
-                <h3>Payment Details</h3>
-                
+            <div class="payment-grid">
                 <div class="form-group">
                     <label class="form-label">Payment Method <span class="required">*</span></label>
                     <select class="form-select" id="paymentMethod" required>
@@ -444,7 +408,14 @@
                         <option value="Cheque">Cheque</option>
                     </select>
                 </div>
-                
+
+                <div class="form-group">
+                    <label class="form-label">Admission Fees (₹) <span class="required">*</span></label>
+                    <input type="number" class="form-input" id="admissionFees" placeholder="Enter admission fees" min="0" value="0" required>
+                </div>
+            </div>
+            
+            <div class="payment-grid">
                 <div class="form-group">
                     <label class="form-label">Discount Amount (₹)</label>
                     <input type="number" class="form-input" id="discountAmount" placeholder="Enter discount amount" min="0">
@@ -454,825 +425,712 @@
                     <label class="form-label">Amount Paid Today (₹) <span class="required">*</span></label>
                     <input type="number" class="form-input" id="paidAmount" placeholder="Enter paid amount" min="0" required>
                 </div>
-
-                <table class="totals-table" id="totalsTable" style="display: none;">
-                    <tr>
-                        <td>Subtotal:</td>
-                        <td id="subtotal" style="text-align: right; font-weight: bold;">₹0</td>
-                    </tr>
-                    <tr>
-                        <td>Discount:</td>
-                        <td id="discount" style="text-align: right; font-weight: bold;">₹0</td>
-                    </tr>
-                    <tr>
-                        <td>Amount Paid:</td>
-                        <td id="paidDisplay" style="text-align: right; font-weight: bold;">₹0</td>
-                    </tr>
-                    <tr>
-                        <td>Due Amount:</td>
-                        <td id="dueAmount" style="text-align: right; font-weight: bold;">₹0</td>
-                    </tr>
-                </table>
-
-                <div class="grand-total" id="grandTotal" style="display: none;">
-                    Total: ₹0
-                </div>
             </div>
 
-            <button class="btn" id="submitBtn" onclick="submitRegistration()">
-                Register Now
-            </button>
-        </div>
-    </div>
-    <script>
-        let coursesData = {};
-        let selectedCourses = [];
-        let coursePaymentPlans = {};
+            <table class="totals-table" id="totalsTable" style="display: none;">
+                <tr>
+                    <td>Course Fees:</td>
+                    <td id="courseFeesDisplay" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+                <tr class="admission-fees-row">
+                    <td>Admission Fees:</td>
+                    <td id="admissionFeesDisplay" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td id="subtotal" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+                <tr>
+                    <td>Discount:</td>
+                    <td id="discount" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+                <tr>
+                    <td>Amount Paid:</td>
+                    <td id="paidDisplay" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+                <tr>
+                    <td>Due Amount:</td>
+                    <td id="dueAmount" style="text-align: right; font-weight: bold;">₹0</td>
+                </tr>
+            </table>
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCourses();
-            setupEventListeners();
+            <div class="grand-total" id="grandTotal" style="display: none;">
+                Total: ₹0
+            </div>
+        </div>
+
+        <button class="btn" id="submitBtn" onclick="submitRegistration()">
+            Register Now
+        </button>
+    </div>
+</div>
+
+<script>
+    let coursesData = {};
+    let selectedCourses = [];
+    let coursePaymentPlans = {};
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCourses();
+        setupEventListeners();
+    });
+
+    // Load courses from Netlify function
+    async function loadCourses() {
+        try {
+            const response = await fetch('/.netlify/functions/courses');
+            const courses = await response.json();
+            
+            window.coursesData = coursesData = {};
+            courses.forEach(course => {
+                coursesData[course.name] = course;
+            });
+            
+            displayCourses(courses);
+        } catch (error) {
+            console.error('Error loading courses:', error);
+            showAlert('Failed to load courses. Please refresh the page.', 'error');
+        }
+    }
+
+    // Display courses
+    function displayCourses(courses) {
+        const container = document.getElementById('coursesContainer');
+        
+        if (courses.length === 0) {
+            container.innerHTML = '<p>No courses available at the moment.</p>';
+            return;
+        }
+
+        container.innerHTML = courses.map(course => {
+            const savings = course.monthly_price - course.full_price;
+            return `
+                <div class="course-item" onclick="selectCourse('${course.name}')">
+                    <div class="course-header">
+                        <span class="course-name">${course.name}</span>
+                        <span class="course-duration">${course.duration}</span>
+                    </div>
+                    <div class="pricing-options">
+                        <div class="price-option" onclick="selectPricing(event, '${course.name}', 'full')">
+                            <div class="price-label">Full Payment</div>
+                            <div class="price-amount">₹${course.full_price.toLocaleString()}</div>
+                            ${savings > 0 ? `<div style="font-size: 10px; color: green;">Save ₹${savings}</div>` : ''}
+                        </div>
+                        <div class="price-option" onclick="selectPricing(event, '${course.name}', 'monthly')">
+                            <div class="price-label">Monthly Payment</div>
+                            <div class="price-amount">₹${course.monthly_price.toLocaleString()}</div>
+                            <div style="font-size: 10px;">₹${Math.ceil(course.monthly_price / course.monthly_installments)}/month</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Select course
+    function selectCourse(courseName) {
+        const courseItem = event.target.closest('.course-item');
+        
+        if (courseItem.classList.contains('selected')) {
+            courseItem.classList.remove('selected');
+            selectedCourses = selectedCourses.filter(c => c !== courseName);
+            delete coursePaymentPlans[courseName];
+            
+            courseItem.querySelectorAll('.price-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+        } else {
+            courseItem.classList.add('selected');
+            if (!selectedCourses.includes(courseName)) {
+                selectedCourses.push(courseName);
+            }
+        }
+        
+        updateTotals();
+    }
+
+    // Select pricing
+    function selectPricing(event, courseName, plan) {
+        event.stopPropagation();
+        
+        const courseItem = event.target.closest('.course-item');
+        const priceOptions = courseItem.querySelectorAll('.price-option');
+        
+        priceOptions.forEach(option => option.classList.remove('selected'));
+        event.target.closest('.price-option').classList.add('selected');
+        
+        coursePaymentPlans[courseName] = plan;
+        
+        if (!courseItem.classList.contains('selected')) {
+            courseItem.classList.add('selected');
+            if (!selectedCourses.includes(courseName)) {
+                selectedCourses.push(courseName);
+            }
+        }
+        
+        updateTotals();
+    }
+
+    // Updated totals calculation with admission fees
+    function updateTotals() {
+        let courseFeesTotal = 0;
+        
+        selectedCourses.forEach(courseName => {
+            const course = coursesData[courseName];
+            const plan = coursePaymentPlans[courseName] || 'full';
+            const price = plan === 'full' ? course.full_price : course.monthly_price;
+            courseFeesTotal += price;
         });
 
-        // Load courses from Netlify function
-        // async function loadCourses() {
-        //     try {
-        //         const response = await fetch('/.netlify/functions/courses');
-        //         const courses = await response.json();
-                
-        //         coursesData = {};
-        //         courses.forEach(course => {
-        //             coursesData[course.name] = course;
-        //         });
-                
-        //         displayCourses(courses);
-        //     } catch (error) {
-        //         console.error('Error loading courses:', error);
-        //         showAlert('Failed to load courses. Please refresh the page.', 'error');
-        //     }
-        // }
+        const admissionFees = parseInt(document.getElementById('admissionFees').value) || 0;
+        const subtotal = courseFeesTotal + admissionFees;
+        const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
+        const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
+        const grandTotal = Math.max(0, subtotal - discountAmount);
+        const dueAmount = Math.max(0, grandTotal - paidAmount);
 
-        // Display courses
-        function displayCourses(courses) {
-            const container = document.getElementById('coursesContainer');
+        // Update display
+        if (selectedCourses.length > 0 || admissionFees > 0) {
+            document.getElementById('courseFeesDisplay').textContent = '₹' + courseFeesTotal.toLocaleString();
+            document.getElementById('admissionFeesDisplay').textContent = '₹' + admissionFees.toLocaleString();
+            document.getElementById('subtotal').textContent = '₹' + subtotal.toLocaleString();
+            document.getElementById('discount').textContent = '₹' + discountAmount.toLocaleString();
+            document.getElementById('paidDisplay').textContent = '₹' + paidAmount.toLocaleString();
+            document.getElementById('dueAmount').textContent = '₹' + dueAmount.toLocaleString();
+            document.getElementById('grandTotal').textContent = 'Total: ₹' + grandTotal.toLocaleString();
             
-            if (courses.length === 0) {
-                container.innerHTML = '<p>No courses available at the moment.</p>';
-                return;
-            }
-
-            container.innerHTML = courses.map(course => {
-                const savings = course.monthly_price - course.full_price;
-                return `
-                    <div class="course-item" onclick="selectCourse('${course.name}')">
-                        <div class="course-header">
-                            <span class="course-name">${course.name}</span>
-                            <span class="course-duration">${course.duration}</span>
-                        </div>
-                        <div class="pricing-options">
-                            <div class="price-option" onclick="selectPricing(event, '${course.name}', 'full')">
-                                <div class="price-label">Full Payment</div>
-                                <div class="price-amount">₹${course.full_price.toLocaleString()}</div>
-                                ${savings > 0 ? `<div style="font-size: 10px; color: green;">Save ₹${savings}</div>` : ''}
-                            </div>
-                            <div class="price-option" onclick="selectPricing(event, '${course.name}', 'monthly')">
-                                <div class="price-label">Monthly Payment</div>
-                                <div class="price-amount">₹${course.monthly_price.toLocaleString()}</div>
-                                <div style="font-size: 10px;">₹${Math.ceil(course.monthly_price / course.monthly_installments)}/month</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Select course
-        function selectCourse(courseName) {
-            const courseItem = event.target.closest('.course-item');
-            
-            if (courseItem.classList.contains('selected')) {
-                // Deselect
-                courseItem.classList.remove('selected');
-                selectedCourses = selectedCourses.filter(c => c !== courseName);
-                delete coursePaymentPlans[courseName];
-                
-                // Clear pricing selections
-                courseItem.querySelectorAll('.price-option').forEach(option => {
-                    option.classList.remove('selected');
-                });
-            } else {
-                // Select
-                courseItem.classList.add('selected');
-                if (!selectedCourses.includes(courseName)) {
-                    selectedCourses.push(courseName);
-                }
-            }
-            
-            updateTotals();
-        }
-
-        // Select pricing
-        function selectPricing(event, courseName, plan) {
-            event.stopPropagation();
-            
-            const courseItem = event.target.closest('.course-item');
-            const priceOptions = courseItem.querySelectorAll('.price-option');
-            
-            // Remove selection from all options
-            priceOptions.forEach(option => option.classList.remove('selected'));
-            
-            // Select current option
-            event.target.closest('.price-option').classList.add('selected');
-            
-            // Update payment plan
-            coursePaymentPlans[courseName] = plan;
-            
-            // Make sure course is selected
-            if (!courseItem.classList.contains('selected')) {
-                courseItem.classList.add('selected');
-                if (!selectedCourses.includes(courseName)) {
-                    selectedCourses.push(courseName);
-                }
-            }
-            
-            updateTotals();
-        }
-
-        // Update totals
-        function updateTotals() {
-            let subtotal = 0;
-            
-            selectedCourses.forEach(courseName => {
-                const course = coursesData[courseName];
-                const plan = coursePaymentPlans[courseName] || 'full';
-                const price = plan === 'full' ? course.full_price : course.monthly_price;
-                subtotal += price;
-            });
-
-            const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
-            const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
-            const grandTotal = Math.max(0, subtotal - discountAmount);
-            const dueAmount = Math.max(0, grandTotal - paidAmount);
-
-            // Update display
-            if (selectedCourses.length > 0) {
-                document.getElementById('subtotal').textContent = '₹' + subtotal.toLocaleString();
-                document.getElementById('discount').textContent = '₹' + discountAmount.toLocaleString();
-                document.getElementById('paidDisplay').textContent = '₹' + paidAmount.toLocaleString();
-                document.getElementById('dueAmount').textContent = '₹' + dueAmount.toLocaleString();
-                document.getElementById('grandTotal').textContent = 'Total: ₹' + grandTotal.toLocaleString();
-                
-                document.getElementById('totalsTable').style.display = 'table';
-                document.getElementById('grandTotal').style.display = 'block';
-            } else {
-                document.getElementById('totalsTable').style.display = 'none';
-                document.getElementById('grandTotal').style.display = 'none';
-            }
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            document.getElementById('discountAmount').addEventListener('input', updateTotals);
-            document.getElementById('paidAmount').addEventListener('input', updateTotals);
-        }
-
-        // Show alert
-        function showAlert(message, type) {
-            const alertBox = document.getElementById('alertBox');
-            alertBox.className = `alert ${type}`;
-            alertBox.textContent = message;
-            alertBox.style.display = 'block';
-            
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                alertBox.style.display = 'none';
-            }, 5000);
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Validate form
-        function validateForm() {
-            const requiredFields = [
-                { id: 'studentName', name: 'Full Name' },
-                { id: 'phoneNumber', name: 'Phone Number' },
-                { id: 'dobMonth', name: 'Birth Month' },
-                { id: 'dobDay', name: 'Birth Day' },
-                { id: 'dobYear', name: 'Birth Year' },
-                { id: 'address', name: 'Address' },
-                { id: 'paymentMethod', name: 'Payment Method' },
-                { id: 'paidAmount', name: 'Paid Amount' }
-            ];
-
-            for (const field of requiredFields) {
-                const element = document.getElementById(field.id);
-                if (!element.value.trim()) {
-                    showAlert(`Please fill in ${field.name}`, 'error');
-                    element.focus();
-                    return false;
-                }
-            }
-
-            if (selectedCourses.length === 0) {
-                showAlert('Please select at least one course', 'error');
-                return false;
-            }
-
-            // Check if all selected courses have payment plans
-            for (const courseName of selectedCourses) {
-                if (!coursePaymentPlans[courseName]) {
-                    showAlert(`Please select a payment plan for ${courseName}`, 'error');
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        // Submit registration
-        // async function submitRegistration() {
-        //     if (!validateForm()) return;
-
-        //     const submitBtn = document.getElementById('submitBtn');
-        //     const originalText = submitBtn.textContent;
-
-        //     try {
-        //         // Show loading
-        //         submitBtn.disabled = true;
-        //         submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
-
-        //         // Prepare student data
-        //         const dobMonth = document.getElementById('dobMonth').value.padStart(2, '0');
-        //         const dobDay = document.getElementById('dobDay').value.padStart(2, '0');
-        //         const dobYear = document.getElementById('dobYear').value;
-        //         const dateOfBirth = `${dobYear}-${dobMonth}-${dobDay}`;
-
-        //         const studentData = {
-        //             full_name: document.getElementById('studentName').value.trim(),
-        //             phone_number: document.getElementById('phoneNumber').value.trim(),
-        //             email: document.getElementById('email').value.trim() || null,
-        //             date_of_birth: dateOfBirth,
-        //             address: document.getElementById('address').value.trim()
-        //         };
-
-        //         // Prepare course selections
-        //         const selectedCoursesData = selectedCourses.map(courseName => {
-        //             const course = coursesData[courseName];
-        //             const plan = coursePaymentPlans[courseName];
-        //             const price = plan === 'full' ? course.full_price : course.monthly_price;
-                    
-        //             return {
-        //                 course_id: course.id,
-        //                 payment_plan: plan,
-        //                 course_fee: price
-        //             };
-        //         });
-
-        //         // Prepare payment details
-        //         const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
-        //         const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
-        //         const totalAmount = selectedCoursesData.reduce((sum, course) => sum + course.course_fee, 0);
-        //         const grandTotal = Math.max(0, totalAmount - discountAmount);
-        //         const dueAmount = Math.max(0, grandTotal - paidAmount);
-
-        //         const paymentDetails = {
-        //             total_amount: totalAmount,
-        //             discount_amount: discountAmount,
-        //             paid_amount: paidAmount,
-        //             due_amount: dueAmount,
-        //             payment_method: document.getElementById('paymentMethod').value
-        //         };
-
-        //         // Submit to Netlify function
-        //         const response = await fetch('/.netlify/functions/registrations', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({
-        //                 studentData,
-        //                 selectedCourses: selectedCoursesData,
-        //                 paymentDetails
-        //             })
-        //         });
-
-        //         const result = await response.json();
-
-        //         if (response.ok) {
-        //             showAlert(`Registration successful! Your receipt number is: ${result.receipt_no}`, 'success');
-                    
-        //             // Reset form
-        //             resetForm();
-                    
-        //             // Show success message with print option
-        //             setTimeout(() => {
-        //                 if (confirm('Registration completed! Would you like to print the receipt?')) {
-        //                     generateReceipt(result.receipt_no, studentData, selectedCoursesData, paymentDetails);
-        //                 }
-        //             }, 1000);
-        //         } else {
-        //             throw new Error(result.error || 'Registration failed');
-        //         }
-
-        //     } catch (error) {
-        //         console.error('Error:', error);
-        //         showAlert(error.message || 'Registration failed. Please try again.', 'error');
-        //     } finally {
-        //         // Reset button
-        //         submitBtn.disabled = false;
-        //         submitBtn.textContent = originalText;
-        //     }
-        // }
-
-
-        // Replace your existing submitRegistration function with this corrected version
-        async function submitRegistration() {
-            if (!validateForm()) return;
-        
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-        
-            try {
-                // Show loading
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
-        
-                // Prepare student data
-                const dobMonth = document.getElementById('dobMonth').value.padStart(2, '0');
-                const dobDay = document.getElementById('dobDay').value.padStart(2, '0');
-                const dobYear = document.getElementById('dobYear').value;
-                const dateOfBirth = `${dobYear}-${dobMonth}-${dobDay}`;
-        
-                const studentData = {
-                    full_name: document.getElementById('studentName').value.trim(),
-                    phone_number: document.getElementById('phoneNumber').value.trim(),
-                    email: document.getElementById('email').value.trim() || null,
-                    date_of_birth: dateOfBirth,
-                    address: document.getElementById('address').value.trim()
-                };
-        
-                // Prepare course selections
-                const selectedCoursesData = selectedCourses.map(courseName => {
-                    const course = coursesData[courseName]; // This uses the global coursesData
-                    const plan = coursePaymentPlans[courseName];
-                    const price = plan === 'full' ? course.full_price : course.monthly_price;
-                    
-                    return {
-                        course_id: course.id,
-                        course_name: courseName, // Add course name for receipt
-                        payment_plan: plan,
-                        course_fee: price,
-                        duration: course.duration // Add duration for receipt
-                    };
-                });
-        
-                // Prepare payment details
-                const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
-                const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
-                const totalAmount = selectedCoursesData.reduce((sum, course) => sum + course.course_fee, 0);
-                const grandTotal = Math.max(0, totalAmount - discountAmount);
-                const dueAmount = Math.max(0, grandTotal - paidAmount);
-        
-                const paymentDetails = {
-                    total_amount: totalAmount,
-                    discount_amount: discountAmount,
-                    paid_amount: paidAmount,
-                    due_amount: dueAmount,
-                    payment_method: document.getElementById('paymentMethod').value
-                };
-        
-                // Submit to Netlify function
-                const response = await fetch('/.netlify/functions/registrations', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        studentData,
-                        selectedCourses: selectedCoursesData,
-                        paymentDetails
-                    })
-                });
-        
-                const result = await response.json();
-        
-                if (response.ok) {
-                    showAlert(`Registration successful! Your receipt number is: ${result.receipt_no}`, 'success');
-                    
-                    // Reset form
-                    resetForm();
-                    
-                    // Show success message with print option - Fixed timing and parameters
-                    setTimeout(() => {
-                        if (confirm('Registration completed! Would you like to print the receipt?')) {
-                            // Pass the correct data structure to generateReceipt
-                            generateReceipt(result.receipt_no, studentData, selectedCoursesData, paymentDetails);
-                        }
-                    }, 1000);
-                } else {
-                    throw new Error(result.error || 'Registration failed');
-                }
-        
-            } catch (error) {
-                console.error('Error:', error);
-                showAlert(error.message || 'Registration failed. Please try again.', 'error');
-            } finally {
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        }
-        
-        // Also update the loadCourses function to make coursesData globally accessible
-        async function loadCourses() {
-            try {
-                const response = await fetch('/.netlify/functions/courses');
-                const courses = await response.json();
-                
-                // Make coursesData globally accessible
-                window.coursesData = coursesData = {};
-                courses.forEach(course => {
-                    coursesData[course.name] = course;
-                });
-                
-                displayCourses(courses);
-            } catch (error) {
-                console.error('Error loading courses:', error);
-                showAlert('Failed to load courses. Please refresh the page.', 'error');
-            }
-        }
-        // ALSO UPDATE: Make coursesData globally accessible in the submitRegistration function
-        // Change this line in your submitRegistration function:
-        // let coursesData = {};
-        // TO:
-        // window.coursesData = coursesData; // Make it globally accessible
-        
-        // Replace the existing generateReceipt function with this corrected version
-        function generateReceipt(receiptNo, studentData, selectedCoursesData, paymentDetails) {
-            const now = new Date();
-            
-            // Create courses table HTML
-            let coursesHtml = '';
-            
-            // coursesData here is actually the selectedCoursesData array passed from submitRegistration
-            coursesData.forEach(courseData => {
-                // Get course name from the global coursesData object using course_id
-                const courseName = Object.keys(window.coursesData || {}).find(name => 
-                    window.coursesData[name].id === courseData.course_id
-                ) || 'Unknown Course';
-                
-                // Get course details
-                const courseDetails = window.coursesData[courseName];
-                const duration = courseDetails ? courseDetails.duration : 'N/A';
-                const planText = courseData.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment';
-                const fee = courseData.course_fee;
-                
-                coursesHtml += `
-                    <tr>
-                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px;">${courseName}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${duration}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${planText}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: right; font-weight: bold;">₹${fee.toLocaleString()}</td>
-                    </tr>
-                `;
-            });
-        
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Registration Receipt - ${receiptNo}</title>
-                    <style>
-                        @media print {
-                            @page { margin: 0.5in; size: A4; }
-                            body { -webkit-print-color-adjust: exact; color-adjust: exact; }
-                        }
-                        
-                        * { margin: 0; padding: 0; box-sizing: border-box; }
-                        
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.4;
-                            color: #333;
-                            background: white;
-                            padding: 20px;
-                            max-width: 800px;
-                            margin: 0 auto;
-                        }
-                        
-                        .header {
-                            text-align: center;
-                            border-bottom: 2px solid #333;
-                            padding-bottom: 20px;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .company-name {
-                            font-size: 28px;
-                            font-weight: bold;
-                            color: #333;
-                            margin-bottom: 5px;
-                        }
-                        
-                        .company-subtitle {
-                            font-size: 16px;
-                            color: #666;
-                            margin-bottom: 10px;
-                        }
-                        
-                        .company-address {
-                            font-size: 14px;
-                            color: #666;
-                            line-height: 1.6;
-                        }
-                        
-                        .receipt-title {
-                            text-align: center;
-                            font-size: 20px;
-                            font-weight: bold;
-                            color: #333;
-                            margin: 20px 0 30px 0;
-                            text-transform: uppercase;
-                        }
-                        
-                        .info-section {
-                            display: flex;
-                            justify-content: space-between;
-                            margin-bottom: 30px;
-                            gap: 40px;
-                        }
-                        
-                        .info-box {
-                            flex: 1;
-                        }
-                        
-                        .info-title {
-                            font-weight: bold;
-                            font-size: 16px;
-                            color: #333;
-                            border-bottom: 1px solid #ccc;
-                            padding-bottom: 8px;
-                            margin-bottom: 15px;
-                        }
-                        
-                        .info-content {
-                            font-size: 14px;
-                            line-height: 1.8;
-                        }
-                        
-                        .info-content p {
-                            margin-bottom: 8px;
-                        }
-                        
-                        .courses-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .courses-table th {
-                            background: #f5f5f5;
-                            border: 1px solid #ddd;
-                            padding: 12px 8px;
-                            text-align: left;
-                            font-weight: bold;
-                            font-size: 14px;
-                        }
-                        
-                        .courses-table td {
-                            border: 1px solid #ddd;
-                            padding: 12px 8px;
-                            font-size: 14px;
-                        }
-                        
-                        .totals-section {
-                            float: right;
-                            width: 300px;
-                            margin-bottom: 30px;
-                        }
-                        
-                        .totals-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                        }
-                        
-                        .totals-table td {
-                            padding: 8px 12px;
-                            font-size: 14px;
-                            border-bottom: 1px solid #eee;
-                        }
-                        
-                        .totals-table td:first-child {
-                            text-align: left;
-                        }
-                        
-                        .totals-table td:last-child {
-                            text-align: right;
-                            font-weight: bold;
-                        }
-                        
-                        .grand-total {
-                            border-top: 2px solid #333;
-                            border-bottom: double 3px #333;
-                            font-weight: bold;
-                            font-size: 16px;
-                            background: #f9f9f9;
-                        }
-                        
-                        .payment-info {
-                            clear: both;
-                            text-align: center;
-                            border: 1px solid #ddd;
-                            padding: 15px;
-                            margin-bottom: 30px;
-                            background: #f9f9f9;
-                        }
-                        
-                        .payment-method {
-                            font-weight: bold;
-                            margin-bottom: 5px;
-                        }
-                        
-                        .payment-status {
-                            font-weight: bold;
-                            color: #28a745;
-                        }
-                        
-                        .footer {
-                            text-align: center;
-                            border-top: 1px solid #ddd;
-                            padding-top: 20px;
-                            margin-top: 30px;
-                            font-size: 13px;
-                            color: #666;
-                        }
-                        
-                        .thank-you {
-                            font-size: 18px;
-                            font-weight: bold;
-                            color: #333;
-                            margin-bottom: 10px;
-                        }
-                        
-                        .print-buttons {
-                            text-align: center;
-                            margin: 30px 0;
-                        }
-                        
-                        .btn {
-                            padding: 12px 24px;
-                            margin: 0 10px;
-                            border: none;
-                            border-radius: 5px;
-                            font-size: 14px;
-                            font-weight: bold;
-                            cursor: pointer;
-                        }
-                        
-                        .btn-print {
-                            background: #007bff;
-                            color: white;
-                        }
-                        
-                        .btn-close {
-                            background: #6c757d;
-                            color: white;
-                        }
-                        
-                        @media print {
-                            .print-buttons { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div class="company-name">Computer & Digital Excellence</div>
-                        <div class="company-subtitle">(CODE)</div>
-                        <div class="company-address">
-                            Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
-                            Phone: +91 96358 09537 | Email: code.bagdogra@gmail.com
-                        </div>
-                    </div>
-                    
-                    <div class="receipt-title">Course Registration & Payment Receipt</div>
-                    
-                    <div class="info-section">
-                        <div class="info-box">
-                            <div class="info-title">Receipt Details</div>
-                            <div class="info-content">
-                                <p><strong>Receipt No:</strong> ${receiptNo}</p>
-                                <p><strong>Date:</strong> ${now.toLocaleDateString('en-IN', { 
-                                    day: 'numeric', 
-                                    month: 'long', 
-                                    year: 'numeric' 
-                                })}</p>
-                                <p><strong>Time:</strong> ${now.toLocaleTimeString('en-IN', { 
-                                    hour: '2-digit', 
-                                    minute: '2-digit',
-                                    hour12: true 
-                                })}</p>
-                            </div>
-                        </div>
-                        <div class="info-box">
-                            <div class="info-title">Student Information</div>
-                            <div class="info-content">
-                                <p><strong>Name:</strong> ${studentData.full_name}</p>
-                                <p><strong>Phone:</strong> ${studentData.phone_number}</p>
-                                <p><strong>Email:</strong><br>${studentData.email || 'Not provided'}</p>
-                                <p><strong>Address:</strong> ${studentData.address}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <table class="courses-table">
-                        <thead>
-                            <tr>
-                                <th>Course Description</th>
-                                <th>Duration</th>
-                                <th>Payment Plan</th>
-                                <th>Fee (₹)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${coursesHtml}
-                        </tbody>
-                    </table>
-                    
-                    <div class="totals-section">
-                        <table class="totals-table">
-                            <tr>
-                                <td>Subtotal:</td>
-                                <td>₹ ${paymentDetails.total_amount.toLocaleString()}.00</td>
-                            </tr>
-                            <tr>
-                                <td>Discount:</td>
-                                <td>₹ ${paymentDetails.discount_amount.toLocaleString()}.00</td>
-                            </tr>
-                            <tr>
-                                <td>Amount Paid:</td>
-                                <td>₹ ${paymentDetails.paid_amount.toLocaleString()}.00</td>
-                            </tr>
-                            <tr>
-                                <td>Due Amount:</td>
-                                <td>₹ ${paymentDetails.due_amount.toLocaleString()}.00</td>
-                            </tr>
-                            <tr class="grand-total">
-                                <td>Grand Total:</td>
-                                <td>₹ ${(paymentDetails.total_amount - paymentDetails.discount_amount).toLocaleString()}.00</td>
-                            </tr>
-                        </table>
-                    </div>
-                    
-                    <div class="payment-info">
-                        <div class="payment-method">Payment Method: ${paymentDetails.payment_method}</div>
-                        <div class="payment-status">✅ Payment Status: PAID</div>
-                    </div>
-                    
-                    <div class="print-buttons">
-                        <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
-                        <button class="btn btn-close" onclick="window.close()">✕ Close</button>
-                    </div>
-                    
-                    <div class="footer">
-                        <div class="thank-you">Thank You for Choosing CODE!</div>
-                    </div>
-                </body>
-                </html>
-            `);
-            
-            printWindow.document.close();
-            printWindow.focus();
-        }
-
-        // Reset form
-        function resetForm() {
-            document.getElementById('studentName').value = '';
-            document.getElementById('phoneNumber').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('dobMonth').value = '';
-            document.getElementById('dobDay').value = '';
-            document.getElementById('dobYear').value = '';
-            document.getElementById('address').value = '';
-            document.getElementById('paymentMethod').value = '';
-            document.getElementById('discountAmount').value = '';
-            document.getElementById('paidAmount').value = '';
-            
-            selectedCourses = [];
-            coursePaymentPlans = {};
-            
-            document.querySelectorAll('.course-item').forEach(item => {
-                item.classList.remove('selected');
-                item.querySelectorAll('.price-option').forEach(option => {
-                    option.classList.remove('selected');
-                });
-            });
-            
+            document.getElementById('totalsTable').style.display = 'table';
+            document.getElementById('grandTotal').style.display = 'block';
+        } else {
             document.getElementById('totalsTable').style.display = 'none';
             document.getElementById('grandTotal').style.display = 'none';
         }
-    </script>
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        document.getElementById('admissionFees').addEventListener('input', updateTotals);
+        document.getElementById('discountAmount').addEventListener('input', updateTotals);
+        document.getElementById('paidAmount').addEventListener('input', updateTotals);
+    }
+
+    // Show alert
+    function showAlert(message, type) {
+        const alertBox = document.getElementById('alertBox');
+        alertBox.className = `alert ${type}`;
+        alertBox.textContent = message;
+        alertBox.style.display = 'block';
+        
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 5000);
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Validate form
+    function validateForm() {
+        const requiredFields = [
+            { id: 'studentName', name: 'Full Name' },
+            { id: 'phoneNumber', name: 'Phone Number' },
+            { id: 'dobMonth', name: 'Birth Month' },
+            { id: 'dobDay', name: 'Birth Day' },
+            { id: 'dobYear', name: 'Birth Year' },
+            { id: 'address', name: 'Address' },
+            { id: 'paymentMethod', name: 'Payment Method' },
+            { id: 'admissionFees', name: 'Admission Fees' },
+            { id: 'paidAmount', name: 'Paid Amount' }
+        ];
+
+        for (const field of requiredFields) {
+            const element = document.getElementById(field.id);
+            if (!element.value.trim()) {
+                showAlert(`Please fill in ${field.name}`, 'error');
+                element.focus();
+                return false;
+            }
+        }
+
+        const admissionFees = parseInt(document.getElementById('admissionFees').value) || 0;
+        
+        if (selectedCourses.length === 0 && admissionFees === 0) {
+            showAlert('Please select at least one course or enter admission fees', 'error');
+            return false;
+        }
+
+        // Check if all selected courses have payment plans
+        for (const courseName of selectedCourses) {
+            if (!coursePaymentPlans[courseName]) {
+                showAlert(`Please select a payment plan for ${courseName}`, 'error');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Submit registration with admission fees
+    async function submitRegistration() {
+        if (!validateForm()) return;
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.textContent;
+
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="spinner"></div> Processing...';
+
+            const dobMonth = document.getElementById('dobMonth').value.padStart(2, '0');
+            const dobDay = document.getElementById('dobDay').value.padStart(2, '0');
+            const dobYear = document.getElementById('dobYear').value;
+            const dateOfBirth = `${dobYear}-${dobMonth}-${dobDay}`;
+
+            const studentData = {
+                full_name: document.getElementById('studentName').value.trim(),
+                phone_number: document.getElementById('phoneNumber').value.trim(),
+                email: document.getElementById('email').value.trim() || null,
+                date_of_birth: dateOfBirth,
+                address: document.getElementById('address').value.trim()
+            };
+
+            const selectedCoursesData = selectedCourses.map(courseName => {
+                const course = coursesData[courseName];
+                const plan = coursePaymentPlans[courseName];
+                const price = plan === 'full' ? course.full_price : course.monthly_price;
+                
+                return {
+                    course_id: course.id,
+                    course_name: courseName,
+                    payment_plan: plan,
+                    course_fee: price,
+                    duration: course.duration
+                };
+            });
+
+            const admissionFees = parseInt(document.getElementById('admissionFees').value) || 0;
+            const courseFees = selectedCoursesData.reduce((sum, course) => sum + course.course_fee, 0);
+            const discountAmount = parseInt(document.getElementById('discountAmount').value) || 0;
+            const paidAmount = parseInt(document.getElementById('paidAmount').value) || 0;
+            const totalAmount = courseFees + admissionFees;
+            const grandTotal = Math.max(0, totalAmount - discountAmount);
+            const dueAmount = Math.max(0, grandTotal - paidAmount);
+
+            const paymentDetails = {
+                total_amount: totalAmount,
+                admission_fees: admissionFees,
+                discount_amount: discountAmount,
+                paid_amount: paidAmount,
+                due_amount: dueAmount,
+                payment_method: document.getElementById('paymentMethod').value
+            };
+
+            const response = await fetch('/.netlify/functions/registrations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    studentData,
+                    selectedCourses: selectedCoursesData,
+                    paymentDetails
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showAlert(`Registration successful! Your receipt number is: ${result.receipt_no}`, 'success');
+                resetForm();
+                
+                setTimeout(() => {
+                    if (confirm('Registration completed! Would you like to print the receipt?')) {
+                        generateReceipt(result.receipt_no, studentData, selectedCoursesData, paymentDetails);
+                    }
+                }, 1000);
+            } else {
+                throw new Error(result.error || 'Registration failed');
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert(error.message || 'Registration failed. Please try again.', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    }
+
+    // Generate receipt with admission fees
+    function generateReceipt(receiptNo, studentData, selectedCoursesData, paymentDetails) {
+        const now = new Date();
+        
+        let coursesHtml = '';
+        selectedCoursesData.forEach(courseData => {
+            const planText = courseData.payment_plan === 'full' ? 'Full Payment' : 'Monthly Payment';
+            coursesHtml += `
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px;">${courseData.course_name}</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${courseData.duration}</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">${planText}</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: right; font-weight: bold;">₹${courseData.course_fee.toLocaleString()}</td>
+                </tr>
+            `;
+        });
+
+        // Add admission fees row if applicable
+        if (paymentDetails.admission_fees > 0) {
+            coursesHtml += `
+                <tr style="background: #fff3cd;">
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; font-weight: bold;">Admission Fees</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">-</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: center;">One-time</td>
+                    <td style="border: 1px solid #ddd; padding: 12px 8px; font-size: 14px; text-align: right; font-weight: bold;">₹${paymentDetails.admission_fees.toLocaleString()}</td>
+                </tr>
+            `;
+        }
+
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Registration Receipt - ${receiptNo}</title>
+                <style>
+                    @media print {
+                        @page { margin: 0.5in; size: A4; }
+                        body { -webkit-print-color-adjust: exact; color-adjust: exact; }
+                        .print-buttons { display: none !important; }
+                    }
+                    
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.4;
+                        color: #333;
+                        background: white;
+                        padding: 20px;
+                        max-width: 800px;
+                        margin: 0 auto;
+                    }
+                    
+                    .header {
+                        text-align: center;
+                        border-bottom: 2px solid #333;
+                        padding-bottom: 20px;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .company-name {
+                        font-size: 28px;
+                        font-weight: bold;
+                        color: #333;
+                        margin-bottom: 5px;
+                    }
+                    
+                    .company-subtitle {
+                        font-size: 16px;
+                        color: #666;
+                        margin-bottom: 10px;
+                    }
+                    
+                    .company-address {
+                        font-size: 14px;
+                        color: #666;
+                        line-height: 1.6;
+                    }
+                    
+                    .receipt-title {
+                        text-align: center;
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: #333;
+                        margin: 20px 0 30px 0;
+                        text-transform: uppercase;
+                    }
+                    
+                    .info-section {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 30px;
+                        gap: 40px;
+                    }
+                    
+                    .info-box {
+                        flex: 1;
+                    }
+                    
+                    .info-title {
+                        font-weight: bold;
+                        font-size: 16px;
+                        color: #333;
+                        border-bottom: 1px solid #ccc;
+                        padding-bottom: 8px;
+                        margin-bottom: 15px;
+                    }
+                    
+                    .info-content {
+                        font-size: 14px;
+                        line-height: 1.8;
+                    }
+                    
+                    .info-content p {
+                        margin-bottom: 8px;
+                    }
+                    
+                    .courses-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .courses-table th {
+                        background: #f5f5f5;
+                        border: 1px solid #ddd;
+                        padding: 12px 8px;
+                        text-align: left;
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+                    
+                    .courses-table td {
+                        border: 1px solid #ddd;
+                        padding: 12px 8px;
+                        font-size: 14px;
+                    }
+                    
+                    .totals-section {
+                        float: right;
+                        width: 300px;
+                        margin-bottom: 30px;
+                    }
+                    
+                    .totals-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    
+                    .totals-table td {
+                        padding: 8px 12px;
+                        font-size: 14px;
+                        border-bottom: 1px solid #eee;
+                    }
+                    
+                    .totals-table td:first-child {
+                        text-align: left;
+                    }
+                    
+                    .totals-table td:last-child {
+                        text-align: right;
+                        font-weight: bold;
+                    }
+                    
+                    .admission-fees-row {
+                        background: #fff3cd;
+                    }
+                    
+                    .grand-total {
+                        border-top: 2px solid #333;
+                        border-bottom: double 3px #333;
+                        font-weight: bold;
+                        font-size: 16px;
+                        background: #f9f9f9;
+                    }
+                    
+                    .payment-info {
+                        clear: both;
+                        text-align: center;
+                        border: 1px solid #ddd;
+                        padding: 15px;
+                        margin-bottom: 30px;
+                        background: #f9f9f9;
+                    }
+                    
+                    .footer {
+                        text-align: center;
+                        border-top: 1px solid #ddd;
+                        padding-top: 20px;
+                        margin-top: 30px;
+                        font-size: 13px;
+                        color: #666;
+                    }
+                    
+                    .thank-you {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #333;
+                        margin-bottom: 10px;
+                    }
+                    
+                    .print-buttons {
+                        text-align: center;
+                        margin: 30px 0;
+                    }
+                    
+                    .btn {
+                        padding: 12px 24px;
+                        margin: 0 10px;
+                        border: none;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+                    
+                    .btn-print {
+                        background: #007bff;
+                        color: white;
+                    }
+                    
+                    .btn-close {
+                        background: #6c757d;
+                        color: white;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="company-name">Computer & Digital Excellence</div>
+                    <div class="company-subtitle">(CODE)</div>
+                    <div class="company-address">
+                        Lokenath Nagar, Bagdogra, Pin Code: 734014<br>
+                        Phone: +91 96358 09537 | Email: code.bagdogra@gmail.com
+                    </div>
+                </div>
+                
+                <div class="receipt-title">Course Registration & Payment Receipt</div>
+                
+                <div class="info-section">
+                    <div class="info-box">
+                        <div class="info-title">Receipt Details</div>
+                        <div class="info-content">
+                            <p><strong>Receipt No:</strong> ${receiptNo}</p>
+                            <p><strong>Date:</strong> ${now.toLocaleDateString('en-IN', { 
+                                day: 'numeric', 
+                                month: 'long', 
+                                year: 'numeric' 
+                            })}</p>
+                            <p><strong>Time:</strong> ${now.toLocaleTimeString('en-IN', { 
+                                hour: '2-digit', 
+                                minute: '2-digit',
+                                hour12: true 
+                            })}</p>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-title">Student Information</div>
+                        <div class="info-content">
+                            <p><strong>Name:</strong> ${studentData.full_name}</p>
+                            <p><strong>Phone:</strong> ${studentData.phone_number}</p>
+                            <p><strong>Email:</strong><br>${studentData.email || 'Not provided'}</p>
+                            <p><strong>Address:</strong> ${studentData.address}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="courses-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Duration</th>
+                            <th>Payment Plan</th>
+                            <th>Fee (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${coursesHtml}
+                    </tbody>
+                </table>
+                
+                <div class="totals-section">
+                    <table class="totals-table">
+                        <tr>
+                            <td>Course Fees:</td>
+                            <td>₹ ${(paymentDetails.total_amount - paymentDetails.admission_fees).toLocaleString()}.00</td>
+                        </tr>
+                        ${paymentDetails.admission_fees > 0 ? `
+                        <tr class="admission-fees-row">
+                            <td>Admission Fees:</td>
+                            <td>₹ ${paymentDetails.admission_fees.toLocaleString()}.00</td>
+                        </tr>
+                        ` : ''}
+                        <tr>
+                            <td>Subtotal:</td>
+                            <td>₹ ${paymentDetails.total_amount.toLocaleString()}.00</td>
+                        </tr>
+                        <tr>
+                            <td>Discount:</td>
+                            <td>₹ ${paymentDetails.discount_amount.toLocaleString()}.00</td>
+                        </tr>
+                        <tr>
+                            <td>Amount Paid:</td>
+                            <td>₹ ${paymentDetails.paid_amount.toLocaleString()}.00</td>
+                        </tr>
+                        <tr>
+                            <td>Due Amount:</td>
+                            <td>₹ ${paymentDetails.due_amount.toLocaleString()}.00</td>
+                        </tr>
+                        <tr class="grand-total">
+                            <td>Grand Total:</td>
+                            <td>₹ ${(paymentDetails.total_amount - paymentDetails.discount_amount).toLocaleString()}.00</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="payment-info">
+                    <div style="font-weight: bold; margin-bottom: 5px;">Payment Method: ${paymentDetails.payment_method}</div>
+                    <div style="font-weight: bold; color: #28a745;">✅ Payment Status: PAID</div>
+                </div>
+                
+                <div class="print-buttons">
+                    <button class="btn btn-print" onclick="window.print()">🖨️ Print Receipt</button>
+                    <button class="btn btn-close" onclick="window.close()">✕ Close</button>
+                </div>
+                
+                <div class="footer">
+                    <div class="thank-you">Thank You for Choosing CODE!</div>
+                    <p>For any queries, please contact us at the above details.<br>
+                    This is a computer-generated receipt.</p>
+                    <p style="margin-top: 15px; font-style: italic;">
+                        <em>"Your Digital Solutions Partner"</em>
+                    </p>
+                </div>
+            </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        printWindow.focus();
+    }
+
+    // Reset form
+    function resetForm() {
+        document.getElementById('studentName').value = '';
+        document.getElementById('phoneNumber').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('dobMonth').value = '';
+        document.getElementById('dobDay').value = '';
+        document.getElementById('dobYear').value = '';
+        document.getElementById('address').value = '';
+        document.getElementById('paymentMethod').value = '';
+        document.getElementById('admissionFees').value = '0';
+        document.getElementById('discountAmount').value = '';
+        document.getElementById('paidAmount').value = '';
+        
+        selectedCourses = [];
+        coursePaymentPlans = {};
+        
+        document.querySelectorAll('.course-item').forEach(item => {
+            item.classList.remove('selected');
+            item.querySelectorAll('.price-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+        });
+        
+        document.getElementById('totalsTable').style.display = 'none';
+        document.getElementById('grandTotal').style.display = 'none';
+    }
+</script>
 </body>
 </html>
