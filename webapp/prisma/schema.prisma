@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  username       String    @unique @db.VarChar(50)
+  passwordHash   String    @map("password_hash") @db.VarChar(255)
+  userType       String    @map("user_type") @db.VarChar(20)
+  isActive       Boolean?  @default(true) @map("is_active")
+  createdAt      DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  lastLogin      DateTime? @map("last_login") @db.Timestamp(6)
+  failedAttempts Int?      @default(0) @map("failed_attempts")
+  lockedUntil    DateTime? @map("locked_until") @db.Timestamp(6)
+
+  @@index([userType], map: "idx_users_type")
+  @@index([username], map: "idx_users_username")
+  @@map("users")
+}
+
+model Course {
+  id                        Int                  @id @default(autoincrement())
+  name                      String               @unique @db.VarChar(255)
+  fullPrice                 Int                  @map("full_price")
+  monthlyPrice              Int                  @map("monthly_price")
+  duration                  String               @db.VarChar(50)
+  monthlyInstallments       Int                  @map("monthly_installments")
+  isActive                  Boolean?             @default(true) @map("is_active")
+  createdAt                 DateTime?            @default(now()) @map("created_at") @db.Timestamp(6)
+  courseRegistrations       CourseRegistration[]
+  monthlyInstallmentRecords MonthlyInstallment[]
+
+  @@map("courses")
+}
+
+model Student {
+  id            Int            @id @default(autoincrement())
+  fullName      String         @map("full_name") @db.VarChar(255)
+  phoneNumber   String         @map("phone_number") @db.VarChar(20)
+  email         String?        @db.VarChar(255)
+  dateOfBirth   DateTime       @map("date_of_birth") @db.Date
+  address       String
+  createdAt     DateTime?      @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  registrations Registration[]
+
+  @@index([email], map: "idx_students_email")
+  @@index([phoneNumber], map: "idx_students_phone")
+  @@map("students")
+}
+
+model Registration {
+  id                  Int                  @id @default(autoincrement())
+  receiptNo           String               @unique @map("receipt_no") @db.VarChar(50)
+  studentId           Int?                 @map("student_id")
+  totalAmount         Int                  @map("total_amount")
+  discountAmount      Int?                 @default(0) @map("discount_amount")
+  paidAmount          Int                  @map("paid_amount")
+  dueAmount           Int                  @map("due_amount")
+  paymentMethod       String               @map("payment_method") @db.VarChar(50)
+  paymentStatus       String?              @default("PAID") @map("payment_status") @db.VarChar(20)
+  registrationDate    DateTime?            @default(now()) @map("registration_date") @db.Timestamp(6)
+  admissionFees       Decimal?             @default(0) @map("admission_fees") @db.Decimal(10, 2)
+  courseRegistrations CourseRegistration[]
+  monthlyInstallments MonthlyInstallment[]
+  paymentHistory      PaymentHistory[]
+  student             Student?             @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([registrationDate], map: "idx_registrations_date")
+  @@index([receiptNo], map: "idx_registrations_receipt")
+  @@map("registrations")
+}
+
+model CourseRegistration {
+  id             Int           @id @default(autoincrement())
+  registrationId Int?          @map("registration_id")
+  courseId       Int?          @map("course_id")
+  paymentPlan    String        @map("payment_plan") @db.VarChar(20)
+  courseFee      Int           @map("course_fee")
+  course         Course?       @relation(fields: [courseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  registration   Registration? @relation(fields: [registrationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("course_registrations")
+}
+
+model MonthlyInstallment {
+  id                Int                         @id @default(autoincrement())
+  registrationId    Int?                        @map("registration_id")
+  courseId          Int?                        @map("course_id")
+  monthNumber       Int                         @map("month_number")
+  monthName         String                      @map("month_name") @db.VarChar(20)
+  dueDate           DateTime                    @map("due_date") @db.Date
+  installmentAmount Decimal                     @map("installment_amount") @db.Decimal(10, 2)
+  paidAmount        Decimal?                    @default(0) @map("paid_amount") @db.Decimal(10, 2)
+  paymentStatus     String?                     @default("PENDING") @map("payment_status") @db.VarChar(20)
+  paymentDate       DateTime?                   @map("payment_date") @db.Date
+  days_overdue      Int?                        @default(0)
+  created_at        DateTime?                   @default(now()) @db.Timestamp(6)
+  updatedAt         DateTime?                   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  course            Course?                     @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  registration      Registration?               @relation(fields: [registrationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  mappings          PaymentInstallmentMapping[]
+
+  @@index([courseId], map: "idx_monthly_installments_course")
+  @@index([registrationId], map: "idx_monthly_installments_registration")
+  @@index([paymentStatus], map: "idx_monthly_installments_status")
+  @@map("monthly_installments")
+}
+
+model PaymentHistory {
+  id             Int                         @id @default(autoincrement())
+  registrationId Int?                        @map("registration_id")
+  paymentAmount  Int                         @map("payment_amount")
+  paymentDate    DateTime?                   @default(now()) @map("payment_date") @db.Timestamp(6)
+  paymentMethod  String                      @map("payment_method") @db.VarChar(50)
+  paymentType    String?                     @default("installment") @map("payment_type") @db.VarChar(20)
+  receiptNo      String                      @map("receipt_no") @db.VarChar(50)
+  notes          String?
+  created_by     String?                     @default("admin") @db.VarChar(100)
+  registration   Registration?               @relation(fields: [registrationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  mappings       PaymentInstallmentMapping[]
+
+  @@index([paymentDate], map: "idx_payment_history_date")
+  @@index([registrationId], map: "idx_payment_history_registration")
+  @@map("payment_history")
+}
+
+model PaymentInstallmentMapping {
+  id                   Int                 @id @default(autoincrement())
+  paymentHistoryId     Int?                @map("payment_history_id")
+  monthlyInstallmentId Int?                @map("monthly_installment_id")
+  amountApplied        Decimal             @map("amount_applied") @db.Decimal(10, 2)
+  created_at           DateTime?           @default(now()) @db.Timestamp(6)
+  monthlyInstallment   MonthlyInstallment? @relation(fields: [monthlyInstallmentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  paymentHistory       PaymentHistory?     @relation(fields: [paymentHistoryId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([paymentHistoryId], map: "idx_payment_mapping_payment")
+  @@map("payment_installment_mapping")
+}

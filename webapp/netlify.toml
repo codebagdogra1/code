@@ -1,0 +1,10 @@
+# Netlify config for the Next.js app. In the Netlify UI set the site's
+# "Base directory" to `webapp` (or run `netlify deploy` from this folder).
+# The official Next.js runtime is auto-installed by Netlify.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
