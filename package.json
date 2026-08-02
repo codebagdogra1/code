@@ -2,8 +2,14 @@
   "name": "course-registration-system",
   "version": "1.0.0",
   "description": "Course registration system for CODE",
+  "scripts": {
+    "dev": "netlify dev"
+  },
   "dependencies": {
     "pg": "^8.11.3",
     "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
   }
 }
