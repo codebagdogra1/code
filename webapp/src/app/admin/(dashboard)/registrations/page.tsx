@@ -85,9 +85,6 @@ export default function RegistrationsPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">
-            <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--ro-ink-2)]">
-              <Icon name="search" size={15} />
-            </span>
             <input
               className="ro-input py-1.5 pl-8 text-sm"
               placeholder="Filter this page…"

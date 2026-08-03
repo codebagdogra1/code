@@ -220,9 +220,6 @@ export default function NewRegistrationPage() {
                 <label className="ro-label">Phone number *</label>
                 <div className="flex items-center gap-2">
                   <div className="relative flex-1">
-                    <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--ro-ink-2)]">
-                      <Icon name="search" size={15} />
-                    </span>
                     <input
                       className="ro-input ro-mono pl-8"
                       required

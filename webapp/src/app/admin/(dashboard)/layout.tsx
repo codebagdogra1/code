@@ -39,7 +39,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         className="hidden w-60 shrink-0 flex-col border-r border-[var(--ro-steel-edge)] px-3 py-4 md:flex"
         style={{
           background:
-            "linear-gradient(180deg,var(--ro-steel-hi),var(--ro-steel) 22%,var(--ro-steel-2))",
+            "linear-gradient(180deg, #0e3f65, #00012b 22%, #411a21)",
         }}
       >
         <Link
