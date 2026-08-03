@@ -207,18 +207,23 @@ export default function RegistrationDetailPage({
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_1fr]">
         <div className="space-y-5">
-          {/* Student job-card */}
-          <section className="ro-panel overflow-hidden">
-            <div className="px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
-              <span className="ro-plate ro-plate--ink">Student card</span>
+          {/* Student job-card — receipt number runs down the file spine */}
+          <section className="ro-panel flex overflow-hidden">
+            <div className="ro-filespine" aria-hidden="true">
+              {reg.receipt_no}
             </div>
-            <dl className="grid grid-cols-2 gap-x-5 gap-y-4 p-5">
-              <Field label="Phone" value={reg.phone_number} mono />
-              <Field label="Email" value={reg.email || "—"} />
-              <Field label="Date of birth" value={formatDate(reg.date_of_birth)} />
-              <Field label="Registered" value={formatDate(reg.registration_date)} />
-              <Field label="Address" value={reg.address || "—"} full />
-            </dl>
+            <div className="min-w-0 flex-1">
+              <div className="px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
+                <span className="ro-plate ro-plate--ink">Student card</span>
+              </div>
+              <dl className="grid grid-cols-2 gap-x-5 gap-y-4 p-5">
+                <Field label="Phone" value={reg.phone_number} mono />
+                <Field label="Email" value={reg.email || "—"} />
+                <Field label="Date of birth" value={formatDate(reg.date_of_birth)} />
+                <Field label="Registered" value={formatDate(reg.registration_date)} />
+                <Field label="Address" value={reg.address || "—"} full />
+              </dl>
+            </div>
           </section>
 
           {/* Courses */}
@@ -249,7 +254,7 @@ export default function RegistrationDetailPage({
                 style={{ borderBottom: undefined }}
               >
                 <span className="ro-plate ro-plate--ink">Monthly installments</span>
-                <span className="ro-mono text-[0.7rem] tracking-wide text-[var(--ro-ink-2)]">
+                <span className="ro-mono hidden text-[0.7rem] tracking-wide text-[var(--ro-ink-2)] sm:inline">
                   tap a month to record its payment
                 </span>
               </div>
@@ -326,7 +331,12 @@ export default function RegistrationDetailPage({
             )}
             <span className="ro-plate ro-plate--ink">Record payment</span>
 
-            {hasInstallments ? (
+            {reg.due_amount <= 0 ? (
+              <div className="mt-4 flex items-center gap-2.5 rounded-sm border border-dashed border-[var(--ro-green)] bg-[var(--ro-green-tint)] px-3.5 py-3.5 text-sm font-medium text-[var(--ro-green)]">
+                <Icon name="check" size={18} />
+                Fully settled — nothing due.
+              </div>
+            ) : hasInstallments ? (
               <div className="mt-4 space-y-3">
                 <div className="flex items-baseline justify-between rounded-sm border border-dashed border-[var(--ro-line-2)] bg-[var(--ro-panel-2)] px-3 py-2.5">
                   <span className="text-[0.72rem] uppercase tracking-wide text-[var(--ro-ink-2)]">

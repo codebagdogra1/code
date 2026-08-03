@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-03T00:00:00Z",
+  "title": "Design System: The Records Office (CODE Admin)",
+  "extensions": {
+    "scope": "Admin-only, scoped to the `.ro` root class (webapp/src/app/globals.css). Does not govern the public site (navy/gold + Inter), which is out of scope.",
+    "colorMeta": {
+      "ink-blue": { "role": "primary", "displayName": "Ink-Blue", "canonical": "#274b77", "tonalRamp": ["#0f1d2f", "#152a45", "#1c3a5d", "#274b77", "#436a95", "#7d9bbb", "#b6cadd", "#e2e8f0"] },
+      "oxide-red": { "role": "secondary", "displayName": "Oxide-Red", "canonical": "#a2372a", "tonalRamp": ["#3a140f", "#5e211a", "#86281d", "#a2372a", "#c25a4d", "#d98d84", "#ebbcb6", "#f3e3df"] },
+      "stamp-green": { "role": "secondary", "displayName": "Stamp-Green", "canonical": "#3a6041", "tonalRamp": ["#152417", "#22381f", "#2c4b31", "#3a6041", "#57815f", "#84a889", "#b4ccb7", "#e2ecdf"] },
+      "ochre": { "role": "secondary", "displayName": "Ochre", "canonical": "#7c560f", "tonalRamp": ["#2e2005", "#452f08", "#5f420b", "#7c560f", "#a3781f", "#c9a24e", "#e2c98d", "#f0e7cf"] },
+      "file-cream-ground": { "role": "neutral", "displayName": "File-Cream Ground", "canonical": "#ece7d8", "tonalRamp": ["#57503d", "#6f6650", "#8c8268", "#a89d80", "#c4ba9f", "#d8cfb8", "#ece7d8", "#f7f4ec"] },
+      "panel-cream": { "role": "neutral", "displayName": "Panel-Cream", "canonical": "#fbfaf4", "tonalRamp": ["#615d4c", "#7b7660", "#96907660", "#b3ac8f", "#d0cab0", "#ece7d8", "#f4efe1", "#fbfaf4"] },
+      "steel-chrome": { "role": "neutral", "displayName": "Steel-Chrome", "canonical": "#39433c", "tonalRamp": ["#181d19", "#212824", "#2b342e", "#39433c", "#4c574e", "#6d7a6f", "#9aa79c", "#d4dcd2"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#201e18", "tonalRamp": ["#201e18", "#332f24", "#4a4435", "#574f3f", "#7a7059", "#a49a80", "#cdc6b1", "#ece7d8"] }
+    },
+    "typographyMeta": {
+      "figure": { "displayName": "Figure", "purpose": "Large stamped money-plate amounts. JetBrains Mono tabular, the loudest dashboard element." },
+      "plate": { "displayName": "Plate", "purpose": "Engraved label-plate headers and the CODE·RECORDS mark. Archivo uppercase, tracked." },
+      "body": { "displayName": "Body", "purpose": "Table cells, input text, panel prose. Archivo." },
+      "label": { "displayName": "Label", "purpose": "Field labels, table headers, stamp/caption micro-text. Archivo 700 uppercase, tracked." },
+      "mono": { "displayName": "Mono-inline", "purpose": "Receipt numbers, nav indices, file-spine text. JetBrains Mono tabular at label scale." }
+    },
+    "shadows": [
+      { "name": "card-rest", "value": "0 1px 2px rgba(32,30,24,0.06)", "purpose": "Default barely-there seating for panels and job-cards." },
+      { "name": "lift", "value": "0 10px 24px -12px rgba(32,30,24,0.4), 0 2px 6px -3px rgba(32,30,24,0.22)", "purpose": "Popovers, modals, and hover-raised punch squares only." },
+      { "name": "engraved-money", "value": "inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -3px 8px rgba(32,30,24,0.05)", "purpose": "Pressed-metal look on money-plates." },
+      { "name": "engraved-plate", "value": "inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.32)", "purpose": "Engraved edge on steel label plates." },
+      { "name": "spine-marker", "value": "-5px 0 0 0 var(--ro-red), 0 1px 2px rgba(32,30,24,0.06)", "purpose": "Hard oxide-red left bar on the active nav tab — the file-pulled-from-rail marker (world-native, not decorative)." },
+      { "name": "ledger-rule", "value": "0 2.5px 0 -1px var(--ro-blue)", "purpose": "The blue underline of the two-colour ledger rule, paired with a 1.5px oxide-red border-bottom." }
+    ],
+    "motion": [
+      { "name": "state-transition", "value": "cubic-bezier(0.2, 0.8, 0.3, 1)", "purpose": "Tab/section reveal and hover state easing (~0.14s)." },
+      { "name": "stamp-settle", "value": "ro-stamp-settle 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both", "purpose": "One-shot payment-stamp animation: scales and rotates into place. The world's authored moment." },
+      { "name": "reveal", "value": "ro-reveal 0.4s cubic-bezier(0.2, 0.8, 0.3, 1) both", "purpose": "Restrained fade-and-rise for tabs/sections." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Disables stamp-settle, reveal, spine pull-out translate, and punch hover lift." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px", "purpose": "Steel rail shows at md+; below md it collapses to a steel top bar with horizontal nav." },
+      { "name": "sm", "value": "640px", "purpose": "Page padding steps up (px-4 py-6 -> sm:px-8 sm:py-9)." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Uppercase stencilled action plate; ink-blue, for the primary action on a surface.",
+      "html": "<button class=\"ds-ro-btn-primary\">Record payment</button>",
+      "css": ".ds-ro-btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:0.45rem; font-family:'Archivo',system-ui,sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.5rem 0.9rem; border:1px solid #1c3a5d; border-radius:4px; background:#274b77; color:#f4f1e8; box-shadow:inset 0 1px 0 rgba(255,255,255,0.14); cursor:pointer; white-space:nowrap; transition:background-color .14s ease, transform .14s ease; } .ds-ro-btn-primary:hover { background:#1c3a5d; } .ds-ro-btn-primary:focus-visible { outline:2px solid #274b77; outline-offset:2px; } .ds-ro-btn-primary:disabled { opacity:.5; pointer-events:none; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Cream secondary button with hairline border.",
+      "html": "<button class=\"ds-ro-btn-ghost\">Cancel</button>",
+      "css": ".ds-ro-btn-ghost { display:inline-flex; align-items:center; justify-content:center; gap:0.45rem; font-family:'Archivo',system-ui,sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.5rem 0.9rem; border:1px solid #b3aa90; border-radius:4px; background:#fbfaf4; color:#201e18; cursor:pointer; white-space:nowrap; transition:background-color .14s ease; } .ds-ro-btn-ghost:hover { background:#f4efe1; } .ds-ro-btn-ghost:focus-visible { outline:2px solid #274b77; outline-offset:2px; }"
+    },
+    {
+      "name": "Danger Button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Oxide-red destructive button; delete/void-adjacent actions only.",
+      "html": "<button class=\"ds-ro-btn-danger\">Delete record</button>",
+      "css": ".ds-ro-btn-danger { display:inline-flex; align-items:center; justify-content:center; gap:0.45rem; font-family:'Archivo',system-ui,sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.5rem 0.9rem; border:1px solid #86281d; border-radius:4px; background:#a2372a; color:#f6efe6; cursor:pointer; white-space:nowrap; transition:background-color .14s ease; } .ds-ro-btn-danger:hover { background:#86281d; } .ds-ro-btn-danger:focus-visible { outline:2px solid #274b77; outline-offset:2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Recessed near-white field with hairline border and uppercase micro-label.",
+      "html": "<label class=\"ds-ro-label\">Receipt no.</label><input class=\"ds-ro-input\" placeholder=\"CODE/2026/0148\" />",
+      "css": ".ds-ro-label { display:block; margin-bottom:0.3rem; font-family:'Archivo',system-ui,sans-serif; font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#574f3f; } .ds-ro-input { width:100%; background:#fffdf6; border:1px solid #b3aa90; border-radius:3px; padding:0.52rem 0.62rem; font-family:'Archivo',system-ui,sans-serif; font-size:0.9rem; color:#201e18; box-shadow:inset 0 1px 2px rgba(32,30,24,0.07); } .ds-ro-input::placeholder { color:#9a927e; } .ds-ro-input:focus { outline:2px solid #274b77; outline-offset:0; border-color:#274b77; }"
+    },
+    {
+      "name": "File-Spine Nav Tab",
+      "kind": "nav",
+      "refersTo": "nav-spine",
+      "description": "Uppercase rail tab with mono index chip; active tab pulls out of the steel rail with a hard red spine bar.",
+      "html": "<nav style=\"background:linear-gradient(180deg,#4c574e,#39433c 22%,#2b342e); padding:12px; display:flex; flex-direction:column; gap:6px; width:220px;\"><a class=\"ds-ro-spine\"><span class=\"ds-ro-spine-no\">02</span>Registrations</a><a class=\"ds-ro-spine ds-ro-spine-active\"><span class=\"ds-ro-spine-no\">03</span>Courses</a></nav>",
+      "css": ".ds-ro-spine { display:flex; align-items:center; gap:0.6rem; padding:0.55rem 0.7rem; border-radius:4px; border:1px solid transparent; color:#d4dcd2; font-family:'Archivo',system-ui,sans-serif; font-weight:600; font-size:0.78rem; letter-spacing:0.07em; text-transform:uppercase; text-decoration:none; transition:background-color .14s ease, transform .14s ease, color .14s ease; } .ds-ro-spine-no { font-family:'JetBrains Mono',ui-monospace,monospace; font-size:0.64rem; font-weight:700; padding:0.1rem 0.32rem; border-radius:2px; background:rgba(0,0,0,0.26); color:#aeb7ac; } .ds-ro-spine:hover { background:rgba(255,255,255,0.06); color:#eef2ec; } .ds-ro-spine-active { background:#fbfaf4; color:#201e18; border-color:#212824; transform:translateX(5px); box-shadow:-5px 0 0 0 #a2372a, 0 1px 2px rgba(32,30,24,0.06); } .ds-ro-spine-active .ds-ro-spine-no { background:#a2372a; color:#f6efe6; }"
+    },
+    {
+      "name": "Status Stamp",
+      "kind": "chip",
+      "refersTo": "stamp",
+      "description": "Inked rubber-stamp: colour + boxed shape marker + label, rotated -2deg. Solid marker = settled, hollow = outstanding.",
+      "html": "<span class=\"ds-ro-stamp ds-ro-stamp-paid\">Paid</span> <span class=\"ds-ro-stamp ds-ro-stamp-due\">Due</span> <span class=\"ds-ro-stamp ds-ro-stamp-overdue\">Overdue</span>",
+      "css": ".ds-ro-stamp { display:inline-flex; align-items:center; gap:0.34rem; font-family:'Archivo',system-ui,sans-serif; font-weight:700; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.16rem 0.42rem 0.16rem 0.36rem; border:1.5px solid currentColor; border-radius:3px; transform:rotate(-2deg); white-space:nowrap; color:#574f3f; } .ds-ro-stamp::before { content:''; width:0.44rem; height:0.44rem; border:1.5px solid currentColor; border-radius:1px; } .ds-ro-stamp-paid { color:#3a6041; } .ds-ro-stamp-paid::before { background:currentColor; } .ds-ro-stamp-overdue { color:#a2372a; } .ds-ro-stamp-overdue::before { background:currentColor; } .ds-ro-stamp-due { color:#7c560f; }"
+    },
+    {
+      "name": "Money Number-Plate",
+      "kind": "card",
+      "refersTo": "money",
+      "description": "Stamped metal plate: uppercase caption + colour-code chip + large mono figure. The dashboard worktop stat.",
+      "html": "<div class=\"ds-ro-money\"><div class=\"ds-ro-money-head\"><span class=\"ds-ro-money-chip\" style=\"background:#3a6041;\"></span>Collected</div><div class=\"ds-ro-money-value\">₹1,48,200</div><div class=\"ds-ro-money-sub\">42 receipts today</div></div>",
+      "css": ".ds-ro-money { display:block; width:220px; background:linear-gradient(180deg,#fbfaf4,#efe9da); border:1px solid #b3aa90; border-radius:4px; padding:0.85rem 0.95rem 0.95rem; box-shadow:inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -3px 8px rgba(32,30,24,0.05); } .ds-ro-money-head { display:flex; align-items:center; gap:0.4rem; font-family:'Archivo',system-ui,sans-serif; font-size:0.64rem; font-weight:700; letter-spacing:0.13em; text-transform:uppercase; color:#574f3f; } .ds-ro-money-chip { width:0.5rem; height:0.5rem; border-radius:2px; flex:none; box-shadow:inset 0 0 0 1px rgba(0,0,0,0.12); } .ds-ro-money-value { margin-top:0.5rem; font-family:'JetBrains Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums; font-size:1.7rem; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#201e18; } .ds-ro-money-sub { margin-top:0.35rem; font-family:'Archivo',system-ui,sans-serif; font-size:0.72rem; color:#574f3f; }"
+    },
+    {
+      "name": "Punch-Card Month Square",
+      "kind": "custom",
+      "refersTo": "punch",
+      "description": "Installment month square; paid = stamped (green), due = open cream, overdue = red, selected = blue outline.",
+      "html": "<div style=\"display:flex; gap:8px;\"><span class=\"ds-ro-punch ds-ro-punch-paid\"><span class=\"ds-ro-punch-m\">JAN</span><span class=\"ds-ro-punch-a\">₹2000</span></span><span class=\"ds-ro-punch\"><span class=\"ds-ro-punch-m\">FEB</span><span class=\"ds-ro-punch-a\">₹2000</span></span><span class=\"ds-ro-punch ds-ro-punch-overdue\"><span class=\"ds-ro-punch-m\">DEC</span><span class=\"ds-ro-punch-a\">₹2000</span></span></div>",
+      "css": ".ds-ro-punch { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:0.1rem; min-width:3rem; padding:0.4rem 0.3rem; border:1px solid #b3aa90; border-radius:3px; background:#fffdf6; font-family:'JetBrains Mono',ui-monospace,monospace; text-align:center; } .ds-ro-punch-m { font-size:0.6rem; font-weight:700; letter-spacing:0.04em; color:#574f3f; } .ds-ro-punch-a { font-size:0.72rem; color:#201e18; } .ds-ro-punch-paid { background:#e2ecdf; border-color:#3a6041; } .ds-ro-punch-paid .ds-ro-punch-a, .ds-ro-punch-paid .ds-ro-punch-m { color:#3a6041; } .ds-ro-punch-overdue { background:#f3e3df; border-color:#a2372a; } .ds-ro-punch-overdue .ds-ro-punch-m { color:#a2372a; }"
+    },
+    {
+      "name": "Engraved Label Plate",
+      "kind": "custom",
+      "refersTo": "plate",
+      "description": "Pressed-metal section header carrying its own uppercase title. Standalone header, never an eyebrow.",
+      "html": "<span class=\"ds-ro-plate\">Today's collections</span>",
+      "css": ".ds-ro-plate { display:inline-flex; align-items:center; gap:0.5rem; font-family:'Archivo',system-ui,sans-serif; font-weight:700; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.15em; color:#d4dcd2; background:linear-gradient(180deg,#47524a,#384139); border:1px solid #212824; border-radius:3px; padding:0.34rem 0.62rem; box-shadow:inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.32); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Records Office",
+    "overview": "The institute's steel records room made digital — the physical thing this software replaces, not a SaaS dashboard. The surface reads as a daytime clerk's worktop under tubelight: an enamel-on-steel grey-green chrome rail down the side, file-cream panels and job-cards on the desk, engraved metal label plates for headers, inked rubber-stamps for status, and a punch-card grid for the months of an installment plan. It deliberately refuses the incumbent 'AI slop' template (sidebar + sparkline stat-card + rounded-2xl). The world is dense but calm, built for one operator who lives in it for hours with a student waiting; money truth is the loudest thing on screen, stamped into metal number-plates in a tabular mono face. Everything is squared and hairline-bordered like filed records; depth is engraved (inset light and shadow) rather than floated. Colour is a strict working code — four accents, each meaning one operational thing. The mode is Operate and the theme is deliberately light; there is no dark theme for admin, and contrast targets WCAG 2.1 AA.",
+    "keyCharacteristics": [
+      "Enamel-on-steel grey-green chrome rail + file-cream content ground.",
+      "A four-colour working code (oxide-red, ink-blue, stamp-green, ochre) and nothing else.",
+      "Engraved label plates, inked status stamps, numbered file-spine nav, punch-card month grid.",
+      "Squared corners (3-4px), hairlines, inset 'engraved' shadows — no soft SaaS drop shadows.",
+      "JetBrains Mono tabular figures for every rupee amount and receipt number; Archivo for everything else.",
+      "Status is never colour-only: colour + boxed shape marker + text label, always."
+    ],
+    "rules": [
+      { "name": "The Colour-Code Rule", "body": "Exactly four working accents exist and each means one thing: oxide-red = overdue/danger, ink-blue = action, stamp-green = paid, ochre = due. Never repurpose an accent for decoration or a second meaning; a new surface does not get a free brand colour.", "section": "colors" },
+      { "name": "The Never-Colour-Alone Rule", "body": "Status is conveyed by colour plus a boxed shape marker plus a text label — never colour alone. A stamp's solid square = settled, hollow square = outstanding; the word is always present.", "section": "colors" },
+      { "name": "The Mono-Money Rule", "body": "Every rupee figure and every receipt number is set in JetBrains Mono with tabular numerals, no exceptions. Money that isn't monospaced isn't trusted.", "section": "typography" },
+      { "name": "The Plate-Not-Eyebrow Rule", "body": "The engraved label plate carries its own title and stands alone as a section header. It is never used as a kicker or eyebrow stacked above a larger heading.", "section": "typography" },
+      { "name": "The Engraved-Not-Floating Rule", "body": "Surfaces are flat at rest and gain depth from inset light/shadow and hairlines. A soft outward drop shadow appears only as a response to elevation (modal, popover) — never as ambient decoration on a resting card.", "section": "elevation" },
+      { "name": "The Squared-Records Rule", "body": "Corner radii stay within 2-4px. If a shape needs to look filed and official, it is squared and hairline-bordered; soft or pill geometry belongs to the out-of-scope public site.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do set every rupee figure and receipt number in JetBrains Mono tabular (The Mono-Money Rule).",
+      "Do encode status with colour + boxed shape marker + text label together (The Never-Colour-Alone Rule).",
+      "Do keep radii in the 2-4px squared band and define surfaces with hairline borders (The Squared-Records Rule).",
+      "Do convey depth with inset light/shadow and hairlines; reserve outward drop shadows for modals/popovers (The Engraved-Not-Floating Rule).",
+      "Do use the engraved label plate as a standalone section header carrying its own title.",
+      "Do hold to the four-colour working code and give each accent exactly one meaning (The Colour-Code Rule).",
+      "Do respect prefers-reduced-motion: the stamp-settle, section reveal, spine pull-out, and punch hover all fall back to no motion."
+    ],
+    "donts": [
+      "Don't ship soft SaaS drop shadows, rounded-2xl cards, or a sparkline stat-card layout — the named anti-reference ('AI slop').",
+      "Don't use a working accent for decoration or a second meaning; there is no free brand colour on a new surface.",
+      "Don't stack a label plate as a kicker/eyebrow above a heading (The Plate-Not-Eyebrow Rule).",
+      "Don't introduce a dark theme for admin; this is a deliberately light daytime-desk world.",
+      "Don't let this system leak onto the public site, or the public navy/gold + Inter system leak into the .ro admin subtree.",
+      "Don't substitute glyph icons, an icon font, or emoji for the authored 1.6-stroke line set."
+    ]
+  }
+}

@@ -15,6 +15,8 @@ type IconName =
   | "logout"
   | "user"
   | "stamp"
+  | "cancel"
+  | "menu"
   | "x";
 
 const PATHS: Record<IconName, React.ReactNode> = {
@@ -86,6 +88,15 @@ const PATHS: Record<IconName, React.ReactNode> = {
       <path d="M4.5 19.5h15" />
     </>
   ),
+  // no-entry / cancelled — a struck circle
+  cancel: (
+    <>
+      <circle cx="12" cy="12" r="7.5" />
+      <path d="M6.7 6.7l10.6 10.6" />
+    </>
+  ),
+  // hamburger — three stacked rules
+  menu: <path d="M4 7h16M4 12h16M4 17h16" />,
   x: <path d="M6 6l12 12M18 6 6 18" />,
 };
 

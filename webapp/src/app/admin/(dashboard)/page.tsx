@@ -165,7 +165,7 @@ export default async function DashboardPage() {
               />
             </div>
 
-            <div className="mt-6 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
+            <div className="mt-6 grid items-start gap-5 lg:grid-cols-[1.6fr_1fr]">
               {/* Today's collections — the day's posted entries */}
               <section className="ro-panel overflow-hidden">
                 <div className="ro-underrule flex items-center justify-between px-5 py-3.5">
@@ -179,7 +179,16 @@ export default async function DashboardPage() {
                   </span>
                 </div>
                 {stats.todaysCollections.length === 0 ? (
-                  <EmptyLine text="No fees collected yet today." />
+                  <div className="flex flex-col items-center gap-2 px-5 py-12 text-center">
+                    <span className="grid h-10 w-10 place-items-center rounded-sm border border-dashed border-[var(--ro-line-2)] text-[var(--ro-ink-2)]">
+                      <Icon name="stamp" size={18} />
+                    </span>
+                    <p className="text-sm text-[var(--ro-ink-2)]">
+                      No fees collected yet today.
+                      <br />
+                      Payments you stamp will post here.
+                    </p>
+                  </div>
                 ) : (
                   <ul>
                     {stats.todaysCollections.map((c) => (

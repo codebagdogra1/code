@@ -50,6 +50,8 @@ export function roStampClass(status: string | null | undefined): string {
     case "OVERDUE":
     case "ERROR":
       return "ro-stamp--overdue";
+    case "CANCELLED":
+      return "ro-stamp--cancelled";
     default:
       return "";
   }
@@ -68,6 +70,8 @@ export function statusLabel(status: string | null | undefined): string {
       return "Due";
     case "OVERDUE":
       return "Overdue";
+    case "CANCELLED":
+      return "Cancelled";
     default:
       return status || "—";
   }

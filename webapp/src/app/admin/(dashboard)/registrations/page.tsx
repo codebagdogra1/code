@@ -47,6 +47,23 @@ export default function RegistrationsPage() {
     else alert("Failed to delete registration.");
   }
 
+  // Student left midway / cancelled the course. Parks unpaid months (they stop
+  // counting as overdue) while keeping recorded payments; ACTIVE reverses it.
+  async function setStatus(receiptNo: string, name: string, status: "CANCELLED" | "ACTIVE") {
+    const cancelling = status === "CANCELLED";
+    const msg = cancelling
+      ? `Mark ${receiptNo} (${name}) as cancelled? Remaining unpaid months stop counting as overdue. Payments already recorded are kept.`
+      : `Restore ${receiptNo} (${name}) to active?`;
+    if (!confirm(msg)) return;
+    const res = await fetch(`/api/admin/registrations/${receiptNo}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    if (res.ok) load(page);
+    else alert(`Failed to ${cancelling ? "cancel" : "restore"} registration.`);
+  }
+
   const q = query.trim().toLowerCase();
   const rows = q
     ? items.filter(
@@ -68,6 +85,9 @@ export default function RegistrationsPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">
+            <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--ro-ink-2)]">
+              <Icon name="search" size={15} />
+            </span>
             <input
               className="ro-input py-1.5 pl-8 text-sm"
               placeholder="Filter this page…"

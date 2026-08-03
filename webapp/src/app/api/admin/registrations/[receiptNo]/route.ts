@@ -65,6 +65,71 @@ export async function GET(
   }
 }
 
+// Admin: change a registration's enrolment status. Used when a student leaves
+// midway or cancels: we mark the registration CANCELLED and park its still-unpaid
+// installments so they stop accruing overdue months (recorded payments are kept).
+// ACTIVE restores those installments and recomputes the money status.
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ receiptNo: string }> },
+) {
+  const { receiptNo } = await params;
+
+  let body: { status?: string };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const target = (body.status || "").toUpperCase();
+  if (target !== "CANCELLED" && target !== "ACTIVE") {
+    return NextResponse.json({ error: "status must be CANCELLED or ACTIVE" }, { status: 400 });
+  }
+
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      const reg = await tx.registration.findUnique({
+        where: { receiptNo },
+        select: { id: true, paidAmount: true, dueAmount: true },
+      });
+      if (!reg) return null;
+
+      if (target === "CANCELLED") {
+        await tx.monthlyInstallment.updateMany({
+          where: { registrationId: reg.id, paymentStatus: "PENDING" },
+          data: { paymentStatus: "CANCELLED" },
+        });
+        await tx.registration.update({
+          where: { id: reg.id },
+          data: { paymentStatus: "CANCELLED" },
+        });
+      } else {
+        await tx.monthlyInstallment.updateMany({
+          where: { registrationId: reg.id, paymentStatus: "CANCELLED" },
+          data: { paymentStatus: "PENDING" },
+        });
+        const status = reg.dueAmount <= 0 ? "PAID" : reg.paidAmount > 0 ? "PARTIAL" : "PENDING";
+        await tx.registration.update({
+          where: { id: reg.id },
+          data: { paymentStatus: status },
+        });
+      }
+
+      return { status: target };
+    });
+
+    if (!result) {
+      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, status: result.status });
+  } catch (error) {
+    console.error("Error updating registration status:", error);
+    return NextResponse.json({ error: "Failed to update registration" }, { status: 500 });
+  }
+}
+
 // Admin: delete a registration and all related rows in FK-safe order, removing the
 // student too if they have no other registrations. Ported from delete-registration.js.
 export async function DELETE(

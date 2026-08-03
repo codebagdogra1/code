@@ -168,7 +168,7 @@ h4 {
   --ro-steel-hi: #4c574e;
   --ro-steel-edge: #212824;
   --ro-steel-ink: #d4dcd2;
-  --ro-steel-ink-2: #93a094;
+  --ro-steel-ink-2: #aeb7ac; /* lightened to clear WCAG AA (4.5:1) on the steel rail */
 
   /* Ink & rules */
   --ro-ink: #201e18;
@@ -341,6 +341,11 @@ h4 {
 .ro-stamp--partial {
   color: var(--ro-ochre);
 } /* hollow marker = not yet settled */
+.ro-stamp--cancelled {
+  color: var(--ro-ink-2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+} /* struck out = pulled from the register */
 
 /* Buttons */
 .ro-btn {
@@ -357,6 +362,7 @@ h4 {
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
+  white-space: nowrap;
   transition: background-color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
 }
 .ro-btn:disabled {
@@ -461,6 +467,25 @@ h4 {
 .ro-spine--active .ro-spine__no {
   background: var(--ro-red);
   color: #f6efe6;
+}
+
+/* File-spine — the receipt number down the edge of a job-card (the brief's
+   "registration = a job-card with a receipt-no spine"). */
+.ro-filespine {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 0.5rem 0;
+  font-family: var(--font-mono-code), monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ro-steel-ink);
+  background: linear-gradient(90deg, var(--ro-steel-2), var(--ro-steel));
+  border-right: 1px solid var(--ro-steel-edge);
 }
 
 /* Register-sheet table */
