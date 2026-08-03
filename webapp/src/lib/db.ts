@@ -12,6 +12,12 @@ function createClient() {
   return new PrismaClient({
     adapter,
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+    // Interactive transactions default to a 2s maxWait to acquire a connection.
+    // On a cold serverless invocation the first TLS handshake to the remote
+    // Postgres takes >2s, so transaction routes (cancel/restore/delete a
+    // registration) would fail to start and 500. Give connection acquisition
+    // and the transaction body generous headroom.
+    transactionOptions: { maxWait: 10_000, timeout: 20_000 },
   });
 }
 
