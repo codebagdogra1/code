@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { formatCurrency, formatDate, statusColor } from "@/lib/format";
+import { formatRupees, formatDate, roStampClass, statusLabel } from "@/lib/format";
 import type { Pagination, RegistrationListItem } from "@/lib/types";
+import { Icon } from "@/components/ro/Icon";
 
 export default function RegistrationsPage() {
   const [items, setItems] = useState<RegistrationListItem[]>([]);
@@ -11,12 +12,13 @@ export default function RegistrationsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
   const load = useCallback(async (p: number) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/admin/registrations?page=${p}&limit=10`);
+      const res = await fetch(`/api/admin/registrations?page=${p}&limit=12`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load");
       setItems(data.registrations);
@@ -29,92 +31,131 @@ export default function RegistrationsPage() {
   }, []);
 
   useEffect(() => {
-    // Fetch (and re-fetch) the page whenever `page` changes.
     // eslint-disable-next-line react-hooks/set-state-in-effect -- data fetch on param change
     load(page);
   }, [page, load]);
 
-  async function remove(receiptNo: string) {
-    if (!confirm(`Delete registration ${receiptNo} and all related data? This cannot be undone.`))
+  async function remove(receiptNo: string, name: string) {
+    if (
+      !confirm(
+        `Delete registration ${receiptNo} (${name}) and all its payments and installments? This cannot be undone.`,
+      )
+    )
       return;
     const res = await fetch(`/api/admin/registrations/${receiptNo}`, { method: "DELETE" });
     if (res.ok) load(page);
     else alert("Failed to delete registration.");
   }
 
+  const q = query.trim().toLowerCase();
+  const rows = q
+    ? items.filter(
+        (r) =>
+          r.full_name.toLowerCase().includes(q) ||
+          r.receipt_no.toLowerCase().includes(q) ||
+          (r.phone_number || "").includes(q),
+      )
+    : items;
+
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold">Registrations</h1>
-          <p className="mt-1 text-[var(--muted)]">
-            {pagination ? `${pagination.totalRecords} total` : "Loading…"}
-          </p>
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="ro-plate py-1.5">Registrations</span>
+          <span className="ro-mono text-xs font-semibold tracking-widest text-[var(--ro-ink-2)]">
+            {pagination ? `${pagination.totalRecords} ON FILE` : "LOADING…"}
+          </span>
         </div>
-      </div>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <input
+              className="ro-input py-1.5 pl-8 text-sm"
+              placeholder="Filter this page…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-label="Filter registrations on this page"
+            />
+          </div>
+          <Link href="/admin/registrations/new" className="ro-btn ro-btn--primary">
+            <Icon name="new" size={15} />
+            New
+          </Link>
+        </div>
+      </header>
 
-      {error && <div className="card mt-6 p-6 text-red-600">{error}</div>}
+      {error && (
+        <div className="ro-panel mt-6 flex items-start gap-3 p-6 text-[var(--ro-red)]">
+          <Icon name="alert" size={20} />
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
 
-      <div className="card mt-6 overflow-x-auto">
-        <table className="w-full min-w-[48rem] text-sm">
+      <div className="ro-panel mt-5 overflow-x-auto">
+        <table className="ro-table min-w-[52rem]">
           <thead>
-            <tr className="border-b border-[var(--border)] text-left text-[var(--muted)]">
-              <th className="p-4">Receipt</th>
-              <th className="p-4">Student</th>
-              <th className="p-4">Date</th>
-              <th className="p-4 text-right">Paid</th>
-              <th className="p-4 text-right">Due</th>
-              <th className="p-4">Status</th>
-              <th className="p-4"></th>
+            <tr>
+              <th>Receipt</th>
+              <th>Student</th>
+              <th>Registered</th>
+              <th className="text-right">Paid</th>
+              <th className="text-right">Due</th>
+              <th>Status</th>
+              <th className="text-right">Action</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-[var(--muted)]">
-                  Loading…
-                </td>
-              </tr>
-            ) : items.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-8 text-center text-[var(--muted)]">
-                  No registrations yet.
-                </td>
-              </tr>
+              <SpanRow>Reading the register…</SpanRow>
+            ) : rows.length === 0 ? (
+              <SpanRow>{q ? "No match on this page." : "No registrations on file yet."}</SpanRow>
             ) : (
-              items.map((r) => (
-                <tr key={r.id} className="border-b border-[var(--border)] last:border-0">
-                  <td className="p-4 font-mono text-xs">{r.receipt_no}</td>
-                  <td className="p-4">
-                    <div className="font-medium">{r.full_name}</div>
-                    <div className="text-xs text-[var(--muted)]">{r.phone_number}</div>
+              rows.map((r) => (
+                <tr key={r.id}>
+                  <td>
+                    <Link
+                      href={`/admin/registrations/${r.receipt_no}`}
+                      className="ro-mono text-xs font-semibold text-[var(--ro-blue)] hover:underline"
+                    >
+                      {r.receipt_no}
+                    </Link>
                   </td>
-                  <td className="p-4 text-[var(--muted)]">{formatDate(r.registration_date)}</td>
-                  <td className="p-4 text-right">{formatCurrency(r.paid_amount)}</td>
-                  <td className="p-4 text-right">{formatCurrency(r.due_amount)}</td>
-                  <td className="p-4">
-                    <span className={`badge badge-dot ${statusColor(r.payment_status)}`}>
-                      {r.payment_status}
-                    </span>
-                    {r.overdue_months > 0 && (
-                      <span className={`badge badge-dot ml-1 ${statusColor("OVERDUE")}`}>
-                        {r.overdue_months} overdue
+                  <td>
+                    <div className="font-semibold">{r.full_name}</div>
+                    <div className="ro-mono text-[0.72rem] text-[var(--ro-ink-2)]">
+                      {r.phone_number}
+                    </div>
+                  </td>
+                  <td className="text-[var(--ro-ink-2)]">{formatDate(r.registration_date)}</td>
+                  <td className="ro-mono text-right">{formatRupees(r.paid_amount)}</td>
+                  <td className="ro-mono text-right font-semibold">
+                    {r.due_amount > 0 ? formatRupees(r.due_amount) : "—"}
+                  </td>
+                  <td>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className={`ro-stamp ${roStampClass(r.payment_status)}`}>
+                        {statusLabel(r.payment_status)}
                       </span>
-                    )}
+                      {r.overdue_months > 0 && (
+                        <span className="ro-stamp ro-stamp--overdue">
+                          {r.overdue_months} overdue
+                        </span>
+                      )}
+                    </div>
                   </td>
-                  <td className="p-4">
-                    <div className="flex justify-end gap-2">
+                  <td>
+                    <div className="flex justify-end gap-1.5">
                       <Link
                         href={`/admin/registrations/${r.receipt_no}`}
-                        className="btn-ghost px-3 py-1.5"
+                        className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem]"
                       >
-                        View
+                        Open
                       </Link>
                       <button
-                        onClick={() => remove(r.receipt_no)}
-                        className="btn-danger px-3 py-1.5"
+                        onClick={() => remove(r.receipt_no, r.full_name)}
+                        className="ro-btn ro-btn--ghost px-2 py-1 text-[var(--ro-red)]"
+                        aria-label={`Delete registration ${r.receipt_no}`}
                       >
-                        Delete
+                        <Icon name="trash" size={14} />
                       </button>
                     </div>
                   </td>
@@ -126,26 +167,38 @@ export default function RegistrationsPage() {
       </div>
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-between text-sm">
+        <div className="mt-4 flex items-center justify-between">
           <button
-            className="btn-ghost"
+            className="ro-btn ro-btn--ghost"
             disabled={!pagination.hasPrev}
             onClick={() => setPage((p) => p - 1)}
           >
-            ← Previous
+            <Icon name="arrow-left" size={15} />
+            Previous
           </button>
-          <span className="text-[var(--muted)]">
-            Page {pagination.currentPage} of {pagination.totalPages}
+          <span className="ro-mono text-xs font-semibold tracking-widest text-[var(--ro-ink-2)]">
+            SHEET {pagination.currentPage} / {pagination.totalPages}
           </span>
           <button
-            className="btn-ghost"
+            className="ro-btn ro-btn--ghost"
             disabled={!pagination.hasNext}
             onClick={() => setPage((p) => p + 1)}
           >
-            Next →
+            Next
+            <Icon name="arrow-right" size={15} />
           </button>
         </div>
       )}
     </div>
+  );
+}
+
+function SpanRow({ children }: { children: React.ReactNode }) {
+  return (
+    <tr>
+      <td colSpan={7} className="py-10 text-center text-[var(--ro-ink-2)]">
+        {children}
+      </td>
+    </tr>
   );
 }

@@ -145,3 +145,453 @@ h4 {
     opacity: 0.85;
   }
 }
+
+/* ============================================================================
+   THE RECORDS OFFICE — admin-only visual world (scoped to `.ro`)
+   The institute's steel records room made digital: enamel-on-steel grey-green
+   chrome, file-cream content, engraved label plates, numbered file-spine nav,
+   inked status stamps, and a punch-card month grid. Deliberately light (daytime
+   desk under tubelight) and squared (records, not soft SaaS cards). The public
+   site keeps the navy/gold system above — this layer never touches it.
+   ========================================================================= */
+
+.ro {
+  /* Grounds & steel */
+  --ro-ground: #ece7d8;
+  --ro-ground-2: #e2dbc8;
+  --ro-panel: #fbfaf4;
+  --ro-panel-2: #f4efe1;
+  --ro-panel-line: #d6cfba;
+  --ro-zebra: #f2ede0;
+  --ro-steel: #39433c;
+  --ro-steel-2: #2b342e;
+  --ro-steel-hi: #4c574e;
+  --ro-steel-edge: #212824;
+  --ro-steel-ink: #d4dcd2;
+  --ro-steel-ink-2: #93a094;
+
+  /* Ink & rules */
+  --ro-ink: #201e18;
+  --ro-ink-2: #574f3f;
+  --ro-line: #cdc6b1;
+  --ro-line-2: #b3aa90;
+
+  /* Working accents (the colour code) */
+  --ro-red: #a2372a; /* overdue / destructive */
+  --ro-red-2: #86281d;
+  --ro-red-tint: #f3e3df;
+  --ro-blue: #274b77; /* primary action / links */
+  --ro-blue-2: #1c3a5d;
+  --ro-blue-tint: #e2e8f0;
+  --ro-green: #3a6041; /* paid / settled */
+  --ro-green-tint: #e2ecdf;
+  --ro-ochre: #7c560f; /* due / pending */
+  --ro-ochre-tint: #f0e7cf;
+
+  --ro-shadow-card: 0 1px 2px rgba(32, 30, 24, 0.06);
+  --ro-shadow-lift: 0 10px 24px -12px rgba(32, 30, 24, 0.4), 0 2px 6px -3px rgba(32, 30, 24, 0.22);
+
+  font-family: var(--font-archivo), system-ui, -apple-system, sans-serif;
+  color: var(--ro-ink);
+  background-color: var(--ro-ground);
+  font-variant-numeric: tabular-nums;
+}
+
+.ro ::selection {
+  background: var(--ro-blue);
+  color: #f4f1e8;
+}
+.ro h1,
+.ro h2,
+.ro h3,
+.ro h4 {
+  color: var(--ro-ink);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+}
+
+/* Monospace — every rupee figure, receipt number, and the month grid */
+.ro-mono {
+  font-family: var(--font-mono-code), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Engraved label plate — the world's headline device. Carries its own title;
+   used standalone as section headers (never as an eyebrow above a heading). */
+.ro-plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ro-steel-ink);
+  background: linear-gradient(180deg, #47524a, #384139);
+  border: 1px solid var(--ro-steel-edge);
+  border-radius: 3px;
+  padding: 0.34rem 0.62rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), inset 0 -1px 0 rgba(0, 0, 0, 0.32);
+}
+/* Plate rendered on cream (section titles inside panels) */
+.ro-plate--ink {
+  color: var(--ro-ink);
+  background: linear-gradient(180deg, #f7f2e4, #ece5d3);
+  border-color: var(--ro-line-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(32, 30, 24, 0.08);
+}
+
+/* Panels & cards — squared, hairline-bordered file stock, not soft SaaS cards */
+.ro-panel {
+  background: var(--ro-panel);
+  border: 1px solid var(--ro-panel-line);
+  border-radius: 4px;
+  box-shadow: var(--ro-shadow-card);
+}
+.ro-panel--lift {
+  box-shadow: var(--ro-shadow-lift);
+}
+
+/* Two-colour ledger rule (thin red over thin blue) used under table headers
+   and section titles — evokes the double-ruled fee register. */
+.ro-underrule {
+  border-bottom: 1.5px solid var(--ro-red);
+  box-shadow: 0 2.5px 0 -1px var(--ro-blue);
+}
+
+/* Stamped metal number-plate (dashboard money figures) */
+.ro-money {
+  display: block;
+  background: linear-gradient(180deg, #fbfaf4, #efe9da);
+  border: 1px solid var(--ro-line-2);
+  border-radius: 4px;
+  padding: 0.85rem 0.95rem 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -3px 8px rgba(32, 30, 24, 0.05);
+}
+.ro-money__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ro-ink-2);
+}
+.ro-money__chip {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 2px;
+  flex: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+.ro-money__value {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono-code), monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ro-ink);
+}
+.ro-money__sub {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--ro-ink-2);
+}
+
+/* Inked status stamp — colour + boxed shape marker + text label (never colour
+   alone). Slight rotation for the rubber-stamp feel. */
+.ro-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  font-weight: 700;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.16rem 0.42rem 0.16rem 0.36rem;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-2deg);
+  white-space: nowrap;
+  color: var(--ro-ink-2);
+}
+.ro-stamp::before {
+  content: "";
+  width: 0.44rem;
+  height: 0.44rem;
+  border: 1.5px solid currentColor;
+  border-radius: 1px;
+}
+.ro-stamp--paid {
+  color: var(--ro-green);
+}
+.ro-stamp--paid::before {
+  background: currentColor;
+}
+.ro-stamp--overdue {
+  color: var(--ro-red);
+}
+.ro-stamp--overdue::before {
+  background: currentColor;
+}
+.ro-stamp--due,
+.ro-stamp--partial {
+  color: var(--ro-ochre);
+} /* hollow marker = not yet settled */
+
+/* Buttons */
+.ro-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.14s ease, transform 0.14s ease, box-shadow 0.14s ease;
+}
+.ro-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.ro-btn:focus-visible {
+  outline: 2px solid var(--ro-blue);
+  outline-offset: 2px;
+}
+.ro-btn--primary {
+  background: var(--ro-blue);
+  color: #f4f1e8;
+  border-color: var(--ro-blue-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.ro-btn--primary:hover {
+  background: var(--ro-blue-2);
+}
+.ro-btn--ghost {
+  background: var(--ro-panel);
+  color: var(--ro-ink);
+  border-color: var(--ro-line-2);
+}
+.ro-btn--ghost:hover {
+  background: var(--ro-panel-2);
+}
+.ro-btn--danger {
+  background: var(--ro-red);
+  color: #f6efe6;
+  border-color: var(--ro-red-2);
+}
+.ro-btn--danger:hover {
+  background: var(--ro-red-2);
+}
+
+/* Inputs */
+.ro-input {
+  width: 100%;
+  background: #fffdf6;
+  border: 1px solid var(--ro-line-2);
+  border-radius: 3px;
+  padding: 0.52rem 0.62rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 0.9rem;
+  color: var(--ro-ink);
+  box-shadow: inset 0 1px 2px rgba(32, 30, 24, 0.07);
+}
+.ro-input::placeholder {
+  color: #9a927e;
+}
+.ro-input:focus {
+  outline: 2px solid var(--ro-blue);
+  outline-offset: 0;
+  border-color: var(--ro-blue);
+}
+.ro-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ro-ink-2);
+}
+
+/* File-spine nav tab — active tab is a cream file pulled out of the steel rail */
+.ro-spine {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  color: var(--ro-steel-ink);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: background-color 0.14s ease, transform 0.14s ease, color 0.14s ease;
+}
+.ro-spine__no {
+  font-family: var(--font-mono-code), monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  padding: 0.1rem 0.32rem;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.26);
+  color: var(--ro-steel-ink-2);
+}
+.ro-spine:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #eef2ec;
+}
+.ro-spine--active {
+  background: var(--ro-panel);
+  color: var(--ro-ink);
+  border-color: var(--ro-steel-edge);
+  transform: translateX(5px);
+  box-shadow: -5px 0 0 0 var(--ro-red), var(--ro-shadow-card);
+}
+.ro-spine--active .ro-spine__no {
+  background: var(--ro-red);
+  color: #f6efe6;
+}
+
+/* Register-sheet table */
+.ro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+.ro-table th {
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ro-ink-2);
+}
+.ro-table thead th {
+  border-bottom: 1.5px solid var(--ro-red);
+  box-shadow: 0 2.5px 0 -1px var(--ro-blue);
+}
+.ro-table td {
+  padding: 0.62rem 0.8rem;
+  border-bottom: 1px solid var(--ro-line);
+  vertical-align: middle;
+}
+.ro-table tbody tr {
+  transition: background-color 0.12s ease;
+}
+.ro-table tbody tr:hover {
+  background: var(--ro-zebra);
+}
+.ro-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Punch-card month square */
+.ro-punch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  min-width: 3rem;
+  padding: 0.4rem 0.3rem;
+  border: 1px solid var(--ro-line-2);
+  border-radius: 3px;
+  background: #fffdf6;
+  font-family: var(--font-mono-code), monospace;
+  text-align: center;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ro-punch__m {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ro-ink-2);
+}
+.ro-punch__a {
+  font-size: 0.72rem;
+  color: var(--ro-ink);
+}
+.ro-punch--paid {
+  background: var(--ro-green-tint);
+  border-color: var(--ro-green);
+  color: var(--ro-green);
+}
+.ro-punch--paid .ro-punch__a,
+.ro-punch--paid .ro-punch__m {
+  color: var(--ro-green);
+}
+.ro-punch--overdue {
+  background: var(--ro-red-tint);
+  border-color: var(--ro-red);
+}
+.ro-punch--overdue .ro-punch__m {
+  color: var(--ro-red);
+}
+.ro-punch--selectable {
+  cursor: pointer;
+}
+.ro-punch--selectable:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ro-shadow-card);
+}
+.ro-punch--selected {
+  outline: 2px solid var(--ro-blue);
+  outline-offset: 1px;
+  background: var(--ro-blue-tint);
+}
+
+/* Motion — one authored moment (the payment stamp) + a restrained tab/section reveal */
+@keyframes ro-stamp-settle {
+  0% {
+    transform: scale(1.6) rotate(-9deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(0.94) rotate(-1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-2deg);
+  }
+}
+.ro-stamp--settle {
+  animation: ro-stamp-settle 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+@keyframes ro-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.ro-reveal {
+  animation: ro-reveal 0.4s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ro-spine--active {
+    transform: none;
+  }
+  .ro-stamp--settle,
+  .ro-reveal {
+    animation: none;
+  }
+  .ro-punch--selectable:hover {
+    transform: none;
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Icon } from "@/components/ro/Icon";
 
 export function LogoutButton() {
   const router = useRouter();
@@ -15,7 +16,8 @@ export function LogoutButton() {
   }
 
   return (
-    <button onClick={logout} disabled={loading} className="btn-ghost w-full">
+    <button onClick={logout} disabled={loading} className="ro-btn ro-btn--ghost w-full">
+      <Icon name="logout" size={15} />
       {loading ? "Signing out…" : "Sign out"}
     </button>
   );

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatCurrency } from "@/lib/format";
+import { formatRupees } from "@/lib/format";
 import type { Course } from "@/lib/types";
+import { Icon } from "@/components/ro/Icon";
 
 export default function CoursesAdminPage() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -59,58 +60,54 @@ export default function CoursesAdminPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Courses</h1>
-      <p className="mt-1 text-[var(--muted)]">Manage the courses offered to students.</p>
+      <header className="flex items-center gap-3">
+        <span className="ro-plate py-1.5">Courses</span>
+        <span className="ro-mono text-xs font-semibold tracking-widest text-[var(--ro-ink-2)]">
+          {loading ? "LOADING…" : `${courses.length} IN CATALOGUE`}
+        </span>
+      </header>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_22rem]">
-        <div className="card overflow-x-auto">
-          <table className="w-full min-w-[36rem] text-sm">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_22rem]">
+        <div className="ro-panel overflow-x-auto">
+          <table className="ro-table min-w-[38rem]">
             <thead>
-              <tr className="border-b border-[var(--border)] text-left text-[var(--muted)]">
-                <th className="p-4">Name</th>
-                <th className="p-4">Duration</th>
-                <th className="p-4 text-right">Full</th>
-                <th className="p-4 text-right">Monthly</th>
-                <th className="p-4">Active</th>
+              <tr>
+                <th>Course</th>
+                <th>Duration</th>
+                <th className="text-right">Full</th>
+                <th className="text-right">Monthly</th>
+                <th>State</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-[var(--muted)]">
-                    Loading…
-                  </td>
-                </tr>
+                <SpanRow>Opening the catalogue…</SpanRow>
               ) : courses.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-8 text-center text-[var(--muted)]">
-                    No courses yet — add one on the right.
-                  </td>
-                </tr>
+                <SpanRow>No courses yet — add the first one on the right.</SpanRow>
               ) : (
                 courses.map((c) => (
-                  <tr key={c.id} className="border-b border-[var(--border)] last:border-0">
-                    <td className="p-4 font-medium">{c.name}</td>
-                    <td className="p-4 text-[var(--muted)]">{c.duration || "—"}</td>
-                    <td className="p-4 text-right">
-                      {c.fullPrice != null ? formatCurrency(c.fullPrice) : "—"}
+                  <tr key={c.id}>
+                    <td className="font-semibold">{c.name}</td>
+                    <td className="text-[var(--ro-ink-2)]">{c.duration || "—"}</td>
+                    <td className="ro-mono text-right">
+                      {c.fullPrice != null ? formatRupees(c.fullPrice) : "—"}
                     </td>
-                    <td className="p-4 text-right">
-                      {c.monthlyPrice != null
-                        ? `${formatCurrency(
-                            Math.ceil(c.monthlyPrice / c.monthlyInstallments),
-                          )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
-                        : "—"}
+                    <td className="ro-mono text-right text-[0.8rem]">
+                      {c.monthlyPrice != null ? (
+                        <>
+                          {formatRupees(Math.ceil(c.monthlyPrice / c.monthlyInstallments))}
+                          <span className="text-[var(--ro-ink-2)]"> ×{c.monthlyInstallments}</span>
+                        </>
+                      ) : (
+                        "—"
+                      )}
                     </td>
-                    <td className="p-4">
+                    <td>
                       <span
-                        className={`badge ${
-                          c.isActive
-                            ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
-                            : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                        }`}
+                        className={`ro-stamp ${c.isActive ? "ro-stamp--paid" : ""}`}
+                        style={c.isActive ? undefined : { color: "var(--ro-ink-2)" }}
                       >
-                        {c.isActive ? "Active" : "Inactive"}
+                        {c.isActive ? "Active" : "Retired"}
                       </span>
                     </td>
                   </tr>
@@ -120,21 +117,21 @@ export default function CoursesAdminPage() {
           </table>
         </div>
 
-        <form onSubmit={create} className="card h-fit space-y-3 p-6">
-          <h2 className="text-lg font-semibold">Add course</h2>
+        <form onSubmit={create} className="ro-panel h-fit space-y-3.5 p-5">
+          <span className="ro-plate ro-plate--ink">Add course</span>
           <div>
-            <label className="label">Name *</label>
+            <label className="ro-label">Name *</label>
             <input
-              className="input"
+              className="ro-input"
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
           </div>
           <div>
-            <label className="label">Duration</label>
+            <label className="ro-label">Duration</label>
             <input
-              className="input"
+              className="ro-input"
               placeholder="e.g. 6 months"
               value={form.duration}
               onChange={(e) => setForm({ ...form, duration: e.target.value })}
@@ -142,39 +139,55 @@ export default function CoursesAdminPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="label">Full price</label>
+              <label className="ro-label">Full price</label>
               <input
                 type="number"
-                className="input"
+                className="ro-input ro-mono"
                 value={form.full_price}
                 onChange={(e) => setForm({ ...form, full_price: e.target.value })}
               />
             </div>
             <div>
-              <label className="label">Monthly plan total</label>
+              <label className="ro-label">Monthly total</label>
               <input
                 type="number"
-                className="input"
+                className="ro-input ro-mono"
                 value={form.monthly_price}
                 onChange={(e) => setForm({ ...form, monthly_price: e.target.value })}
               />
             </div>
           </div>
           <div>
-            <label className="label">Monthly installments</label>
+            <label className="ro-label">Monthly installments</label>
             <input
               type="number"
-              className="input"
+              className="ro-input ro-mono"
               value={form.monthly_installments}
               onChange={(e) => setForm({ ...form, monthly_installments: e.target.value })}
             />
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <button type="submit" className="btn-primary w-full" disabled={saving}>
-            {saving ? "Saving…" : "Add course"}
+          {error && (
+            <p className="flex items-start gap-2 text-[0.78rem] text-[var(--ro-red)]">
+              <Icon name="alert" size={15} />
+              {error}
+            </p>
+          )}
+          <button type="submit" className="ro-btn ro-btn--primary w-full" disabled={saving}>
+            <Icon name="new" size={15} />
+            {saving ? "Saving…" : "Add to catalogue"}
           </button>
         </form>
       </div>
     </div>
+  );
+}
+
+function SpanRow({ children }: { children: React.ReactNode }) {
+  return (
+    <tr>
+      <td colSpan={5} className="py-10 text-center text-[var(--ro-ink-2)]">
+        {children}
+      </td>
+    </tr>
   );
 }
