@@ -23,6 +23,14 @@ type CourseGroup = {
   duration: string;
   installments: GroupInstallment[];
 };
+type PaymentRow = {
+  id: number;
+  payment_amount: number;
+  payment_method: string;
+  payment_type: string;
+  receipt_no: string;
+  payment_date: string | null;
+};
 
 const num = (v: number | string | null | undefined) => Number(v ?? 0);
 
@@ -34,13 +42,18 @@ export default function RegistrationDetailPage({
   const { receiptNo } = use(params);
   const [reg, setReg] = useState<RegistrationDetail | null>(null);
   const [groups, setGroups] = useState<CourseGroup[]>([]);
+  const [payments, setPayments] = useState<PaymentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [method, setMethod] = useState("Cash");
   const [saving, setSaving] = useState(false);
-  const [notice, setNotice] = useState<{ kind: "ok" | "warn" | "err"; text: string } | null>(null);
+  const [notice, setNotice] = useState<{
+    kind: "ok" | "warn" | "err";
+    text: string;
+    receiptNo?: string;
+  } | null>(null);
   const [stamped, setStamped] = useState(false);
 
   // Flat quick-payment (used when a registration has no monthly installments).
@@ -49,15 +62,18 @@ export default function RegistrationDetailPage({
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [dRes, mRes] = await Promise.all([
+      const [dRes, mRes, pRes] = await Promise.all([
         fetch(`/api/admin/registrations/${receiptNo}`),
         fetch(`/api/admin/payments?receipt_no=${encodeURIComponent(receiptNo)}&action=monthly_installments`),
+        fetch(`/api/admin/payments?receipt_no=${encodeURIComponent(receiptNo)}`),
       ]);
       const dData = await dRes.json();
       if (!dRes.ok) throw new Error(dData.error || "Not found");
       setReg(dData);
       const mData = await mRes.json();
       setGroups(mRes.ok && Array.isArray(mData.courses) ? mData.courses : []);
+      const pData = await pRes.json();
+      setPayments(pRes.ok && Array.isArray(pData.payments) ? pData.payments : []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load");
     } finally {
@@ -81,6 +97,11 @@ export default function RegistrationDetailPage({
     Math.max(0, Math.round(num(i.installment_amount) - num(i.paid_amount)));
 
   const isPaid = (i: GroupInstallment) => i.payment_status === "PAID" || remainingOf(i) <= 0;
+  const isCancelledInst = (i: GroupInstallment) => i.payment_status === "CANCELLED";
+
+  // Whole registration was cancelled (student left / withdrew). No payments can be
+  // recorded and installments are parked until it is restored to active.
+  const isCancelled = reg?.payment_status?.toUpperCase() === "CANCELLED";
 
   const selectedTotal = useMemo(() => {
     let t = 0;
@@ -95,7 +116,7 @@ export default function RegistrationDetailPage({
 
   function toggle(id: number) {
     const i = byId.get(id);
-    if (!i || isPaid(i)) return;
+    if (!i || isPaid(i) || isCancelledInst(i) || isCancelled) return;
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -131,9 +152,13 @@ export default function RegistrationDetailPage({
       setTimeout(() => setStamped(false), 900);
       setSelected(new Set());
       if (data.warnings?.length) {
-        setNotice({ kind: "warn", text: data.warnings.join(" ") });
+        setNotice({ kind: "warn", text: data.warnings.join(" "), receiptNo: data.payment_receipt_no });
       } else {
-        setNotice({ kind: "ok", text: data.message || "Payment recorded." });
+        setNotice({
+          kind: "ok",
+          text: data.message || "Payment recorded.",
+          receiptNo: data.payment_receipt_no,
+        });
       }
       load();
     } catch (err) {
@@ -164,6 +189,34 @@ export default function RegistrationDetailPage({
       load();
     } catch (err) {
       setNotice({ kind: "err", text: err instanceof Error ? err.message : "Payment failed" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // Cancel (student left midway) parks unpaid months so they stop counting as
+  // overdue; restore reverses it. Recorded payments are kept either way.
+  async function setStatus(status: "CANCELLED" | "ACTIVE") {
+    const cancelling = status === "CANCELLED";
+    const msg = cancelling
+      ? "Mark this registration as cancelled? Remaining unpaid months stop counting as overdue. Payments already recorded are kept."
+      : "Restore this registration to active?";
+    if (!confirm(msg)) return;
+    setSaving(true);
+    setNotice(null);
+    try {
+      const res = await fetch(`/api/admin/registrations/${receiptNo}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Failed to ${cancelling ? "cancel" : "restore"}`);
+      setSelected(new Set());
+      setNotice({ kind: "ok", text: cancelling ? "Registration cancelled." : "Registration restored." });
+      load();
+    } catch (err) {
+      setNotice({ kind: "err", text: err instanceof Error ? err.message : "Update failed" });
     } finally {
       setSaving(false);
     }
@@ -200,9 +253,29 @@ export default function RegistrationDetailPage({
             {reg.receipt_no} · registered {formatDate(reg.registration_date)}
           </p>
         </div>
-        <span className={`ro-stamp ${roStampClass(reg.payment_status)}`}>
-          {statusLabel(reg.payment_status)}
-        </span>
+        <div className="flex items-center gap-2.5">
+          <Link
+            href={`/admin/receipts/registration/${encodeURIComponent(reg.receipt_no)}`}
+            target="_blank"
+            className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem]"
+            title="Open a printable registration receipt"
+          >
+            <Icon name="printer" size={14} /> Print receipt
+          </Link>
+          <span className={`ro-stamp ${roStampClass(reg.payment_status)}`}>
+            {statusLabel(reg.payment_status)}
+          </span>
+          {!isCancelled && (
+            <button
+              onClick={() => setStatus("CANCELLED")}
+              disabled={saving}
+              className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem] text-[var(--ro-ochre)]"
+              title="Student left / cancelled the course"
+            >
+              <Icon name="cancel" size={14} /> Cancel
+            </button>
+          )}
+        </div>
       </header>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_1fr]">
@@ -272,18 +345,20 @@ export default function RegistrationDetailPage({
                       <div className="flex flex-wrap gap-2">
                         {g.installments.map((i) => {
                           const paid = isPaid(i);
+                          const cancelled = !paid && isCancelledInst(i);
                           const overdue = i.current_status === "OVERDUE";
                           const sel = selected.has(i.id);
                           const remaining = remainingOf(i);
+                          const selectable = !paid && !cancelled && !isCancelled;
                           return (
                             <button
                               key={i.id}
                               type="button"
-                              disabled={paid}
+                              disabled={!selectable}
                               onClick={() => toggle(i.id)}
                               aria-pressed={sel}
-                              title={`${i.month_name} — ${paid ? "paid" : overdue ? "overdue" : "due"} ${formatRupees(remaining)}`}
-                              className={`ro-punch ${paid ? "ro-punch--paid" : overdue ? "ro-punch--overdue" : ""} ${!paid ? "ro-punch--selectable" : ""} ${sel ? "ro-punch--selected" : ""}`}
+                              title={`${i.month_name} — ${paid ? "paid" : cancelled ? "cancelled" : overdue ? "overdue" : "due"} ${formatRupees(remaining)}`}
+                              className={`ro-punch ${paid ? "ro-punch--paid" : cancelled ? "ro-punch--cancelled" : overdue ? "ro-punch--overdue" : ""} ${selectable ? "ro-punch--selectable" : ""} ${sel ? "ro-punch--selected" : ""}`}
                             >
                               <span className="ro-punch__m">M{i.month_number}</span>
                               {paid ? (
@@ -299,6 +374,35 @@ export default function RegistrationDetailPage({
                   );
                 })}
               </div>
+            </section>
+          )}
+
+          {/* Payment history — each collected payment prints its own fee receipt */}
+          {payments.length > 0 && (
+            <section className="ro-panel overflow-hidden">
+              <div className="px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
+                <span className="ro-plate ro-plate--ink">Payments received</span>
+              </div>
+              <ul className="divide-y divide-[var(--ro-line)]">
+                {payments.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-3 px-5 py-3">
+                    <div className="min-w-0">
+                      <div className="ro-mono text-sm font-semibold">{formatRupees(p.payment_amount)}</div>
+                      <div className="ro-mono truncate text-[0.7rem] text-[var(--ro-ink-2)]">
+                        {p.receipt_no} · {formatDate(p.payment_date)} · {p.payment_method}
+                      </div>
+                    </div>
+                    <Link
+                      href={`/admin/receipts/payment/${encodeURIComponent(p.receipt_no)}`}
+                      target="_blank"
+                      className="ro-btn ro-btn--ghost shrink-0 px-2.5 py-1 text-[0.7rem]"
+                      title="Open a printable fee payment receipt"
+                    >
+                      <Icon name="printer" size={14} /> Receipt
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
         </div>
@@ -331,7 +435,22 @@ export default function RegistrationDetailPage({
             )}
             <span className="ro-plate ro-plate--ink">Record payment</span>
 
-            {reg.due_amount <= 0 ? (
+            {isCancelled ? (
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center gap-2.5 rounded-sm border border-dashed border-[var(--ro-ochre)] bg-[var(--ro-panel-2)] px-3.5 py-3.5 text-sm font-medium text-[var(--ro-ink-2)]">
+                  <Icon name="cancel" size={18} />
+                  Registration cancelled — no payments can be recorded. Unpaid months are parked.
+                </div>
+                <button
+                  onClick={() => setStatus("ACTIVE")}
+                  disabled={saving}
+                  className="ro-btn ro-btn--primary w-full"
+                >
+                  <Icon name="arrow-left" size={15} />
+                  {saving ? "Restoring…" : "Restore to active"}
+                </button>
+              </div>
+            ) : reg.due_amount <= 0 ? (
               <div className="mt-4 flex items-center gap-2.5 rounded-sm border border-dashed border-[var(--ro-green)] bg-[var(--ro-green-tint)] px-3.5 py-3.5 text-sm font-medium text-[var(--ro-green)]">
                 <Icon name="check" size={18} />
                 Fully settled — nothing due.
@@ -425,6 +544,15 @@ export default function RegistrationDetailPage({
                 <Icon name={notice.kind === "ok" ? "check" : "alert"} size={15} />
                 {notice.text}
               </p>
+            )}
+            {notice?.receiptNo && (
+              <Link
+                href={`/admin/receipts/payment/${encodeURIComponent(notice.receiptNo)}`}
+                target="_blank"
+                className="ro-btn ro-btn--ghost mt-3 w-full"
+              >
+                <Icon name="printer" size={15} /> Print this receipt
+              </Link>
             )}
           </section>
         </aside>

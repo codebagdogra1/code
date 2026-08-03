@@ -17,6 +17,7 @@ type IconName =
   | "stamp"
   | "cancel"
   | "menu"
+  | "printer"
   | "x";
 
 const PATHS: Record<IconName, React.ReactNode> = {
@@ -97,6 +98,15 @@ const PATHS: Record<IconName, React.ReactNode> = {
   ),
   // hamburger — three stacked rules
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
+  // desk printer with a feed sheet
+  printer: (
+    <>
+      <path d="M7 8.5V4.5h10v4" />
+      <path d="M5.5 8.5h13a1.5 1.5 0 0 1 1.5 1.5v5a1 1 0 0 1-1 1H17M7 16.5H5a1 1 0 0 1-1-1v-5a1.5 1.5 0 0 1 1.5-1.5Z" />
+      <path d="M7 13.5h10v6H7z" />
+      <path d="M16.5 11h.01" />
+    </>
+  ),
   x: <path d="M6 6l12 12M18 6 6 18" />,
 };
 
