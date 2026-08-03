@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { AdminNav, MobileNav } from "@/components/AdminNav";
+import { AdminNav, MobileMenu } from "@/components/AdminNav";
 import { LogoutButton } from "@/components/LogoutButton";
 import { Icon } from "@/components/ro/Icon";
 
@@ -72,20 +72,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Mobile steel top bar + horizontal nav (the rail is hidden < md) */}
-        <div
-          className="border-b border-[var(--ro-steel-edge)] md:hidden"
-          style={{ background: "linear-gradient(180deg,var(--ro-steel-hi),var(--ro-steel-2))" }}
-        >
-          <div className="flex items-center justify-between px-4 py-2.5">
-            <Link href="/admin" className="ro-plate py-1.5">
-              <Icon name="stamp" size={13} />
-              CODE · RECORDS
-            </Link>
-            <LogoutButton />
-          </div>
-          <MobileNav />
-        </div>
+        {/* Mobile steel top bar + hamburger drawer (the rail is hidden < md) */}
+        <MobileMenu username={session.username} />
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-8 sm:py-9">{children}</main>
       </div>
