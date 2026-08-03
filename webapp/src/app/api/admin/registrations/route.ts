@@ -40,9 +40,9 @@ export async function GET(req: NextRequest) {
       due_amount: r.dueAmount,
       payment_method: r.paymentMethod,
       payment_status: r.paymentStatus,
-      full_name: r.student.fullName,
-      phone_number: r.student.phoneNumber,
-      email: r.student.email,
+      full_name: r.student?.fullName ?? "",
+      phone_number: r.student?.phoneNumber ?? "",
+      email: r.student?.email ?? null,
       overdue_months: r._count.monthlyInstallments,
     }));
 

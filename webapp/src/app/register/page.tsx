@@ -183,10 +183,11 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div>
-                  <label className="label">Date of birth</label>
+                  <label className="label">Date of birth *</label>
                   <input
                     type="date"
                     className="input"
+                    required
                     value={student.date_of_birth}
                     onChange={(e) => setStudent({ ...student, date_of_birth: e.target.value })}
                   />

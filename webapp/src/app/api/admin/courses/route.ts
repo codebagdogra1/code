@@ -36,9 +36,9 @@ export async function POST(req: Request) {
     const course = await prisma.course.create({
       data: {
         name: body.name,
-        duration: body.duration ?? null,
-        fullPrice: body.full_price ?? null,
-        monthlyPrice: body.monthly_price ?? null,
+        duration: body.duration ?? "",
+        fullPrice: body.full_price ?? 0,
+        monthlyPrice: body.monthly_price ?? 0,
         monthlyInstallments: body.monthly_installments ?? 12,
       },
     });

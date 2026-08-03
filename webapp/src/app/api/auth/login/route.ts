@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (!isValid) {
-    const failedAttempts = user.failedAttempts + 1;
+    const failedAttempts = (user.failedAttempts ?? 0) + 1;
     const lockedUntil =
       failedAttempts >= MAX_ATTEMPTS ? new Date(Date.now() + LOCK_MINUTES * 60 * 1000) : null;
 

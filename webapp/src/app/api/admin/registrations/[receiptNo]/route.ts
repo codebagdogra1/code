@@ -19,7 +19,7 @@ export async function GET(
       },
     });
 
-    if (!reg) {
+    if (!reg || !reg.student) {
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
     }
 
@@ -40,10 +40,10 @@ export async function GET(
       address: reg.student.address,
       date_of_birth: reg.student.dateOfBirth,
       courses: reg.courseRegistrations.map((cr) => ({
-        course_name: cr.course.name,
+        course_name: cr.course?.name ?? "",
         payment_plan: cr.paymentPlan,
         course_fee: cr.courseFee,
-        duration: cr.course.duration,
+        duration: cr.course?.duration ?? "",
       })),
       monthly_installments: reg.monthlyInstallments.map((mi) => ({
         id: mi.id,
@@ -54,7 +54,7 @@ export async function GET(
         paid_amount: mi.paidAmount,
         payment_status: mi.paymentStatus,
         payment_date: mi.paymentDate,
-        course_name: mi.course.name,
+        course_name: mi.course?.name ?? "",
       })),
     };
 
@@ -88,11 +88,13 @@ export async function DELETE(
       await tx.courseRegistration.deleteMany({ where: { registrationId: reg.id } });
       await tx.registration.delete({ where: { id: reg.id } });
 
-      const remaining = await tx.registration.count({ where: { studentId: reg.studentId } });
       let deletedStudent = false;
-      if (remaining === 0) {
-        await tx.student.delete({ where: { id: reg.studentId } });
-        deletedStudent = true;
+      if (reg.studentId != null) {
+        const remaining = await tx.registration.count({ where: { studentId: reg.studentId } });
+        if (remaining === 0) {
+          await tx.student.delete({ where: { id: reg.studentId } });
+          deletedStudent = true;
+        }
       }
 
       return { receiptNo: reg.receiptNo, deletedStudent };

@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           orderBy: { monthNumber: "asc" },
         });
         if (unpaidPrevious.length > 0) {
-          const courseName = selected[0]?.course.name || "Unknown Course";
+          const courseName = selected[0]?.course?.name || "Unknown Course";
           warnings.push(
             `WARNING: ${courseName} has unpaid previous months: ${unpaidPrevious
               .map((m) => m.monthName)
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
           data: {
             registrationId: registration.id,
             paymentAmount: payment_amount,
-            paymentMethod: payment_method ?? null,
+            paymentMethod: payment_method ?? "Cash",
             paymentType: "installment",
             receiptNo: paymentReceiptNo,
             notes,
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
           for (const monthId of mp.month_ids) {
             const inst = await tx.monthlyInstallment.findUnique({ where: { id: monthId } });
             if (!inst) continue;
-            const newPaid = inst.paidAmount.add(D(amountPerMonth));
+            const newPaid = (inst.paidAmount ?? D(0)).add(D(amountPerMonth));
             const isPaid = newPaid.gte(inst.installmentAmount);
             await tx.monthlyInstallment.update({
               where: { id: monthId },
@@ -135,7 +135,7 @@ export async function POST(req: Request) {
           data: {
             registrationId: registration.id,
             paymentAmount: payment_amount,
-            paymentMethod: payment_method ?? null,
+            paymentMethod: payment_method ?? "Cash",
             paymentType: "installment",
             receiptNo: paymentReceiptNo,
             notes,
@@ -229,11 +229,13 @@ export async function GET(req: NextRequest) {
         const daysOverdue = overdue
           ? Math.floor((today.getTime() - mi.dueDate.getTime()) / 86_400_000)
           : 0;
+        const courseName = mi.course?.name ?? "Unknown Course";
+        const courseDuration = mi.course?.duration ?? "";
         const entry = {
           id: mi.id,
           course_id: mi.courseId,
-          course_name: mi.course.name,
-          duration: mi.course.duration,
+          course_name: courseName,
+          duration: courseDuration,
           month_number: mi.monthNumber,
           month_name: mi.monthName,
           due_date: mi.dueDate,
@@ -244,10 +246,10 @@ export async function GET(req: NextRequest) {
           current_status: overdue ? "OVERDUE" : mi.paymentStatus,
           days_overdue: daysOverdue,
         };
-        const group = (grouped[mi.course.name] ??= {
+        const group = (grouped[courseName] ??= {
           course_id: mi.courseId,
-          course_name: mi.course.name,
-          duration: mi.course.duration,
+          course_name: courseName,
+          duration: courseDuration,
           installments: [],
         }) as { installments: unknown[] };
         group.installments.push(entry);
@@ -275,9 +277,9 @@ export async function GET(req: NextRequest) {
       receipt_no: p.receiptNo,
       notes: p.notes,
       payment_date: p.paymentDate,
-      registration_receipt_no: p.registration.receiptNo,
-      full_name: p.registration.student.fullName,
-      phone_number: p.registration.student.phoneNumber,
+      registration_receipt_no: p.registration?.receiptNo ?? "",
+      full_name: p.registration?.student?.fullName ?? "",
+      phone_number: p.registration?.student?.phoneNumber ?? "",
     }));
 
     return NextResponse.json(serialize({ payments: mapped }));
@@ -294,15 +296,17 @@ async function applyPaymentToRegistration(
   registrationId: number,
   amount: number,
 ) {
+  // Registration money columns (paid/total/discount/due) are integer rupees, so we do
+  // plain number math here rather than Decimal arithmetic.
   const reg = await tx.registration.findUniqueOrThrow({ where: { id: registrationId } });
-  const newPaid = reg.paidAmount.add(D(amount));
-  const newDue = Prisma.Decimal.max(0, reg.totalAmount.sub(reg.discountAmount).sub(newPaid));
+  const newPaid = reg.paidAmount + amount;
+  const newDue = Math.max(0, reg.totalAmount - (reg.discountAmount ?? 0) - newPaid);
   return tx.registration.update({
     where: { id: registrationId },
     data: {
       paidAmount: newPaid,
       dueAmount: newDue,
-      paymentStatus: newDue.lte(0) ? "COMPLETED" : "PARTIAL",
+      paymentStatus: newDue <= 0 ? "COMPLETED" : "PARTIAL",
     },
   });
 }

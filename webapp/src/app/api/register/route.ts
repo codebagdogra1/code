@@ -46,6 +46,7 @@ export async function POST(req: Request) {
   if (
     !studentData?.full_name ||
     !studentData?.phone_number ||
+    !studentData?.date_of_birth ||
     !Array.isArray(selectedCourses) ||
     selectedCourses.length === 0 ||
     !paymentDetails
@@ -53,27 +54,29 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing required registration data" }, { status: 400 });
   }
 
-  const dob = studentData.date_of_birth ? new Date(studentData.date_of_birth) : null;
+  // date_of_birth and address are NOT NULL in the database, so date of birth is required
+  // and address falls back to an empty string when omitted.
+  const dob = new Date(studentData.date_of_birth);
 
   try {
     const result = await prisma.$transaction(async (tx) => {
-      // Upsert student by unique phone number.
-      const student = await tx.student.upsert({
+      // Upsert student by phone number. phoneNumber isn't a unique key, so we look it up
+      // and update-or-create manually rather than using upsert.
+      const studentValues = {
+        fullName: studentData.full_name,
+        email: studentData.email ?? null,
+        dateOfBirth: dob,
+        address: studentData.address ?? "",
+      };
+      const existing = await tx.student.findFirst({
         where: { phoneNumber: studentData.phone_number },
-        update: {
-          fullName: studentData.full_name,
-          email: studentData.email ?? null,
-          dateOfBirth: dob,
-          address: studentData.address ?? null,
-        },
-        create: {
-          fullName: studentData.full_name,
-          phoneNumber: studentData.phone_number,
-          email: studentData.email ?? null,
-          dateOfBirth: dob,
-          address: studentData.address ?? null,
-        },
+        select: { id: true },
       });
+      const student = existing
+        ? await tx.student.update({ where: { id: existing.id }, data: studentValues })
+        : await tx.student.create({
+            data: { ...studentValues, phoneNumber: studentData.phone_number },
+          });
 
       const receiptNo = generateReceiptNo();
       const registration = await tx.registration.create({
@@ -85,7 +88,7 @@ export async function POST(req: Request) {
           discountAmount: paymentDetails.discount_amount ?? 0,
           paidAmount: paymentDetails.paid_amount ?? 0,
           dueAmount: paymentDetails.due_amount ?? 0,
-          paymentMethod: paymentDetails.payment_method ?? null,
+          paymentMethod: paymentDetails.payment_method ?? "Cash",
         },
       });
 
@@ -131,7 +134,7 @@ export async function POST(req: Request) {
           data: {
             registrationId: registration.id,
             paymentAmount: paymentDetails.paid_amount ?? 0,
-            paymentMethod: paymentDetails.payment_method ?? null,
+            paymentMethod: paymentDetails.payment_method ?? "Cash",
             paymentType: "initial",
             receiptNo,
             notes: "Initial payment during registration",
