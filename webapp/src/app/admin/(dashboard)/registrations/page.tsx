@@ -170,6 +170,23 @@ export default function RegistrationsPage() {
                       >
                         Open
                       </Link>
+                      {r.payment_status?.toUpperCase() === "CANCELLED" ? (
+                        <button
+                          onClick={() => setStatus(r.receipt_no, r.full_name, "ACTIVE")}
+                          className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem]"
+                        >
+                          Restore
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setStatus(r.receipt_no, r.full_name, "CANCELLED")}
+                          className="ro-btn ro-btn--ghost px-2 py-1 text-[var(--ro-ochre)]"
+                          aria-label={`Cancel registration ${r.receipt_no}`}
+                          title="Student left / cancelled the course"
+                        >
+                          <Icon name="cancel" size={14} />
+                        </button>
+                      )}
                       <button
                         onClick={() => remove(r.receipt_no, r.full_name)}
                         className="ro-btn ro-btn--ghost px-2 py-1 text-[var(--ro-red)]"
