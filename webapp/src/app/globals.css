@@ -1,67 +1,147 @@
 @import "tailwindcss";
 
-/* CODE — course registration + admin. Brand accent is indigo. Theme-aware via
-   prefers-color-scheme with sensible surface tokens. */
+/* CODE design system — derived from the public site's navy/gold identity but tuned
+   for calm, dense, accessible operations work (see docs/14-Design-System.md).
+   Principles: calm over decorative, density with breathing room, status is never
+   colour-only (icon + label + colour), keyboard-first, one token set for both
+   themes and both public + internal surfaces. */
+
 :root {
-  --background: #f6f7fb;
+  /* Brand */
+  --navy-900: #0b1426; /* primary dark surface / public bg */
+  --navy-700: #0f1c33;
+  --navy-500: #1b2c50;
+  --gold-500: #f9b233; /* primary accent / CTAs — never used for status */
+  --gold-400: #ffd166;
+  --gold-600: #e0971d;
+  --teal-500: #2bb3b8; /* secondary accent, links, info (retuned for AA on white) */
+
+  /* Semantic surfaces (light theme = the tools' default) */
+  --background: #f7f8fb;
   --surface: #ffffff;
-  --foreground: #12141c;
-  --muted: #5b6172;
-  --border: #e6e8f0;
-  --brand: #4f46e5;
-  --brand-fg: #ffffff;
+  --surface-2: #eef1f6; /* zebra rows, subtle fills */
+  --foreground: #131722; /* headings */
+  --body: #384152; /* body text */
+  --muted: #6b7488;
+  --border: #dfe4ec;
+
+  /* Brand tokens mapped to roles */
+  --brand: var(--navy-700); /* structural brand (nav, logo chip) */
+  --accent: var(--gold-500); /* primary action */
+  --accent-fg: #1a1206; /* text on gold — dark for AA contrast */
+  --accent-hover: var(--gold-600);
+  --link: #1d8a8f;
+
+  /* Status (icon + label always accompany these; money: paid=success,
+     outstanding=warning, overdue=danger) */
+  --success: #1f9d55;
+  --warning: #b26a00;
+  --danger: #d1394c;
+  --info: #2c7be5;
+
+  /* Radius scale — 8 controls, 12 cards, 999 pills */
+  --radius-control: 8px;
+  --radius-card: 12px;
+
+  /* Elevation — two levels only */
+  --shadow-float: 0 8px 24px -8px rgb(11 20 38 / 0.18), 0 2px 6px -2px rgb(11 20 38 / 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
+  --color-body: var(--body);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-brand: var(--brand);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono-code);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b0c12;
-    --surface: #14161f;
-    --foreground: #e9eaf0;
-    --muted: #9aa0b4;
-    --border: #262a38;
-    --brand: #6366f1;
+    --background: #0b1426; /* navy becomes the surface */
+    --surface: #101c33;
+    --surface-2: #16233d;
+    --foreground: #eef1f7;
+    --body: #c8cfdd;
+    --muted: #94a0ba;
+    --border: #22304d;
+
+    --brand: #16233d;
+    --link: #49d2d6;
+
+    --shadow-float: 0 8px 28px -8px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.5);
   }
 }
 
 body {
   background: var(--background);
+  color: var(--body);
+  font-family: var(--font-sans), "Inter", system-ui, -apple-system, Arial, sans-serif;
+  /* Tabular numerals so money and counts align in columns — critical for a fee tool. */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
 @layer components {
+  /* Resting card — subtle border, no shadow (calm, dense). */
   .card {
-    @apply rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-sm;
+    @apply rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)];
   }
-  /* Tailwind v4 note: @apply can only reference real utilities, not other custom
-     component classes — so each button variant repeats the base utilities. */
+  /* Floating surface — modals / popovers only. */
+  .card-float {
+    @apply rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-float)];
+  }
+
+  /* Buttons — Tailwind v4 @apply can't reference other component classes, so each
+     variant repeats the shared base utilities. Primary is gold (the brand CTA). */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-[var(--brand)] text-white hover:opacity-90;
+    @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] px-4 py-2 text-sm font-semibold transition-colors disabled:pointer-events-none disabled:opacity-50 bg-[var(--accent)] text-[var(--accent-fg)] hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)];
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-[var(--brand)] text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)];
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 border border-[var(--border)] bg-transparent hover:bg-black/[.03] dark:hover:bg-white/[.05];
+    @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] px-4 py-2 text-sm font-medium text-[var(--body)] transition-colors disabled:pointer-events-none disabled:opacity-50 border border-[var(--border)] bg-transparent hover:bg-[var(--surface-2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)];
   }
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-red-600 text-white hover:bg-red-700;
+    @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-[var(--danger)] text-white hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--danger)];
   }
+
   .input {
-    @apply w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--brand)]/40;
+    @apply w-full rounded-[var(--radius-control)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-shadow placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30;
   }
   .label {
-    @apply mb-1 block text-sm font-medium text-[var(--foreground)];
+    @apply mb-1 block text-sm font-medium text-[var(--body)];
   }
+
+  /* Status badge — always pair colour with a dot and a text label so status is
+     never conveyed by colour alone (WCAG). */
   .badge {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .badge-dot::before {
+    content: "";
+    display: inline-block;
+    height: 0.375rem;
+    width: 0.375rem;
+    border-radius: 9999px;
+    background: currentColor;
+    opacity: 0.85;
   }
 }

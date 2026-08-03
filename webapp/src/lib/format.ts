@@ -14,16 +14,22 @@ export function formatDate(value: string | Date | null | undefined): string {
   return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+// Returns the classes for a status badge. Always combine with `badge badge-dot`
+// so status carries a coloured dot + text label, never colour alone (WCAG).
+// Money semantics: paid = success, outstanding/partial = warning, overdue = danger.
 export function statusColor(status: string | null | undefined): string {
   switch ((status || "").toUpperCase()) {
     case "COMPLETED":
     case "PAID":
-      return "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300";
+      return "bg-green-100 text-green-800 dark:bg-green-500/15 dark:text-green-300";
     case "PARTIAL":
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300";
+    case "PENDING":
+    case "DUE":
+      return "bg-amber-100 text-amber-900 dark:bg-amber-500/15 dark:text-amber-300";
     case "OVERDUE":
-      return "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300";
+    case "ERROR":
+      return "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300";
     default:
-      return "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
+      return "bg-slate-100 text-slate-700 dark:bg-slate-500/15 dark:text-slate-300";
   }
 }

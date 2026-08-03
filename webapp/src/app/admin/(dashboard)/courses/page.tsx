@@ -97,7 +97,9 @@ export default function CoursesAdminPage() {
                     </td>
                     <td className="p-4 text-right">
                       {c.monthlyPrice != null
-                        ? `${formatCurrency(c.monthlyPrice)} × ${c.monthlyInstallments}`
+                        ? `${formatCurrency(
+                            Math.ceil(c.monthlyPrice / c.monthlyInstallments),
+                          )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
                         : "—"}
                     </td>
                     <td className="p-4">
@@ -149,7 +151,7 @@ export default function CoursesAdminPage() {
               />
             </div>
             <div>
-              <label className="label">Monthly price</label>
+              <label className="label">Monthly plan total</label>
               <input
                 type="number"
                 className="input"

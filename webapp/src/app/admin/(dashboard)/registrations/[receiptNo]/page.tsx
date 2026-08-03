@@ -89,7 +89,9 @@ export default function RegistrationDetailPage({
           <h1 className="mt-1 text-2xl font-bold">{reg.full_name}</h1>
           <p className="font-mono text-sm text-[var(--muted)]">{reg.receipt_no}</p>
         </div>
-        <span className={`badge ${statusColor(reg.payment_status)}`}>{reg.payment_status}</span>
+        <span className={`badge badge-dot ${statusColor(reg.payment_status)}`}>
+          {reg.payment_status}
+        </span>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
@@ -150,7 +152,7 @@ export default function RegistrationDetailPage({
                           {formatCurrency(mi.installment_amount)}
                         </td>
                         <td className="py-2">
-                          <span className={`badge ${statusColor(mi.payment_status)}`}>
+                          <span className={`badge badge-dot ${statusColor(mi.payment_status)}`}>
                             {mi.payment_status}
                           </span>
                         </td>

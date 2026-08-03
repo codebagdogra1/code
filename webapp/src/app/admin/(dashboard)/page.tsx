@@ -54,11 +54,15 @@ export default async function DashboardPage() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <StatCard label="Registrations" value={stats.totalRegistrations.toString()} />
               <StatCard label="Students" value={stats.totalStudents.toString()} />
-              <StatCard label="Revenue collected" value={formatCurrency(stats.totalRevenue)} />
+              <StatCard
+                label="Revenue collected"
+                value={formatCurrency(stats.totalRevenue)}
+                accent="text-[var(--success)]"
+              />
               <StatCard
                 label="Pending payments"
                 value={formatCurrency(stats.pendingPayments)}
-                accent="text-amber-600"
+                accent="text-[var(--warning)]"
               />
             </div>
 
@@ -78,7 +82,7 @@ export default async function DashboardPage() {
                     {stats.popularCourses.map((c) => (
                       <li key={c.name} className="flex items-center justify-between text-sm">
                         <span>{c.name}</span>
-                        <span className="badge bg-[var(--brand)]/10 text-[var(--brand)]">
+                        <span className="badge bg-[var(--surface-2)] font-medium text-[var(--body)]">
                           {c.count} enrolled
                         </span>
                       </li>
@@ -111,8 +115,10 @@ function StatCard({
 }) {
   return (
     <div className="card p-5">
-      <p className="text-sm text-[var(--muted)]">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${accent ?? ""}`}>{value}</p>
+      <p className="text-xs font-medium uppercase tracking-wide text-[var(--muted)]">{label}</p>
+      <p className={`mt-2 text-2xl font-bold tracking-tight ${accent ?? "text-[var(--foreground)]"}`}>
+        {value}
+      </p>
     </div>
   );
 }

@@ -3,7 +3,9 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { prisma } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
 
-export const dynamic = "force-dynamic";
+// Prerender and revalidate every 5 minutes (ISR) — the brochure is public and
+// changes only when courses do, so there's no need to query the DB per request.
+export const revalidate = 300;
 
 export const metadata = {
   title: "CODE — Brochure",
@@ -65,7 +67,9 @@ export default async function BrochurePage() {
                   </td>
                   <td className="py-3">
                     {c.monthlyPrice != null
-                      ? `${formatCurrency(c.monthlyPrice)} × ${c.monthlyInstallments}`
+                      ? `${formatCurrency(
+                          Math.ceil(c.monthlyPrice / c.monthlyInstallments),
+                        )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
                       : "—"}
                   </td>
                 </tr>

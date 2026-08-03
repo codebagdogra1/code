@@ -93,11 +93,11 @@ export default function RegistrationsPage() {
                   <td className="p-4 text-right">{formatCurrency(r.paid_amount)}</td>
                   <td className="p-4 text-right">{formatCurrency(r.due_amount)}</td>
                   <td className="p-4">
-                    <span className={`badge ${statusColor(r.payment_status)}`}>
+                    <span className={`badge badge-dot ${statusColor(r.payment_status)}`}>
                       {r.payment_status}
                     </span>
                     {r.overdue_months > 0 && (
-                      <span className={`badge ml-1 ${statusColor("OVERDUE")}`}>
+                      <span className={`badge badge-dot ml-1 ${statusColor("OVERDUE")}`}>
                         {r.overdue_months} overdue
                       </span>
                     )}

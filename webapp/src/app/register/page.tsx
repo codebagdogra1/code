@@ -40,9 +40,12 @@ export default function RegisterPage() {
     () =>
       Object.entries(selected).map(([id, sel]) => {
         const course = courses.find((c) => c.id === Number(id))!;
+        // `monthlyPrice` from the DB is the TOTAL for the monthly plan (already the
+        // sum of all installments), not a per-month figure. The per-month amount is
+        // derived by dividing by the number of installments.
         const fee =
           sel.plan === "monthly"
-            ? Number(course.monthlyPrice ?? 0) * course.monthlyInstallments
+            ? Number(course.monthlyPrice ?? 0)
             : Number(course.fullPrice ?? 0);
         return { course, plan: sel.plan, fee };
       }),
@@ -246,8 +249,10 @@ export default function RegisterPage() {
                                     active={sel.plan === "monthly"}
                                     onClick={() => setPlan(c.id, "monthly")}
                                     label={`Monthly — ${formatCurrency(
+                                      Math.ceil(c.monthlyPrice / c.monthlyInstallments),
+                                    )}/mo × ${c.monthlyInstallments} = ${formatCurrency(
                                       c.monthlyPrice,
-                                    )} × ${c.monthlyInstallments}`}
+                                    )}`}
                                   />
                                 )}
                               </div>

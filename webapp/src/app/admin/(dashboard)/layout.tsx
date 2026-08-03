@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="flex min-h-screen">
       <aside className="hidden w-60 shrink-0 flex-col border-r border-[var(--border)] bg-[var(--surface)] p-4 md:flex">
         <Link href="/admin" className="mb-6 flex items-center gap-2 font-semibold">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-[var(--brand)] text-white">
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-[var(--brand)] font-mono text-xs text-[var(--accent)]">
             {"</>"}
           </span>
           CODE Admin

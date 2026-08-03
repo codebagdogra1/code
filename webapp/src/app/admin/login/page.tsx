@@ -37,7 +37,7 @@ function LoginForm() {
   return (
     <form onSubmit={submit} className="card w-full max-w-sm space-y-4 p-8">
       <div className="text-center">
-        <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[var(--brand)] text-white">
+        <span className="mx-auto grid h-11 w-11 place-items-center rounded-xl bg-[var(--brand)] font-mono text-sm text-[var(--accent)]">
           {"</>"}
         </span>
         <h1 className="mt-3 text-xl font-bold">Admin sign in</h1>
