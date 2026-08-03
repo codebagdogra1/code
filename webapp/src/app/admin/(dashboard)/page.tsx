@@ -20,6 +20,7 @@ async function getStats() {
     totalStudents,
     todaysPayments,
     overdueGroups,
+    overdueTop,
     courses,
   ] = await Promise.all([
     prisma.registration.aggregate({ _sum: { paidAmount: true } }),
@@ -35,42 +36,48 @@ async function getStats() {
         registration: { select: { receiptNo: true, student: { select: { fullName: true } } } },
       },
     }),
+    // Overdue totals across ALL registrations (drives the "Overdue" money-plate).
     prisma.monthlyInstallment.groupBy({
       by: ["registrationId"],
       where: { paymentStatus: "PENDING", dueDate: { lt: now } },
       _sum: { installmentAmount: true },
       _count: { _all: true },
     }),
+    // Top-5 overdue registrations WITH student names, resolved in one joined query.
+    // This used to be a second, dependent round-trip (groupBy in JS -> findMany by
+    // id); folding it into this parallel batch makes the dashboard a single DB
+    // round-trip instead of two.
+    prisma.$queryRaw<
+      Array<{ receipt_no: string; full_name: string | null; amount: number; months: number }>
+    >`
+      SELECT r.receipt_no,
+             s.full_name,
+             SUM(mi.installment_amount)::float8 AS amount,
+             COUNT(*)::int AS months
+      FROM monthly_installments mi
+      JOIN registrations r ON r.id = mi.registration_id
+      LEFT JOIN students s ON s.id = r.student_id
+      WHERE mi.payment_status = 'PENDING' AND mi.due_date < NOW()
+      GROUP BY r.id, r.receipt_no, s.full_name
+      ORDER BY amount DESC
+      LIMIT 5
+    `,
     prisma.course.findMany({
       select: { name: true, _count: { select: { courseRegistrations: true } } },
     }),
   ]);
 
-  const overdueSorted = overdueGroups
-    .filter((g) => g.registrationId != null)
-    .map((g) => ({
-      id: g.registrationId as number,
-      amount: Number(g._sum.installmentAmount ?? 0),
-      months: g._count._all,
-    }))
-    .sort((a, b) => b.amount - a.amount);
-  const overdueTotal = overdueSorted.reduce((s, g) => s + g.amount, 0);
-  const topIds = overdueSorted.slice(0, 5).map((g) => g.id);
-  const topRegs = topIds.length
-    ? await prisma.registration.findMany({
-        where: { id: { in: topIds } },
-        select: { id: true, receiptNo: true, student: { select: { fullName: true } } },
-      })
-    : [];
-  const overdueList = overdueSorted.slice(0, 5).map((g) => {
-    const r = topRegs.find((x) => x.id === g.id);
-    return {
-      receiptNo: r?.receiptNo ?? "—",
-      name: r?.student?.fullName ?? "Unknown",
-      amount: g.amount,
-      months: g.months,
-    };
-  });
+  const overdueTotal = overdueGroups.reduce(
+    (s, g) => s + Number(g._sum.installmentAmount ?? 0),
+    0,
+  );
+  const overdueCount = overdueGroups.filter((g) => g.registrationId != null).length;
+  const overdueList = overdueTop.map((o) => ({
+    receiptNo: o.receipt_no ?? "—",
+    name: o.full_name ?? "Unknown",
+    amount: Number(o.amount),
+    months: Number(o.months),
+  }));
 
   const todaysCollections = todaysPayments.map((p) => ({
     id: p.id,
@@ -86,7 +93,7 @@ async function getStats() {
     collected: Number(collectedAgg._sum.paidAmount ?? 0),
     outstanding: Number(outstandingAgg._sum.dueAmount ?? 0),
     overdueTotal,
-    overdueCount: overdueSorted.length,
+    overdueCount,
     thisMonth,
     totalRegistrations,
     totalStudents,
