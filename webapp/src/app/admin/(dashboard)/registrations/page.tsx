@@ -141,6 +141,26 @@ export default function RegistrationsPage() {
                     <div className="ro-mono text-[0.72rem] text-[var(--ro-ink-2)]">
                       {r.phone_number}
                     </div>
+                    {/* Course names so a multi-course row shows every course —
+                        the active one alongside any written-off one (struck
+                        through) — rather than only signalling that a write-off
+                        happened. Skipped on plain single-course rows. */}
+                    {(r.course_count > 1 || r.written_off_course_count > 0) &&
+                      r.courses.length > 0 && (
+                        <div className="mt-0.5 text-[0.72rem] text-[var(--ro-ink-2)]">
+                          {r.courses.map((c, i) => (
+                            <span key={i}>
+                              {i > 0 && ", "}
+                              <span
+                                className={c.written_off ? "line-through opacity-70" : ""}
+                                title={c.written_off ? `${c.name} — written off` : c.name}
+                              >
+                                {c.name}
+                              </span>
+                            </span>
+                          ))}
+                        </div>
+                      )}
                   </td>
                   <td className="text-[var(--ro-ink-2)]">{formatDate(r.registration_date)}</td>
                   <td className="ro-mono text-right">{formatRupees(r.paid_amount)}</td>
@@ -152,6 +172,14 @@ export default function RegistrationsPage() {
                       <span className={`ro-stamp ${roStampClass(r.payment_status)}`}>
                         {statusLabel(r.payment_status)}
                       </span>
+                      {r.written_off_course_count > 0 && (
+                        <span
+                          className="ro-stamp ro-stamp--cancelled"
+                          title="Course(s) written off — parked amounts are excluded from Due"
+                        >
+                          {r.written_off_course_count} written off
+                        </span>
+                      )}
                       {r.overdue_months > 0 && (
                         <span className="ro-stamp ro-stamp--overdue">
                           {r.overdue_months} overdue

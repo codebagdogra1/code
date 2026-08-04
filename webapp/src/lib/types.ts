@@ -27,6 +27,12 @@ export type RegistrationListItem = {
   // Number of courses on this registration. Multi-course rows hide the list-level
   // cancel button; those are cancelled per-course from the detail page instead.
   course_count: number;
+  // How many of those courses have been written off (all their remaining months
+  // parked). Drives a "written off" chip so a partly-cancelled row reads clearly.
+  written_off_course_count: number;
+  // The courses on this registration, each flagged if it's been written off, so
+  // the row can show which course the student is still enrolled in by name.
+  courses: { name: string; written_off: boolean }[];
 };
 
 export type Pagination = {
