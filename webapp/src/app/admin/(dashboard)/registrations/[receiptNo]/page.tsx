@@ -252,6 +252,43 @@ export default function RegistrationDetailPage({
     }
   }
 
+  // Course-scoped write-off / restore: parks (or unparks) just this course's unpaid
+  // months when a student switches one course of several midway. The rest of the
+  // registration stays active; recorded payments are kept.
+  async function setCourseStatus(
+    courseId: number,
+    courseName: string,
+    status: "CANCELLED" | "ACTIVE",
+  ) {
+    const cancelling = status === "CANCELLED";
+    const msg = cancelling
+      ? `Write off the remaining months of ${courseName}? Its unpaid months stop counting as overdue. Payments already recorded are kept, and the rest of this registration stays active.`
+      : `Restore the remaining months of ${courseName}?`;
+    if (!confirm(msg)) return;
+    setSaving(true);
+    setNotice(null);
+    try {
+      const res = await fetch(`/api/admin/registrations/${receiptNo}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, course_id: courseId }),
+      });
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.error || `Failed to ${cancelling ? "write off" : "restore"} course`);
+      setSelected(new Set());
+      setNotice({
+        kind: "ok",
+        text: cancelling ? `${courseName} written off.` : `${courseName} restored.`,
+      });
+      load();
+    } catch (err) {
+      setNotice({ kind: "err", text: err instanceof Error ? err.message : "Update failed" });
+    } finally {
+      setSaving(false);
+    }
+  }
+
   if (loading)
     return <p className="ro-mono text-sm tracking-widest text-[var(--ro-ink-2)]">READING FILE…</p>;
   if (error || !reg)
@@ -450,13 +487,48 @@ export default function RegistrationDetailPage({
                 )}
                 {visibleGroups.map((g) => {
                   const settled = g.installments.filter(isPaid).length;
+                  // Months still owed vs. already parked, for the per-course control.
+                  const pending = g.installments.filter(
+                    (i) => !isPaid(i) && !isCancelledInst(i),
+                  ).length;
+                  const parked = g.installments.filter(
+                    (i) => !isPaid(i) && isCancelledInst(i),
+                  ).length;
                   return (
                     <div key={g.course_id}>
-                      <div className="mb-2.5 flex items-center justify-between">
+                      <div className="mb-2.5 flex items-center justify-between gap-2">
                         <span className="text-sm font-semibold">{g.course_name}</span>
-                        <span className="ro-mono text-[0.7rem] text-[var(--ro-ink-2)]">
-                          {settled}/{g.installments.length} settled
-                        </span>
+                        <div className="flex items-center gap-2.5">
+                          <span className="ro-mono text-[0.7rem] text-[var(--ro-ink-2)]">
+                            {settled}/{g.installments.length} settled
+                          </span>
+                          {/* Course-scoped write-off / restore — only when the
+                              registration carries several courses and this one isn't
+                              already fully settled. Single-course regs use the
+                              whole-registration Cancel in the header instead. */}
+                          {multiCourse && !isCancelled && pending > 0 && (
+                            <button
+                              onClick={() =>
+                                setCourseStatus(g.course_id, g.course_name, "CANCELLED")
+                              }
+                              disabled={saving}
+                              className="ro-btn ro-btn--ghost px-2 py-0.5 text-[0.68rem] text-[var(--ro-ochre)]"
+                              title="Student switched this course — write off its remaining months"
+                            >
+                              <Icon name="cancel" size={13} /> Write off
+                            </button>
+                          )}
+                          {multiCourse && !isCancelled && pending === 0 && parked > 0 && (
+                            <button
+                              onClick={() => setCourseStatus(g.course_id, g.course_name, "ACTIVE")}
+                              disabled={saving}
+                              className="ro-btn ro-btn--ghost px-2 py-0.5 text-[0.68rem]"
+                              title="Restore this course's written-off months"
+                            >
+                              <Icon name="arrow-left" size={13} /> Restore
+                            </button>
+                          )}
+                        </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {g.installments.map((i) => {

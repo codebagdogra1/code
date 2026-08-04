@@ -91,13 +91,18 @@ export async function GET(
 // midway or cancels: we mark the registration CANCELLED and park its still-unpaid
 // installments so they stop accruing overdue months (recorded payments are kept).
 // ACTIVE restores those installments and recomputes the money status.
+//
+// When a `course_id` is supplied the action is scoped to that one course: only its
+// pending months are parked/restored and the registration itself stays active. This
+// is how a student who switches one course (of several) midway has just that course
+// written off, leaving the rest of the registration untouched.
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ receiptNo: string }> },
 ) {
   const { receiptNo } = await params;
 
-  let body: { status?: string };
+  let body: { status?: string; course_id?: number };
   try {
     body = await req.json();
   } catch {
@@ -109,6 +114,12 @@ export async function PATCH(
     return NextResponse.json({ error: "status must be CANCELLED or ACTIVE" }, { status: 400 });
   }
 
+  // Optional course scope: park/restore just this course's months.
+  const courseId = body.course_id != null ? Number(body.course_id) : null;
+  if (body.course_id != null && !Number.isInteger(courseId)) {
+    return NextResponse.json({ error: "course_id must be an integer" }, { status: 400 });
+  }
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       const reg = await tx.registration.findUnique({
@@ -116,6 +127,29 @@ export async function PATCH(
         select: { id: true, paidAmount: true, dueAmount: true },
       });
       if (!reg) return null;
+
+      // Course-scoped write-off / restore: touch only that course's months and
+      // leave the registration status alone (other courses may still be active).
+      if (courseId != null) {
+        const enrolled = await tx.courseRegistration.findFirst({
+          where: { registrationId: reg.id, courseId },
+          select: { id: true },
+        });
+        if (!enrolled) return { notFoundCourse: true };
+
+        if (target === "CANCELLED") {
+          await tx.monthlyInstallment.updateMany({
+            where: { registrationId: reg.id, courseId, paymentStatus: "PENDING" },
+            data: { paymentStatus: "CANCELLED" },
+          });
+        } else {
+          await tx.monthlyInstallment.updateMany({
+            where: { registrationId: reg.id, courseId, paymentStatus: "CANCELLED" },
+            data: { paymentStatus: "PENDING" },
+          });
+        }
+        return { status: target, courseId };
+      }
 
       if (target === "CANCELLED") {
         await tx.monthlyInstallment.updateMany({
@@ -143,6 +177,9 @@ export async function PATCH(
 
     if (!result) {
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+    }
+    if ("notFoundCourse" in result) {
+      return NextResponse.json({ error: "Course not found on this registration" }, { status: 404 });
     }
 
     return NextResponse.json({ success: true, status: result.status });

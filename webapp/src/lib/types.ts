@@ -24,6 +24,9 @@ export type RegistrationListItem = {
   phone_number: string;
   email: string | null;
   overdue_months: number;
+  // Number of courses on this registration. Multi-course rows hide the list-level
+  // cancel button; those are cancelled per-course from the detail page instead.
+  course_count: number;
 };
 
 export type Pagination = {

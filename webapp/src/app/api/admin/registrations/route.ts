@@ -23,6 +23,10 @@ export async function GET(req: NextRequest) {
               monthlyInstallments: {
                 where: { paymentStatus: "PENDING", dueDate: { lt: now } },
               },
+              // How many courses this registration holds — the list hides the
+              // whole-registration cancel button for multi-course rows, steering
+              // those to the detail page for per-course write-offs.
+              courseRegistrations: true,
             },
           },
         },
@@ -44,6 +48,7 @@ export async function GET(req: NextRequest) {
       phone_number: r.student?.phoneNumber ?? "",
       email: r.student?.email ?? null,
       overdue_months: r._count.monthlyInstallments,
+      course_count: r._count.courseRegistrations,
     }));
 
     const totalPages = Math.ceil(totalRecords / limit) || 1;

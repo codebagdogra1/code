@@ -167,7 +167,12 @@ export default function RegistrationsPage() {
                       >
                         Open
                       </Link>
-                      {r.payment_status?.toUpperCase() === "CANCELLED" ? (
+                      {/* Cancel/restore lives here only for single-course rows. A
+                          registration with several courses is cancelled per-course
+                          from its detail page, so the blunt whole-registration
+                          toggle is hidden for those. */}
+                      {r.course_count > 1 ? null : r.payment_status?.toUpperCase() ===
+                        "CANCELLED" ? (
                         <button
                           onClick={() => setStatus(r.receipt_no, r.full_name, "ACTIVE")}
                           className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem]"
