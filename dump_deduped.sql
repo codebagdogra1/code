@@ -1,0 +1,1361 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict AcWYYPdw5cJRee1eNma8ddStlbYqwUeepTZ8crnuZCBCLTtLO8CR2nD8PWqn1pT
+
+-- Dumped from database version 17.10 (4f20678)
+-- Dumped by pg_dump version 18.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: create_monthly_installments_for_registration(integer); Type: FUNCTION; Schema: public; Owner: neondb_owner
+--
+
+CREATE FUNCTION public.create_monthly_installments_for_registration(reg_id integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    reg_record RECORD;
+    course_record RECORD;
+    month_count INTEGER;
+    installment_amt DECIMAL(10,2);
+    current_due_date DATE;
+BEGIN
+    -- Get registration details
+    SELECT registration_date INTO reg_record FROM registrations WHERE id = reg_id;
+    
+    -- Get all monthly payment courses for this registration
+    FOR course_record IN 
+        SELECT cr.course_id, cr.course_fee, c.monthly_installments, c.name
+        FROM course_registrations cr
+        JOIN courses c ON cr.course_id = c.id
+        WHERE cr.registration_id = reg_id AND cr.payment_plan = 'monthly'
+    LOOP
+        -- Calculate installment amount
+        installment_amt := course_record.course_fee / course_record.monthly_installments;
+        
+        -- Create monthly installments
+        FOR month_count IN 1..course_record.monthly_installments LOOP
+            current_due_date := reg_record.registration_date + INTERVAL '1 month' * (month_count - 1);
+            
+            INSERT INTO monthly_installments (
+                registration_id, course_id, month_number, month_name,
+                due_date, installment_amount, payment_status
+            ) VALUES (
+                reg_id, course_record.course_id, month_count, 
+                'Month ' || month_count, current_due_date, installment_amt, 'PENDING'
+            );
+        END LOOP;
+    END LOOP;
+END;
+$$;
+
+
+ALTER FUNCTION public.create_monthly_installments_for_registration(reg_id integer) OWNER TO neondb_owner;
+
+--
+-- Name: trigger_create_monthly_installments(); Type: FUNCTION; Schema: public; Owner: neondb_owner
+--
+
+CREATE FUNCTION public.trigger_create_monthly_installments() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    -- Create monthly installments for courses with monthly payment plans
+    PERFORM create_monthly_installments_for_registration(NEW.registration_id);
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.trigger_create_monthly_installments() OWNER TO neondb_owner;
+
+--
+-- Name: update_overdue_installments(); Type: FUNCTION; Schema: public; Owner: neondb_owner
+--
+
+CREATE FUNCTION public.update_overdue_installments() RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    UPDATE monthly_installments 
+    SET 
+        payment_status = 'OVERDUE',
+        days_overdue = CURRENT_DATE - due_date
+    WHERE 
+        payment_status = 'PENDING' 
+        AND due_date < CURRENT_DATE;
+END;
+$$;
+
+
+ALTER FUNCTION public.update_overdue_installments() OWNER TO neondb_owner;
+
+--
+-- Name: update_updated_at_column(); Type: FUNCTION; Schema: public; Owner: neondb_owner
+--
+
+CREATE FUNCTION public.update_updated_at_column() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.update_updated_at_column() OWNER TO neondb_owner;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: course_registrations; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.course_registrations (
+    id integer NOT NULL,
+    registration_id integer,
+    course_id integer,
+    payment_plan character varying(20) NOT NULL,
+    course_fee integer NOT NULL,
+    CONSTRAINT course_registrations_payment_plan_check CHECK (((payment_plan)::text = ANY ((ARRAY['full'::character varying, 'monthly'::character varying])::text[])))
+);
+
+
+ALTER TABLE public.course_registrations OWNER TO neondb_owner;
+
+--
+-- Name: course_registrations_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.course_registrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.course_registrations_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: course_registrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.course_registrations_id_seq OWNED BY public.course_registrations.id;
+
+
+--
+-- Name: courses; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.courses (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    full_price integer NOT NULL,
+    monthly_price integer NOT NULL,
+    duration character varying(50) NOT NULL,
+    monthly_installments integer NOT NULL,
+    is_active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.courses OWNER TO neondb_owner;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.courses_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.courses_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.courses_id_seq OWNED BY public.courses.id;
+
+
+--
+-- Name: monthly_installments; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.monthly_installments (
+    id integer NOT NULL,
+    registration_id integer,
+    course_id integer,
+    month_number integer NOT NULL,
+    month_name character varying(20) NOT NULL,
+    due_date date NOT NULL,
+    installment_amount numeric(10,2) NOT NULL,
+    paid_amount numeric(10,2) DEFAULT 0,
+    payment_status character varying(20) DEFAULT 'PENDING'::character varying,
+    payment_date date,
+    days_overdue integer DEFAULT 0,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.monthly_installments OWNER TO neondb_owner;
+
+--
+-- Name: monthly_installments_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.monthly_installments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.monthly_installments_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: monthly_installments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.monthly_installments_id_seq OWNED BY public.monthly_installments.id;
+
+
+--
+-- Name: payment_history; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.payment_history (
+    id integer NOT NULL,
+    registration_id integer,
+    payment_amount integer NOT NULL,
+    payment_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    payment_method character varying(50) NOT NULL,
+    payment_type character varying(20) DEFAULT 'installment'::character varying,
+    receipt_no character varying(50) NOT NULL,
+    notes text,
+    created_by character varying(100) DEFAULT 'admin'::character varying,
+    CONSTRAINT payment_history_payment_type_check CHECK (((payment_type)::text = ANY ((ARRAY['initial'::character varying, 'installment'::character varying, 'full'::character varying])::text[])))
+);
+
+
+ALTER TABLE public.payment_history OWNER TO neondb_owner;
+
+--
+-- Name: payment_history_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.payment_history_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.payment_history_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: payment_history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.payment_history_id_seq OWNED BY public.payment_history.id;
+
+
+--
+-- Name: payment_installment_mapping; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.payment_installment_mapping (
+    id integer NOT NULL,
+    payment_history_id integer,
+    monthly_installment_id integer,
+    amount_applied numeric(10,2) NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.payment_installment_mapping OWNER TO neondb_owner;
+
+--
+-- Name: payment_installment_mapping_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.payment_installment_mapping_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.payment_installment_mapping_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: payment_installment_mapping_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.payment_installment_mapping_id_seq OWNED BY public.payment_installment_mapping.id;
+
+
+--
+-- Name: registrations; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.registrations (
+    id integer NOT NULL,
+    receipt_no character varying(50) NOT NULL,
+    student_id integer,
+    total_amount integer NOT NULL,
+    discount_amount integer DEFAULT 0,
+    paid_amount integer NOT NULL,
+    due_amount integer NOT NULL,
+    payment_method character varying(50) NOT NULL,
+    payment_status character varying(20) DEFAULT 'PAID'::character varying,
+    registration_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    admission_fees numeric(10,2) DEFAULT 0
+);
+
+
+ALTER TABLE public.registrations OWNER TO neondb_owner;
+
+--
+-- Name: registrations_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.registrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.registrations_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: registrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.registrations_id_seq OWNED BY public.registrations.id;
+
+
+--
+-- Name: students; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.students (
+    id integer NOT NULL,
+    full_name character varying(255) NOT NULL,
+    phone_number character varying(20) NOT NULL,
+    email character varying(255),
+    date_of_birth date NOT NULL,
+    address text NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.students OWNER TO neondb_owner;
+
+--
+-- Name: students_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.students_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.students_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: students_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.students_id_seq OWNED BY public.students.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: neondb_owner
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password_hash character varying(255) NOT NULL,
+    user_type character varying(20) NOT NULL,
+    is_active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    last_login timestamp without time zone,
+    failed_attempts integer DEFAULT 0,
+    locked_until timestamp without time zone,
+    CONSTRAINT users_user_type_check CHECK (((user_type)::text = 'admin'::text))
+);
+
+
+ALTER TABLE public.users OWNER TO neondb_owner;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: neondb_owner
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_id_seq OWNER TO neondb_owner;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: neondb_owner
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: course_registrations id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.course_registrations ALTER COLUMN id SET DEFAULT nextval('public.course_registrations_id_seq'::regclass);
+
+
+--
+-- Name: courses id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.courses ALTER COLUMN id SET DEFAULT nextval('public.courses_id_seq'::regclass);
+
+
+--
+-- Name: monthly_installments id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.monthly_installments ALTER COLUMN id SET DEFAULT nextval('public.monthly_installments_id_seq'::regclass);
+
+
+--
+-- Name: payment_history id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_history ALTER COLUMN id SET DEFAULT nextval('public.payment_history_id_seq'::regclass);
+
+
+--
+-- Name: payment_installment_mapping id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_installment_mapping ALTER COLUMN id SET DEFAULT nextval('public.payment_installment_mapping_id_seq'::regclass);
+
+
+--
+-- Name: registrations id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.registrations ALTER COLUMN id SET DEFAULT nextval('public.registrations_id_seq'::regclass);
+
+
+--
+-- Name: students id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.students ALTER COLUMN id SET DEFAULT nextval('public.students_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: course_registrations; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.course_registrations (id, registration_id, course_id, payment_plan, course_fee) FROM stdin;
+3	2	4	monthly	7000
+4	3	4	monthly	7000
+8	8	4	monthly	7000
+5	5	2	full	5500
+6	6	2	monthly	5500
+7	7	2	monthly	5500
+17	19	2	monthly	6000
+16	18	2	full	5500
+15	17	2	monthly	6000
+14	16	2	monthly	6000
+19	21	2	monthly	6000
+20	22	2	monthly	6000
+21	23	2	monthly	6000
+22	24	2	monthly	6000
+23	25	3	full	12000
+24	26	1	monthly	4000
+25	27	4	full	7000
+26	28	1	full	3500
+27	29	2	full	6000
+28	30	2	monthly	9000
+29	31	2	monthly	9000
+30	32	2	full	8500
+31	33	2	full	8500
+32	34	5	monthly	20000
+33	35	2	monthly	9000
+34	36	2	monthly	9000
+35	37	2	monthly	9000
+36	38	3	monthly	24000
+37	39	2	monthly	9000
+38	40	2	monthly	9000
+39	41	2	monthly	9000
+40	42	2	monthly	9000
+41	43	2	monthly	9000
+42	44	2	monthly	9000
+43	45	4	monthly	12000
+44	46	2	monthly	9000
+45	47	3	full	18000
+46	48	3	monthly	24000
+47	49	9	full	14000
+\.
+
+
+--
+-- Data for Name: courses; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.courses (id, name, full_price, monthly_price, duration, monthly_installments, is_active, created_at) FROM stdin;
+6	Ecommerce Expert (Industry Level)	30000	35000	6 months	6	t	2025-08-24 12:51:21.901442
+7	Ecommerce Expert (Job Ready)	45000	55000	8 months	8	t	2025-08-24 12:51:21.901442
+1	CCA	3500	4000	3 months	3	t	2025-08-24 12:51:21.901442
+4	Web Design Basic	10000	12000	5 months	5	t	2025-08-24 12:51:21.901442
+8	A.I. Prompt Engineering	6500	7000	2 months	2	t	2025-08-24 12:51:21.901442
+2	DCA	8500	9000	6 months	6	t	2025-08-24 12:51:21.901442
+5	Web Design Advanced	18000	20000	5 months	5	t	2025-08-24 12:51:21.901442
+3	ADCA	18000	24000	12 months	12	t	2025-08-24 12:51:21.901442
+9	Digital Marketing Basics	14000	20000	2 months	2	t	2025-08-24 12:51:21.901442
+\.
+
+
+--
+-- Data for Name: monthly_installments; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.monthly_installments (id, registration_id, course_id, month_number, month_name, due_date, installment_amount, paid_amount, payment_status, payment_date, days_overdue, created_at, updated_at) FROM stdin;
+239	42	2	1	Month 1	2026-05-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+240	42	2	2	Month 2	2026-06-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+81	23	2	3	Month 3	2025-12-11	1000.00	1000.00	PAID	2025-12-08	0	2025-10-11 10:47:48.615534	2025-12-30 16:41:50.823712
+241	42	2	3	Month 3	2026-07-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+242	42	2	4	Month 4	2026-08-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+79	23	2	1	Month 1	2025-10-11	1000.00	1000.00	PAID	2025-10-11	0	2025-10-11 10:47:48.615534	2025-10-11 10:47:48.615534
+80	23	2	2	Month 2	2025-11-11	1000.00	1000.00	PAID	2025-11-03	0	2025-10-11 10:47:48.615534	2025-12-30 16:40:52.934865
+49	21	2	1	Month 1	2025-10-07	1000.00	0.00	PAID	2025-10-08	0	2025-10-07 13:37:49.806975	2025-10-07 13:37:49.806975
+50	21	2	2	Month 2	2025-11-07	1000.00	1000.00	PAID	2025-12-02	0	2025-10-07 13:37:49.806975	2025-12-30 16:51:11.148304
+51	21	2	3	Month 3	2025-12-07	1000.00	1000.00	PAID	2025-12-02	0	2025-10-07 13:37:49.806975	2025-12-30 16:51:11.148304
+39	19	2	3	Month 3	2025-11-01	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:16:47.184563
+40	19	2	4	Month 4	2025-12-01	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:16:47.184563
+33	17	2	3	Month 3	2025-10-29	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:34:46.922901
+243	42	2	5	Month 5	2026-09-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+244	42	2	6	Month 6	2026-10-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+113	30	2	5	Month 5	2026-05-29	1500.00	1500.00	PAID	2026-05-30	0	2026-01-29 12:40:43.741156	2026-05-30 13:56:18.073418
+34	17	2	4	Month 4	2025-11-29	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:35:27.779158
+27	16	2	3	Month 3	2025-10-27	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:37:13.513136
+54	21	2	6	Month 6	2026-03-07	1000.00	1000.00	PAID	2026-05-30	0	2025-10-07 13:37:49.806975	2026-05-30 17:37:40.362811
+114	30	2	6	Month 6	2026-06-29	1500.00	1500.00	PAID	2026-08-03	0	2026-01-29 12:40:43.741156	2026-08-03 19:34:03.106
+17	7	2	3	Month 3	2025-10-10	1000.00	0.00	CANCELLED	\N	0	2025-09-25 18:32:59.957693	2026-08-03 19:35:37.926
+28	16	2	4	Month 4	2025-11-27	1000.00	1000.00	PAID	2025-12-30	0	2025-09-25 18:32:59.957693	2025-12-30 17:37:43.041858
+3	2	4	3	Month 3	2025-10-05	3100.00	3100.00	PAID	2025-11-12	0	2025-09-25 18:32:59.957693	2025-12-30 17:56:28.551573
+68	22	2	2	Month 2	2025-11-10	1000.00	1000.00	PAID	2025-12-29	0	2025-10-10 13:15:35.049488	2025-12-29 19:23:55.364392
+64	5	2	4	Month 4	2025-11-05	1000.00	1000.00	PAID	2025-12-29	0	2025-10-09 08:54:33.348385	2025-12-29 19:40:25.889027
+8	3	4	4	Month 4	2025-11-05	1800.00	1800.00	PAID	2026-01-04	0	2025-09-25 18:32:59.957693	2026-01-04 16:06:36.79336
+36	17	2	6	Month 6	2026-01-29	1000.00	1000.00	PAID	2026-02-22	0	2025-09-25 18:32:59.957693	2026-02-22 20:12:24.690222
+42	19	2	6	Month 6	2026-02-01	1000.00	1000.00	PAID	2026-02-22	0	2025-09-25 18:32:59.957693	2026-02-22 20:13:13.50224
+41	19	2	5	Month 5	2026-01-01	1000.00	1000.00	PAID	2026-01-05	0	2025-09-25 18:32:59.957693	2026-01-05 12:06:19.375423
+30	16	2	6	Month 6	2026-01-27	1000.00	1000.00	PAID	2026-02-22	0	2025-09-25 18:32:59.957693	2026-02-22 20:12:39.243008
+82	23	2	4	Month 4	2026-01-11	1000.00	1000.00	PAID	2026-01-09	0	2025-10-11 10:47:48.615534	2026-01-09 10:12:28.427238
+38	19	2	2	Month 2	2025-10-01	1000.00	1000.00	PAID	2025-10-10	0	2025-09-25 18:32:59.957693	2025-10-10 13:20:30.348151
+11	6	2	3	Month 3	2025-10-02	1000.00	1000.00	PAID	2025-10-09	0	2025-09-25 18:32:59.957693	2025-10-09 08:30:21.834938
+35	17	2	5	Month 5	2025-12-29	1000.00	1000.00	PAID	2026-01-05	0	2025-09-25 18:32:59.957693	2026-01-05 13:54:11.179859
+5	3	4	1	Month 1	2025-08-05	1800.00	1000.00	PAID	2025-08-07	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+1	2	4	1	Month 1	2025-08-05	1000.00	1000.00	PAID	2025-08-07	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+2	2	4	2	Month 2	2025-09-05	2000.00	2000.00	PAID	2025-10-13	0	2025-09-25 18:32:59.957693	2025-12-30 17:55:52.684275
+70	22	2	4	Month 4	2026-01-10	1000.00	1000.00	PAID	2026-01-19	0	2025-10-10 13:15:35.049488	2026-01-19 12:55:31.424153
+53	21	2	5	Month 5	2026-02-07	1000.00	1000.00	PAID	2026-02-22	0	2025-10-07 13:37:49.806975	2026-02-22 20:13:42.778346
+24	8	4	4	Month 4	2025-11-11	1750.00	0.00	PENDING	\N	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+21	8	4	1	Month 1	2025-08-11	1750.00	0.00	PENDING	\N	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+23	8	4	3	Month 3	2025-10-11	1750.00	0.00	PENDING	\N	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+22	8	4	2	Month 2	2025-09-11	1750.00	0.00	PENDING	\N	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+25	16	2	1	Month 1	2025-08-27	1000.00	1000.00	PAID	2025-08-29	0	2025-09-25 18:32:59.957693	2025-10-09 06:54:41.730767
+26	16	2	2	Month 2	2025-09-27	1000.00	1000.00	PAID	2025-10-03	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+31	17	2	1	Month 1	2025-08-29	1000.00	1000.00	PAID	2025-08-29	0	2025-09-25 18:32:59.957693	2025-10-09 06:55:06.576288
+32	17	2	2	Month 2	2025-09-29	1000.00	0.00	PAID	2025-10-03	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+37	19	2	1	Month 1	2025-09-01	1000.00	1000.00	PAID	2025-09-01	0	2025-09-25 18:32:59.957693	2025-10-09 06:53:04.823716
+52	21	2	4	Month 4	2026-01-07	1000.00	1000.00	PAID	2026-01-03	0	2025-10-07 13:37:49.806975	2026-01-03 11:40:27.933332
+4	2	4	4	Month 4	2025-11-05	1100.00	1100.00	PAID	2026-01-04	0	2025-09-25 18:32:59.957693	2026-01-04 16:05:52.436176
+6	3	4	2	Month 2	2025-09-05	1800.00	1800.00	PAID	2026-01-04	0	2025-09-25 18:32:59.957693	2026-01-04 16:06:36.79336
+7	3	4	3	Month 3	2025-10-05	1800.00	1800.00	PAID	2026-01-04	0	2025-09-25 18:32:59.957693	2026-01-04 16:06:36.79336
+29	16	2	5	Month 5	2025-12-27	1000.00	1000.00	PAID	2026-01-05	0	2025-09-25 18:32:59.957693	2026-01-05 13:54:39.76789
+71	22	2	5	Month 5	2026-02-10	1000.00	1000.00	PAID	2026-01-19	0	2025-10-10 13:15:35.049488	2026-01-19 12:55:31.424153
+72	22	2	6	Month 6	2026-03-10	1000.00	1000.00	PAID	2026-01-19	0	2025-10-10 13:15:35.049488	2026-01-19 12:55:31.424153
+9	6	2	1	Month 1	2025-08-02	1000.00	1500.00	PAID	2025-08-02	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+14	6	2	6	Month 6	2026-01-02	500.00	500.00	PAID	2025-12-29	0	2025-09-25 18:32:59.957693	2025-12-29 19:33:00.281375
+110	30	2	2	Month 2	2026-02-28	1500.00	1500.00	PAID	2026-02-27	0	2026-01-29 12:40:43.741156	2026-01-29 12:40:43.741156
+109	30	2	1	Month 1	2026-01-29	1500.00	1500.00	PAID	2026-01-29	0	2026-01-29 12:40:43.741156	2026-02-27 14:34:14.467618
+83	23	2	5	Month 5	2026-02-11	1000.00	1000.00	PAID	2026-03-10	0	2025-10-11 10:47:48.615534	2026-03-10 19:57:28.066972
+10	6	2	2	Month 2	2025-09-02	1000.00	1000.00	PAID	2025-10-09	0	2025-09-25 18:32:59.957693	2025-10-09 08:30:21.834938
+84	23	2	6	Month 6	2026-03-11	1000.00	1000.00	PAID	2026-03-10	0	2025-10-11 10:47:48.615534	2026-03-10 19:57:46.533577
+111	30	2	3	Month 3	2026-03-29	1500.00	1500.00	PAID	2026-04-10	0	2026-01-29 12:40:43.741156	2026-04-10 12:46:21.475838
+15	7	2	1	Month 1	2025-08-10	1000.00	1000.00	PAID	2025-08-07	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+16	7	2	2	Month 2	2025-09-10	1000.00	1000.00	PAID	2025-09-10	0	2025-09-25 18:32:59.957693	2025-09-25 18:32:59.957693
+61	5	2	1	Month 1	2025-08-05	1000.00	1000.00	PAID	2025-08-05	0	2025-10-09 08:54:33.348385	2025-10-09 08:54:33.348385
+62	5	2	2	Month 2	2025-09-05	1000.00	1000.00	PAID	2025-08-05	0	2025-10-09 08:54:33.348385	2025-10-09 08:54:33.348385
+63	5	2	3	Month 3	2025-10-05	1000.00	1000.00	PAID	2025-08-05	0	2025-10-09 08:54:33.348385	2025-10-09 08:54:33.348385
+12	6	2	4	Month 4	2025-11-02	1000.00	1000.00	PAID	2025-11-13	0	2025-09-25 18:32:59.957693	2025-11-13 10:13:04.834367
+69	22	2	3	Month 3	2025-12-10	1000.00	1000.00	PAID	2025-12-17	0	2025-10-10 13:15:35.049488	2025-10-10 13:15:35.049488
+13	6	2	5	Month 5	2025-12-02	1000.00	1000.00	PAID	2025-12-29	0	2025-09-25 18:32:59.957693	2025-12-29 19:32:33.884766
+65	5	2	5	Month 5	2025-12-05	1000.00	1000.00	PAID	2025-12-29	0	2025-10-09 08:54:33.348385	2025-12-29 19:40:25.889027
+66	5	2	6	Month 6	2026-01-05	1000.00	1000.00	PAID	2025-12-29	0	2025-10-09 08:54:33.348385	2025-12-29 19:40:25.889027
+179	38	3	1	Month 1	2026-03-31	2000.00	2000.00	PAID	2026-03-31	0	2026-03-31 13:21:39.847646	2026-03-31 13:21:39.847646
+155	36	2	1	Month 1	2026-03-31	1500.00	1500.00	PAID	2026-03-31	0	2026-03-31 12:10:24.130725	2026-03-31 12:10:24.130725
+92	24	2	2	Month 2	2025-11-21	1000.00	1000.00	PAID	2026-01-09	0	2025-10-21 14:07:30.77048	2026-01-09 10:19:08.646414
+143	35	2	1	Month 1	2026-03-31	1500.00	1500.00	PAID	2026-03-31	0	2026-03-31 11:41:06.819364	2026-03-31 11:41:06.819364
+133	34	5	1	Month 1	2026-03-24	4000.00	4000.00	PAID	2026-03-24	0	2026-03-24 14:44:21.063447	2026-03-24 14:44:21.063447
+124	31	2	4	Month 4	2026-04-30	1500.00	1500.00	PAID	2026-05-30	0	2026-01-31 12:33:14.627857	2026-05-30 17:39:57.204326
+125	31	2	5	Month 5	2026-05-31	1500.00	0.00	PENDING	\N	0	2026-01-31 12:33:14.627857	2026-01-31 12:33:14.627857
+67	22	2	1	Month 1	2025-10-10	1000.00	1000.00	PAID	2025-10-26	0	2025-10-10 13:15:35.049488	2025-10-26 10:21:38.183386
+126	31	2	6	Month 6	2026-06-30	1500.00	0.00	PENDING	\N	0	2026-01-31 12:33:14.627857	2026-01-31 12:33:14.627857
+144	35	2	2	Month 2	2026-04-30	1500.00	1500.00	PAID	2026-05-30	0	2026-03-31 11:41:06.819364	2026-05-30 17:41:38.067435
+156	36	2	2	Month 2	2026-04-30	1500.00	1500.00	PAID	2026-05-30	0	2026-03-31 12:10:24.130725	2026-05-30 17:42:33.964378
+105	26	1	3	Month 3	2026-01-06	1333.00	0.00	PENDING	\N	0	2025-11-06 14:53:36.354734	2025-11-06 14:53:36.354734
+103	26	1	1	Month 1	2025-11-06	1333.00	1333.00	PAID	2025-12-03	0	2025-11-06 14:53:36.354734	2025-12-03 14:58:26.788149
+104	26	1	2	Month 2	2025-12-06	1333.00	1333.00	PAID	2025-12-03	0	2025-11-06 14:53:36.354734	2025-12-03 15:03:41.001897
+91	24	2	1	Month 1	2025-10-21	1000.00	1000.00	PAID	2025-12-29	0	2025-10-21 14:07:30.77048	2025-12-29 19:48:07.821535
+305	48	3	9	Month 9	2027-03-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+306	48	3	10	Month 10	2027-04-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+307	48	3	11	Month 11	2027-05-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+308	48	3	12	Month 12	2027-06-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+121	31	2	1	Month 1	2026-01-31	1500.00	1500.00	PAID	2026-01-31	0	2026-01-31 12:33:14.627857	2026-01-31 12:33:14.627857
+122	31	2	2	Month 2	2026-02-28	1500.00	1500.00	PAID	2026-03-09	0	2026-01-31 12:33:14.627857	2026-03-09 14:39:11.65004
+167	37	2	1	Month 1	2026-03-31	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+168	37	2	2	Month 2	2026-04-30	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+169	37	2	3	Month 3	2026-05-31	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+170	37	2	4	Month 4	2026-06-30	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+171	37	2	5	Month 5	2026-07-31	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+172	37	2	6	Month 6	2026-08-31	1500.00	0.00	PENDING	\N	0	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+180	38	3	2	Month 2	2026-04-30	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+181	38	3	3	Month 3	2026-05-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+182	38	3	4	Month 4	2026-06-30	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+183	38	3	5	Month 5	2026-07-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+184	38	3	6	Month 6	2026-08-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+185	38	3	7	Month 7	2026-09-30	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+186	38	3	8	Month 8	2026-10-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+187	38	3	9	Month 9	2026-11-30	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+188	38	3	10	Month 10	2026-12-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+189	38	3	11	Month 11	2027-01-31	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+190	38	3	12	Month 12	2027-02-28	2000.00	0.00	PENDING	\N	0	2026-03-31 13:21:39.847646	2026-08-03 19:00:21.843
+157	36	2	3	Month 3	2026-05-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 12:10:24.130725	2026-08-03 19:33:07.396
+158	36	2	4	Month 4	2026-06-30	1500.00	0.00	CANCELLED	\N	0	2026-03-31 12:10:24.130725	2026-08-03 19:33:07.396
+159	36	2	5	Month 5	2026-07-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 12:10:24.130725	2026-08-03 19:33:07.396
+160	36	2	6	Month 6	2026-08-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 12:10:24.130725	2026-08-03 19:33:07.396
+145	35	2	3	Month 3	2026-05-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 11:41:06.819364	2026-08-03 19:33:14.559
+146	35	2	4	Month 4	2026-06-30	1500.00	0.00	CANCELLED	\N	0	2026-03-31 11:41:06.819364	2026-08-03 19:33:14.559
+147	35	2	5	Month 5	2026-07-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 11:41:06.819364	2026-08-03 19:33:14.559
+148	35	2	6	Month 6	2026-08-31	1500.00	0.00	CANCELLED	\N	0	2026-03-31 11:41:06.819364	2026-08-03 19:33:14.559
+134	34	5	2	Month 2	2026-04-24	4000.00	0.00	CANCELLED	\N	0	2026-03-24 14:44:21.063447	2026-08-03 19:33:21.937
+135	34	5	3	Month 3	2026-05-24	4000.00	0.00	CANCELLED	\N	0	2026-03-24 14:44:21.063447	2026-08-03 19:33:21.937
+136	34	5	4	Month 4	2026-06-24	4000.00	0.00	CANCELLED	\N	0	2026-03-24 14:44:21.063447	2026-08-03 19:33:21.937
+137	34	5	5	Month 5	2026-07-24	4000.00	0.00	CANCELLED	\N	0	2026-03-24 14:44:21.063447	2026-08-03 19:33:21.937
+93	24	2	3	Month 3	2025-12-21	1000.00	0.00	CANCELLED	\N	0	2025-10-21 14:07:30.77048	2026-08-03 19:36:38.14
+94	24	2	4	Month 4	2026-01-21	1000.00	0.00	CANCELLED	\N	0	2025-10-21 14:07:30.77048	2026-08-03 19:36:38.14
+95	24	2	5	Month 5	2026-02-21	1000.00	0.00	CANCELLED	\N	0	2025-10-21 14:07:30.77048	2026-08-03 19:36:38.14
+96	24	2	6	Month 6	2026-03-21	1000.00	0.00	CANCELLED	\N	0	2025-10-21 14:07:30.77048	2026-08-03 19:36:38.14
+227	41	2	1	Month 1	2026-04-10	1500.00	1500.00	PAID	2026-04-10	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+232	41	2	6	Month 6	2026-09-10	1500.00	0.00	PENDING	\N	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+228	41	2	2	Month 2	2026-05-10	1500.00	1500.00	PAID	2026-04-10	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+203	39	2	1	Month 1	2026-04-04	1500.00	1500.00	PAID	2026-04-04	0	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+251	43	2	1	Month 1	2026-05-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+252	43	2	2	Month 2	2026-06-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+253	43	2	3	Month 3	2026-07-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+254	43	2	4	Month 4	2026-08-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+205	39	2	3	Month 3	2026-06-04	1500.00	0.00	PENDING	\N	0	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+206	39	2	4	Month 4	2026-07-04	1500.00	0.00	PENDING	\N	0	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+207	39	2	5	Month 5	2026-08-04	1500.00	0.00	PENDING	\N	0	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+208	39	2	6	Month 6	2026-09-04	1500.00	0.00	PENDING	\N	0	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+255	43	2	5	Month 5	2026-09-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+256	43	2	6	Month 6	2026-10-08	1500.00	0.00	PENDING	\N	0	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+217	40	2	3	Month 3	2026-06-10	1500.00	0.00	PENDING	\N	0	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+218	40	2	4	Month 4	2026-07-10	1500.00	0.00	PENDING	\N	0	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+219	40	2	5	Month 5	2026-08-10	1500.00	0.00	PENDING	\N	0	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+220	40	2	6	Month 6	2026-09-10	1500.00	0.00	PENDING	\N	0	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+263	44	2	1	Month 1	2026-05-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+264	44	2	2	Month 2	2026-06-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+265	44	2	3	Month 3	2026-07-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+266	44	2	4	Month 4	2026-08-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+267	44	2	5	Month 5	2026-09-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+229	41	2	3	Month 3	2026-06-10	1500.00	0.00	PENDING	\N	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+230	41	2	4	Month 4	2026-07-10	1500.00	0.00	PENDING	\N	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+231	41	2	5	Month 5	2026-08-10	1500.00	0.00	PENDING	\N	0	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+268	44	2	6	Month 6	2026-10-09	1500.00	0.00	PENDING	\N	0	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+123	31	2	3	Month 3	2026-03-31	1500.00	1500.00	PAID	2026-04-26	0	2026-01-31 12:33:14.627857	2026-04-26 17:09:23.646171
+215	40	2	1	Month 1	2026-04-10	1500.00	1500.00	PAID	\N	0	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+275	45	4	1	Month 1	2026-05-25	2400.00	0.00	PENDING	\N	0	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+276	45	4	2	Month 2	2026-06-25	2400.00	0.00	PENDING	\N	0	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+277	45	4	3	Month 3	2026-07-25	2400.00	0.00	PENDING	\N	0	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+278	45	4	4	Month 4	2026-08-25	2400.00	0.00	PENDING	\N	0	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+279	45	4	5	Month 5	2026-09-25	2400.00	0.00	PENDING	\N	0	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+285	46	2	1	Month 1	2026-05-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+286	46	2	2	Month 2	2026-06-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+287	46	2	3	Month 3	2026-07-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+288	46	2	4	Month 4	2026-08-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+289	46	2	5	Month 5	2026-09-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+290	46	2	6	Month 6	2026-10-26	1500.00	0.00	PENDING	\N	0	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+112	30	2	4	Month 4	2026-04-29	1500.00	1500.00	PAID	2026-05-30	0	2026-01-29 12:40:43.741156	2026-05-30 13:51:54.575284
+204	39	2	2	Month 2	2026-05-04	1500.00	1500.00	PAID	2026-05-30	0	2026-04-04 13:05:51.114805	2026-05-30 17:43:46.683434
+216	40	2	2	Month 2	2026-05-10	1500.00	1500.00	PAID	2026-05-30	0	2026-04-10 08:06:04.187826	2026-05-30 17:44:48.111225
+298	48	3	2	Month 2	2026-08-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+299	48	3	3	Month 3	2026-09-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+300	48	3	4	Month 4	2026-10-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+301	48	3	5	Month 5	2026-11-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+302	48	3	6	Month 6	2026-12-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+303	48	3	7	Month 7	2027-01-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+304	48	3	8	Month 8	2027-02-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+297	48	3	1	Month 1	2026-07-02	2000.00	0.00	PENDING	\N	0	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+19	7	2	5	Month 5	2025-12-10	1000.00	0.00	CANCELLED	\N	0	2025-09-25 18:32:59.957693	2026-08-03 19:35:37.926
+20	7	2	6	Month 6	2026-01-10	1000.00	0.00	CANCELLED	\N	0	2025-09-25 18:32:59.957693	2026-08-03 19:35:37.926
+18	7	2	4	Month 4	2025-11-10	1000.00	0.00	CANCELLED	\N	0	2025-09-25 18:32:59.957693	2026-08-03 19:35:37.926
+\.
+
+
+--
+-- Data for Name: payment_history; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.payment_history (id, registration_id, payment_amount, payment_date, payment_method, payment_type, receipt_no, notes, created_by) FROM stdin;
+1	3	1000	2025-08-05 20:00:45	UPI	initial	RCPT-1002	Initial payment at registration	admin
+3	6	1500	2025-08-02 17:41:58	UPI	initial	RCPT-1004	Initial payment at registration	admin
+4	5	3000	2025-08-04 20:34:30	UPI	initial	RCPT-1003	Initial payment at registration	admin
+5	7	1000	2025-08-10 19:28:05	UPI	initial	RCPT-1005	Initial payment at registration	admin
+10	7	1000	2025-09-15 07:15:30.346862	UPI	installment	PMT-202509-530352	For September Classes	admin
+16	21	1000	2025-10-07 13:37:49.806975	UPI	initial	CODE-2025-269828	Initial payment during registration	admin
+18	16	1000	2025-10-09 06:54:41.730767	UPI	installment	PMT-202510-881736	For the month of september.	admin
+19	17	1000	2025-10-09 06:55:06.576288	UPI	installment	PMT-202510-906581	For the month of september.	admin
+49	16	1000	2025-12-30 17:37:43.041858	Cash	installment	PMT-202512-263044	For the month of december.	admin
+50	2	2100	2025-12-30 17:55:52.684275	Cash	installment	PMT-202512-352688	For the month of October.	admin
+20	16	1000	2025-08-29 17:44:10	UPI	initial	CODE-2025-640050	\N	admin
+21	17	1000	2025-08-29 17:44:35	UPI	initial	CODE-2025-640050	\N	admin
+17	19	1000	2025-09-01 06:53:04	Cash	initial	PMT-202510-784826	For the month of september.	admin
+24	6	2000	2025-10-09 08:30:21.834938	UPI	installment	PMT-202510-621838	For the month of september & october.	admin
+26	19	1000	2025-10-10 13:20:30.348151	Cash	installment	PMT-202510-430352	For the month of October.	admin
+27	23	2000	2025-10-11 10:47:48.615534	Cash	initial	CODE-2025-668638	Initial payment during registration	admin
+28	24	1000	2025-10-21 14:07:30.77048	UPI	initial	CODE-2025-650835	Initial payment during registration	admin
+29	22	2000	2025-10-26 10:21:38.183386	Cash	installment	PMT-202510-098187	For the month of september & october.	admin
+30	25	7000	2025-10-29 14:49:47.910691	Cash	initial	CODE-2025-387990	Initial payment during registration	admin
+31	26	2084	2025-11-06 14:53:36.354734	UPI	initial	CODE-2025-816426	Initial payment during registration	admin
+32	27	1000	2025-11-13 10:11:47.74665	UPI	installment	PMT-202511-707750	Admission fees	admin
+33	6	1000	2025-11-13 10:13:04.834367	UPI	installment	PMT-202511-784838	For the month of November.	admin
+34	26	1333	2025-12-03 14:58:26.788149	UPI	installment	PMT-202512-906792	For the month of december.	admin
+35	26	1333	2025-12-03 15:03:41.001897	UPI	installment	PMT-202512-221006	For the month of december.	admin
+36	28	2000	2025-12-22 12:18:38.865811	UPI	initial	CODE-2025-918884	Initial payment during registration	admin
+25	22	750	2025-10-10 13:15:35.049488	Cash	initial	CODE-2025-135070	Initial payment during registration	admin
+38	6	1000	2025-12-29 19:32:33.884766	Cash	installment	PMT-202512-753886	For the month of december.	admin
+39	6	500	2025-12-29 19:33:00.281375	Cash	installment	PMT-202512-780282	For the month of January.	admin
+44	21	2000	2025-12-02 16:51:11	Cash	installment	PMT-202512-471152	For the month of November and December	admin
+42	23	1000	2025-11-03 16:40:52	Cash	installment	PMT-202512-852939	For the month of November.	admin
+43	23	1000	2025-12-08 16:41:50	Cash	installment	PMT-202512-910826	For the month of december.	admin
+37	22	1000	2025-12-17 16:23:20	Cash	installment	PMT-202512-235367	For the month of November.	admin
+40	5	3000	2025-12-01 19:40:25	Cash	installment	PMT-202512-225893	For the month of November, December, and January at once with 500 discount applied.	admin
+45	19	2000	2025-12-30 17:16:47.184563	Cash	installment	PMT-202512-007189	For the month of November and December	admin
+41	24	1000	2025-11-09 19:48:07	Cash	installment	PMT-202512-687825	For the month of November.	admin
+46	17	1000	2025-12-30 17:34:46.922901	Cash	installment	PMT-202512-086924	For the month of November.	admin
+47	17	1000	2025-12-30 17:35:27.779158	Cash	installment	PMT-202512-127783	For the month of december.	admin
+48	16	1000	2025-12-30 17:37:13.513136	Cash	installment	PMT-202512-233515	For the month of November.	admin
+2	2	2000	2025-08-05 20:00:45	UPI	initial	RCPT-1001	Initial payment at registration	admin
+51	2	2000	2025-12-30 17:56:28.551573	Cash	installment	PMT-202512-388556	For the month of November.	admin
+52	27	4000	2025-12-31 09:49:58.902613	UPI	installment	PMT-202512-598907	Paid on 31st December.	admin
+53	28	2000	2026-01-01 14:41:03.244611	UPI	installment	PMT-202601-463247	Remaining Dues Cleared	admin
+54	21	1000	2026-01-03 11:40:27.933332	UPI	installment	PMT-202601-427938	For the month of January 2026.	admin
+55	2	1100	2026-01-04 16:05:52.436176	UPI	installment	PMT-202601-752438	Dues cleared.	admin
+56	3	6200	2026-01-04 16:06:36.79336	UPI	installment	PMT-202601-796796	All dues cleared.	admin
+57	19	1000	2026-01-05 12:06:19.375423	Cash	installment	PMT-202601-779383	For the month of January 2026.	admin
+58	17	1000	2026-01-05 13:54:11.179859	Cash	installment	PMT-202601-251193	For the month of January 2026.	admin
+59	16	1000	2026-01-05 13:54:39.76789	Cash	installment	PMT-202601-279772	For the month of January 2026.	admin
+60	29	6000	2026-01-06 13:17:39.111732	UPI	initial	CODE-2026-459124	Initial payment during registration	admin
+61	23	1000	2026-01-09 10:12:28.427238	Cash	installment	PMT-202601-548429	For the month of January.	admin
+62	24	1000	2026-01-09 10:19:08.646414	UPI	installment	PMT-202601-948650	For the month of January.	admin
+63	22	3000	2026-01-19 12:55:31.424153	Cash	installment	PMT-202601-331425	Due paid.	admin
+64	30	2500	2026-01-29 12:40:43.741156	UPI	initial	CODE-2026-443812	Initial payment during registration	admin
+65	31	2500	2026-01-31 12:33:14.627857	Cash	initial	CODE-2026-794697	Initial payment during registration	admin
+66	17	1000	2026-02-22 20:12:24.690222	Cash	installment	PMT-202602-144701	Last Payment of course done	admin
+67	16	1000	2026-02-22 20:12:39.243008	Cash	installment	PMT-202602-159246	Last Payment of course done	admin
+68	19	1000	2026-02-22 20:13:13.50224	UPI	installment	PMT-202602-193506	Last Payment of course done	admin
+69	21	1000	2026-02-22 20:13:42.778346	UPI	installment	PMT-202602-222781	For the month of Febuary.	admin
+70	30	1500	2026-02-27 14:34:14.467618	UPI	installment	PMT-202602-854472	For the month of March.	admin
+71	32	9500	2026-03-07 07:58:56.922651	UPI	initial	CODE-2026-336972	Initial payment during registration	admin
+72	31	1500	2026-03-09 14:39:11.65004	Cash	installment	PMT-202603-151664	For the month of March 2026	admin
+73	23	1000	2026-03-10 19:57:28.066972	Cash	installment	PMT-202603-647984	For the month of feb 2026.	admin
+74	23	1000	2026-03-10 19:57:46.533577	Cash	installment	PMT-202603-666449	For the month of march 2026.	admin
+75	27	2000	2026-03-10 19:59:14.324474	UPI	installment	PMT-202603-754239	For the month of Jan 2026 and Feb 2026.	admin
+76	33	5000	2026-03-19 14:35:13.391594	UPI	initial	CODE-2026-913427	Initial payment during registration	admin
+77	34	4000	2026-03-24 14:44:21.063447	UPI	initial	CODE-2026-461106	Initial payment during registration	admin
+78	35	2500	2026-03-31 11:41:06.819364	Cash	initial	CODE-2026-266888	Initial payment during registration	admin
+79	36	2500	2026-03-31 12:10:24.130725	UPI	initial	CODE-2026-024187	Initial payment during registration	admin
+80	37	1000	2026-03-31 13:06:02.481023	Cash	initial	CODE-2026-362531	Initial payment during registration	admin
+81	38	2000	2026-03-31 13:21:39.847646	Cash	initial	CODE-2026-299865	Initial payment during registration	admin
+82	39	2500	2026-04-04 13:05:51.114805	Cash	initial	CODE-2026-951134	Initial payment during registration	admin
+84	41	4000	2026-04-10 11:24:28.534876	Cash	initial	CODE-2026-268597	Initial payment during registration	admin
+85	30	1500	2026-04-10 12:46:21.475838	UPI	installment	PMT-202604-181477	Month of April	admin
+86	33	4500	2026-04-10 12:53:36.472585	UPI	installment	PMT-202604-616475		admin
+87	31	1500	2026-04-26 17:09:23.646171	Cash	installment	PMT-202604-363647	For the month of April 2026.	admin
+83	40	2500	2026-04-10 08:06:04.187826	UPI	initial	CODE-2026-364271	Initial payment during registration	admin
+88	25	2000	2026-04-26 18:05:13.046292	UPI	installment	PMT-202604-713050	For the month of April - 10th April, 2026.	admin
+89	42	2500	2026-05-08 14:01:55.310295	Cash	initial	CODE-2026-915330	Initial payment during registration	admin
+90	43	2500	2026-05-08 14:06:44.55744	UPI	initial	CODE-2026-204567	Initial payment during registration	admin
+91	44	2500	2026-05-09 12:35:36.503265	UPI	initial	CODE-2026-136609	Initial payment during registration	admin
+92	45	5000	2026-05-25 13:01:03.851416	Cash	initial	CODE-2026-063868	Initial payment during registration	admin
+93	46	2500	2026-05-26 13:27:03.981121	Cash	initial	CODE-2026-024027	Initial payment during registration	admin
+94	47	18000	2026-05-27 11:47:01.456677	Cash	initial	CODE-2026-421500	Initial payment during registration	admin
+95	30	1500	2026-05-30 13:51:54.575284	UPI	installment	PMT-202605-114577	For the month of May.	admin
+96	30	1500	2026-05-30 13:56:18.073418	UPI	installment	PMT-202605-378075	For the month of June.	admin
+97	21	1000	2026-05-30 17:37:40.362811	UPI	installment	PMT-202605-660365	For the month of May.	admin
+98	31	1500	2026-05-30 17:39:57.204326	Cash	installment	PMT-202605-797205	For the month of May.	admin
+99	35	1500	2026-05-30 17:41:38.067435	Cash	installment	PMT-202605-898069	For the month of May.	admin
+100	36	1500	2026-05-30 17:42:33.964378	Cash	installment	PMT-202605-953967	For the month of May.	admin
+101	39	1500	2026-05-30 17:43:46.683434	UPI	installment	PMT-202605-026687	For the month of May.	admin
+102	40	1500	2026-05-30 17:44:48.111225	UPI	installment	PMT-202605-088113	For the month of May.	admin
+103	48	2000	2026-07-02 14:13:40.512637	Cash	initial	CODE-2026-620527	Initial payment during registration	admin
+104	49	14000	2026-07-21 13:03:26.784163	Cash	initial	CODE-2026-006842	Initial payment during registration	admin
+105	30	1500	2026-08-03 19:34:02.493	UPI	installment	PMT-202608-641257		admin
+\.
+
+
+--
+-- Data for Name: payment_installment_mapping; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.payment_installment_mapping (id, payment_history_id, monthly_installment_id, amount_applied, created_at) FROM stdin;
+5	17	37	1000.00	2025-10-09 06:53:04.823716
+6	18	25	1000.00	2025-10-09 06:54:41.730767
+7	19	31	1000.00	2025-10-09 06:55:06.576288
+8	20	32	1000.00	2025-10-03 17:44:05
+10	24	10	1000.00	2025-10-09 08:30:21.834938
+11	24	11	1000.00	2025-10-09 08:30:21.834938
+12	26	38	1000.00	2025-10-10 13:20:30.348151
+13	29	67	1000.00	2025-10-26 10:21:38.183386
+15	33	12	1000.00	2025-11-13 10:13:04.834367
+16	34	103	1333.00	2025-12-03 14:58:26.788149
+17	35	104	1333.00	2025-12-03 15:03:41.001897
+18	37	68	1000.00	2025-12-29 19:23:55.364392
+19	38	13	1000.00	2025-12-29 19:32:33.884766
+20	39	14	500.00	2025-12-29 19:33:00.281375
+21	40	64	1000.00	2025-12-29 19:40:25.889027
+22	40	65	1000.00	2025-12-29 19:40:25.889027
+23	40	66	1000.00	2025-12-29 19:40:25.889027
+24	41	91	1000.00	2025-12-29 19:48:07.821535
+25	42	80	1000.00	2025-12-30 16:40:52.934865
+26	43	81	1000.00	2025-12-30 16:41:50.823712
+27	44	50	1000.00	2025-12-30 16:51:11.148304
+28	44	51	1000.00	2025-12-30 16:51:11.148304
+29	45	39	1000.00	2025-12-30 17:16:47.184563
+30	45	40	1000.00	2025-12-30 17:16:47.184563
+31	46	33	1000.00	2025-12-30 17:34:46.922901
+32	47	34	1000.00	2025-12-30 17:35:27.779158
+33	48	27	1000.00	2025-12-30 17:37:13.513136
+34	49	28	1000.00	2025-12-30 17:37:43.041858
+35	50	2	2100.00	2025-12-30 17:55:52.684275
+36	51	3	1000.00	2025-12-30 17:56:28.551573
+37	54	52	1000.00	2026-01-03 11:40:27.933332
+38	55	4	1100.00	2026-01-04 16:05:52.436176
+39	56	6	1800.00	2026-01-04 16:06:36.79336
+40	56	7	1800.00	2026-01-04 16:06:36.79336
+41	56	8	1800.00	2026-01-04 16:06:36.79336
+42	57	41	1000.00	2026-01-05 12:06:19.375423
+43	58	35	1000.00	2026-01-05 13:54:11.179859
+44	59	29	1000.00	2026-01-05 13:54:39.76789
+45	61	82	1000.00	2026-01-09 10:12:28.427238
+46	62	92	1000.00	2026-01-09 10:19:08.646414
+47	63	70	1000.00	2026-01-19 12:55:31.424153
+48	63	71	1000.00	2026-01-19 12:55:31.424153
+49	63	72	1000.00	2026-01-19 12:55:31.424153
+50	66	36	1000.00	2026-02-22 20:12:24.690222
+51	67	30	1000.00	2026-02-22 20:12:39.243008
+52	68	42	1000.00	2026-02-22 20:13:13.50224
+53	69	53	1000.00	2026-02-22 20:13:42.778346
+54	70	109	1500.00	2026-02-27 14:34:14.467618
+55	72	122	1500.00	2026-03-09 14:39:11.65004
+56	73	83	1000.00	2026-03-10 19:57:28.066972
+57	74	84	1000.00	2026-03-10 19:57:46.533577
+58	85	111	1500.00	2026-04-10 12:46:21.475838
+59	87	123	1500.00	2026-04-26 17:09:23.646171
+60	95	112	1500.00	2026-05-30 13:51:54.575284
+61	96	113	1500.00	2026-05-30 13:56:18.073418
+62	97	54	1000.00	2026-05-30 17:37:40.362811
+63	98	124	1500.00	2026-05-30 17:39:57.204326
+64	99	144	1500.00	2026-05-30 17:41:38.067435
+65	100	156	1500.00	2026-05-30 17:42:33.964378
+66	101	204	1500.00	2026-05-30 17:43:46.683434
+67	102	216	1500.00	2026-05-30 17:44:48.111225
+68	105	114	1500.00	2026-08-03 19:34:03.411
+\.
+
+
+--
+-- Data for Name: registrations; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.registrations (id, receipt_no, student_id, total_amount, discount_amount, paid_amount, due_amount, payment_method, payment_status, registration_date, admission_fees) FROM stdin;
+29	CODE-2026-459124	28	7000	1000	6000	0	UPI	PAID	2026-01-06 13:17:39.111732	1000.00
+34	CODE-2026-461106	33	20000	1000	4000	15000	UPI	CANCELLED	2026-03-24 14:44:21.063447	0.00
+22	CODE-2025-135070	21	6750	0	6750	0	Cash	COMPLETED	2025-10-10 13:15:35.049488	750.00
+18	CODE-2025-494970	17	6000	500	5000	0	UPI	PAID	2025-08-30 07:38:14.935244	0.00
+17	CODE-2025-640050	16	6000	0	6000	0	Cash	COMPLETED	2025-08-29 12:14:00.027571	0.00
+16	CODE-2025-334927	15	6000	0	6000	0	Cash	COMPLETED	2025-08-27 07:22:14.895102	0.00
+19	CODE-2025-530431	18	6000	0	6000	0	Cash	COMPLETED	2025-09-01 12:08:50.419918	0.00
+30	CODE-2026-443812	29	10000	0	10000	0	UPI	COMPLETED	2026-01-29 12:40:43.741156	1000.00
+27	CODE-2025-762663	26	8000	0	7000	1000	UPI	CANCELLED	2025-11-07 13:22:42.595449	1000.00
+32	CODE-2026-336972	31	9500	0	9500	0	UPI	PAID	2026-03-07 07:58:56.922651	1000.00
+7	RCPT-1005	7	6000	4000	2000	0	UPI	CANCELLED	2025-08-10 19:28:05	0.00
+24	CODE-2025-650835	23	7000	0	3000	4000	UPI	CANCELLED	2025-10-21 14:07:30.77048	1000.00
+23	CODE-2025-668638	22	7000	0	7000	0	Cash	COMPLETED	2025-10-11 10:47:48.615534	1000.00
+37	CODE-2026-362531	36	10000	600	1000	8400	Cash	PAID	2026-03-31 13:06:02.481023	1000.00
+26	CODE-2025-816426	25	4750	0	4750	0	UPI	COMPLETED	2025-11-06 14:53:36.354734	750.00
+25	CODE-2025-387990	24	13000	1000	9000	3000	Cash	CANCELLED	2025-10-29 14:49:47.910691	1000.00
+6	RCPT-1004	6	6000	0	6000	0	UPI	COMPLETED	2025-08-02 17:41:58	0.00
+5	RCPT-1003	5	6000	0	6000	0	UPI	COMPLETED	2025-08-04 20:34:30	0.00
+41	CODE-2026-268597	39	10000	0	4000	6000	Cash	PAID	2026-04-10 11:24:28.534876	1000.00
+33	CODE-2026-913427	32	9500	0	9500	0	UPI	COMPLETED	2026-03-19 14:35:13.391594	1000.00
+42	CODE-2026-915330	40	10000	0	2500	7500	Cash	PAID	2026-05-08 14:01:55.310295	1000.00
+43	CODE-2026-204567	41	10000	0	2500	7500	UPI	PAID	2026-05-08 14:06:44.55744	1000.00
+44	CODE-2026-136609	42	10000	0	2500	7500	UPI	PAID	2026-05-09 12:35:36.503265	1000.00
+45	CODE-2026-063868	43	13000	0	5000	8000	Cash	PAID	2026-05-25 13:01:03.851416	1000.00
+46	CODE-2026-024027	44	10000	0	2500	7500	Cash	PAID	2026-05-26 13:27:03.981121	1000.00
+47	CODE-2026-421500	45	19000	0	18000	1000	Cash	PAID	2026-05-27 11:47:01.456677	1000.00
+21	CODE-2025-269828	20	6000	0	6000	0	UPI	COMPLETED	2025-10-07 13:37:49.806975	0.00
+31	CODE-2026-794697	30	10000	0	7000	3000	Cash	PARTIAL	2026-01-31 12:33:14.627857	1000.00
+28	CODE-2025-918884	27	4000	0	4000	0	UPI	COMPLETED	2025-12-22 12:18:38.865811	500.00
+2	RCPT-1001	2	7500	300	7200	0	UPI	COMPLETED	2025-08-05 20:00:45	0.00
+39	CODE-2026-951134	37	10000	0	4000	6000	Cash	PARTIAL	2026-04-04 13:05:51.114805	1000.00
+3	RCPT-1002	3	7500	300	7200	0	UPI	PARTIAL	2025-08-05 20:00:45	0.00
+40	CODE-2026-364271	38	10000	0	4000	6000	UPI	PARTIAL	2026-04-10 08:06:04.187826	1000.00
+48	CODE-2026-620527	46	25000	500	2000	22500	Cash	PAID	2026-07-02 14:13:40.512637	1000.00
+49	CODE-2026-006842	47	15000	1000	14000	0	Cash	PAID	2026-07-21 13:03:26.784163	1000.00
+8	RCPT-1006	8	7500	7500	0	0	UPI	COMPLETED	2025-08-11 18:22:14	0.00
+38	CODE-2026-299865	5	24000	14000	2000	8000	Cash	PARTIAL	2026-03-31 13:21:39.847646	0.00
+36	CODE-2026-024187	35	10000	0	4000	6000	UPI	CANCELLED	2026-03-31 12:10:24.130725	1000.00
+35	CODE-2026-266888	34	10000	0	4000	6000	Cash	CANCELLED	2026-03-31 11:41:06.819364	1000.00
+\.
+
+
+--
+-- Data for Name: students; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.students (id, full_name, phone_number, email, date_of_birth, address, created_at, updated_at) FROM stdin;
+7	Pawan Kumar Singh	8917687767	pawankumarsingh.pk22@gmail.com	1985-04-11	Bhujia Pani	2025-08-24 16:20:17.335846	2025-08-24 16:20:17.335846
+39	Niten Khati	9093302344	khatiniten@gmail.com	2007-04-15	Bagdogra Puthimari Bhujiapani	2026-04-10 11:24:28.534876	2026-04-10 11:24:28.534876
+15	Kashish Choudhary	9832712137	kashishchoudhary1000@gmail.com	2007-01-26	Viman Nagar, Bagdogra Airport, Bhujia Pani, Darjeeling, West Bengal, 734014	2025-08-27 07:22:14.895102	2025-08-27 07:22:14.895102
+16	Isha Chaoudhary	6297664909	ishachoudhary5000@gmail.com	2005-04-05	Viman Nagar, Bhujia Banir, Bagdogra, West Bengal, 734014, IN	2025-08-29 12:14:00.027571	2025-08-29 12:14:00.027571
+17	Rik Sarkar	8337894487	dilipsarkar1905@gmail.com	2011-07-21	Gossainpur natun para bagdogra.	2025-08-30 07:38:14.935244	2025-08-30 07:38:14.935244
+21	Pranab Tiwari	8383846806	pranabtiwari1666@gmail.com	2010-12-04	Ramajote, Bhujia Banir chatt, 734014	2025-10-10 13:15:35.049488	2025-10-10 13:15:35.049488
+22	Sandesh Thapa	7029552180	sandesh2843@gmail.com	2006-08-28	Gadaddhar pally, upper bagdogra, bagdogra, 734014	2025-10-11 10:47:48.615534	2025-10-11 10:47:48.615534
+23	Tisha Das	9641959295	tishadas2002@gmail.com	2002-07-06	Loknath Nagar , Bagdogra, Near- Gayatri Marbles, Dist. Darjeeling	2025-10-21 14:07:30.77048	2025-10-21 14:07:30.77048
+24	Abir Dey	8101192855	igautam006@gmail.com	2012-11-19	Rinku Bhowmik, Airport more, Sister Nivedita School, Bagdogra, Near- Gayatri Marbles, Dist. Darjeeling	2025-10-29 14:49:47.910691	2025-10-29 14:49:47.910691
+25	Reyan Sarkar	9932420007	apusarkar@gmail.com	2016-01-07	Bagdogra Bhujiapani	2025-11-06 14:53:36.354734	2025-11-06 14:53:36.354734
+18	Neha Das	9002581133	dkhokan003@gmail.com	2007-12-09	D/O Khokan Das, Bhujia Pani Chhat, Bagdogra, West Bengal, IN	2025-09-01 12:08:50.419918	2025-12-30 17:14:08.87092
+20	Gulal Singh	7979738257	rajput319@gmail.com	2013-07-25	Lokenath Nagar, Bagdogra	2025-10-07 13:37:49.806975	2025-12-30 17:14:08.877566
+40	Rahul mondal	9907953882	rahulmandalrahul82@gmail.com	2007-12-25	airportmore railway colony bagdogra	2026-05-08 14:01:55.310295	2026-05-08 14:01:55.310295
+26	Mayan Dey	9832622135	mayandey947@gmail.com	2007-05-07	Loknath Nagar , Bagdogra, Near- Gayatri Marbles, Dist. Darjeeling	2025-11-07 13:22:42.595449	2025-12-30 17:44:54.954575
+8	Priyankshu Singh	82933014308	priyankshusingh2009@gmail.com	2009-08-29	bagdora,buribalasan,ashok nagar	2025-08-24 16:20:17.727859	2025-12-30 17:44:54.957673
+6	Aron Chhetri	9144285655	aronchettri171@gmail.com	2006-05-17	puthi mari	2025-08-24 16:20:16.935763	2025-12-30 17:44:54.968183
+2	Sani Bahadur Sonar	8116139299	sanisonar3582@gmail.com	2009-03-13	stalin nagar, bagdogra,uttar bagdogra	2025-08-24 16:16:09.9409	2025-12-30 17:44:54.969285
+3	Priya Kumari	9775187288	priyakumari35823802@gmail.com	2006-03-16	Stalin nagar,uttar bagdogra,bagdogra	2025-08-24 16:16:10.405122	2025-12-30 17:44:54.9704
+27	Ishaan Sharma	6388469106	sanjitsharma1987@gmail.com	2016-08-30	Loknath Nagar , Bagdogra, Near- Gayatri Marbles, Dist. Darjeeling	2025-12-22 12:18:38.865811	2025-12-30 17:45:13.014121
+28	Ayush Das	9593014415	narashdas@gmail.com	2012-10-05	Nutun Para, Gossainpur	2026-01-06 13:17:39.111732	2026-01-06 13:17:39.111732
+29	Abhishek kumar singh	9470011711	ankitkumarsingh11135@gmail.com	2000-10-20	phuhan ara Bihar, pin 802163	2026-01-29 12:40:43.741156	2026-01-29 12:40:43.741156
+30	Sharmistha Roy	9339939643	roysharmisha982@gmail.com	2004-06-23	Sukantapally,Bagdogra	2026-01-31 12:33:14.627857	2026-01-31 12:33:14.627857
+31	Rakhi Oraon	9382977203	orakhi59@gmail.com	1997-03-07	Alokjhari Jote, Rajajhar, Bagdogra, 734014	2026-03-07 07:58:56.922651	2026-03-07 07:58:56.922651
+32	Irfan Khan	8609004815	lipib596@gmail.com	2010-08-04	Bhujia Banir, Bagdogra	2026-03-19 14:35:13.391594	2026-03-19 14:35:13.391594
+33	Babai mahato	8638934121	babaimahato617@gmail.com	2003-09-22	thiknikata (Nilkantha) (jibonsawa) Noukaghat road, siliguri, 734011	2026-03-24 14:44:21.063447	2026-03-24 14:44:21.063447
+34	Khushi kumari	7029348616	dharmendrayan@gmail.com	2010-10-04	Railway colony, Bagdogra quater no 39b	2026-03-31 11:41:06.819364	2026-03-31 11:41:06.819364
+35	Tanisha Gupta	9093059234	guptainternet09@gmail.com	2010-10-26	west bengal siliguri puthimari 734014	2026-03-31 12:10:24.130725	2026-03-31 12:10:24.130725
+36	Babli Karmakar	8293495364	test12@test.in	2008-05-27	Bagdogra bhujiapani	2026-03-31 13:06:02.481023	2026-03-31 13:06:02.481023
+5	Vasudha Kumari	6006134575	dk6006134575@gmail.com	2012-09-20	K1 Fitness Gym, Loknath Nagar, Bagdogra	2025-08-24 16:20:16.547799	2026-03-31 13:21:39.847646
+37	Shristi Chik Baraik	8918025430	chikbaraikshristi@gmail.com	2005-08-20	HANSQUA F. L , BAGDOGRA.	2026-04-04 13:05:51.114805	2026-04-04 13:05:51.114805
+38	Kripa Mahato	8720902685	abc@gmail.com	2010-09-10	Patapari, p.o. Penchara, dist - purulia, Manbazar -	2026-04-10 08:06:04.187826	2026-04-10 08:06:04.187826
+41	Kunal saha	9635704193	20yash07kunal@gmail.com	2007-03-30	Bagdogra railway colony.	2026-05-08 14:06:44.55744	2026-05-08 14:06:44.55744
+42	Parakhar Sunar	9679747899	prakharsunar@gmail.com	2009-10-05	Bhujiyapani,putimari road, bagdogra	2026-05-09 12:35:36.503265	2026-05-09 12:35:36.503265
+43	Abidan Rai	9775452082	throne2crown@gmail.com	2008-08-14	Bhujiapani,Bagdogra,Dis-darjeeeling	2026-05-25 13:01:03.851416	2026-05-25 13:01:03.851416
+44	Nishant Kumar Roy	7001660551	nkroy567.nkr@gmail.com	2001-09-29	Railway Colony Station More Bagdogra near Radhakrishna Mandir	2026-05-26 13:27:03.981121	2026-05-26 13:27:03.981121
+45	Debjit Ghosh	+917478038926	debjitghosh1236	2013-01-25	Ashok Nagar Bagdogora 734014	2026-05-27 11:47:01.456677	2026-05-27 11:47:01.456677
+46	Chandan Kumar Ray	8388940789	crai47130@gamil.com	2007-05-14	Harekrishna pally bagdogra	2026-07-02 14:13:40.512637	2026-07-02 14:13:40.512637
+47	Soumi Mitra	9382878350	soumim761@gmail.com	2000-10-09	Lokenath Nagar	2026-07-21 13:03:26.784163	2026-07-21 13:03:26.784163
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: neondb_owner
+--
+
+COPY public.users (id, username, password_hash, user_type, is_active, created_at, last_login, failed_attempts, locked_until) FROM stdin;
+1	admin	$2a$12$gIbiyYIUfexSRsKb3ckT3.rWwIB5/vbRlZK6OuFlB9iyLtZC8pQNC	admin	t	2025-08-25 18:10:24.819803	2026-08-04 06:07:31.442462	0	\N
+\.
+
+
+--
+-- Name: course_registrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.course_registrations_id_seq', 47, true);
+
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.courses_id_seq', 9, true);
+
+
+--
+-- Name: monthly_installments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.monthly_installments_id_seq', 320, true);
+
+
+--
+-- Name: payment_history_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.payment_history_id_seq', 105, true);
+
+
+--
+-- Name: payment_installment_mapping_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.payment_installment_mapping_id_seq', 68, true);
+
+
+--
+-- Name: registrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.registrations_id_seq', 49, true);
+
+
+--
+-- Name: students_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.students_id_seq', 47, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: neondb_owner
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+
+
+--
+-- Name: course_registrations course_registrations_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.course_registrations
+    ADD CONSTRAINT course_registrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: courses courses_name_key; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT courses_name_key UNIQUE (name);
+
+
+--
+-- Name: courses courses_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT courses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: monthly_installments monthly_installments_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.monthly_installments
+    ADD CONSTRAINT monthly_installments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payment_history payment_history_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_history
+    ADD CONSTRAINT payment_history_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payment_installment_mapping payment_installment_mapping_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_installment_mapping
+    ADD CONSTRAINT payment_installment_mapping_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registrations registrations_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.registrations
+    ADD CONSTRAINT registrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registrations registrations_receipt_no_key; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.registrations
+    ADD CONSTRAINT registrations_receipt_no_key UNIQUE (receipt_no);
+
+
+--
+-- Name: students students_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.students
+    ADD CONSTRAINT students_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: idx_monthly_installments_course; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_monthly_installments_course ON public.monthly_installments USING btree (course_id);
+
+
+--
+-- Name: idx_monthly_installments_registration; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_monthly_installments_registration ON public.monthly_installments USING btree (registration_id);
+
+
+--
+-- Name: idx_monthly_installments_status; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_monthly_installments_status ON public.monthly_installments USING btree (payment_status);
+
+
+--
+-- Name: idx_payment_history_date; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_payment_history_date ON public.payment_history USING btree (payment_date);
+
+
+--
+-- Name: idx_payment_history_registration; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_payment_history_registration ON public.payment_history USING btree (registration_id);
+
+
+--
+-- Name: idx_payment_mapping_payment; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_payment_mapping_payment ON public.payment_installment_mapping USING btree (payment_history_id);
+
+
+--
+-- Name: idx_registrations_date; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_registrations_date ON public.registrations USING btree (registration_date);
+
+
+--
+-- Name: idx_registrations_receipt; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_registrations_receipt ON public.registrations USING btree (receipt_no);
+
+
+--
+-- Name: idx_students_email; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_students_email ON public.students USING btree (email);
+
+
+--
+-- Name: idx_students_phone; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_students_phone ON public.students USING btree (phone_number);
+
+
+--
+-- Name: idx_users_type; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_users_type ON public.users USING btree (user_type);
+
+
+--
+-- Name: idx_users_username; Type: INDEX; Schema: public; Owner: neondb_owner
+--
+
+CREATE INDEX idx_users_username ON public.users USING btree (username);
+
+
+--
+-- Name: course_registrations after_course_registration_insert; Type: TRIGGER; Schema: public; Owner: neondb_owner
+--
+
+CREATE TRIGGER after_course_registration_insert AFTER INSERT ON public.course_registrations FOR EACH ROW WHEN (((new.payment_plan)::text = 'monthly'::text)) EXECUTE FUNCTION public.trigger_create_monthly_installments();
+
+
+--
+-- Name: students update_students_updated_at; Type: TRIGGER; Schema: public; Owner: neondb_owner
+--
+
+CREATE TRIGGER update_students_updated_at BEFORE UPDATE ON public.students FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: course_registrations course_registrations_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.course_registrations
+    ADD CONSTRAINT course_registrations_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id);
+
+
+--
+-- Name: course_registrations course_registrations_registration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.course_registrations
+    ADD CONSTRAINT course_registrations_registration_id_fkey FOREIGN KEY (registration_id) REFERENCES public.registrations(id);
+
+
+--
+-- Name: monthly_installments monthly_installments_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.monthly_installments
+    ADD CONSTRAINT monthly_installments_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id) ON DELETE CASCADE;
+
+
+--
+-- Name: monthly_installments monthly_installments_registration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.monthly_installments
+    ADD CONSTRAINT monthly_installments_registration_id_fkey FOREIGN KEY (registration_id) REFERENCES public.registrations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: payment_history payment_history_registration_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_history
+    ADD CONSTRAINT payment_history_registration_id_fkey FOREIGN KEY (registration_id) REFERENCES public.registrations(id);
+
+
+--
+-- Name: payment_installment_mapping payment_installment_mapping_monthly_installment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_installment_mapping
+    ADD CONSTRAINT payment_installment_mapping_monthly_installment_id_fkey FOREIGN KEY (monthly_installment_id) REFERENCES public.monthly_installments(id) ON DELETE CASCADE;
+
+
+--
+-- Name: payment_installment_mapping payment_installment_mapping_payment_history_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.payment_installment_mapping
+    ADD CONSTRAINT payment_installment_mapping_payment_history_id_fkey FOREIGN KEY (payment_history_id) REFERENCES public.payment_history(id) ON DELETE CASCADE;
+
+
+--
+-- Name: registrations registrations_student_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: neondb_owner
+--
+
+ALTER TABLE ONLY public.registrations
+    ADD CONSTRAINT registrations_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: cloud_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public GRANT ALL ON SEQUENCES TO neon_superuser WITH GRANT OPTION;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: cloud_admin
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE cloud_admin IN SCHEMA public GRANT ALL ON TABLES TO neon_superuser WITH GRANT OPTION;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict AcWYYPdw5cJRee1eNma8ddStlbYqwUeepTZ8crnuZCBCLTtLO8CR2nD8PWqn1pT
+
