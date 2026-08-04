@@ -15,7 +15,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/admin.html", destination: "/admin", permanent: true },
       { source: "/login.html", destination: "/admin/login", permanent: true },
-      { source: "/course-registration.html", destination: "/register", permanent: true },
+      // The public site no longer self-registers students (admin-only now) — send
+      // the old registration URL to the course listing instead.
+      { source: "/course-registration.html", destination: "/courses", permanent: true },
       { source: "/brochure.html", destination: "/brochure", permanent: true },
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/old-index.html", destination: "/", permanent: true },

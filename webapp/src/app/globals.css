@@ -147,6 +147,93 @@ h4 {
 }
 
 /* ============================================================================
+   THE EDU WORLD — public marketing site (scoped to `.edu`)
+   The customer-facing pages are rebuilt to match the EduSmart LMS template:
+   DM Sans, a bright blue (#0171f1) primary with a plum (#442e66) secondary,
+   soft rounded cards and pill buttons on white. Scoped to `.edu` so it can
+   redefine the shared role tokens (--accent, --link, --brand, neutrals) for its
+   subtree WITHOUT touching the admin Records Office world below or its tokens.
+   It also pins a light palette so OS dark-mode never flips the marketing pages.
+   ========================================================================= */
+.edu {
+  --edu-primary: #0171f1;
+  --edu-primary-dark: #0161d1;
+  --edu-secondary: #442e66; /* plum — dark bands, logo chip */
+  --edu-secondary-dark: #351f57;
+  --edu-ink: #0e1330; /* headings */
+  --edu-tint: #eef4ff; /* pale blue section fill */
+  --edu-tint-plum: #f4f0fb;
+  --edu-star: #ff9500; /* rating stars */
+
+  /* Repoint the shared role tokens for the public subtree */
+  --accent: var(--edu-primary);
+  --accent-hover: var(--edu-primary-dark);
+  --accent-fg: #ffffff;
+  --link: var(--edu-primary);
+  --brand: var(--edu-secondary);
+
+  /* Pin a light palette (wins over the dark-mode :root block for this subtree) */
+  --background: #ffffff;
+  --surface: #ffffff;
+  --surface-2: var(--edu-tint);
+  --foreground: var(--edu-ink);
+  --body: #4c5568;
+  --muted: #7b8397;
+  --border: #e7ebf3;
+
+  --radius-control: 10px;
+  --radius-card: 18px;
+  --shadow-float: 0 24px 60px -24px rgb(4 27 74 / 0.28), 0 8px 22px -14px rgb(4 27 74 / 0.18);
+
+  font-family: var(--font-dm-sans), var(--font-inter), system-ui, -apple-system, Arial, sans-serif;
+  background: var(--background);
+  color: var(--body);
+}
+
+.edu h1,
+.edu h2,
+.edu h3,
+.edu h4 {
+  color: var(--edu-ink);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+@layer components {
+  /* Solid blue pill — the primary marketing CTA */
+  .edu-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[var(--edu-primary)] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--edu-primary-dark)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--edu-primary)] disabled:pointer-events-none disabled:opacity-50;
+  }
+  /* Outline pill — secondary action */
+  .edu-btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-white px-6 py-3 text-sm font-semibold text-[var(--edu-ink)] transition-all hover:border-[var(--edu-primary)] hover:text-[var(--edu-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--edu-primary)];
+  }
+  /* Ghost pill on dark bands */
+  .edu-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10;
+  }
+  /* Soft floating content card */
+  .edu-card {
+    @apply rounded-[var(--radius-card)] border border-[var(--border)] bg-white shadow-[0_10px_40px_-24px_rgb(4_27_74_/_0.25)];
+  }
+  /* Small blue uppercase eyebrow with a leading dot */
+  .edu-eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[var(--edu-primary)];
+  }
+  .edu-eyebrow::before {
+    content: "";
+    height: 0.5rem;
+    width: 0.5rem;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+  /* Round icon chip (pale blue) */
+  .edu-chip {
+    @apply grid place-items-center rounded-2xl bg-[var(--edu-tint)] text-[var(--edu-primary)];
+  }
+}
+
+/* ============================================================================
    THE RECORDS OFFICE — admin-only visual world (scoped to `.ro`)
    The institute's steel records room made digital: enamel-on-steel grey-green
    chrome, file-cream content, engraved label plates, numbered file-spine nav,

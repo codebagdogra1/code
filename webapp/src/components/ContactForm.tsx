@@ -31,7 +31,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card p-6 sm:p-8">
+    <form onSubmit={handleSubmit} className="edu-card p-6 sm:p-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className="label">
@@ -77,7 +77,7 @@ export function ContactForm() {
         </p>
       )}
 
-      <button type="submit" disabled={status.type === "loading"} className="btn-primary mt-6 w-full sm:w-auto">
+      <button type="submit" disabled={status.type === "loading"} className="edu-btn mt-6 w-full sm:w-auto">
         {status.type === "loading" ? "Sending…" : "Send message"}
       </button>
       <p className="mt-3 text-xs text-[var(--muted)]">

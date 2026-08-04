@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { SiteHeader } from "@/components/SiteHeader";
+import { PublicLayout } from "@/components/PublicLayout";
 import { prisma } from "@/lib/db";
 import { formatCurrency } from "@/lib/format";
+import { whatsappLink } from "@/lib/site";
 
 // Prerender and revalidate every 5 minutes (ISR) — the brochure is public and
 // changes only when courses do, so there's no need to query the DB per request.
@@ -39,58 +39,69 @@ export default async function BrochurePage() {
   }
 
   return (
-    <>
-      <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-12">
-        <h1 className="text-3xl font-bold">Course brochure</h1>
-        <p className="mt-1 text-[var(--muted)]">
-          Everything we offer, with durations and flexible payment plans.
-        </p>
+    <PublicLayout>
+      <section className="bg-gradient-to-b from-[var(--edu-tint)] to-white">
+        <div className="mx-auto w-full max-w-4xl px-4 py-14 text-center sm:py-16">
+          <span className="edu-eyebrow mx-auto w-fit">Brochure</span>
+          <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Course brochure</h1>
+          <p className="mx-auto mt-3 max-w-xl text-[var(--body)]">
+            Everything we offer, with durations and flexible payment plans.
+          </p>
+        </div>
+      </section>
 
-        <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-[36rem] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-[var(--border)] text-left text-[var(--muted)]">
-                <th className="py-3 pr-4">Course</th>
-                <th className="py-3 pr-4">Duration</th>
-                <th className="py-3 pr-4">Full price</th>
-                <th className="py-3">Monthly plan</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((c) => (
-                <tr key={c.id} className="border-b border-[var(--border)]">
-                  <td className="py-3 pr-4 font-medium">{c.name}</td>
-                  <td className="py-3 pr-4 text-[var(--muted)]">{c.duration || "—"}</td>
-                  <td className="py-3 pr-4">
-                    {c.fullPrice != null ? formatCurrency(c.fullPrice) : "—"}
-                  </td>
-                  <td className="py-3">
-                    {c.monthlyPrice != null
-                      ? `${formatCurrency(
-                          Math.ceil(c.monthlyPrice / c.monthlyInstallments),
-                        )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
-                      : "—"}
-                  </td>
+      <div className="mx-auto w-full max-w-4xl px-4 py-12">
+        <div className="edu-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[36rem] border-collapse text-sm">
+              <thead>
+                <tr className="bg-[var(--edu-tint)] text-left text-[var(--edu-ink)]">
+                  <th className="px-5 py-4 font-bold">Course</th>
+                  <th className="px-5 py-4 font-bold">Duration</th>
+                  <th className="px-5 py-4 font-bold">Full price</th>
+                  <th className="px-5 py-4 font-bold">Monthly plan</th>
                 </tr>
-              ))}
-              {courses.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="py-8 text-center text-[var(--muted)]">
-                    No courses to show yet.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {courses.map((c) => (
+                  <tr key={c.id} className="border-t border-[var(--border)]">
+                    <td className="px-5 py-4 font-semibold text-[var(--edu-ink)]">{c.name}</td>
+                    <td className="px-5 py-4 text-[var(--muted)]">{c.duration || "—"}</td>
+                    <td className="px-5 py-4 font-semibold">
+                      {c.fullPrice != null ? formatCurrency(c.fullPrice) : "—"}
+                    </td>
+                    <td className="px-5 py-4 text-[var(--body)]">
+                      {c.monthlyPrice != null
+                        ? `${formatCurrency(
+                            Math.ceil(c.monthlyPrice / c.monthlyInstallments),
+                          )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
+                        : "—"}
+                    </td>
+                  </tr>
+                ))}
+                {courses.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="px-5 py-10 text-center text-[var(--muted)]">
+                      No courses to show yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div className="mt-8">
-          <Link href="/register" className="btn-primary px-6 py-3">
-            Enroll now
-          </Link>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="edu-btn px-8 py-3.5 text-base"
+          >
+            Enroll on WhatsApp
+          </a>
         </div>
-      </main>
-    </>
+      </div>
+    </PublicLayout>
   );
 }
