@@ -13,7 +13,17 @@ export async function GET(
     const reg = await prisma.registration.findUnique({
       where: { receiptNo },
       include: {
-        student: true,
+        // The student, plus every registration they hold — used to render the
+        // "student files" strip so the desk can hop between a student's separate
+        // registrations (e.g. a DCA→ADCA transfer that lives on two receipts).
+        student: {
+          include: {
+            registrations: {
+              include: { courseRegistrations: { include: { course: { select: { name: true } } } } },
+              orderBy: { registrationDate: "asc" },
+            },
+          },
+        },
         courseRegistrations: { include: { course: true } },
         monthlyInstallments: { include: { course: true }, orderBy: { monthNumber: "asc" } },
       },
@@ -39,6 +49,17 @@ export async function GET(
       email: reg.student.email,
       address: reg.student.address,
       date_of_birth: reg.student.dateOfBirth,
+      student_id: reg.studentId,
+      // The student's registrations (including this one), for the files strip.
+      student_registrations: reg.student.registrations.map((r) => ({
+        receipt_no: r.receiptNo,
+        registration_date: r.registrationDate,
+        payment_status: r.paymentStatus,
+        due_amount: r.dueAmount,
+        course_names: r.courseRegistrations
+          .map((cr) => cr.course?.name ?? "")
+          .filter(Boolean),
+      })),
       courses: reg.courseRegistrations.map((cr) => ({
         course_id: cr.courseId,
         course_name: cr.course?.name ?? "",

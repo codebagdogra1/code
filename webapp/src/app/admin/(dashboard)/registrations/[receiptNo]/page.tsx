@@ -339,6 +339,28 @@ export default function RegistrationDetailPage({
         </div>
       </header>
 
+      {/* Student files — when a student holds more than one registration (e.g. a
+          DCA→ADCA transfer on two receipts), a strip of their registrations lets
+          the desk hop between them. The current one is marked and non-clickable. */}
+      {reg.student_registrations.length > 1 && (
+        <section className="ro-panel mt-4 overflow-hidden">
+          <div
+            className="flex items-center gap-2.5 px-4 py-2.5"
+            style={{ borderBottom: "1px solid var(--ro-line)" }}
+          >
+            <span className="ro-plate ro-plate--ink">Student files</span>
+            <span className="ro-mono text-[0.7rem] tracking-wide text-[var(--ro-ink-2)]">
+              {reg.student_registrations.length} registrations for {reg.full_name}
+            </span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto p-3">
+            {reg.student_registrations.map((r) => (
+              <FileTab key={r.receipt_no} r={r} current={r.receipt_no === reg.receipt_no} />
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_1fr]">
         <div className="space-y-5">
           {/* Student job-card — receipt number runs down the file spine */}
@@ -680,6 +702,50 @@ export default function RegistrationDetailPage({
         </aside>
       </div>
     </div>
+  );
+}
+
+function FileTab({
+  r,
+  current,
+}: {
+  r: RegistrationDetail["student_registrations"][number];
+  current: boolean;
+}) {
+  const inner = (
+    <>
+      <div className="flex items-center justify-between gap-2">
+        <span className="ro-mono text-xs font-semibold">{r.receipt_no}</span>
+        <span className={`ro-stamp ${roStampClass(r.payment_status)} text-[0.65rem]`}>
+          {statusLabel(r.payment_status)}
+        </span>
+      </div>
+      <div className="mt-1 truncate text-[0.72rem]">{r.course_names.join(", ") || "—"}</div>
+      <div className="ro-mono mt-0.5 text-[0.65rem] text-[var(--ro-ink-2)]">
+        {formatDate(r.registration_date)} ·{" "}
+        {r.due_amount > 0 ? `due ${formatRupees(r.due_amount)}` : "settled"}
+      </div>
+    </>
+  );
+  const base = "min-w-[9.5rem] max-w-[13rem] shrink-0 rounded-sm border px-3 py-2 text-left";
+  if (current) {
+    return (
+      <div
+        aria-current="page"
+        className={`${base} border-[var(--ro-ink)] bg-[var(--ro-panel-2)]`}
+        style={{ boxShadow: "inset 3px 0 0 var(--ro-ink)" }}
+      >
+        {inner}
+      </div>
+    );
+  }
+  return (
+    <Link
+      href={`/admin/registrations/${encodeURIComponent(r.receipt_no)}`}
+      className={`${base} border-[var(--ro-line-2)] transition-colors hover:bg-[var(--ro-panel-2)]`}
+    >
+      {inner}
+    </Link>
   );
 }
 

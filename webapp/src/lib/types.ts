@@ -62,6 +62,16 @@ export type RegistrationDetail = {
   email: string | null;
   address: string | null;
   date_of_birth: string | null;
+  student_id: number | null;
+  // Every registration held by this student (including the current one), for the
+  // "student files" strip that lets the desk hop between separate registrations.
+  student_registrations: {
+    receipt_no: string;
+    registration_date: string;
+    payment_status: string;
+    due_amount: number;
+    course_names: string[];
+  }[];
   courses: {
     course_id: number | null;
     course_name: string;
