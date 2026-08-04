@@ -63,6 +63,7 @@ export type RegistrationDetail = {
   address: string | null;
   date_of_birth: string | null;
   courses: {
+    course_id: number | null;
     course_name: string;
     payment_plan: string;
     course_fee: number;

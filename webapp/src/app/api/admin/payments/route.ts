@@ -265,22 +265,39 @@ export async function GET(req: NextRequest) {
         registration: {
           select: { receiptNo: true, student: { select: { fullName: true, phoneNumber: true } } },
         },
+        // Which course(s) each payment settled, via its installment mappings. Lets
+        // the detail page attribute a payment to a course. Flat/legacy payments have
+        // no mappings and so are only shown in the "all courses" view.
+        mappings: { include: { monthlyInstallment: { select: { courseId: true } } } },
       },
     });
 
-    const mapped = payments.map((p) => ({
-      id: p.id,
-      registration_id: p.registrationId,
-      payment_amount: p.paymentAmount,
-      payment_method: p.paymentMethod,
-      payment_type: p.paymentType,
-      receipt_no: p.receiptNo,
-      notes: p.notes,
-      payment_date: p.paymentDate,
-      registration_receipt_no: p.registration?.receiptNo ?? "",
-      full_name: p.registration?.student?.fullName ?? "",
-      phone_number: p.registration?.student?.phoneNumber ?? "",
-    }));
+    const mapped = payments.map((p) => {
+      // Sum the amount applied to each course across this payment's mappings.
+      const perCourse = new Map<number, number>();
+      for (const m of p.mappings) {
+        const courseId = m.monthlyInstallment?.courseId;
+        if (courseId == null) continue;
+        perCourse.set(courseId, (perCourse.get(courseId) ?? 0) + Number(m.amountApplied));
+      }
+      return {
+        id: p.id,
+        registration_id: p.registrationId,
+        payment_amount: p.paymentAmount,
+        payment_method: p.paymentMethod,
+        payment_type: p.paymentType,
+        receipt_no: p.receiptNo,
+        notes: p.notes,
+        payment_date: p.paymentDate,
+        registration_receipt_no: p.registration?.receiptNo ?? "",
+        full_name: p.registration?.student?.fullName ?? "",
+        phone_number: p.registration?.student?.phoneNumber ?? "",
+        courses: [...perCourse.entries()].map(([course_id, amount_applied]) => ({
+          course_id,
+          amount_applied: Math.round(amount_applied),
+        })),
+      };
+    });
 
     return NextResponse.json(serialize({ payments: mapped }));
   } catch (error) {

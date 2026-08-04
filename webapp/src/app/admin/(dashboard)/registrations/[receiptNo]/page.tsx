@@ -30,6 +30,9 @@ type PaymentRow = {
   payment_type: string;
   receipt_no: string;
   payment_date: string | null;
+  // Amount this payment applied to each course, derived from its installment
+  // mappings. Empty for flat/legacy payments with no course attribution.
+  courses?: { course_id: number; amount_applied: number }[];
 };
 
 const num = (v: number | string | null | undefined) => Number(v ?? 0);
@@ -47,6 +50,9 @@ export default function RegistrationDetailPage({
   const [error, setError] = useState<string | null>(null);
 
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  // Which course's details are shown. "all" merges every course (the default);
+  // a course_id narrows the installments and payments to just that course.
+  const [courseFilter, setCourseFilter] = useState<number | "all">("all");
   const [method, setMethod] = useState("Cash");
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<{
@@ -261,6 +267,37 @@ export default function RegistrationDetailPage({
       </div>
     );
 
+  // A single registration can carry several courses; the selector below lets the
+  // admin drill into one at a time. With one course there is nothing to switch, so
+  // the selector stays hidden and every panel shows that course as before.
+  const multiCourse = reg.courses.length > 1;
+  const activeCourse =
+    courseFilter === "all" ? null : reg.courses.find((c) => c.course_id === courseFilter) ?? null;
+
+  // Switching course clears any pending month selection so a now-hidden course's
+  // months can't silently stay in the payment total.
+  const chooseCourse = (f: number | "all") => {
+    setCourseFilter(f);
+    setSelected(new Set());
+  };
+
+  const visibleGroups =
+    courseFilter === "all" ? groups : groups.filter((g) => g.course_id === courseFilter);
+
+  // In a course-filtered view, show the amount that payment applied to this course
+  // (a payment can settle months across courses); in the "all" view show the full total.
+  const paymentAmountFor = (p: PaymentRow) =>
+    courseFilter === "all"
+      ? p.payment_amount
+      : (p.courses ?? []).reduce(
+          (t, c) => (c.course_id === courseFilter ? t + c.amount_applied : t),
+          0,
+        );
+  const visiblePayments =
+    courseFilter === "all"
+      ? payments
+      : payments.filter((p) => (p.courses ?? []).some((c) => c.course_id === courseFilter));
+
   return (
     <div>
       <Link
@@ -323,24 +360,52 @@ export default function RegistrationDetailPage({
             </div>
           </section>
 
-          {/* Courses */}
+          {/* Courses — with 2+ courses each row is a filter that scopes the
+              installments and payments below to that course. */}
           <section className="ro-panel overflow-hidden">
-            <div className="px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
+            <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
               <span className="ro-plate ro-plate--ink">Courses</span>
+              {multiCourse && (
+                <span className="ro-mono hidden text-[0.7rem] tracking-wide text-[var(--ro-ink-2)] sm:inline">
+                  tap a course to view its details
+                </span>
+              )}
             </div>
-            <ul className="divide-y divide-[var(--ro-line)]">
-              {reg.courses.map((c, i) => (
-                <li key={i} className="flex items-center justify-between px-5 py-3.5">
-                  <div>
-                    <div className="font-semibold">{c.course_name}</div>
-                    <div className="text-[0.72rem] uppercase tracking-wide text-[var(--ro-ink-2)]">
-                      {c.duration || "—"} · {c.payment_plan}
+            {multiCourse ? (
+              <div className="divide-y divide-[var(--ro-line)]">
+                <CourseRow
+                  active={courseFilter === "all"}
+                  onClick={() => chooseCourse("all")}
+                  title="All courses"
+                  subtitle={`${reg.courses.length} enrolled`}
+                  amount={formatRupees(reg.courses.reduce((t, c) => t + c.course_fee, 0))}
+                />
+                {reg.courses.map((c, i) => (
+                  <CourseRow
+                    key={c.course_id ?? i}
+                    active={courseFilter === c.course_id}
+                    onClick={() => c.course_id != null && chooseCourse(c.course_id)}
+                    title={c.course_name}
+                    subtitle={`${c.duration || "—"} · ${c.payment_plan}`}
+                    amount={formatRupees(c.course_fee)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <ul className="divide-y divide-[var(--ro-line)]">
+                {reg.courses.map((c, i) => (
+                  <li key={i} className="flex items-center justify-between px-5 py-3.5">
+                    <div>
+                      <div className="font-semibold">{c.course_name}</div>
+                      <div className="text-[0.72rem] uppercase tracking-wide text-[var(--ro-ink-2)]">
+                        {c.duration || "—"} · {c.payment_plan}
+                      </div>
                     </div>
-                  </div>
-                  <span className="ro-mono font-semibold">{formatRupees(c.course_fee)}</span>
-                </li>
-              ))}
-            </ul>
+                    <span className="ro-mono font-semibold">{formatRupees(c.course_fee)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
 
           {/* Punch-card month grid */}
@@ -356,7 +421,12 @@ export default function RegistrationDetailPage({
                 </span>
               </div>
               <div className="space-y-5 p-5">
-                {groups.map((g) => {
+                {visibleGroups.length === 0 && (
+                  <p className="ro-mono text-[0.72rem] tracking-wide text-[var(--ro-ink-2)]">
+                    No monthly installments for {activeCourse?.course_name ?? "this course"}.
+                  </p>
+                )}
+                {visibleGroups.map((g) => {
                   const settled = g.installments.filter(isPaid).length;
                   return (
                     <div key={g.course_id}>
@@ -401,17 +471,24 @@ export default function RegistrationDetailPage({
             </section>
           )}
 
-          {/* Payment history — each collected payment prints its own fee receipt */}
-          {payments.length > 0 && (
+          {/* Payment history — each collected payment prints its own fee receipt.
+              When a course is selected we show only payments that touched it, and the
+              amount each applied to that course (a payment can span several courses). */}
+          {visiblePayments.length > 0 && (
             <section className="ro-panel overflow-hidden">
-              <div className="px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
+              <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid var(--ro-line)" }}>
                 <span className="ro-plate ro-plate--ink">Payments received</span>
+                {activeCourse && (
+                  <span className="ro-mono hidden text-[0.7rem] tracking-wide text-[var(--ro-ink-2)] sm:inline">
+                    applied to {activeCourse.course_name}
+                  </span>
+                )}
               </div>
               <ul className="divide-y divide-[var(--ro-line)]">
-                {payments.map((p) => (
+                {visiblePayments.map((p) => (
                   <li key={p.id} className="flex items-center justify-between gap-3 px-5 py-3">
                     <div className="min-w-0">
-                      <div className="ro-mono text-sm font-semibold">{formatRupees(p.payment_amount)}</div>
+                      <div className="ro-mono text-sm font-semibold">{formatRupees(paymentAmountFor(p))}</div>
                       <div className="ro-mono truncate text-[0.7rem] text-[var(--ro-ink-2)]">
                         {p.receipt_no} · {formatDate(p.payment_date)} · {p.payment_method}
                       </div>
@@ -603,6 +680,38 @@ export default function RegistrationDetailPage({
         </aside>
       </div>
     </div>
+  );
+}
+
+function CourseRow({
+  active,
+  onClick,
+  title,
+  subtitle,
+  amount,
+}: {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  subtitle: string;
+  amount: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex w-full items-center justify-between px-5 py-3.5 text-left transition-colors ${
+        active ? "bg-[var(--ro-panel-2)]" : "hover:bg-[var(--ro-panel-2)]"
+      }`}
+      style={active ? { boxShadow: "inset 3px 0 0 var(--ro-ink)" } : undefined}
+    >
+      <div>
+        <div className="font-semibold">{title}</div>
+        <div className="text-[0.72rem] uppercase tracking-wide text-[var(--ro-ink-2)]">{subtitle}</div>
+      </div>
+      <span className="ro-mono font-semibold">{amount}</span>
+    </button>
   );
 }
 

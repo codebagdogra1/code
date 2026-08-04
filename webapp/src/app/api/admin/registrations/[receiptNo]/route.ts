@@ -40,6 +40,7 @@ export async function GET(
       address: reg.student.address,
       date_of_birth: reg.student.dateOfBirth,
       courses: reg.courseRegistrations.map((cr) => ({
+        course_id: cr.courseId,
         course_name: cr.course?.name ?? "",
         payment_plan: cr.paymentPlan,
         course_fee: cr.courseFee,
