@@ -49,10 +49,10 @@ const VALUES = [
 ];
 
 const STATS = [
-  { value: "2,500+", label: "Students trained" },
-  { value: "40+", label: "Courses offered" },
-  { value: "25+", label: "Expert instructors" },
-  { value: "92%", label: "Placement support" },
+  { value: "2,500+", label: "Students trained", tint: "#f0526a" },
+  { value: "40+", label: "Courses offered", tint: "#8a4fe0" },
+  { value: "25+", label: "Expert instructors", tint: "#0171f1" },
+  { value: "92%", label: "Placement support", tint: "#22a35a" },
 ];
 
 const INSTRUCTORS = [
@@ -121,12 +121,14 @@ export default function AboutPage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-[var(--edu-secondary)] text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 gap-8 px-4 py-14 lg:grid-cols-4">
+      <section className="mx-auto w-full max-w-6xl px-4">
+        <div className="grid grid-cols-2 gap-y-8 rounded-[var(--radius-card)] bg-gradient-to-r from-[#f6ecfb] via-[#e7f1fe] to-[#e6f7ee] px-6 py-10 lg:grid-cols-4">
           {STATS.map((s) => (
             <div key={s.label} className="text-center">
-              <p className="text-3xl font-extrabold tracking-tight sm:text-4xl">{s.value}</p>
-              <p className="mt-1 text-sm text-white/70">{s.label}</p>
+              <p className="text-3xl font-extrabold tracking-tight sm:text-4xl" style={{ color: s.tint }}>
+                {s.value}
+              </p>
+              <p className="mt-1 text-sm text-[var(--body)]">{s.label}</p>
             </div>
           ))}
         </div>
@@ -185,7 +187,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:py-20">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-[var(--edu-primary)] px-6 py-16 text-center text-white sm:px-12">
-          <h2 className="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h2 className="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight !text-white sm:text-4xl">
             Join the next batch
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-white/85">

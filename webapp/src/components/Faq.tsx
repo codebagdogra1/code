@@ -29,14 +29,18 @@ export function Faq({ items }: { items: FaqItem[] }) {
               </span>
               <span
                 aria-hidden
-                className={`grid h-7 w-7 shrink-0 place-items-center rounded-full transition-all ${
+                className={`grid h-8 w-8 shrink-0 place-items-center rounded-full transition-all ${
                   isOpen
-                    ? "rotate-45 bg-[var(--edu-primary)] text-white"
+                    ? "bg-[var(--edu-primary)] text-white"
                     : "bg-[var(--edu-tint)] text-[var(--edu-primary)]"
                 }`}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+                  {isOpen ? (
+                    <path d="M5 12h14" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                  ) : (
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+                  )}
                 </svg>
               </span>
             </button>

@@ -23,6 +23,18 @@ const nextConfig: NextConfig = {
       { source: "/old-index.html", destination: "/", permanent: true },
     ];
   },
+
+  // Homepage is an exact static mirror of the EduSmart demo, living in
+  // public/home/ (index.html + its full CSS/JS/image/font asset graph, all
+  // referenced by absolute /home/... paths). A `beforeFiles` rewrite serves it
+  // at "/" and, per Next's routing order, overrides app/page.tsx for the root.
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/", destination: "/home/index.html" }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
 };
 
 export default nextConfig;
