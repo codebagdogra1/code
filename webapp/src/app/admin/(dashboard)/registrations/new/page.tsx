@@ -450,7 +450,7 @@ export default function NewRegistrationPage() {
                 type="number"
                 min={0}
                 className="ro-input ro-mono"
-                value={admissionFee}
+                value={admissionFee === 0 ? "" : admissionFee}
                 onChange={(e) => setAdmissionFee(Math.max(0, Math.round(Number(e.target.value))))}
               />
             </div>
@@ -460,7 +460,7 @@ export default function NewRegistrationPage() {
                 type="number"
                 min={0}
                 className="ro-input ro-mono"
-                value={discount}
+                value={discount === 0 ? "" : discount}
                 onChange={(e) => setDiscount(Math.max(0, Number(e.target.value)))}
               />
             </div>
