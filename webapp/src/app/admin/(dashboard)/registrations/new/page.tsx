@@ -17,7 +17,7 @@ type StudentMatch = {
   registrations_count: number;
 };
 
-const ADMISSION_FEES = 500;
+const DEFAULT_ADMISSION_FEE = 500;
 const BLANK = { full_name: "", phone_number: "", email: "", date_of_birth: "", address: "" };
 
 // Default per-month figure for a monthly course (monthly plan total ÷ installments).
@@ -31,6 +31,9 @@ export default function NewRegistrationPage() {
   // (e.g. take ₹1400/mo instead of ₹1500); null means use the course default.
   const [selected, setSelected] = useState<Record<number, { plan: Plan; customMonthly: number | null }>>({});
   const [student, setStudent] = useState({ ...BLANK });
+  // One-time admission fee taken at the desk. Editable — defaults to the usual
+  // figure but the desk sets the actual amount per enrolment.
+  const [admissionFee, setAdmissionFee] = useState(DEFAULT_ADMISSION_FEE);
   const [discount, setDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   // Money taken at the desk now (admission + first month). Editable; when not
@@ -115,11 +118,11 @@ export default function NewRegistrationPage() {
     [selected, courses],
   );
   const coursesTotal = chosen.reduce((s, c) => s + c.fee, 0);
-  const grandTotal = Math.max(0, coursesTotal + ADMISSION_FEES - discount);
+  const grandTotal = Math.max(0, coursesTotal + admissionFee - discount);
 
   // Default money to collect now = admission + one month of each monthly course.
   const firstMonthTotal = chosen.reduce((s, c) => s + (c.plan === "monthly" ? c.perMonth : 0), 0);
-  const defaultCollect = ADMISSION_FEES + firstMonthTotal;
+  const defaultCollect = admissionFee + firstMonthTotal;
   const collectNow = collectManual ? Math.max(0, Number(collectRaw) || 0) : defaultCollect;
   const dueAfter = Math.max(0, grandTotal - collectNow);
 
@@ -164,8 +167,8 @@ export default function NewRegistrationPage() {
             course_fee: c.fee,
           })),
           paymentDetails: {
-            total_amount: coursesTotal + ADMISSION_FEES,
-            admission_fees: ADMISSION_FEES,
+            total_amount: coursesTotal + admissionFee,
+            admission_fees: admissionFee,
             discount_amount: discount,
             paid_amount: collectNow,
             due_amount: dueAfter,
@@ -206,6 +209,7 @@ export default function NewRegistrationPage() {
               onClick={() => {
                 setReceipt(null);
                 setSelected({});
+                setAdmissionFee(DEFAULT_ADMISSION_FEE);
                 setDiscount(0);
                 setCollectManual(false);
                 setCollectRaw("");
@@ -226,7 +230,7 @@ export default function NewRegistrationPage() {
       <header className="flex items-center gap-3">
         <span className="ro-plate py-1.5">New registration</span>
         <span className="ro-mono text-xs font-semibold tracking-widest text-[var(--ro-ink-2)]">
-          A ONE-TIME ₹{ADMISSION_FEES} ADMISSION FEE APPLIES
+          A ONE-TIME ADMISSION FEE APPLIES
         </span>
       </header>
 
@@ -439,8 +443,17 @@ export default function NewRegistrationPage() {
             <span className="ro-plate ro-plate--ink">Summary</span>
             <dl className="mt-4 space-y-2.5">
               <SummaryRow label="Courses" value={formatRupees(coursesTotal)} />
-              <SummaryRow label="Admission fee" value={formatRupees(ADMISSION_FEES)} />
             </dl>
+            <div className="mt-3.5">
+              <label className="ro-label">Admission fee (₹)</label>
+              <input
+                type="number"
+                min={0}
+                className="ro-input ro-mono"
+                value={admissionFee}
+                onChange={(e) => setAdmissionFee(Math.max(0, Math.round(Number(e.target.value))))}
+              />
+            </div>
             <div className="mt-3.5">
               <label className="ro-label">Discount (₹)</label>
               <input
@@ -498,7 +511,7 @@ export default function NewRegistrationPage() {
                 }}
               />
               <p className="mt-1 text-[0.7rem] text-[var(--ro-ink-2)]">
-                Admission {formatRupees(ADMISSION_FEES)}
+                Admission {formatRupees(admissionFee)}
                 {firstMonthTotal > 0 ? ` + first month ${formatRupees(firstMonthTotal)}` : ""}. Applied to
                 month 1 automatically.
               </p>
