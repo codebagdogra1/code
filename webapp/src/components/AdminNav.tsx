@@ -52,7 +52,7 @@ export function MobileMenu({ username }: { username: string }) {
 
   return (
     <div
-      className="border-b border-[var(--ro-steel-edge)] md:hidden"
+      className="sticky top-0 z-30 border-b border-[var(--ro-steel-edge)] md:hidden"
       style={{ background: "linear-gradient(180deg,var(--ro-steel-hi),var(--ro-steel-2))" }}
     >
       <div className="flex items-center justify-between px-4 py-2.5">

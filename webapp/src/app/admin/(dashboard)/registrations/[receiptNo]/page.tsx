@@ -58,6 +58,8 @@ export default function RegistrationDetailPage({
 
   // Flat quick-payment (used when a registration has no monthly installments).
   const [flatAmount, setFlatAmount] = useState("");
+  // Custom amount for a single-month installment payment (partial payments).
+  const [customAmount, setCustomAmount] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -114,6 +116,26 @@ export default function RegistrationDetailPage({
 
   const hasInstallments = groups.some((g) => g.installments.length > 0);
 
+  // When exactly one month is selected the amount is editable, so the admin can
+  // record a partial payment. Multiple months always settle at their own dues.
+  const singleSelected = useMemo(
+    () => (selected.size === 1 ? byId.get([...selected][0]) ?? null : null),
+    [selected, byId],
+  );
+  const singleId = singleSelected?.id ?? null;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync input to selection
+    setCustomAmount(singleSelected ? String(remainingOf(singleSelected)) : "");
+    // Reset only when the single selection changes, not on every re-render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [singleId]);
+
+  // Amount actually posted: the (clamped) custom amount for a single month,
+  // otherwise the sum of each selected month's remaining due.
+  const payAmount = singleSelected
+    ? Math.min(Math.max(0, Math.round(Number(customAmount) || 0)), remainingOf(singleSelected))
+    : selectedTotal;
+
   function toggle(id: number) {
     const i = byId.get(id);
     if (!i || isPaid(i) || isCancelledInst(i) || isCancelled) return;
@@ -126,22 +148,24 @@ export default function RegistrationDetailPage({
   }
 
   async function stampPayment() {
-    if (selected.size === 0 || selectedTotal <= 0) return;
+    if (selected.size === 0 || payAmount <= 0) return;
     setSaving(true);
     setNotice(null);
-    // One entry per month with its exact remaining amount, so each month is
-    // allocated its real due (never split evenly across months).
-    const monthly_payments = [...selected]
-      .map((id) => byId.get(id))
-      .filter((i): i is GroupInstallment => !!i)
-      .map((i) => ({ course_id: i.course_id, month_ids: [i.id], amount: remainingOf(i) }));
+    // One entry per month. A single month can carry a custom (partial) amount;
+    // multiple months are each allocated their real due (never split evenly).
+    const monthly_payments = singleSelected
+      ? [{ course_id: singleSelected.course_id, month_ids: [singleSelected.id], amount: payAmount }]
+      : [...selected]
+          .map((id) => byId.get(id))
+          .filter((i): i is GroupInstallment => !!i)
+          .map((i) => ({ course_id: i.course_id, month_ids: [i.id], amount: remainingOf(i) }));
     try {
       const res = await fetch("/api/admin/payments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           registration_receipt_no: receiptNo,
-          payment_amount: selectedTotal,
+          payment_amount: payAmount,
           payment_method: method,
           monthly_payments,
         }),
@@ -461,8 +485,28 @@ export default function RegistrationDetailPage({
                   <span className="text-[0.72rem] uppercase tracking-wide text-[var(--ro-ink-2)]">
                     {selected.size} month{selected.size === 1 ? "" : "s"} selected
                   </span>
-                  <span className="ro-mono text-lg font-bold">{formatRupees(selectedTotal)}</span>
+                  <span className="ro-mono text-lg font-bold">{formatRupees(payAmount)}</span>
                 </div>
+                {singleSelected && (
+                  <div>
+                    <label className="ro-label" htmlFor="inst-amt">
+                      Amount (₹)
+                    </label>
+                    <input
+                      id="inst-amt"
+                      type="number"
+                      min={1}
+                      max={remainingOf(singleSelected)}
+                      className="ro-input ro-mono"
+                      value={customAmount}
+                      onChange={(e) => setCustomAmount(e.target.value)}
+                    />
+                    <p className="mt-1 text-[0.72rem] leading-relaxed text-[var(--ro-ink-2)]">
+                      {singleSelected.month_name}: {formatRupees(remainingOf(singleSelected))} due.
+                      Enter less to record a partial payment.
+                    </p>
+                  </div>
+                )}
                 <div>
                   <label className="ro-label" htmlFor="method">
                     Method
@@ -482,14 +526,15 @@ export default function RegistrationDetailPage({
                 </div>
                 <button
                   onClick={stampPayment}
-                  disabled={saving || selected.size === 0}
+                  disabled={saving || selected.size === 0 || payAmount <= 0}
                   className="ro-btn ro-btn--primary w-full"
                 >
                   <Icon name="stamp" size={15} />
-                  {saving ? "Posting…" : `Stamp ${formatRupees(selectedTotal)}`}
+                  {saving ? "Posting…" : `Stamp ${formatRupees(payAmount)}`}
                 </button>
                 <p className="text-[0.72rem] leading-relaxed text-[var(--ro-ink-2)]">
-                  Each selected month is settled at its own amount — no even-splitting across months.
+                  Select one month to enter a custom amount; multiple months each settle at their own
+                  due — no even-splitting.
                 </p>
               </div>
             ) : (

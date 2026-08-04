@@ -20,13 +20,23 @@ type StudentMatch = {
 const ADMISSION_FEES = 500;
 const BLANK = { full_name: "", phone_number: "", email: "", date_of_birth: "", address: "" };
 
+// Default per-month figure for a monthly course (monthly plan total ÷ installments).
+const defaultMonthly = (c: Course) =>
+  Math.ceil(Number(c.monthlyPrice ?? 0) / Math.max(1, c.monthlyInstallments));
+
 export default function NewRegistrationPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
-  const [selected, setSelected] = useState<Record<number, { plan: Plan }>>({});
+  // customMonthly is a per-student override of the per-month installment figure
+  // (e.g. take ₹1400/mo instead of ₹1500); null means use the course default.
+  const [selected, setSelected] = useState<Record<number, { plan: Plan; customMonthly: number | null }>>({});
   const [student, setStudent] = useState({ ...BLANK });
   const [discount, setDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("Cash");
+  // Money taken at the desk now (admission + first month). Editable; when not
+  // manually set it defaults to admission + one month of each monthly course.
+  const [collectRaw, setCollectRaw] = useState("");
+  const [collectManual, setCollectManual] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<string | null>(null);
@@ -94,25 +104,38 @@ export default function NewRegistrationPage() {
     () =>
       Object.entries(selected).map(([id, sel]) => {
         const course = courses.find((c) => c.id === Number(id))!;
+        // For a monthly plan the course_fee sent to the API is the TOTAL (perMonth ×
+        // installments), so a custom per-month figure flows straight through to the
+        // generated installments.
+        const perMonth = sel.customMonthly ?? defaultMonthly(course);
         const fee =
-          sel.plan === "monthly" ? Number(course.monthlyPrice ?? 0) : Number(course.fullPrice ?? 0);
-        return { course, plan: sel.plan, fee };
+          sel.plan === "monthly" ? perMonth * course.monthlyInstallments : Number(course.fullPrice ?? 0);
+        return { course, plan: sel.plan, perMonth, fee };
       }),
     [selected, courses],
   );
   const coursesTotal = chosen.reduce((s, c) => s + c.fee, 0);
   const grandTotal = Math.max(0, coursesTotal + ADMISSION_FEES - discount);
 
+  // Default money to collect now = admission + one month of each monthly course.
+  const firstMonthTotal = chosen.reduce((s, c) => s + (c.plan === "monthly" ? c.perMonth : 0), 0);
+  const defaultCollect = ADMISSION_FEES + firstMonthTotal;
+  const collectNow = collectManual ? Math.max(0, Number(collectRaw) || 0) : defaultCollect;
+  const dueAfter = Math.max(0, grandTotal - collectNow);
+
   function toggle(id: number) {
     setSelected((prev) => {
       const next = { ...prev };
       if (next[id]) delete next[id];
-      else next[id] = { plan: "full" };
+      else next[id] = { plan: "full", customMonthly: null };
       return next;
     });
   }
   function setPlan(id: number, plan: Plan) {
-    setSelected((prev) => ({ ...prev, [id]: { plan } }));
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], plan } }));
+  }
+  function setCustomMonthly(id: number, value: number | null) {
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], customMonthly: value } }));
   }
 
   async function submit(e: React.FormEvent) {
@@ -144,8 +167,8 @@ export default function NewRegistrationPage() {
             total_amount: coursesTotal + ADMISSION_FEES,
             admission_fees: ADMISSION_FEES,
             discount_amount: discount,
-            paid_amount: 0,
-            due_amount: grandTotal,
+            paid_amount: collectNow,
+            due_amount: dueAfter,
             payment_method: paymentMethod,
           },
         }),
@@ -171,7 +194,9 @@ export default function NewRegistrationPage() {
             {receipt}
           </p>
           <p className="text-sm text-[var(--ro-ink-2)]">
-            No money collected yet — open the card to stamp the first payment.
+            {collectNow > 0
+              ? `${formatRupees(collectNow)} collected at admission — open the card for the rest.`
+              : "No money collected yet — open the card to stamp the first payment."}
           </p>
           <div className="mt-6 flex justify-center gap-2.5">
             <Link href={`/admin/registrations/${receipt}`} className="ro-btn ro-btn--primary">
@@ -182,6 +207,8 @@ export default function NewRegistrationPage() {
                 setReceipt(null);
                 setSelected({});
                 setDiscount(0);
+                setCollectManual(false);
+                setCollectRaw("");
                 clearStudent();
               }}
               className="ro-btn ro-btn--ghost"
@@ -348,22 +375,52 @@ export default function NewRegistrationPage() {
                               </span>
                             </div>
                             {sel && (
-                              <div className="mt-3 flex flex-wrap gap-2">
-                                {c.fullPrice != null && (
-                                  <PlanButton
-                                    active={sel.plan === "full"}
-                                    onClick={() => setPlan(c.id, "full")}
-                                    label={`Full — ${formatRupees(c.fullPrice)}`}
-                                  />
+                              <>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  {c.fullPrice != null && (
+                                    <PlanButton
+                                      active={sel.plan === "full"}
+                                      onClick={() => setPlan(c.id, "full")}
+                                      label={`Full — ${formatRupees(c.fullPrice)}`}
+                                    />
+                                  )}
+                                  {c.monthlyPrice != null && (
+                                    <PlanButton
+                                      active={sel.plan === "monthly"}
+                                      onClick={() => setPlan(c.id, "monthly")}
+                                      label={`Monthly — ${formatRupees(defaultMonthly(c))}/mo ×${c.monthlyInstallments}`}
+                                    />
+                                  )}
+                                </div>
+                                {sel.plan === "monthly" && (
+                                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                                    <label className="ro-label mb-0">Per-month amount (₹)</label>
+                                    <input
+                                      type="number"
+                                      min={0}
+                                      className="ro-input ro-mono w-28 py-1"
+                                      value={sel.customMonthly ?? defaultMonthly(c)}
+                                      onChange={(e) => {
+                                        const v = Math.max(0, Math.round(Number(e.target.value)));
+                                        setCustomMonthly(c.id, v === defaultMonthly(c) ? null : v);
+                                      }}
+                                    />
+                                    <span className="ro-mono text-[0.72rem] text-[var(--ro-ink-2)]">
+                                      × {c.monthlyInstallments} ={" "}
+                                      {formatRupees((sel.customMonthly ?? defaultMonthly(c)) * c.monthlyInstallments)}
+                                    </span>
+                                    {sel.customMonthly != null && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setCustomMonthly(c.id, null)}
+                                        className="ro-mono text-[0.7rem] font-semibold text-[var(--ro-blue)] hover:underline"
+                                      >
+                                        reset
+                                      </button>
+                                    )}
+                                  </div>
                                 )}
-                                {c.monthlyPrice != null && (
-                                  <PlanButton
-                                    active={sel.plan === "monthly"}
-                                    onClick={() => setPlan(c.id, "monthly")}
-                                    label={`Monthly — ${formatRupees(Math.ceil(c.monthlyPrice / c.monthlyInstallments))}/mo ×${c.monthlyInstallments}`}
-                                  />
-                                )}
-                              </div>
+                              </>
                             )}
                           </div>
                         </label>
@@ -414,6 +471,42 @@ export default function NewRegistrationPage() {
                 <span className="ro-mono text-xl font-bold">{formatRupees(grandTotal)}</span>
               </div>
             </div>
+            <div className="mt-3.5">
+              <div className="flex items-center justify-between">
+                <label className="ro-label mb-0">Collect now (₹)</label>
+                {collectManual && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCollectManual(false);
+                      setCollectRaw("");
+                    }}
+                    className="ro-mono text-[0.7rem] font-semibold text-[var(--ro-blue)] hover:underline"
+                  >
+                    auto
+                  </button>
+                )}
+              </div>
+              <input
+                type="number"
+                min={0}
+                className="ro-input ro-mono mt-1"
+                value={collectManual ? collectRaw : String(defaultCollect)}
+                onChange={(e) => {
+                  setCollectManual(true);
+                  setCollectRaw(e.target.value);
+                }}
+              />
+              <p className="mt-1 text-[0.7rem] text-[var(--ro-ink-2)]">
+                Admission {formatRupees(ADMISSION_FEES)}
+                {firstMonthTotal > 0 ? ` + first month ${formatRupees(firstMonthTotal)}` : ""}. Applied to
+                month 1 automatically.
+              </p>
+              <div className="mt-2 flex items-baseline justify-between">
+                <span className="text-sm text-[var(--ro-ink-2)]">Balance after</span>
+                <span className="ro-mono font-semibold">{formatRupees(dueAfter)}</span>
+              </div>
+            </div>
             {error && (
               <p className="mt-3 flex items-start gap-2 text-[0.8rem] text-[var(--ro-red)]">
                 <Icon name="alert" size={15} />
@@ -425,7 +518,9 @@ export default function NewRegistrationPage() {
               {submitting ? "Filing…" : "File registration"}
             </button>
             <p className="mt-2 text-center text-[0.7rem] text-[var(--ro-ink-2)]">
-              Payment is recorded on the card after filing.
+              {collectNow > 0
+                ? `${formatRupees(collectNow)} stamped on filing · balance on the card.`
+                : "Payment is recorded on the card after filing."}
             </p>
           </div>
         </aside>

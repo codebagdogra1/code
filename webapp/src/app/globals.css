@@ -201,6 +201,28 @@ h4 {
   background: var(--ro-blue);
   color: #f4f1e8;
 }
+
+/* Thin, themed scrollbar on the document itself — the whole page scrolls now
+   (the steel rail is sticky), so the bar rides the browser's right edge but still
+   reads as records-office chrome rather than a default browser bar. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ro-line-2) transparent;
+}
+html::-webkit-scrollbar {
+  width: 10px;
+}
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: var(--ro-line-2);
+  border: 3px solid var(--ro-ground);
+  border-radius: 0;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ro-steel-hi);
+}
 .ro h1,
 .ro h2,
 .ro h3,

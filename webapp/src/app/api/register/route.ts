@@ -58,6 +58,14 @@ export async function POST(req: Request) {
   // and address falls back to an empty string when omitted.
   const dob = new Date(studentData.date_of_birth);
 
+  // Money is computed server-side so the ledger is always internally consistent,
+  // regardless of what the client posted for due/paid.
+  const total = paymentDetails.total_amount;
+  const discount = paymentDetails.discount_amount ?? 0;
+  const admission = Number(paymentDetails.admission_fees ?? 0);
+  const paidNow = paymentDetails.paid_amount ?? 0;
+  const dueAmount = Math.max(0, total - discount - paidNow);
+
   try {
     const result = await prisma.$transaction(async (tx) => {
       // Upsert student by phone number. phoneNumber isn't a unique key, so we look it up
@@ -83,14 +91,19 @@ export async function POST(req: Request) {
         data: {
           receiptNo,
           studentId: student.id,
-          totalAmount: paymentDetails.total_amount,
-          admissionFees: paymentDetails.admission_fees ?? 0,
-          discountAmount: paymentDetails.discount_amount ?? 0,
-          paidAmount: paymentDetails.paid_amount ?? 0,
-          dueAmount: paymentDetails.due_amount ?? 0,
+          totalAmount: total,
+          admissionFees: admission,
+          discountAmount: discount,
+          paidAmount: paidNow,
+          dueAmount,
+          paymentStatus: dueAmount <= 0 ? "COMPLETED" : paidNow > 0 ? "PARTIAL" : "PENDING",
           paymentMethod: paymentDetails.payment_method ?? "Cash",
         },
       });
+
+      // Installments created below, gathered so an admission-time payment can be
+      // applied to the earliest months (fixing the "first month not reflected" bug).
+      const createdInstallments: { id: number; monthNumber: number; installmentAmount: number }[] = [];
 
       for (const selection of selectedCourses) {
         await tx.courseRegistration.create({
@@ -114,7 +127,7 @@ export async function POST(req: Request) {
           for (let monthNumber = 1; monthNumber <= months; monthNumber++) {
             const dueDate = new Date(start);
             dueDate.setMonth(dueDate.getMonth() + (monthNumber - 1));
-            await tx.monthlyInstallment.create({
+            const created = await tx.monthlyInstallment.create({
               data: {
                 registrationId: registration.id,
                 courseId: selection.course_id,
@@ -125,21 +138,50 @@ export async function POST(req: Request) {
                 paymentStatus: "PENDING",
               },
             });
+            createdInstallments.push({ id: created.id, monthNumber, installmentAmount });
           }
         }
       }
 
-      if ((paymentDetails.paid_amount ?? 0) > 0) {
-        await tx.paymentHistory.create({
+      if (paidNow > 0) {
+        const payment = await tx.paymentHistory.create({
           data: {
             registrationId: registration.id,
-            paymentAmount: paymentDetails.paid_amount ?? 0,
+            paymentAmount: paidNow,
             paymentMethod: paymentDetails.payment_method ?? "Cash",
             paymentType: "initial",
             receiptNo,
             notes: "Initial payment during registration",
           },
         });
+
+        // Apply the non-admission portion of the collected amount to the earliest
+        // installments (month 1 first), so what was taken at the desk is reflected
+        // in the punch-card grid — not just buried in payment history.
+        let toApply = Math.max(0, paidNow - admission);
+        const ordered = createdInstallments.sort((a, b) => a.monthNumber - b.monthNumber);
+        for (const inst of ordered) {
+          if (toApply <= 0.009) break;
+          const amount = Math.min(toApply, inst.installmentAmount);
+          if (amount <= 0.009) continue;
+          const fullyPaid = amount >= inst.installmentAmount - 0.009;
+          await tx.monthlyInstallment.update({
+            where: { id: inst.id },
+            data: {
+              paidAmount: amount,
+              paymentStatus: fullyPaid ? "PAID" : "PARTIAL",
+              paymentDate: fullyPaid ? new Date() : null,
+            },
+          });
+          await tx.paymentInstallmentMapping.create({
+            data: {
+              paymentHistoryId: payment.id,
+              monthlyInstallmentId: inst.id,
+              amountApplied: amount,
+            },
+          });
+          toApply -= amount;
+        }
       }
 
       return { receiptNo, registrationId: registration.id };
