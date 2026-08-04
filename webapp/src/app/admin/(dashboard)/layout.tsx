@@ -31,12 +31,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!session) redirect("/admin/login");
 
   return (
-    <div className="ro flex h-screen overflow-hidden">
+    <div className="ro flex min-h-screen">
       <div hidden dangerouslySetInnerHTML={{ __html: DIRECTION_CONTRACT }} />
 
       {/* Steel records-room rail */}
       <aside
-        className="hidden w-60 shrink-0 flex-col border-r border-[var(--ro-steel-edge)] px-3 py-4 md:flex"
+        className="hidden w-60 shrink-0 flex-col self-start border-r border-[var(--ro-steel-edge)] px-3 py-4 md:sticky md:top-0 md:flex md:h-screen"
         style={{
           background:
             "linear-gradient(180deg, #0e3f65, #00012b 22%, #411a21)",
@@ -71,11 +71,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile steel top bar + hamburger drawer (the rail is hidden < md) */}
         <MobileMenu username={session.username} />
 
-        <main className="mx-auto w-full max-w-6xl flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-9">{children}</main>
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-8 sm:py-9">{children}</main>
       </div>
     </div>
   );
