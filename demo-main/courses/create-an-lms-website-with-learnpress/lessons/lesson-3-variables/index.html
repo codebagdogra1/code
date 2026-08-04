@@ -1,0 +1,1305 @@
+
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en-US">
+
+<!-- Mirrored from edusmart.physcode.com/demo-main/courses/create-an-lms-website-with-learnpress/lessons/lesson-3-variables/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Aug 2026 10:44:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<link rel="pingback" href="../../../../xmlrpc.html">
+	<script id="lpData">
+var lpData = {"site_url":"https:\/\/edusmart.physcode.com\/demo-main","user_id":"0","theme":"edusmart","lp_rest_url":"https:\/\/edusmart.physcode.com\/demo-main\/wp-json\/","nonce":"0c4eab9e58","is_course_archive":"","courses_url":"https:\/\/edusmart.physcode.com\/demo-main\/courses\/","urlParams":[],"lp_version":"4.4.3","lp_rest_load_ajax":"https:\/\/edusmart.physcode.com\/demo-main\/wp-json\/lp\/v1\/load_content_via_ajax\/","ajaxUrl":"https:\/\/edusmart.physcode.com\/demo-main\/wp-admin\/admin-ajax.php","lpAjaxUrl":"https:\/\/edusmart.physcode.com\/demo-main\/lp-ajax-handle","coverImageRatio":"5.16","toast":{"gravity":"bottom","position":"center","duration":3000,"close":1,"stopOnFocus":1,"classPrefix":"lp-toast"},"i18n":{"yes":"Yes","cancel":"Cancel","generate_with_ai":"Generate with AI","confirm_close_ai":"Are you sure you want to close? Generate data will stop."},"enable_open_ai":""};
+</script>
+<script id="lpSettingCourses">
+var lpSettingCourses = {"lpArchiveLoadAjax":"1","lpArchiveNoLoadAjaxFirst":"0","lpArchivePaginationType":"number","noLoadCoursesJs":"0"};
+</script>
+		<style id="learn-press-custom-css">
+			:root {
+				--lp-container-max-width: 1290px;
+				--lp-cotainer-padding: 1rem;
+				--lp-primary-color: #0171f1;
+				--lp-secondary-color: #442e66;
+			}
+		</style>
+		<title>Create an LMS Website with LearnPress &rarr; Lesson 3: Variables - Demo Main</title>
+<meta name='robots' content='max-image-preview:large' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/cart-frontendd40c.js?ver=a01fdd9c34719d5b1103' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-cart-checkout-base-frontend8e21.js?ver=153ca3cfcc597a1e974e' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/vendor/wp-polyfill.min2c7c.js?ver=3.15.0' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/i18n.mineca5.js?ver=781d11515ad3d91786ec' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/hooks.min394d.js?ver=7496969728ca0f95732d' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-cart-checkout-vendors-frontenddd45.js?ver=b7449dc1c874ee46cb05' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/vendor/react.mine1ab.js?ver=18.3.1.1' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/vendor/react-jsx-runtime.mincb06.js?ver=18.3.1' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/blocks-checkout1d6c.js?ver=8dcac098e959cbf8c646' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/vendor/react-dom.mine1ab.js?ver=18.3.1.1' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/blocks-checkout-eventsb970.js?ver=1cd9ffa6e3cff96ad1b2' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-typesbc79.js?ver=fe36cf3610166e461f03' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/blocks-componentsbde6.js?ver=2ac32594f5e16f5ec744' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-dataaec6.js?ver=cd41ff7e87047939df16' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-registrya18d.js?ver=bb54b6869c8b2a477616' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-settingsbd0e.js?ver=5cdaba16c87338181b77' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/api-fetch.min9cd3.js?ver=d7efe4dc1468d36c39b8' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/url.min3303.js?ver=bb0f766c3d2efe497871' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/data.min5bad.js?ver=1756b6a2676c1b3369ab' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/compose.minf496.js?ver=fbe37f6b46750554f947' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/deprecated.min3b9c.js?ver=990e85f234fee8f7d446' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/dom.min6c57.js?ver=66a6cf58e0c4cd128af0' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/element.minc5e8.js?ver=15ba804677f72a8db97b' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/escape-html.minaf01.js?ver=3f093e5cca67aa0f8b56' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/is-shallow-equal.minf5d9.js?ver=5d84b9f3cb50d2ce7d04' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/keycodes.min373f.js?ver=aa1a141e3468afe7f852' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/priority-queue.minff74.js?ver=1f0e89e247bc0bd3f9b9' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/undo-manager.min6d4e.js?ver=27bb0ae036a2c9d4a1b5' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/private-apis.min9a9f.js?ver=835912f0086b9e59aed4' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/redux-routine.min328c.js?ver=64f9f5001aabc046c605' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/data-controls.minf6b7.js?ver=730061ade69d7f341014' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/html-entities.min27e5.js?ver=8c6fa5b869dfeadc4af2' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/notices.mina1a7.js?ver=218d0173a31ae7269246' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/components.mind9b0.js?ver=5dedfe13f08880193a28' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/a11y.min8148.js?ver=af934e5259bc51b8718e' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/dom-ready.min379d.js?ver=a06281ae5cf5500e9317' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/date.min1fba.js?ver=c9f8e7dd3232716f34e9' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/vendor/moment.minf799.js?ver=2.30.1' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/primitives.min746d.js?ver=a5c905ec27bcd76ef287' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/rich-text.min0537.js?ver=16449e6108f48327f368' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/warning.min5fc7.js?ver=36fdbdc984d93aee8a97' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-middleware524a.js?ver=2c049fe250c153b7cac8' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/admin/sanitize/indexb11d.js?ver=6cc3684099bd6a5547b8' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-shared-context9268.js?ver=621353d8a3a7c8d44b41' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks-shared-hocsc13b.js?ver=81d21446ddb1d5f22bf3' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/price-formatfd4e.js?ver=0df720e448f7ab3c5d0d' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/autop.min48c9.js?ver=9d0d0901b46f0a9027c9' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/plugins.mind808.js?ver=72e3cf01c2b3535a9432' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/style-engine.min9076.js?ver=faa37ce61b7ec8394b2a' as='script' rel='prefetch' />
+<link href='../../../../wp-includes/js/dist/wordcount.min8e0e.js?ver=3b928d5db8724a8614dd' as='script' rel='prefetch' />
+<link href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/checkout-frontend9686.js?ver=b93dcd7a1f9df26fd5ad' as='script' rel='prefetch' />
+<link rel="alternate" type="application/rss+xml" title="Demo Main &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Demo Main &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Demo Main &raquo; Create an LMS Website with LearnPress Comments Feed" href="../../feed/index.html" />
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='../../../../wp-includes/css/dist/block-library/style.min42a0.css?ver=7.0.2' media='all' />
+<style id="wp-block-library-inline-css">
+.wp-block-image.is-style-fancy-border img { border: 5px solid #000; }
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id="wp-block-library-theme-inline-css">
+.wp-block-audio :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-audio :where(figcaption){color:#ffffffa6}.wp-block-audio{margin:0 0 1em}.wp-block-code{border:1px solid #ccc;border-radius:4px;font-family:Menlo,Consolas,monaco,monospace;padding:.8em 1em}.wp-block-embed :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-embed :where(figcaption){color:#ffffffa6}.wp-block-embed{margin:0 0 1em}.blocks-gallery-caption{color:#555;font-size:13px;text-align:center}.is-dark-theme .blocks-gallery-caption{color:#ffffffa6}:root :where(.wp-block-image figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme :root :where(.wp-block-image figcaption){color:#ffffffa6}.wp-block-image{margin:0 0 1em}.wp-block-pullquote{border-bottom:4px solid;border-top:4px solid;color:currentColor;margin-bottom:1.75em}.wp-block-pullquote :where(cite),.wp-block-pullquote :where(footer),.wp-block-pullquote__citation{color:currentColor;font-size:.8125em;font-style:normal;text-transform:uppercase}.wp-block-quote{border-left:.25em solid;margin:0 0 1.75em;padding-left:1em}.wp-block-quote cite,.wp-block-quote footer{color:currentColor;font-size:.8125em;font-style:normal;position:relative}.wp-block-quote:where(.has-text-align-right){border-left:none;border-right:.25em solid;padding-left:0;padding-right:1em}.wp-block-quote:where(.has-text-align-center){border:none;padding-left:0}.wp-block-quote.is-large,.wp-block-quote.is-style-large,.wp-block-quote:where(.is-style-plain){border:none}.wp-block-search .wp-block-search__label{font-weight:700}.wp-block-search__button{border:1px solid #ccc;padding:.375em .625em}:where(.wp-block-group.has-background){padding:1.25em 2.375em}.wp-block-separator.has-css-opacity{opacity:.4}.wp-block-separator{border:none;border-bottom:2px solid;margin-left:auto;margin-right:auto}.wp-block-separator.has-alpha-channel-opacity{opacity:1}.wp-block-separator:not(.is-style-wide):not(.is-style-dots){width:100px}.wp-block-separator.has-background:not(.is-style-dots){border-bottom:none;height:1px}.wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots){height:2px}.wp-block-table{margin:0 0 1em}.wp-block-table td,.wp-block-table th{word-break:normal}.wp-block-table :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-table :where(figcaption){color:#ffffffa6}.wp-block-video :where(figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme .wp-block-video :where(figcaption){color:#ffffffa6}.wp-block-video{margin:0 0 1em}:root :where(.wp-block-template-part.has-background){margin-bottom:0;margin-top:0;padding:1.25em 2.375em}
+/*# sourceURL=/wp-includes/css/dist/block-library/theme.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:root :where(.wp-block-icon svg){width: 24px;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-term-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-term-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+<link rel='stylesheet' id='bbp-default-css' href='../../../../wp-content/plugins/bbpress/templates/default/css/bbpress.min32bb.css?ver=2.6.14' media='all' />
+<link rel='stylesheet' id='contact-form-7-css' href='../../../../wp-content/plugins/contact-form-7/includes/css/stylesc098.css?ver=6.1.6' media='all' />
+<link rel='stylesheet' id='tp-css-css' href='../../../../wp-content/plugins/tp-chameleon/assets/style9a8f.css?ver=2.0.5.3' media='all' />
+<link rel='stylesheet' id='tp-buy-popup-css' href='../../../../wp-content/plugins/tp-chameleon/assets/tp-buy-popup9a8f.css?ver=2.0.5.3' media='all' />
+<link rel='stylesheet' id='tp-login-style-css' href='../../../../wp-content/plugins/tp-login/assets/css/tp-login4e44.css?ver=1.3' media='all' />
+<link rel='stylesheet' id='wcbt-global-css' href='../../../../wp-content/plugins/woo-booster-toolkit/assets/dist/css/frontend/wcbt-global.min4bf4.css?ver=1.0.3' media='all' />
+<link rel='stylesheet' id='woocommerce-layout-css' href='../../../../wp-content/plugins/woocommerce/assets/css/woocommerce-layoute54b.css?ver=10.9.4' media='all' />
+<link rel='stylesheet' id='woocommerce-smallscreen-css' href='../../../../wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreene54b.css?ver=10.9.4' media='only screen and (max-width: 768px)' />
+<link rel='stylesheet' id='woocommerce-general-css' href='../../../../wp-content/plugins/woocommerce/assets/css/woocommercee54b.css?ver=10.9.4' media='all' />
+<style id="woocommerce-inline-inline-css">
+.woocommerce form .form-row .required { visibility: visible; }
+/*# sourceURL=woocommerce-inline-inline-css */
+</style>
+<link rel='stylesheet' id='phys-core-cookie-consent-css' href='../../../../wp-content/plugins/phys-core/assets/css/modal431f.css?ver=2.1.2' media='all' />
+<link rel='stylesheet' id='learnpress-package-css' href='../../../../wp-content/plugins/learnpress-upsell/build/frontend0e7f.css?ver=0527fbd6a958f72b3fbd' media='all' />
+<link rel='stylesheet' id='toastify-css' href='../../../../wp-content/plugins/learnpress-upsell/public/toastify.min42a0.css?ver=7.0.2' media='all' />
+<link rel='stylesheet' id='lp-co-instructor-css-css' href='../../../../wp-content/plugins/learnpress-co-instructor/assets/dist/css/co-instructor.min0235.css?ver=4.1.1' media='all' />
+<link rel='stylesheet' id='phys-style-css' href='../../../../wp-content/themes/edusmart/stylece14.css?ver=1.0.8' media='all' />
+<style id="phys-style-inline-css">
+:root{--phys-width_logo:206px;--phys-header_background_color:#fff;--phys-header_overlay_top:initial;--phys-header_overlay_border_radius:0px;--phys-header_overlay_background-wrapper:rgba(255, 255, 255, 0.2);--phys-header_overlay_background-content:#ffffff00;--phys-main_menu-font-family:DM Sans;--phys-main_menu-font-size:16px;--phys-main_menu-line-height:1.25em;--phys-main_menu-text-transform:none;--phys-main_menu-font-weight:600;--phys-main_menu-text-align:left;--phys-main_menu_padding:33px 12px;--phys-main_menu_color-background_color:#fff;--phys-main_menu_color-text_color:#111;--phys-main_menu_color-text_color_hover:#0171F1;--phys-sticky_menu-background_color:#fff;--phys-sticky_menu-text_color:#2A2A28;--phys-sticky_menu-text_color_hover:#0171F1;--phys-sub_menu-background_color:#fff;--phys-sub_menu-text_color:#2A2A28;--phys-sub_menu-text_color_hover:#0171F1;--phys-body_primary_color:#0171F1;--phys-body_primary_color-rgb:1,113,241;--phys-body_primary_color_hover:#1DAAFF;--phys-button_color_hover:#111;--phys-background_main_color:#fff;--phys-background_section_color:#F5F5F5;--phys-border_color:#e5e5e5;--phys-price_color:#FF3B30;--phys-light_color:#d6f1fe;--phys-font_body-font-family:DM Sans;--phys-font_body-font-size:16px;--phys-font_body-line-height:1.7em;--phys-font_body-color:#333333;--phys-font_body-variant:400;--phys-font_button-font-family:DM Sans;--phys-font_button-font-size:16px;--phys-font_button-line-height:1.4em;--phys-font_button-color:#fff;--phys-font_button-variant:600;--phys-font_button-text-transform:none;--phys-font_title-font-family:DM Sans;--phys-font_title-color:#111;--phys-font_title-variant:700;--phys-font_h1-font-size:48px;--phys-font_h1-line-height:1.25em;--phys-font_h1-text-transform:none;--phys-font_h2-font-size:36px;--phys-font_h2-line-height:1.25em;--phys-font_h2-text-transform:none;--phys-font_h3-font-size:28px;--phys-font_h3-line-height:1.25em;--phys-font_h3-text-transform:none;--phys-font_h4-font-size:20px;--phys-font_h4-line-height:1.25em;--phys-font_h4-text-transform:none;--phys-font_h5-font-size:18px;--phys-font_h5-line-height:1.25em;--phys-font_h5-text-transform:none;--phys-font_h6-font-size:16px;--phys-font_h6-line-height:1.25em;--phys-font_h6-text-transform:none;--phys-theme_feature_preloading_style-background:#ffffff;--phys-theme_feature_preloading_style-color:#333333;--phys-nav_mobile_color-background:#ffffff;--phys-nav_mobile_color-text:#333;--phys-nav_mobile_color-hover:#0171F1;--phys-footer_background_color:#fff;--phys-footer_color-title:#OAOAOA;--phys-footer_color-text:#333333;--phys-footer_color-link:#333333;--phys-footer_color-hover:#c48981;--phys-copyright_background_color:#333;--phys-copyright_text_color:#fff;--phys-copyright_border_color:#e5e5e5;}
+/*# sourceURL=phys-style-inline-css */
+</style>
+<link rel='stylesheet' id='phys-single-course-css' href='../../../../wp-content/themes/edusmart/assets/css/single-coursece14.css?ver=1.0.8' media='all' />
+<link rel='stylesheet' id='phys-tp-events-css' href='../../../../wp-content/themes/edusmart/assets/css/tp-eventsce14.css?ver=1.0.8' media='all' />
+<link rel='stylesheet' id='elementor-icons-thim-ekits-fonts-css' href='../../../../wp-content/plugins/thim-elementor-kit/build/libraries/thim-ekits/css/thim-ekits-icons.min47a7.css?ver=1.4.5' media='all' />
+<link rel='stylesheet' id='learnpress-css' href='../../../../wp-content/plugins/learnpress/assets/css/learnpress.mincb20.css?ver=4.4.3' media='all' />
+<link rel='stylesheet' id='learnpress-widgets-css' href='../../../../wp-content/plugins/learnpress/assets/css/widgets.mincb20.css?ver=4.4.3' media='all' />
+<link rel='stylesheet' id='lp-tom-select-css' href='../../../../wp-content/plugins/learnpress/assets/src/css/vendor/tom-select.mincb20.css?ver=4.4.3' media='all' />
+<script id="wp-hooks-js" src="../../../../wp-includes/js/dist/hooks.min394d.js?ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" src="../../../../wp-includes/js/dist/i18n.mineca5.js?ver=781d11515ad3d91786ec"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="jquery-core-js" src="../../../../wp-includes/js/jquery/jquery.minf43b.js?ver=3.7.1"></script>
+<script id="jquery-migrate-js" src="../../../../wp-includes/js/jquery/jquery-migrate.min5589.js?ver=3.4.1"></script>
+<script id="wp-url-js" src="../../../../wp-includes/js/dist/url.min3303.js?ver=bb0f766c3d2efe497871"></script>
+<script id="wp-api-fetch-js" src="../../../../wp-includes/js/dist/api-fetch.min9cd3.js?ver=d7efe4dc1468d36c39b8"></script>
+<script id="wp-api-fetch-js-after">
+wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "../../../../wp-json/index.html" ) );
+wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "0c4eab9e58" );
+wp.apiFetch.use( wp.apiFetch.nonceMiddleware );
+wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );
+wp.apiFetch.nonceEndpoint = "../../../../wp-admin/admin-ajaxf809.html?action=rest-nonce";
+//# sourceURL=wp-api-fetch-js-after
+</script>
+<script data-wp-strategy="defer" defer id="wc-jquery-blockui-js" src="../../../../wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.mina1e9.js?ver=2.7.0-wc.10.9.4"></script>
+<script id="wc-add-to-cart-js-extra">
+var wc_add_to_cart_params = {"ajax_url":"/demo-main/wp-admin/admin-ajax.php","wc_ajax_url":"/demo-main/?wc-ajax=%%endpoint%%","i18n_view_cart":"View cart","cart_url":"https://edusmart.physcode.com/demo-main/cart/","is_cart":"","cart_redirect_after_add":"no"};
+//# sourceURL=wc-add-to-cart-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="wc-add-to-cart-js" src="../../../../wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.mine54b.js?ver=10.9.4"></script>
+<script data-wp-strategy="defer" defer id="wc-js-cookie-js" src="../../../../wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min5d42.js?ver=2.1.4-wc.10.9.4"></script>
+<script id="woocommerce-js-extra">
+var woocommerce_params = {"ajax_url":"/demo-main/wp-admin/admin-ajax.php","wc_ajax_url":"/demo-main/?wc-ajax=%%endpoint%%","i18n_password_show":"Show password","i18n_password_hide":"Hide password"};
+//# sourceURL=woocommerce-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="woocommerce-js" src="../../../../wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.mine54b.js?ver=10.9.4"></script>
+<script id="underscore-js" src="../../../../wp-includes/js/underscore.min55e2.js?ver=1.13.8"></script>
+<script data-wp-strategy="defer" defer id="learnpress-package-js" src="../../../../wp-content/plugins/learnpress-upsell/build/frontend0e7f.js?ver=0527fbd6a958f72b3fbd"></script>
+<script async data-wp-strategy="async" id="lp-load-ajax-js" src="../../../../wp-content/plugins/learnpress/assets/js/dist/loadAJAX.mincb20.js?ver=4.4.3"></script>
+<script id="utils-js-extra">
+var userSettings = {"url":"/","uid":"0","time":"1785838928","secure":"1"};
+//# sourceURL=utils-js-extra
+</script>
+<script id="utils-js" src="../../../../wp-includes/js/utils.min42a0.js?ver=7.0.2"></script>
+<script id="lp-global-js-extra">
+var lpGlobalSettings = {"siteurl":"https://edusmart.physcode.com/demo-main","ajax":"https://edusmart.physcode.com/demo-main/wp-admin/admin-ajax.php","courses_url":"https://edusmart.physcode.com/demo-main/courses/","post_id":33506,"user_id":0,"theme":"edusmart","localize":{"button_ok":"OK","button_cancel":"Cancel","button_yes":"Yes","button_no":"No"},"lp_rest_url":"https://edusmart.physcode.com/demo-main/wp-json/","nonce":"0c4eab9e58","option_enable_popup_confirm_finish":"yes","is_course_archive":"","lpArchiveSkeleton":[],"lpArchiveLoadAjax":1,"lpArchiveNoLoadAjaxFirst":0,"lpArchivePaginationType":"number","noLoadCoursesJs":0};
+//# sourceURL=lp-global-js-extra
+</script>
+<script id="lp-global-js" src="../../../../wp-content/plugins/learnpress/assets/js/global.mincb20.js?ver=4.4.3"></script>
+<script id="lp-utils-js" src="../../../../wp-content/plugins/learnpress/assets/js/dist/utils.mincb20.js?ver=4.4.3"></script>
+<script async data-wp-strategy="async" id="lp-curriculum-js" src="../../../../wp-content/plugins/learnpress/assets/js/dist/frontend/curriculum.mincb20.js?ver=4.4.3"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.html?rsd" />
+<meta name="generator" content="WordPress 7.0.2" />
+<meta name="generator" content="WooCommerce 10.9.4" />
+<link rel="canonical" href="../../index.html" />
+<link rel='shortlink' href='../../../../indexad21.html?p=33506' />
+	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+	<meta name="generator" content="Elementor 4.2.1; features: e_font_icon_svg, additional_custom_breakpoints; settings: css_print_method-internal, google_font-enabled, font_display-swap">
+			<style>
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
+					background-image: none !important;
+				}
+				@media screen and (max-height: 1024px) {
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+				@media screen and (max-height: 640px) {
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+			</style>
+			<link rel="icon" href="../../../../wp-content/uploads/sites/9/2025/06/favicon-s-32x32.png" sizes="32x32" />
+<link rel="icon" href="../../../../wp-content/uploads/sites/9/2025/06/favicon-s.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="../../../../wp-content/uploads/sites/9/2025/06/favicon-s.png" />
+<meta name="msapplication-TileImage" content="https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2025/06/favicon-s.png" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-347LETLS6H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-347LETLS6H');
+</script><style id="phys-customizer-inline-styles">/* latin-ext */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../../../wp-content/uploads/sites/9/phys-fonts/dmsans/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu6-K6z9mXgjU0.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../../../wp-content/uploads/sites/9/phys-fonts/dmsans/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../../../wp-content/uploads/sites/9/phys-fonts/dmsans/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu6-K6z9mXgjU0.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../../../wp-content/uploads/sites/9/phys-fonts/dmsans/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K6z9mXg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}</style></head>
+<body class="wp-singular lp_course-template-default single single-lp_course postid-33506 wp-embed-responsive wp-theme-edusmart theme-edusmart course-item-popup viewing-course-item viewing-course-item-33513 course-item-lp_lesson lp-sidebar-toggle__open edusmart learnpress learnpress-page woocommerce-no-js elementor-default elementor-kit-9">
+
+
+
+<script type="text/javascript" id="bbp-swap-no-js-body-class">
+	document.body.className = document.body.className.replace( 'bbp-no-js', 'bbp-js' );
+</script>
+
+        <div id="wcbt-quick-view-popup"></div>
+		
+<header id="masthead" class="site-header affix-top overlay">
+		
+<div class="navigation container">
+
+ 	<div class="mobile-menu-container menu-mobile-effect navbar-toggle">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div><div class="width-logo sm-logo"><a href="../../../../index.html" title="Demo Main - Education WP Theme" rel="home" class="phys-logo"><img src="../../../../wp-content/uploads/sites/9/2025/06/new-logo.png" alt="Demo Main"  data-sticky="https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2025/06/new-logo.png"></a></div>
+	<nav class="width-navigation main-navigation table-cell has-menu-right">
+		<div class="inner-navigation">
+			
+<ul class="nav navbar-nav navbar-main-menu thim-ekits-menu effect-submenu">
+
+			<li class="thim-ekits-menu__icon-menu-back">
+			<span>
+				Back			</span>
+		</li>
+	
+	<li id="menu-item-34016" class="menu-item-button menu-item menu-item-type-custom menu-item-object-custom menu-item-34016 nav-item thim-ekits-menu__has-dropdown thim-ekits-menu__mega-menu"><a href="../../../index.html" class="thim-ekits-menu__nav-link"><span class="thim-ekits-menu__has-icon"><i class="lp-icon-th-large" style=""></i></span>Categories</a><span class="thim-ekits-menu__icon"></span><ul class="thim-ekits-menu__content  thim-ekits-menu__content--left thim-ekits-menu__content--container" style="width: 1320px; min-width: 1320px; left: auto; right: 0;"  data-container="header .navigation, .e-con-inner">		<div data-elementor-type="wp-post" data-elementor-id="34017" class="elementor elementor-34017">
+				<div class="elementor-element elementor-element-429ca46 e-con-full e-flex e-con e-parent" data-id="429ca46" data-element_type="container" data-e-type="container">
+		<div class="elementor-element elementor-element-f266659 e-con-full e-flex e-con e-child" data-id="f266659" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-c225bfe elementor-widget elementor-widget-thim-ekits-list-course" data-id="c225bfe" data-element_type="widget" data-e-type="widget" data-settings="{&quot;column_gap&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:20,&quot;sizes&quot;:[]},&quot;column_gap_tablet&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]},&quot;column_gap_mobile&quot;:{&quot;unit&quot;:&quot;px&quot;,&quot;size&quot;:&quot;&quot;,&quot;sizes&quot;:[]}}" data-widget_type="thim-ekits-list-course.default">
+				<div class="elementor-widget-container">
+					<div class="thim-course-tabs thim-block-tabs course-tabs-vertical" id="c225bfe"  data-params="{&quot;page_id&quot;:&quot;34017&quot;,&quot;widget_id&quot;:&quot;c225bfe&quot;}"><ul class="nav nav-tabs"><li class="cat-item active"><a data-cat="93" href="#">AI Technology<span class="course-number">8 Courses</span></a></li><li class="cat-item"><a data-cat="92" href="#">Business<span class="course-number">7 Courses</span></a></li><li class="cat-item"><a data-cat="83" href="#">Health &amp; Fitness<span class="course-number">8 Courses</span></a></li><li class="cat-item"><a data-cat="95" href="#">Language<span class="course-number">8 Courses</span></a></li><li class="cat-item"><a data-cat="87" href="#">Management<span class="course-number">7 Courses</span></a></li><li class="cat-item"><a data-cat="91" href="#">Marketing<span class="course-number">8 Courses</span></a></li><li class="cat-item"><a data-cat="94" href="#">UI UX Design<span class="course-number">8 Courses</span></a></li></ul><div class="loop-wrapper thim-ekits-course learn-press-courses" data-layout="grid">							<div class="thim-ekits-cate__info">
+											<h5 class="category-title">
+							<a href="../../../../course-category/technology/index.html">
+								AI Technology							</a>
+						</h5>
+													<p class="category-description">
+								In 3-9 months, gain the skills to break into a new career or take your career to the next level							</p>
+															</div>
+			
+			<div class="thim-ekits-course__inner">
+															<ul class="nav subcate-list">
+															<li class="cat-item subcate-item ">
+									<a data-cat="84" href="../../../../course-category/technology/artificial/index.html">
+										Artificial									</a>
+								</li>
+															<li class="cat-item subcate-item ">
+									<a data-cat="89" href="../../../../course-category/technology/computer-science/index.html">
+										Computer Science									</a>
+								</li>
+															<li class="cat-item subcate-item ">
+									<a data-cat="10" href="../../../../course-category/technology/photography/index.html">
+										Photography									</a>
+								</li>
+															<li class="cat-item subcate-item ">
+									<a data-cat="12" href="../../../../course-category/technology/programming-tech/index.html">
+										Programming Tech									</a>
+								</li>
+															<li class="cat-item subcate-item ">
+									<a data-cat="88" href="../../../../course-category/technology/seo/index.html">
+										SEO									</a>
+								</li>
+													</ul>
+									
+						<div class="thim-ekits-course__item post-33494 lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-technology course_category-business course_category-computer-science course_category-language course_category-marketing course_category-photography course_category-programming-tech course_tag-node course_tag-python course_tag-tutorial course">
+			<style id="thim-ekit-loop-post-31406">.elementor-31406 .elementor-element.elementor-element-31dc4ac{--display:flex;--gap:0px 0px;--row-gap:0px;--column-gap:0px;border-style:solid;--border-style:solid;border-width:1px 1px 1px 1px;--border-top-width:1px;--border-right-width:1px;--border-bottom-width:1px;--border-left-width:1px;border-color:var( --e-global-color-a5df7df );--border-color:var( --e-global-color-a5df7df );--border-radius:10px 10px 10px 10px;--padding-top:20px;--padding-bottom:20px;--padding-left:20px;--padding-right:20px;}.elementor-31406 .elementor-element.elementor-element-11820ad{--display:flex;--overlay-opacity:0.5;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-11820ad::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-background-video-container::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .e-con-inner > .elementor-background-video-container::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-background-slideshow::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .e-con-inner > .elementor-background-slideshow::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-motion-effects-container > .elementor-motion-effects-layer::before{--background-overlay:'';}.elementor-31406 .elementor-element.elementor-element-715bce3 img{transition-duration:0.3s;border-radius:10px 10px 10px 10px;}body:not(.rtl) .elementor-31406 .elementor-element.elementor-element-332a095{left:50%;}body.rtl .elementor-31406 .elementor-element.elementor-element-332a095{right:50%;}.elementor-31406 .elementor-element.elementor-element-332a095{top:40%;z-index:1;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon-wrapper{text-align:center;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon{background-color:#FFFFFF;color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon{color:#FFFFFF;border-color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon svg{fill:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon{background-color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon svg{fill:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon:hover{background-color:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon:hover, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon:hover{color:var( --e-global-color-accent );border-color:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon:hover, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon:hover svg{fill:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon{font-size:20px;padding:14px;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon svg{height:20px;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon i, .elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon svg{transform:rotate(-45deg);}body:not(.rtl) .elementor-31406 .elementor-element.elementor-element-5976956{right:8px;}body.rtl .elementor-31406 .elementor-element.elementor-element-5976956{left:8px;}.elementor-31406 .elementor-element.elementor-element-5976956{top:10px;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action , .elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action i{color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action.wishlisted,.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action:hover{color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action:hover i, .elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action.wishlisted i{color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action{background-color:#1111114D;padding:8px 8px 8px 8px;font-size:0px;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action i{font-size:20px;margin-right:0px;}.elementor-31406 .elementor-element.elementor-element-f75d39f{--display:flex;--gap:8px 8px;--row-gap:8px;--column-gap:8px;--padding-top:20px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-f75d39f:not(.elementor-motion-effects-element-type-background), .elementor-31406 .elementor-element.elementor-element-f75d39f > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-f8fea38 .elementor-heading-title{line-height:1.25em;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}.elementor-31406 .elementor-element.elementor-element-a0676c4{--display:flex;--flex-direction:row;--container-widget-width:initial;--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:space-between;--gap:16px 16px;--row-gap:16px;--column-gap:16px;--flex-wrap:wrap;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-d120093{text-align:left;}.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{color:#FF3B30;font-family:var( --e-global-typography-primary-font-family ), Sans-serif;font-size:var( --e-global-typography-primary-font-size );font-weight:var( --e-global-typography-primary-font-weight );}.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price .origin-price{color:#737373;font-weight:400;text-decoration:line-through;padding:0px 8px 0px 0px;}@media(max-width:1024px){.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{font-size:var( --e-global-typography-primary-font-size );}}@media(max-width:767px){.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{font-size:var( --e-global-typography-primary-font-size );}}/* Start custom CSS for thim-loop-item-featured-image, class: .elementor-element-715bce3 */.elementor-31406 .elementor-element.elementor-element-715bce3 img {
+    display: block;
+}
+.elementor-31406 .elementor-element.elementor-element-715bce3:before {
+    transition: 0.5s;
+    content: "";
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    background-color: rgba(0,0,0,0.3);
+}/* End custom CSS */
+/* Start custom CSS for icon, class: .elementor-element-332a095 */.elementor-31406 .elementor-element.elementor-element-332a095 {
+    transition: 0.5s;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}/* End custom CSS */
+/* Start custom CSS for learnpress_course_wishlist, class: .elementor-element-5976956 */.elementor-31406 .elementor-element.elementor-element-5976956 .course-wishlist  {
+    cursor: pointer;
+}
+.elementor-31406 .elementor-element.elementor-element-5976956 .course-wishlist:before {
+   font-family: "Font Awesome 5 Free" !important;
+}
+.elementor-31406 .elementor-element.elementor-element-5976956 .lp-btn-wishlist {
+   border: none;
+   border-radius: 50%;
+}/* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-31dc4ac */.elementor-31406 .elementor-element.elementor-element-31dc4ac:hover .loop-icon-hover{
+    opacity: 1;
+    visibility: visible;
+    top: 50%;
+}
+ .elementor-31406 .elementor-element.elementor-element-31dc4ac:hover .loop-image-course:before {
+    opacity: 1;
+ }/* End custom CSS */</style>		<div data-elementor-type="wp-post" data-elementor-id="31406" class="elementor elementor-31406" data-thim-ekit-loop-item-type="lp_course" data-thim-ekit-type="loop_item">
+				<div class="elementor-element elementor-element-31dc4ac e-con-full e-flex e-con e-parent" data-id="31dc4ac" data-element_type="container" data-e-type="container">
+		<div class="elementor-element elementor-element-11820ad e-con-full e-flex e-con e-child" data-id="11820ad" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-715bce3 loop-image-course elementor-widget elementor-widget-thim-loop-item-featured-image" data-id="715bce3" data-element_type="widget" data-e-type="widget" data-widget_type="thim-loop-item-featured-image.default">
+				<div class="elementor-widget-container">
+																<a href="../../../how-to-create-an-awesome-online-course/index.html">
+							<img fetchpriority="high" width="700" height="450" src="../../../../wp-content/uploads/sites/9/2023/01/new-course5-700x450.jpg" class="attachment-edusmart_thumbnail size-edusmart_thumbnail wp-image-33807" alt="" />								</a>
+															</div>
+				</div>
+				<div class="elementor-element elementor-element-332a095 elementor-view-stacked elementor-absolute loop-icon-hover elementor-shape-circle elementor-widget elementor-widget-icon" data-id="332a095" data-element_type="widget" data-e-type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="icon.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-icon-wrapper">
+			<a class="elementor-icon" href="../../../how-to-create-an-awesome-online-course/index.html">
+			<svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>			</a>
+		</div>
+						</div>
+				</div>
+				<div class="elementor-element elementor-element-5976956 elementor-absolute elementor-widget elementor-widget-learnpress_course_wishlist" data-id="5976956" data-element_type="widget" data-e-type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="learnpress_course_wishlist.default">
+				<div class="elementor-widget-container">
+					 <div class="lp-target" data-id="lp-target-6a71bd510da2d" data-send="{&quot;args&quot;:{&quot;id_url&quot;:&quot;wishlist-action&quot;,&quot;course_id&quot;:33494,&quot;layout&quot;:&quot;classic&quot;},&quot;callback&quot;:{&quot;class&quot;:&quot;LearnPress\\Wishlist\\TemplateHooks\\CourseWishlistTemplate&quot;,&quot;method&quot;:&quot;render_button_action&quot;},&quot;id&quot;:&quot;lp-target-6a71bd510da2d&quot;}"><div class="course-button-wishlist__wrapper-no-css"><button class="lp-button lp-button-wishlist-action classic" type="button"><i class="lp-icon-heart-o" title="Add to Wishlist"></i> Add to Wishlist</button></div></div><div class="loading-after"><div class="lp-loading-change lp-hidden"></div></div>				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-f75d39f e-con-full e-flex e-con e-child" data-id="f75d39f" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-f8fea38 elementor-widget elementor-widget-thim-loop-item-title" data-id="f8fea38" data-element_type="widget" data-e-type="widget" data-widget_type="thim-loop-item-title.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default"><a href="../../../how-to-create-an-awesome-online-course/index.html">How to Create an Awesome Online Course</a></h5>				</div>
+				</div>
+		<div class="elementor-element elementor-element-a0676c4 e-con-full e-flex e-con e-child" data-id="a0676c4" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-d120093 elementor-widget elementor-widget-learnpress_course_price" data-id="d120093" data-element_type="widget" data-e-type="widget" data-widget_type="learnpress_course_price.default">
+				<div class="elementor-widget-container">
+					<span class="course-price"><span class="course-item-price"><span class="free">Free</span></span></span>				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		
+		</div>
+				<div class="thim-ekits-course__item post-33496 lp_course type-lp_course status-publish has-post-thumbnail hentry course_category-technology course_category-business course_category-health-fitness course_category-language course_category-marketing course_category-photography course_category-programming-tech course_category-seo course_tag-python course">
+					<div data-elementor-type="wp-post" data-elementor-id="31406" class="elementor elementor-31406" data-thim-ekit-loop-item-type="lp_course" data-thim-ekit-type="loop_item">
+				<div class="elementor-element elementor-element-31dc4ac e-con-full e-flex e-con e-parent" data-id="31dc4ac" data-element_type="container" data-e-type="container">
+		<div class="elementor-element elementor-element-11820ad e-con-full e-flex e-con e-child" data-id="11820ad" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-715bce3 loop-image-course elementor-widget elementor-widget-thim-loop-item-featured-image" data-id="715bce3" data-element_type="widget" data-e-type="widget" data-widget_type="thim-loop-item-featured-image.default">
+				<div class="elementor-widget-container">
+																<a href="../../../how-to-teach-online-courses-effectively/index.html">
+							<img width="700" height="450" src="../../../../wp-content/uploads/sites/9/2025/01/new-course2-700x450.jpg" class="attachment-edusmart_thumbnail size-edusmart_thumbnail wp-image-33803" alt="" />								</a>
+															</div>
+				</div>
+				<div class="elementor-element elementor-element-332a095 elementor-view-stacked elementor-absolute loop-icon-hover elementor-shape-circle elementor-widget elementor-widget-icon" data-id="332a095" data-element_type="widget" data-e-type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="icon.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-icon-wrapper">
+			<a class="elementor-icon" href="../../../how-to-teach-online-courses-effectively/index.html">
+			<svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path></svg>			</a>
+		</div>
+						</div>
+				</div>
+				<div class="elementor-element elementor-element-5976956 elementor-absolute elementor-widget elementor-widget-learnpress_course_wishlist" data-id="5976956" data-element_type="widget" data-e-type="widget" data-settings="{&quot;_position&quot;:&quot;absolute&quot;}" data-widget_type="learnpress_course_wishlist.default">
+				<div class="elementor-widget-container">
+					 <div class="lp-target" data-id="lp-target-6a71bd5110f68" data-send="{&quot;args&quot;:{&quot;id_url&quot;:&quot;wishlist-action&quot;,&quot;course_id&quot;:33496,&quot;layout&quot;:&quot;classic&quot;},&quot;callback&quot;:{&quot;class&quot;:&quot;LearnPress\\Wishlist\\TemplateHooks\\CourseWishlistTemplate&quot;,&quot;method&quot;:&quot;render_button_action&quot;},&quot;id&quot;:&quot;lp-target-6a71bd5110f68&quot;}"><div class="course-button-wishlist__wrapper-no-css"><button class="lp-button lp-button-wishlist-action classic" type="button"><i class="lp-icon-heart-o" title="Add to Wishlist"></i> Add to Wishlist</button></div></div><div class="loading-after"><div class="lp-loading-change lp-hidden"></div></div>				</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-f75d39f e-con-full e-flex e-con e-child" data-id="f75d39f" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+				<div class="elementor-element elementor-element-f8fea38 elementor-widget elementor-widget-thim-loop-item-title" data-id="f8fea38" data-element_type="widget" data-e-type="widget" data-widget_type="thim-loop-item-title.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default"><a href="../../../how-to-teach-online-courses-effectively/index.html">How To Teach Online Courses Effectively</a></h5>				</div>
+				</div>
+		<div class="elementor-element elementor-element-a0676c4 e-con-full e-flex e-con e-child" data-id="a0676c4" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-d120093 elementor-widget elementor-widget-learnpress_course_price" data-id="d120093" data-element_type="widget" data-e-type="widget" data-widget_type="learnpress_course_price.default">
+				<div class="elementor-widget-container">
+					<span class="course-price"><span class="course-item-price"> <span class="origin-price">&#036;90</span><span class="price">&#036;75</span> </span></span>				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		
+		</div>
+					</div>
+		</div></div>				</div>
+				</div>
+				</div>
+				</div>
+				</div>
+		</ul></li>
+<li id="menu-item-213" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-has-children menu-item-213 nav-item thim-ekits-menu__has-dropdown"><a href="../../../../index.html" class="thim-ekits-menu__nav-link">Home</a><span class="thim-ekits-menu__icon"></span>
+<ul class="thim-ekits-menu__dropdown sub-menu">
+	<li id="menu-item-34297" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-34297 nav-item"><a href="../../../../index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo Main</a>	<li id="menu-item-33892" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-33892 nav-item"><a href="https://edusmart.physcode.com/university/" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo University</a>	<li id="menu-item-34296" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-34296 nav-item"><a href="../../../../home-clean-design/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo Clean Design</a>	<li id="menu-item-34316" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34316 nav-item"><a href="https://edusmart.physcode.com/one-instructor/" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo One Instructor</a>	<li id="menu-item-34429" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34429 nav-item"><a href="https://edusmart.physcode.com/one-course/" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo One Course</a>	<li id="menu-item-34452" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34452 nav-item"><a href="https://edusmart.physcode.com/kindergarten/" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Demo Kindergarten</a></ul>
+</li>
+<li id="menu-item-265" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-265 nav-item thim-ekits-menu__has-dropdown thim-ekits-menu__mega-menu"><a href="../../../../about-us/index.html" class="thim-ekits-menu__nav-link">About Us</a><span class="thim-ekits-menu__icon"></span><ul class="thim-ekits-menu__content  thim-ekits-menu__content--center thim-ekits-menu__content--container" style="width: 1020px; min-width: 1020px; left: 50%; transform: translateX(-50%);"  data-container="header .navigation, .e-con-inner">		<div data-elementor-type="wp-post" data-elementor-id="34042" class="elementor elementor-34042">
+				<div class="elementor-element elementor-element-f4365fb e-flex e-con-boxed e-con e-parent" data-id="f4365fb" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-0273d61 e-con-full elementor-hidden-tablet elementor-hidden-mobile e-flex e-con e-child" data-id="0273d61" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-9e7906d elementor-widget elementor-widget-text-editor" data-id="9e7906d" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
+				<div class="elementor-widget-container">
+									<p>We are a passionate education company dedicated to empowering learners of all ages and accessible learning solutions.</p>								</div>
+				</div>
+				<div class="elementor-element elementor-element-9501621 elementor-widget elementor-widget-thim-ekits-button" data-id="9501621" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-button.default">
+				<div class="elementor-widget-container">
+					
+		<div class="thim-ekits-button custom-button-hover btn-outline">
+			<a href="../../../../about-us/index.html" role="button">
+				<span class="button-content-wrapper">
+					Read More				</span>
+			</a>
+		</div>
+
+						</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-e69787e e-con-full e-flex e-con e-child" data-id="e69787e" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-c0bb535 elementor-widget elementor-widget-thim-ekits-header-info" data-id="c0bb535" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-header-info.default">
+				<div class="elementor-widget-container">
+							<div class="header-info-swapper">
+			<ul class="thim-header-info">
+										<li>
+														<a href="../../../../about-us/index.html">
+																
+								About Edusmart
+															</a>
+												</li>
+												<li>
+														<a href="../../../../contact/index.html">
+																
+								Contact
+															</a>
+												</li>
+												<li>
+														<a href="../../../../blog/index.html">
+																
+								Awards & Recognition
+															</a>
+												</li>
+												<li>
+														<a href="../../../../pricing-plan/index.html">
+																
+								Pricing Plan
+															</a>
+												</li>
+									</ul>
+		</div>
+						</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-fa64020 e-con-full e-flex e-con e-child" data-id="fa64020" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-124d5c3 elementor-widget elementor-widget-image" data-id="124d5c3" data-element_type="widget" data-e-type="widget" data-widget_type="image.default">
+				<div class="elementor-widget-container">
+																<a href="../../../../about-us/index.html">
+							<img width="600" height="401" src="../../../../wp-content/uploads/sites/9/2025/04/edulearn1.jpg" class="elementor-animation-hang attachment-large size-large wp-image-34044" alt="" srcset="https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2025/04/edulearn1.jpg 600w, https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2025/04/edulearn1-300x201.jpg 300w, https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2025/04/edulearn1-150x100.jpg 150w" sizes="(max-width: 600px) 100vw, 600px" />								</a>
+															</div>
+				</div>
+				</div>
+					</div>
+				</div>
+				</div>
+		</ul></li>
+<li id="menu-item-33862" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children current_page_parent menu-item-33862 nav-item thim-ekits-menu__has-dropdown"><a href="../../../index.html" class="thim-ekits-menu__nav-link">Courses</a><span class="thim-ekits-menu__icon"></span>
+<ul class="thim-ekits-menu__dropdown sub-menu">
+	<li id="menu-item-34145" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34145 nav-item"><a href="../../../indexaff3.html?course_layout=full-content" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Courses Filter Top</a>	<li id="menu-item-34248" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34248 nav-item"><a href="../../../introduction-to-learnpress-building-your-learning-management-system/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Online Course</a>	<li id="menu-item-34249" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-34249 nav-item"><a href="../../../50-tips-on-making-a-great-online-course/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Offline Course</a></ul>
+</li>
+<li id="menu-item-32637" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-32637 nav-item thim-ekits-menu__has-dropdown"><a href="#" class="thim-ekits-menu__nav-link">Pages</a><span class="thim-ekits-menu__icon"></span>
+<ul class="thim-ekits-menu__dropdown sub-menu">
+	<li id="menu-item-32812" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32812 nav-item"><a href="../../../../lp-become-a-teacher/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Become A Teacher</a>	<li id="menu-item-32810" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32810 nav-item"><a href="../../../../instructors/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Instructors</a>	<li id="menu-item-266" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-266 nav-item"><a href="../../../../contact/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Contact</a>	<li id="menu-item-33772" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-33772 nav-item"><a href="../../../../events/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Events</a>	<li id="menu-item-29546" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-29546 nav-item"><a href="../../../../shop-page/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Shop</a>	<li id="menu-item-33826" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33826 nav-item"><a href="../../../../compare/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Compare</a>	<li id="menu-item-33824" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33824 nav-item"><a href="../../../../wishlist/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Wishlist</a>	<li id="menu-item-33728" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33728 nav-item"><a href="../../../../pricing-plan/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Pricing Plan</a>	<li id="menu-item-34197" class="menu-item menu-item-type-post_type menu-item-object-learnpress_package menu-item-34197 nav-item"><a href="../../../../package/master-your-mindset-unleashing-the-power/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Package</a>	<li id="menu-item-34438" class="menu-item menu-item-type-post_type menu-item-object-lp_collection menu-item-34438 nav-item"><a href="../../../../collections/courses-collection-one/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Collections</a>	<li id="menu-item-33714" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-33714 nav-item"><a href="../../../../404-page.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">404 Page</a>	<li id="menu-item-33716" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33716 nav-item"><a href="../../../../maintenance/index.html" class=" thim-ekits-menu__nav-link thim-ekits-menu__dropdown-item">Maintenance</a></ul>
+</li>
+<li id="menu-item-271" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-271 nav-item"><a href="../../../../blog/index.html" class="thim-ekits-menu__nav-link">Blog</a></li>
+</ul>		</div>
+	</nav>
+
+	<div class="menu-right"><div id="block-16" class="widget-menu-item widget_block" style="display: inline-flex;"><p>		<div data-elementor-type="wp-post" data-elementor-id="30994" class="elementor elementor-30994">
+				<div class="elementor-element elementor-element-05fc3d0 animated-fast e-flex e-con-boxed elementor-invisible e-con e-parent" data-id="05fc3d0" data-element_type="container" data-e-type="container" data-settings="{&quot;animation&quot;:&quot;fadeIn&quot;,&quot;animation_tablet&quot;:&quot;none&quot;}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-22ec3e7 elementor-view-framed elementor-shape-circle elementor-widget elementor-widget-icon" data-id="22ec3e7" data-element_type="widget" data-e-type="widget" data-widget_type="icon.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-icon-wrapper">
+			<a class="elementor-icon" href="../../../../index64b5.html?s=&amp;post_type=lp_course">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 21L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>			</a>
+		</div>
+						</div>
+				</div>
+				<div class="elementor-element elementor-element-7fcc6a6 physc_elhide_1025-1200px elementor-hidden-mobile elementor-widget elementor-widget-thim-ekits-login-icon" data-id="7fcc6a6" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-login-icon.default">
+				<div class="elementor-widget-container">
+							<div class="thim-login-icon">
+			<a class="login" href="../../../../edusmart-login/index.html">Login</a>		</div>
+						</div>
+				</div>
+					</div>
+				</div>
+				</div>
+		</p>
+</div></div></div>
+</header><!-- #masthead -->
+<div class="lp-archive-courses">	<div id="popup-course" class="course-summary">
+		
+<div id="popup-header">
+	<input type="checkbox" id="sidebar-toggle" title="Show/Hide curriculum" />	<div class="popup-header__inner">
+		<h2 class="course-title">
+			<a
+				href="../../index.html">Create an LMS Website with LearnPress</a>
+		</h2>
+
+			</div>
+	<a href="../../index.html"
+		class="back-course"
+		aria-label="Back to course"
+	>
+		<i class="lp-icon-times"></i>
+	</a>
+</div>
+
+<div id="popup-sidebar">
+	<form method="post" class="search-course">
+		<input
+			type="text"
+			name="s" autocomplete="off"
+			placeholder="Search for course content"
+		/>
+		<button
+			name="submit"
+			aria-label="Search for course content">
+			<i class="lp-icon-search"></i>
+		</button>
+		<button type="button" class="clear"></button>
+	</form>
+
+	<div class="lp-course-curriculum"><h3 class="lp-course-curriculum__title">Curriculum</h3><div class="course-curriculum-info"><ul class="course-curriculum-info__left"><li class="course-count-section">2 Sections</li><li class="course-count-lesson">9 Lessons</li><li class="course-duration"><span class="course-duration">10 Weeks</span></li></ul><div class="course-curriculum-info__right"><span class="course-toggle-all-sections">Expand all sections</span><span class="course-toggle-all-sections lp-collapse lp-hidden">Collapse all sections</span></div></div><div class="course-curriculum"><ul class="course-sections"><li class="course-section " data-section-id="15"><div class="course-section-header"><div class="section-toggle">
+				<i class="lp-icon-angle-down"></i>
+				<i class="lp-icon-angle-up"></i>
+			</div><div class="course-section-info"><div class="course-section__title">LearnPress Introduction</div></div><div class="section-count-items">7</div></div><ul class="course-section__items"><li class="course-item " data-item-id="33507" data-item-order="1" data-item-type="lp_lesson"><a href="../lms-website-and-learnpress-introduction/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.1</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">LMS Website and LearnPress Introduction</div></div><div class="course-item__right"><span class="duration">30 Minutes</span></div></div><div class="course-item__status"><span class="course-item-ico preview"></span></div></a></li><li class="course-item " data-item-id="33509" data-item-order="2" data-item-type="lp_lesson"><a href="../learnpress-installation-tutorial/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.2</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">LearnPress Installation Tutorial</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="33510" data-item-order="3" data-item-type="lp_lesson"><a href="../demo-the-quiz-of-the-learnpress/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.3</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Demo the Quiz of the LearnPress</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="33511" data-item-order="4" data-item-type="lp_lesson"><a href="../lesson-1-get-started/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.4</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 1: Get Started</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="33512" data-item-order="5" data-item-type="lp_lesson"><a href="../lesson-2-syntax/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.5</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 2: Syntax</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item current" data-item-id="33513" data-item-order="6" data-item-type="lp_lesson"><a href="index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">1.6</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 3: Variables</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="34082" data-item-order="7" data-item-type="lp_quiz"><a href="../../quizzes/demo-the-quiz-of-learnpress-2copy/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_quiz"></span><span class="course-item-order lp-hidden">1.7</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Quiz of LearnPress</div></div><div class="course-item__right"><span class="duration">10 Minutes</span><span class="question-count">4 Questions</span></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li></ul></li><li class="course-section lp-collapse" data-section-id="16"><div class="course-section-header"><div class="section-toggle">
+				<i class="lp-icon-angle-down"></i>
+				<i class="lp-icon-angle-up"></i>
+			</div><div class="course-section-info"><div class="course-section__title">LearnPress Live Course</div></div><div class="section-count-items">3</div></div><ul class="course-section__items"><li class="course-item " data-item-id="33516" data-item-order="1" data-item-type="lp_lesson"><a href="../lesson-4-file-handing/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">2.1</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 4: File handing</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="33517" data-item-order="2" data-item-type="lp_lesson"><a href="../lesson-5-python-mysql/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">2.2</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 5: Python MySQL</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li><li class="course-item " data-item-id="33518" data-item-order="3" data-item-type="lp_lesson"><a href="../lesson-6-python-mongdb/index.html" class="course-item__link"><div class="course-item__info"><span class="course-item-ico lp_lesson"></span><span class="course-item-order lp-hidden">2.3</span></div><div class="course-item__content"><div class="course-item__left"><div class="course-item-title">Lesson 6: Python MongDB</div></div></div><div class="course-item__status"><span class="course-item-ico locked"></span></div></a></li></ul></li></ul></div></div></div>
+
+<div id="popup-content">
+	
+<div id="learn-press-content-item">
+
+	
+	<div class="content-item-scrollable">
+		<div class="content-item-wrap">
+			
+									<div class="learn-press-message learn-press-content-protected-message error" >
+				 This content is protected, please <a class="lp-link-login" href="../../../../wp-login332f.html?redirect_to=https%3A%2F%2Fedusmart.physcode.com%2Fdemo-main%2Fcourses%2Fcreate-an-lms-website-with-learnpress%2Flessons%2Flesson-3-variables">login</a> and <a class="lp-link-enroll" href="../../index.html">enroll</a> in the course to view this content!			</div>
+
+		
+	
+
+		</div>
+	</div>
+
+	
+</div>
+</div>
+
+<div id="popup-footer">
+	
+<div class="course-item-nav" data-nav="all">
+			<div class="prev">
+			<div class="course-item-nav__name">Lesson 2: Syntax</div>
+			<a href="../lesson-2-syntax/index.html">
+				Prev			</a>
+		</div>
+	
+			<div class="next">
+			<div class="course-item-nav__name">Quiz of LearnPress</div>
+			<a href="../../quizzes/demo-the-quiz-of-learnpress-2copy/index.html">
+				Next			</a>
+		</div>
+	</div>
+
+
+</div>
+	</div>
+</div><div class="thim-ekit__footer">
+	<div class="thim-ekit__footer__inner">
+				<div data-elementor-type="wp-post" data-elementor-id="250" class="elementor elementor-250">
+				<div class="elementor-element elementor-element-8995337 e-flex e-con-boxed e-con e-parent" data-id="8995337" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+					<div class="e-con-inner">
+		<div class="elementor-element elementor-element-9f4b976 e-con-full e-flex e-con e-child" data-id="9f4b976" data-element_type="container" data-e-type="container">
+		<div class="elementor-element elementor-element-d42a4c2 e-con-full e-flex e-con e-child" data-id="d42a4c2" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-6761812 elementor-widget elementor-widget-thim-ekits-heading" data-id="6761812" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-heading.default">
+				<div class="elementor-widget-container">
+					<div class="thim-ekits-heading thim-ekit__heading"><h2 class="title"><span>Let's</span> Achieve Together</h2></div>				</div>
+				</div>
+				<div class="elementor-element elementor-element-5821e24 elementor-widget elementor-widget-text-editor" data-id="5821e24" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
+				<div class="elementor-widget-container">
+									<p>Welcome to our diverse and dynamic course catalog.</p>								</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-8885dd6 e-con-full e-flex e-con e-child" data-id="8885dd6" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-439f474 elementor-widget elementor-widget-shortcode" data-id="439f474" data-element_type="widget" data-e-type="widget" data-widget_type="shortcode.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-shortcode"><script>(function() {
+	window.mc4wp = window.mc4wp || {
+		listeners: [],
+		forms: {
+			on: function(evt, cb) {
+				window.mc4wp.listeners.push(
+					{
+						event   : evt,
+						callback: cb
+					}
+				);
+			}
+		}
+	}
+})();
+</script><!-- Mailchimp for WordPress v4.13.1 - https://wordpress.org/plugins/mailchimp-for-wp/ --><form id="mc4wp-form-1" class="mc4wp-form mc4wp-form-30569" method="post" data-id="30569" data-name="Sign Up" ><div class="mc4wp-form-fields"><div class="mwcwp-wrapper-input">
+  <label for="email">
+    <input type="email" id="email" name="EMAIL" placeholder="Enter your email..." required>
+  </label>
+  <button class="mc4wp-wrapper-submit" type="submit">
+     <span class="mc4wp-text">Subcribe</span>
+     <i aria-hidden="true" class="far fa-paper-plane"></i>
+  </button>
+</div>
+
+</div><label style="display: none !important;">Leave this field empty if you&#039;re human: <input type="text" name="_mc4wp_honeypot" value="" tabindex="-1" autocomplete="off" /></label><input type="hidden" name="_mc4wp_timestamp" value="1785838929" /><input type="hidden" name="_mc4wp_form_id" value="30569" /><input type="hidden" name="_mc4wp_form_element_id" value="mc4wp-form-1" /><div class="mc4wp-response"></div></form><!-- / Mailchimp for WordPress Plugin --></div>
+						</div>
+				</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-a29bbd9 elementor-widget-divider--view-line elementor-widget elementor-widget-divider" data-id="a29bbd9" data-element_type="widget" data-e-type="widget" data-widget_type="divider.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-divider">
+			<span class="elementor-divider-separator">
+						</span>
+		</div>
+						</div>
+				</div>
+		<div class="elementor-element elementor-element-7761b31 e-con-full e-flex e-con e-child" data-id="7761b31" data-element_type="container" data-e-type="container">
+		<div class="elementor-element elementor-element-1aed186 e-con-full e-flex e-con e-child" data-id="1aed186" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-9fe6d4a elementor-widget elementor-widget-heading" data-id="9fe6d4a" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default">About Us</h5>				</div>
+				</div>
+				<div class="elementor-element elementor-element-bb771b8 elementor-widget__width-initial elementor-widget elementor-widget-text-editor" data-id="bb771b8" data-element_type="widget" data-e-type="widget" data-widget_type="text-editor.default">
+				<div class="elementor-widget-container">
+									<p>Orporate clients and leisure travelers has been relying on Groundlink for dependable safe, and professional chauffeured car end service in major cities across World.</p>								</div>
+				</div>
+				<div class="elementor-element elementor-element-33971cf elementor-shape-rounded elementor-grid-0 elementor-widget elementor-widget-social-icons" data-id="33971cf" data-element_type="widget" data-e-type="widget" data-widget_type="social-icons.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-social-icons-wrapper elementor-grid" role="list">
+							<span class="elementor-grid-item" role="listitem">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-facebook-f elementor-repeater-item-4e39c6b" href="https://www.facebook.com/physcode/" target="_blank">
+						<span class="elementor-screen-only">Facebook-f</span>
+						<svg aria-hidden="true" class="e-font-icon-svg e-fab-facebook-f" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path></svg>					</a>
+				</span>
+							<span class="elementor-grid-item" role="listitem">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-instagram elementor-repeater-item-18ddb6d" href="https://www.instagram.com/physcode/?hl=en" target="_blank">
+						<span class="elementor-screen-only">Instagram</span>
+						<svg aria-hidden="true" class="e-font-icon-svg e-fab-instagram" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path></svg>					</a>
+				</span>
+							<span class="elementor-grid-item" role="listitem">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-x-twitter elementor-repeater-item-60969a3" href="https://x.com/physcode" target="_blank">
+						<span class="elementor-screen-only">X-twitter</span>
+						<svg aria-hidden="true" class="e-font-icon-svg e-fab-x-twitter" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path></svg>					</a>
+				</span>
+							<span class="elementor-grid-item" role="listitem">
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-youtube elementor-repeater-item-d9c9a5e" href="https://www.youtube.com/" target="_blank">
+						<span class="elementor-screen-only">Youtube</span>
+						<svg aria-hidden="true" class="e-font-icon-svg e-fab-youtube" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"></path></svg>					</a>
+				</span>
+					</div>
+						</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-b3ccbd6 e-con-full e-flex e-con e-child" data-id="b3ccbd6" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-6aa645e elementor-widget elementor-widget-heading" data-id="6aa645e" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default">Courses</h5>				</div>
+				</div>
+				<div class="elementor-element elementor-element-3fc51b8 elementor-widget elementor-widget-thim-ekits-header-info" data-id="3fc51b8" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-header-info.default">
+				<div class="elementor-widget-container">
+							<div class="header-info-swapper">
+			<ul class="thim-header-info">
+										<li>
+														<a href="../../../../course-category/ui-ux-design/index.html">
+																
+								UI UX Design
+															</a>
+												</li>
+												<li>
+														<a href="../../../../course-category/management/index.html">
+																
+								Management
+															</a>
+												</li>
+												<li>
+														<a href="../../../../course-category/programming-tech/index.html">
+																
+								Programming Tech
+															</a>
+												</li>
+												<li>
+														<a href="../../../../course-category/computer-science/index.html">
+																
+								Computer Science
+															</a>
+												</li>
+									</ul>
+		</div>
+						</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-e53b0dd e-con-full e-flex e-con e-child" data-id="e53b0dd" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-2b72e22 elementor-widget elementor-widget-heading" data-id="2b72e22" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default">Useful Links</h5>				</div>
+				</div>
+				<div class="elementor-element elementor-element-3ab57db elementor-widget elementor-widget-thim-ekits-header-info" data-id="3ab57db" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-header-info.default">
+				<div class="elementor-widget-container">
+							<div class="header-info-swapper">
+			<ul class="thim-header-info">
+										<li>
+														<a href="../../../../about-us/index.html">
+																
+								About Us
+															</a>
+												</li>
+												<li>
+														<a href="../../../../instructors/index.html">
+																
+								Instructors
+															</a>
+												</li>
+												<li>
+														<a href="../../../../contact/index.html">
+																
+								Contact
+															</a>
+												</li>
+												<li>
+														<a href="../../index.html">
+																
+								Course Details
+															</a>
+												</li>
+												<li>
+														<a href="../../../../shop/index.html">
+																
+								Shop
+															</a>
+												</li>
+									</ul>
+		</div>
+						</div>
+				</div>
+				</div>
+		<div class="elementor-element elementor-element-5307d69 e-con-full e-flex e-con e-child" data-id="5307d69" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-f5d5406 elementor-widget elementor-widget-heading" data-id="f5d5406" data-element_type="widget" data-e-type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h5 class="elementor-heading-title elementor-size-default">Contact Us</h5>				</div>
+				</div>
+				<div class="elementor-element elementor-element-589c4fe elementor-widget elementor-widget-thim-ekits-header-info" data-id="589c4fe" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-header-info.default">
+				<div class="elementor-widget-container">
+							<div class="header-info-swapper">
+			<ul class="thim-header-info">
+										<li>
+														<a href="tel:%20(303)%20555-0105" target="_blank">
+																									<span>
+									<i aria-hidden="true" class="tk tk-phone"></i>								</span>
+								
+								(303) 555-0105
+															</a>
+												</li>
+												<li>
+														<a href="https://edusmart.physcode.com/cdn-cgi/l/email-protection#7b12151d143b1c161a121755181416" target="_blank">
+																									<span>
+									<i aria-hidden="true" class="tk tk-envelope"></i>								</span>
+								
+								<span class="__cf_email__" data-cfemail="3c55525a537c5b515d5550125f5351">[email&#160;protected]</span>
+															</a>
+												</li>
+												<li>
+														<a href="#">
+																									<span>
+									<i aria-hidden="true" class="tk tk-map-marker"></i>								</span>
+								
+								Hatteras Lane, Hollywood, FL 33019, USA
+															</a>
+												</li>
+									</ul>
+		</div>
+						</div>
+				</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-061ae63 elementor-widget-divider--view-line elementor-widget elementor-widget-divider" data-id="061ae63" data-element_type="widget" data-e-type="widget" data-widget_type="divider.default">
+				<div class="elementor-widget-container">
+							<div class="elementor-divider">
+			<span class="elementor-divider-separator">
+						</span>
+		</div>
+						</div>
+				</div>
+		<div class="elementor-element elementor-element-5cc7caf e-grid e-con-full e-con e-child" data-id="5cc7caf" data-element_type="container" data-e-type="container">
+				<div class="elementor-element elementor-element-b6e961e elementor-widget elementor-widget-thim-ekits-site-logo" data-id="b6e961e" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-site-logo.default">
+				<div class="elementor-widget-container">
+					
+		<div class="thim-ekit-site-logo">
+							<a href="../../../../index.html" rel="home" aria-label="Demo Main">
+					<img src="../../../../wp-content/uploads/sites/9/2025/06/new-logo.png" title="" alt="" loading="lazy" />				</a>
+					</div>
+
+						</div>
+				</div>
+				<div class="elementor-element elementor-element-81503a1 elementor-widget elementor-widget-thim-ekits-header-info" data-id="81503a1" data-element_type="widget" data-e-type="widget" data-widget_type="thim-ekits-header-info.default">
+				<div class="elementor-widget-container">
+							<div class="header-info-swapper">
+			<ul class="thim-header-info">
+										<li>
+															
+								 Copyright © 2026 <span class="focused-text">EduSmart</span>. All Rights Reserved.
+														</li>
+									</ul>
+		</div>
+						</div>
+				</div>
+				<div class="elementor-element elementor-element-46ca3c8 elementor-widget elementor-widget-image" data-id="46ca3c8" data-element_type="widget" data-e-type="widget" data-widget_type="image.default">
+				<div class="elementor-widget-container">
+																<a href="https://thimpress.com/learnpress-mobile-app/" target="_blank">
+							<img loading="lazy" width="566" height="81" src="../../../../wp-content/uploads/sites/9/2024/11/App-store-gg-play.png" class="attachment-large size-large wp-image-33923" alt="" srcset="https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2024/11/App-store-gg-play.png 566w, https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2024/11/App-store-gg-play-300x43.png 300w, https://edusmart.physcode.com/demo-main/wp-content/uploads/sites/9/2024/11/App-store-gg-play-150x21.png 150w" sizes="(max-width: 566px) 100vw, 566px" />								</a>
+															</div>
+				</div>
+				</div>
+					</div>
+				</div>
+				</div>
+			</div>
+</div>
+<div id="back-to-top" class="btn-back-to-top high-bottom"><i class="tk tk-arrow-up"></i></div><script data-cfasync="false" src="https://edusmart.physcode.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/demo-main/*"},{"not":{"href_matches":["/demo-main/wp-*.php","/demo-main/wp-admin/*","/demo-main/wp-content/uploads/sites/9/*","/demo-main/wp-content/*","/demo-main/wp-content/plugins/*","/demo-main/wp-content/themes/edusmart/*","/demo-main/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+        <div id="wcbt-snackbar"></div>
+		<script>(function() {function maybePrefixUrlField () {
+  const value = this.value.trim()
+  if (value !== '' && value.indexOf('http') !== 0) {
+    this.value = 'http://' + value
+  }
+}
+
+const urlFields = document.querySelectorAll('.mc4wp-form input[type="url"]')
+for (let j = 0; j < urlFields.length; j++) {
+  urlFields[j].addEventListener('blur', maybePrefixUrlField)
+}
+})();</script>			<script>
+				( () => {
+					const lazyloadRunObserver = () => {
+						const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
+						const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
+							entries.forEach( ( entry ) => {
+								if ( entry.isIntersecting ) {
+									let lazyloadBackground = entry.target;
+									if( lazyloadBackground ) {
+										lazyloadBackground.classList.add( 'e-lazyloaded' );
+									}
+									lazyloadBackgroundObserver.unobserve( entry.target );
+								}
+							});
+						}, { rootMargin: '200px 0px 200px 0px' } );
+						lazyloadBackgrounds.forEach( ( lazyloadBackground ) => {
+							lazyloadBackgroundObserver.observe( lazyloadBackground );
+						} );
+					};
+					const events = [
+						'DOMContentLoaded',
+						'elementor/lazyload/observe',
+					];
+					events.forEach( ( event ) => {
+						document.addEventListener( event, lazyloadRunObserver );
+					} );
+				} )();
+			</script>
+				<script type='text/javascript'>
+		(function () {
+			var c = document.body.className;
+			c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+			document.body.className = c;
+		})();
+	</script>
+	
+<div id="tp_style_selector" class="tp-style-selector content-popup">
+	
+<div class="tp_style_selector_container">
+	<div class="tp_sidebar">
+		<div class="tp-sidebar-content">
+			<div class="btn-link-buy"><a href="#tp_chameleon_popup" target="_blank" class="btn-buy" rel="noopener">Buy Now</span></a></div>			<div class="btn-link-support">
+						<a href="https://help.physcode.com/" title="Support Forum" target="_blank" rel="noopener">
+						<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M9 0C4.0374 0 0 4.0374 0 9V12.7287C0 13.6503 0.8073 14.4 1.8 14.4H2.7C2.93869 14.4 3.16761 14.3052 3.3364 14.1364C3.50518 13.9676 3.6 13.7387 3.6 13.5V8.8713C3.6 8.63261 3.50518 8.40369 3.3364 8.2349C3.16761 8.06612 2.93869 7.9713 2.7 7.9713H1.8828C2.3832 4.4883 5.3802 1.8 9 1.8C12.6198 1.8 15.6168 4.4883 16.1172 7.9713H15.3C15.0613 7.9713 14.8324 8.06612 14.6636 8.2349C14.4948 8.40369 14.4 8.63261 14.4 8.8713V14.4C14.4 15.3927 13.5927 16.2 12.6 16.2H10.8V15.3H7.2V18H12.6C14.5854 18 16.2 16.3854 16.2 14.4C17.1927 14.4 18 13.6503 18 12.7287V9C18 4.0374 13.9626 0 9 0Z" fill="#4C94FF"/>
+						</svg>Forum Support</a>
+					</div>		</div>
+	</div>
+	<div class="tp-demos-wrapper"><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/demo-main" title="Demo Main" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-main.jpg" alt="Main" ><h6 class="title-demo">Demo Main</h6></a></div><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/university" title="Demo University" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-university.jpg" alt="University" ><h6 class="title-demo">Demo University</h6></a></div><div class="tp-demo" > 
+						 		<a href="../../../../home-clean-design/index.html" title="Demo Clean Design" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-clean.jpg" alt="Clean Design" ><h6 class="title-demo">Demo Clean Design</h6></a></div><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/one-instructor" title="Demo One Instructor" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-one-instructor.jpg" alt="One Instructor" ><h6 class="title-demo">Demo One Instructor</h6></a></div><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/one-course" title="Demo One Course" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-one-course.jpg" alt="One Cours" ><h6 class="title-demo">Demo One Course</h6></a></div><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/kindergarten" title="Demo Kindergarten" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-kindergarten.jpg" alt="Kindergarten" ><h6 class="title-demo">Demo Kindergarten</h6></a></div><div class="tp-demo" > 
+						 		<a href="https://edusmart.physcode.com/demo-rtl" title="Demo RTL" target="_blank" rel="noopener"><img class="lazyload" src="#" loading="lazy" data-src="https://physcodewp.github.io/demo-data/edusmart/images/demo-rtl.jpg" alt="RTL" ><h6 class="title-demo">Demo RTL</h6></a></div></div></div>
+	<div class="group-style-toggle">
+		<div class="style-toggle toggle-demo"><span>Demos</span></div>
+		<div class="style-toggle toggle-buynow">
+				<a href="#tp_chameleon_popup" title="Buy Now" target="_blank" rel="noopener">Buy Now</a>
+			</div>	</div>
+</div>
+
+	<div class="tp_chameleon_overlay">
+		<div class="tp_chameleon_progress">
+			<div class="tp_chameleon_heading">Processing!</div>
+		</div>
+	</div>
+
+		<div id="tp_chameleon_popup" class="tp-buy-popup" aria-hidden="true">
+		<div class="tp-buy-popup__overlay" data-tp-buy-popup-close></div>
+		<div class="tp-buy-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="tp-buy-popup-title">
+			<button type="button" class="tp-buy-popup__close" data-tp-buy-popup-close aria-label="Close">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M1 13L13 1M13 13L1 1" stroke="black" stroke-width="2" stroke-linecap="round"/>
+				</svg>
+			</button>
+			<div class="tp-buy-popup__header">
+				<h2 id="tp-buy-popup-title">Buy <span>EduSmart</span> Now</h2>
+				<p>Choose the best option for you</p>
+			</div>
+			<div class="tp-buy-popup__cards">
+				<div class="tp-buy-popup__card tp-buy-popup__card--thimpress">
+					<div class="tp-buy-popup__brand">
+						<img src="../../../../wp-content/plugins/tp-chameleon/images/logo-thimpress.svg" alt="ThimPress">
+					</div>
+					<div class="tp-buy-popup__price-row">
+						<div class="tp-buy-popup__original">
+							<span>Original Price</span>
+							<del>$29</del>
+						</div>
+						<strong class="tp-buy-popup__sale">$22</strong>
+													<span class="tp-buy-popup__discount">Save 25%</span>
+											</div>
+											<a class="tp-buy-popup__button tp-buy-popup__button--thimpress" href="https://thimpress.com/product/education-wordpress-theme-edusmart/" target="_blank" rel="noopener">Buy Now</a>
+										<div class="tp-buy-popup__payments">
+						<img src="../../../../wp-content/plugins/tp-chameleon/images/icon-pay-thimpress.svg" alt="Pay Safely">
+					</div>
+											<div class="tp-buy-popup__note">
+							<img src="../../../../wp-content/plugins/tp-chameleon/images/icon-discount.svg" alt="">
+							<span>Discount 25% for First Purchase of EduSmart on ThimPress</span>
+						</div>
+									</div>
+				<div class="tp-buy-popup__card">
+					<div class="tp-buy-popup__brand tp-buy-popup__brand--envato">
+						<img src="../../../../wp-content/plugins/tp-chameleon/images/logo-envato.svg" alt="Envato Market">
+					</div>
+					<strong class="tp-buy-popup__envato-price">$29</strong>
+											<a class="tp-buy-popup__button tp-buy-popup__button--envato" href="https://1.envato.market/EEWBAW" target="_blank" rel="noopener">Buy Now</a>
+										<div class="tp-buy-popup__payments">
+						<img src="../../../../wp-content/plugins/tp-chameleon/images/icon-pay-envato.svg" alt="Pay Safely">
+					</div>
+				</div>
+			</div>
+			<div class="tp-buy-popup__features">
+				<span>1 Unique Source Code</span>
+				<span>Dedicated Support</span>
+				<span>Regular Updates</span>
+			</div>
+			<div class="tp-buy-popup__footer">
+				<span>From June 1st, 2026</span>				<h3>EduSmart Is Officially Available On ThimPress</h3>				<p>We've partnered exclusively with Themeforest since launch. From June 1, 2026, you can also buy directly from us at ThimPress.com so we can offer you more - more payment options, same quality, and an exclusive launch discount.</p>			</div>
+		</div>
+	</div>
+	<style>
+:root{--thim-body-primary-color: var(--lp-primary-color);}
+    .tp-style-selector.content-popup .btn-link-support {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rtl .tp-style-selector.content-popup .tp-demos-wrapper {
+    padding: 15px 0 0 15px;
+}
+.rtl .tp-style-selector.content-popup .btn-link-support svg {
+   margin-right: 0;
+   margin-left: 10px;
+}
+</style><div class="navbar-mobile-button enroll-course-sticky"><span class="course-item-price"><span class="free">Free</span></span><div class="course-buttons"><form name="enroll-course" class="enroll-course" method="post"><input type="hidden" name="enroll-course" value="33506"/><button type="submit" class="lp-button button-enroll-course">Start Now</button></form></div></div><script type="text/template" id="tmpl-variation-template">
+	<div class="woocommerce-variation-description">{{{ data.variation.variation_description }}}</div>
+	<div class="woocommerce-variation-price">{{{ data.variation.price_html }}}</div>
+	<div class="woocommerce-variation-availability">{{{ data.variation.availability_html }}}</div>
+</script>
+<script type="text/template" id="tmpl-unavailable-variation-template">
+	<p role="alert">Sorry, this product is unavailable. Please choose a different combination.</p>
+</script>
+<link rel='stylesheet' id='wc-blocks-style-css' href='../../../../wp-content/plugins/woocommerce/assets/client/blocks/wc-blocks629f.css?ver=wc-10.9.4' media='all' />
+<link rel='stylesheet' id='swiper-css' href='../../../../wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min94a4.css?ver=8.4.5' media='all' />
+<link rel='stylesheet' id='e-swiper-css' href='../../../../wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='phys-list-course-css' href='../../../../wp-content/themes/edusmart/assets/css/list-coursece14.css?ver=1.0.8' media='all' />
+<link rel='stylesheet' id='elementor-frontend-css' href='../../../../wp-content/plugins/elementor/assets/css/frontend.min50fa.css?ver=4.2.1' media='all' />
+<style id="elementor-frontend-inline-css">
+.elementor-34017 .elementor-element.elementor-element-429ca46{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-34017 .elementor-element.elementor-element-f266659{--display:flex;--padding-top:30px;--padding-bottom:20px;--padding-left:30px;--padding-right:30px;}.elementor-34017 .elementor-element.elementor-element-c225bfe{--thim-ekits-course-column-gap:20px;--thim-ekits-course-columns:repeat(3, 1fr);--thim-ekits-course-row-gap:20px;}.elementor-34017 .elementor-element.elementor-element-c225bfe .thim-course-tabs .nav-tabs li a{margin:0px 12px 12px 0px;border-style:solid;border-width:1px 1px 1px 1px;border-color:#E5E5E5;border-radius:48px 48px 48px 48px;}@media(max-width:1024px){.elementor-34017 .elementor-element.elementor-element-c225bfe{--thim-ekits-course-columns:repeat(2, 1fr);}}@media(max-width:767px){.elementor-34017 .elementor-element.elementor-element-c225bfe{--thim-ekits-course-columns:repeat(1, 1fr);}}
+.elementor-31406 .elementor-element.elementor-element-31dc4ac{--display:flex;--gap:0px 0px;--row-gap:0px;--column-gap:0px;border-style:solid;--border-style:solid;border-width:1px 1px 1px 1px;--border-top-width:1px;--border-right-width:1px;--border-bottom-width:1px;--border-left-width:1px;border-color:var( --e-global-color-a5df7df );--border-color:var( --e-global-color-a5df7df );--border-radius:10px 10px 10px 10px;--padding-top:20px;--padding-bottom:20px;--padding-left:20px;--padding-right:20px;}.elementor-31406 .elementor-element.elementor-element-11820ad{--display:flex;--overlay-opacity:0.5;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-11820ad::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-background-video-container::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .e-con-inner > .elementor-background-video-container::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-background-slideshow::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .e-con-inner > .elementor-background-slideshow::before, .elementor-31406 .elementor-element.elementor-element-11820ad > .elementor-motion-effects-container > .elementor-motion-effects-layer::before{--background-overlay:'';}.elementor-31406 .elementor-element.elementor-element-715bce3 img{transition-duration:0.3s;border-radius:10px 10px 10px 10px;}body:not(.rtl) .elementor-31406 .elementor-element.elementor-element-332a095{left:50%;}body.rtl .elementor-31406 .elementor-element.elementor-element-332a095{right:50%;}.elementor-31406 .elementor-element.elementor-element-332a095{top:40%;z-index:1;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon-wrapper{text-align:center;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon{background-color:#FFFFFF;color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon{color:#FFFFFF;border-color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon svg{fill:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon{background-color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon svg{fill:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-stacked .elementor-icon:hover{background-color:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon:hover, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon:hover{color:var( --e-global-color-accent );border-color:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-framed .elementor-icon:hover, .elementor-31406 .elementor-element.elementor-element-332a095.elementor-view-default .elementor-icon:hover svg{fill:var( --e-global-color-accent );}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon{font-size:20px;padding:14px;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon svg{height:20px;}.elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon i, .elementor-31406 .elementor-element.elementor-element-332a095 .elementor-icon svg{transform:rotate(-45deg);}body:not(.rtl) .elementor-31406 .elementor-element.elementor-element-5976956{right:8px;}body.rtl .elementor-31406 .elementor-element.elementor-element-5976956{left:8px;}.elementor-31406 .elementor-element.elementor-element-5976956{top:10px;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action , .elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action i{color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action.wishlisted,.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action:hover{color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action:hover i, .elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action.wishlisted i{color:var( --e-global-color-primary );}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action{background-color:#1111114D;padding:8px 8px 8px 8px;font-size:0px;}.elementor-31406 .elementor-element.elementor-element-5976956 .lp-button-wishlist-action i{font-size:20px;margin-right:0px;}.elementor-31406 .elementor-element.elementor-element-f75d39f{--display:flex;--gap:8px 8px;--row-gap:8px;--column-gap:8px;--padding-top:20px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-f75d39f:not(.elementor-motion-effects-element-type-background), .elementor-31406 .elementor-element.elementor-element-f75d39f > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:#FFFFFF;}.elementor-31406 .elementor-element.elementor-element-f8fea38 .elementor-heading-title{line-height:1.25em;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}.elementor-31406 .elementor-element.elementor-element-a0676c4{--display:flex;--flex-direction:row;--container-widget-width:initial;--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:space-between;--gap:16px 16px;--row-gap:16px;--column-gap:16px;--flex-wrap:wrap;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-31406 .elementor-element.elementor-element-d120093{text-align:left;}.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{color:#FF3B30;font-family:var( --e-global-typography-primary-font-family ), Sans-serif;font-size:var( --e-global-typography-primary-font-size );font-weight:var( --e-global-typography-primary-font-weight );}.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price .origin-price{color:#737373;font-weight:400;text-decoration:line-through;padding:0px 8px 0px 0px;}@media(max-width:1024px){.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{font-size:var( --e-global-typography-primary-font-size );}}@media(max-width:767px){.elementor-31406 .elementor-element.elementor-element-d120093 .course-item-price{font-size:var( --e-global-typography-primary-font-size );}}/* Start custom CSS for thim-loop-item-featured-image, class: .elementor-element-715bce3 */.elementor-31406 .elementor-element.elementor-element-715bce3 img {
+    display: block;
+}
+.elementor-31406 .elementor-element.elementor-element-715bce3:before {
+    transition: 0.5s;
+    content: "";
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    background-color: rgba(0,0,0,0.3);
+}/* End custom CSS */
+/* Start custom CSS for icon, class: .elementor-element-332a095 */.elementor-31406 .elementor-element.elementor-element-332a095 {
+    transition: 0.5s;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}/* End custom CSS */
+/* Start custom CSS for learnpress_course_wishlist, class: .elementor-element-5976956 */.elementor-31406 .elementor-element.elementor-element-5976956 .course-wishlist  {
+    cursor: pointer;
+}
+.elementor-31406 .elementor-element.elementor-element-5976956 .course-wishlist:before {
+   font-family: "Font Awesome 5 Free" !important;
+}
+.elementor-31406 .elementor-element.elementor-element-5976956 .lp-btn-wishlist {
+   border: none;
+   border-radius: 50%;
+}/* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-31dc4ac */.elementor-31406 .elementor-element.elementor-element-31dc4ac:hover .loop-icon-hover{
+    opacity: 1;
+    visibility: visible;
+    top: 50%;
+}
+ .elementor-31406 .elementor-element.elementor-element-31dc4ac:hover .loop-image-course:before {
+    opacity: 1;
+ }/* End custom CSS */
+.elementor-34042 .elementor-element.elementor-element-f4365fb{--display:flex;--flex-direction:row;--container-widget-width:initial;--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--padding-top:30px;--padding-bottom:30px;--padding-left:30px;--padding-right:30px;}.elementor-34042 .elementor-element.elementor-element-0273d61{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-34042 .elementor-element.elementor-element-9e7906d{font-weight:400;}.elementor-34042 .elementor-element.elementor-element-e69787e{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-34042 .elementor-element.elementor-element-c0bb535 > .elementor-widget-container{margin:-10px 0px 0px 0px;}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info {margin:0;}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li {display:block;}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li{margin:1px 0px 1px 0px;}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li > a, .elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li{color:var( --e-global-color-accent );}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li > a,.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li{font-weight:600;}.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li:hover > a{color:var( --e-global-color-primary );}body:not(.rtl) .elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li i,body:not(.rtl) .elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li svg{margin-right:10px;}body.rtl .elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li i,body.rtl .elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li svg{margin-left:10px;}.elementor-34042 .elementor-element.elementor-element-fa64020{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-34042 .elementor-element.elementor-element-124d5c3 img{width:100%;border-radius:10px 10px 10px 10px;}@media(max-width:1024px){.elementor-34042 .elementor-element.elementor-element-f4365fb{--padding-top:15px;--padding-bottom:0px;--padding-left:0px;--padding-right:20px;}.elementor-34042 .elementor-element.elementor-element-c0bb535 > .elementor-widget-container{margin:0px 0px 0px -10px;}}@media(max-width:767px){.elementor-34042 .elementor-element.elementor-element-f4365fb{--gap:10px 10px;--row-gap:10px;--column-gap:10px;}}/* Start custom CSS for thim-ekits-header-info, class: .elementor-element-c0bb535 */.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li a { 
+    display: inline-block;
+    padding: 10px 16px; 
+    width:100%; 
+    border-radius: 100px; 
+}
+.elementor-34042 .elementor-element.elementor-element-c0bb535 .thim-header-info > li a:hover{
+    background-color: var(--phys-background_section_color);
+}/* End custom CSS */
+.elementor-30994 .elementor-element.elementor-element-05fc3d0{--display:flex;--flex-direction:row;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--justify-content:flex-end;--align-items:center;--gap:15px 15px;--row-gap:15px;--column-gap:15px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-30994 .elementor-element.elementor-element-22ec3e7.elementor-view-stacked .elementor-icon{background-color:var( --e-global-color-primary );}.elementor-30994 .elementor-element.elementor-element-22ec3e7.elementor-view-framed .elementor-icon, .elementor-30994 .elementor-element.elementor-element-22ec3e7.elementor-view-default .elementor-icon{color:var( --e-global-color-primary );border-color:var( --e-global-color-primary );}.elementor-30994 .elementor-element.elementor-element-22ec3e7.elementor-view-framed .elementor-icon, .elementor-30994 .elementor-element.elementor-element-22ec3e7.elementor-view-default .elementor-icon svg{fill:var( --e-global-color-primary );}.elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon{font-size:20px;padding:12px;border-width:1px 1px 1px 1px;}.elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon svg{height:20px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon a{padding:12px 24px 12px 24px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6  .thim-login-icon a{font-weight:600;line-height:1.4em;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .register{border-style:solid;border-width:1px 1px 1px 1px;color:var( --e-global-color-primary );border-color:var( --e-global-color-primary );background-color:#FFFFFF;border-radius:48px 48px 48px 48px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .register:hover{color:var( --e-global-color-accent );border-color:var( --e-global-color-secondary );background-color:var( --e-global-color-secondary );border-radius:48px 48px 48px 48px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .login{border-style:solid;border-width:1px 1px 1px 1px;color:#FFFFFF;border-color:var( --e-global-color-primary );background-color:var( --e-global-color-primary );border-radius:48px 48px 48px 48px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .login:hover{color:var( --e-global-color-accent );border-color:var( --e-global-color-secondary );background-color:var( --e-global-color-secondary );}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .logout{border-style:solid;border-width:1px 1px 1px 1px;color:#FFFFFF;border-color:var( --e-global-color-primary );background-color:var( --e-global-color-primary );border-radius:48px 48px 48px 48px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .logout:hover{color:var( --e-global-color-accent );border-color:var( --e-global-color-secondary );background-color:var( --e-global-color-secondary );}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .profile{border-style:none;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .profile i{color:var( --e-global-color-primary );}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon .profile svg path{stroke:var( --e-global-color-primary );fill:var( --e-global-color-primary );}@media(max-width:1024px){.elementor-30994 .elementor-element.elementor-element-05fc3d0{--gap:12px 12px;--row-gap:12px;--column-gap:12px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon{font-size:26px;}.elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon svg{height:26px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon a{padding:8px 10px 8px 10px;}.elementor-30994 .elementor-element.elementor-element-7fcc6a6  .thim-login-icon a{font-size:15px;}}/* Start custom CSS for icon, class: .elementor-element-22ec3e7 */.elementor-30994 .elementor-element.elementor-element-22ec3e7 svg path { 
+   stroke: var(--phys-body_primary_color);
+}
+.elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon-wrapper {
+    line-height: 1; 
+}
+@media (max-width: 1024px) { .elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon { border-width: 0 !important; padding: 0 !important;
+    } 
+    .elementor-30994 .elementor-element.elementor-element-22ec3e7 .elementor-icon svg path { stroke: #111;
+    } 
+}/* End custom CSS */
+/* Start custom CSS for thim-ekits-login-icon, class: .elementor-element-7fcc6a6 */.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .elementor-widget-container .thim-login-icon a.profile{
+    padding: 0;
+}
+.elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon a svg{
+   margin-right: 0;
+   position: relative; 
+   width: 20px;
+   height: 20px;
+   top: 2px;
+}
+@media (max-width: 1024px) { .elementor-30994 .elementor-element.elementor-element-7fcc6a6 .thim-login-icon a svg path{
+   fill: #111 !important;
+}
+}/* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-05fc3d0 */.elementor-30994 .elementor-element.elementor-element-05fc3d0 .thim-login-icon {
+    line-height: 1;
+}/* End custom CSS */
+.elementor-250 .elementor-element.elementor-element-8995337{--display:flex;--align-items:center;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );border-style:solid;--border-style:solid;border-width:1px 0px 0px 0px;--border-top-width:1px;--border-right-width:0px;--border-bottom-width:0px;--border-left-width:0px;border-color:var( --e-global-color-a5df7df );--border-color:var( --e-global-color-a5df7df );--padding-top:0px;--padding-bottom:0px;--padding-left:20px;--padding-right:20px;}.elementor-250 .elementor-element.elementor-element-9f4b976{--display:flex;--flex-direction:row;--container-widget-width:calc( ( 1 - var( --container-widget-flex-grow ) ) * 100% );--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--align-items:center;--margin-top:33px;--margin-bottom:10px;--margin-left:0px;--margin-right:0px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-d42a4c2{--display:flex;--gap:10px 10px;--row-gap:10px;--column-gap:10px;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-d42a4c2.e-con{--flex-grow:0;--flex-shrink:0;}.elementor-250 .elementor-element.elementor-element-6761812 .thim-ekits-heading{align-items:flex-start;text-align:left;}.elementor-250 .elementor-element.elementor-element-6761812 .thim-ekits-heading .title span{color:var( --e-global-color-primary );}.elementor-250 .elementor-element.elementor-element-8885dd6{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-a29bbd9{--divider-border-style:solid;--divider-color:var( --e-global-color-a5df7df );--divider-border-width:1px;}.elementor-250 .elementor-element.elementor-element-a29bbd9 .elementor-divider-separator{width:100%;}.elementor-250 .elementor-element.elementor-element-a29bbd9 .elementor-divider{padding-block-start:5px;padding-block-end:5px;}.elementor-250 .elementor-element.elementor-element-7761b31{--display:flex;--flex-direction:row;--container-widget-width:initial;--container-widget-height:100%;--container-widget-flex-grow:1;--container-widget-align-self:stretch;--flex-wrap-mobile:wrap;--gap:40px 20px;--row-gap:40px;--column-gap:20px;border-style:none;--border-style:none;--padding-top:15px;--padding-bottom:10px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-1aed186{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-1aed186.e-con{--flex-grow:0;--flex-shrink:0;}.elementor-250 .elementor-element.elementor-element-9fe6d4a > .elementor-widget-container{margin:0px 0px 5px 0px;}.elementor-250 .elementor-element.elementor-element-bb771b8{width:var( --container-widget-width, 95% );max-width:95%;--container-widget-width:95%;--container-widget-flex-grow:0;}.elementor-250 .elementor-element.elementor-element-33971cf{--grid-template-columns:repeat(0, auto);--icon-size:16px;--grid-column-gap:7px;--grid-row-gap:0px;}.elementor-250 .elementor-element.elementor-element-33971cf > .elementor-widget-container{margin:10px 0px 0px 0px;}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon{background-color:#FFFFFF00;--icon-padding:14px;border-style:solid;border-width:1px 1px 1px 1px;border-color:#404040CC;}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon i{color:var( --e-global-color-text );}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon svg{fill:var( --e-global-color-text );}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-icon{border-radius:50% 50% 50% 50%;}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon:hover{background-color:var( --e-global-color-primary );border-color:var( --e-global-color-primary );}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon:hover i{color:#FFFFFF;}.elementor-250 .elementor-element.elementor-element-33971cf .elementor-social-icon:hover svg{fill:#FFFFFF;}.elementor-250 .elementor-element.elementor-element-b3ccbd6{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-6aa645e > .elementor-widget-container{margin:0px 0px 5px 0px;}.elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info {margin:0;}.elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li {display:block;}.elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li{margin:0px 0px 8px 0px;}.elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li:hover > a{color:var( --e-global-color-primary );}body:not(.rtl) .elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li i,body:not(.rtl) .elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li svg{margin-right:10px;}body.rtl .elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li i,body.rtl .elementor-250 .elementor-element.elementor-element-3fc51b8 .thim-header-info > li svg{margin-left:10px;}.elementor-250 .elementor-element.elementor-element-e53b0dd{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-2b72e22 > .elementor-widget-container{margin:0px 0px 5px 0px;}.elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info {margin:0;}.elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li {display:block;}.elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li{margin:0px 0px 8px 0px;}.elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li:hover > a{color:var( --e-global-color-primary );}body:not(.rtl) .elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li i,body:not(.rtl) .elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li svg{margin-right:10px;}body.rtl .elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li i,body.rtl .elementor-250 .elementor-element.elementor-element-3ab57db .thim-header-info > li svg{margin-left:10px;}.elementor-250 .elementor-element.elementor-element-5307d69{--display:flex;--padding-top:0px;--padding-bottom:0px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-f5d5406 > .elementor-widget-container{margin:0px 0px 5px 0px;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info {margin:0;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li {display:block;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li{margin:0px 0px 0px 0px;padding:0px 0px 10px 0px;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li:hover > a{color:var( --e-global-color-primary );}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li i{color:var( --e-global-color-primary );font-size:16px;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg path{stroke:var( --e-global-color-primary );fill:var( --e-global-color-primary );}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg{max-width:16px;height:auto;}body:not(.rtl) .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li i,body:not(.rtl) .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg{margin-right:6px;}body.rtl .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li i,body.rtl .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg{margin-left:6px;}.elementor-250 .elementor-element.elementor-element-061ae63{--divider-border-style:solid;--divider-color:var( --e-global-color-a5df7df );--divider-border-width:1px;}.elementor-250 .elementor-element.elementor-element-061ae63 .elementor-divider-separator{width:100%;}.elementor-250 .elementor-element.elementor-element-061ae63 .elementor-divider{padding-block-start:5px;padding-block-end:5px;}.elementor-250 .elementor-element.elementor-element-5cc7caf{--display:grid;--e-con-grid-template-columns:repeat(3, 1fr);--e-con-grid-template-rows:repeat(1, 1fr);--grid-auto-flow:row;--align-items:center;--padding-top:15px;--padding-bottom:35px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-b6e961e .thim-ekit-site-logo img{width:200px;}.elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info {margin:0;}.elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li {display:block;}.elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li:hover > a{color:#57BE24;}body:not(.rtl) .elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li i,body:not(.rtl) .elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li svg{margin-right:10px;}body.rtl .elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li i,body.rtl .elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li svg{margin-left:10px;}.elementor-250 .elementor-element.elementor-element-81503a1 .thim-header-info > li .focused-text{color:var( --e-global-color-primary );}.elementor-250 .elementor-element.elementor-element-46ca3c8{text-align:end;}.elementor-250 .elementor-element.elementor-element-46ca3c8 img{width:283px;}@media(min-width:768px){.elementor-250 .elementor-element.elementor-element-d42a4c2{--width:60%;}.elementor-250 .elementor-element.elementor-element-1aed186{--width:45%;}}@media(max-width:1024px) and (min-width:768px){.elementor-250 .elementor-element.elementor-element-1aed186{--width:48.5%;}.elementor-250 .elementor-element.elementor-element-b3ccbd6{--width:48.5%;}.elementor-250 .elementor-element.elementor-element-e53b0dd{--width:48.5%;}.elementor-250 .elementor-element.elementor-element-5307d69{--width:48.5%;}}@media(max-width:1024px){.elementor-250 .elementor-element.elementor-element-7761b31{--flex-wrap:wrap;}.elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li{margin:0px 0px 0px 0px;}body:not(.rtl) .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li i,body:not(.rtl) .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg{margin-right:3px;}body.rtl .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li i,body.rtl .elementor-250 .elementor-element.elementor-element-589c4fe .thim-header-info > li svg{margin-left:3px;}.elementor-250 .elementor-element.elementor-element-5cc7caf{--grid-auto-flow:row;}}@media(max-width:767px){.elementor-250 .elementor-element.elementor-element-7761b31{--gap:30px 20px;--row-gap:30px;--column-gap:20px;}.elementor-250 .elementor-element.elementor-element-33971cf > .elementor-widget-container{margin:0px 0px 0px 0px;}.elementor-250 .elementor-element.elementor-element-5cc7caf{--e-con-grid-template-columns:repeat(1, 1fr);--gap:15px 15px;--row-gap:15px;--column-gap:15px;--grid-auto-flow:row;--padding-top:15px;--padding-bottom:65px;--padding-left:0px;--padding-right:0px;}.elementor-250 .elementor-element.elementor-element-46ca3c8{text-align:start;}}/* Start custom CSS for thim-ekits-header-info, class: .elementor-element-589c4fe */.elementor-250 .elementor-element.elementor-element-589c4fe .header-info-swapper .thim-header-info > li a {
+    display: flex;
+    gap: 4px;
+}/* End custom CSS */
+/* Start custom CSS for image, class: .elementor-element-46ca3c8 */.rtl .elementor-250 .elementor-element.elementor-element-46ca3c8 {
+    text-align: left;
+}/* End custom CSS */
+/* Start custom CSS for container, class: .elementor-element-8995337 */body:not(.home) .thim-ekit__footer .animated{
+    animation: none;
+}/* End custom CSS */
+.elementor-kit-9{--e-global-color-primary:#0171F1;--e-global-color-secondary:#1DAAFF;--e-global-color-text:#333333;--e-global-color-accent:#111111;--e-global-color-8030683:#F5F5F5;--e-global-color-a5df7df:#E5E5E5;--e-global-color-f06cac9:#D6F1FE;--e-global-typography-primary-font-family:"DM Sans";--e-global-typography-primary-font-size:18px;--e-global-typography-primary-font-weight:600;--e-global-typography-secondary-font-family:"DM Sans";--e-global-typography-secondary-font-weight:400;--e-global-typography-text-font-family:"DM Sans";--e-global-typography-text-font-weight:400;--e-global-typography-accent-font-family:"DM Sans";--e-global-typography-accent-font-weight:500;}.elementor-section.elementor-section-boxed > .elementor-container{max-width:1290px;}.e-con{--container-max-width:1290px;}.elementor-widget:not(:last-child){margin-block-end:20px;}.elementor-element{--widgets-spacing:20px 20px;--widgets-spacing-row:20px;--widgets-spacing-column:20px;}{}h1.entry-title{display:var(--page-title-display);}@media(max-width:1024px){.elementor-section.elementor-section-boxed > .elementor-container{max-width:1024px;}.e-con{--container-max-width:1024px;}}@media(max-width:767px){.elementor-section.elementor-section-boxed > .elementor-container{max-width:767px;}.e-con{--container-max-width:767px;}}
+/*# sourceURL=elementor-frontend-inline-css */
+</style>
+<link rel='stylesheet' id='widget-image-css' href='../../../../wp-content/plugins/elementor/assets/css/widget-image.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='widget-heading-css' href='../../../../wp-content/plugins/elementor/assets/css/widget-heading.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='lp-course-wishlist-css' href='../../../../wp-content/plugins/learnpress-wishlist/assets/dist/css/wishlist.min0235.css?ver=4.1.1' media='all' />
+<link rel='stylesheet' id='phys-button-css' href='../../../../wp-content/themes/edusmart/assets/css/buttonce14.css?ver=1.0.8' media='all' />
+<link rel='stylesheet' id='e-animation-hang-css' href='../../../../wp-content/plugins/elementor/assets/lib/animations/styles/e-animation-hang.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='e-animation-fadeIn-css' href='../../../../wp-content/plugins/elementor/assets/lib/animations/styles/fadeIn.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='widget-divider-css' href='../../../../wp-content/plugins/elementor/assets/css/widget-divider.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='widget-social-icons-css' href='../../../../wp-content/plugins/elementor/assets/css/widget-social-icons.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='e-apple-webkit-css' href='../../../../wp-content/plugins/elementor/assets/css/conditionals/apple-webkit.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='font-awesome-5-all-css' href='../../../../wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='font-awesome-4-shim-css' href='../../../../wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min50fa.css?ver=4.2.1' media='all' />
+<link rel='stylesheet' id='thim-ekit-frontend-css' href='../../../../wp-content/plugins/thim-elementor-kit/build/frontend47a7.css?ver=1.4.5' media='all' />
+<link rel='stylesheet' id='thim-ekit-widgets-css' href='../../../../wp-content/plugins/thim-elementor-kit/build/widgets47a7.css?ver=1.4.5' media='all' />
+<link rel='stylesheet' id='elementor-gf-local-dmsans-css' href='../../../../wp-content/uploads/sites/9/elementor/google-fonts/css/dmsans4c8f.css?ver=1743646852' media='all' />
+<script id="swv-js" src="../../../../wp-content/plugins/contact-form-7/includes/swv/js/indexc098.js?ver=6.1.6"></script>
+<script id="contact-form-7-js-before">
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/edusmart.physcode.com\/demo-main\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    }
+};
+//# sourceURL=contact-form-7-js-before
+</script>
+<script id="contact-form-7-js" src="../../../../wp-content/plugins/contact-form-7/includes/js/indexc098.js?ver=6.1.6"></script>
+<script async data-wp-strategy="async" fetchpriority="low" id="comment-reply-js" src="../../../../wp-includes/js/comment-reply.min42a0.js?ver=7.0.2"></script>
+<script id="tp-chameleon-js" src="../../../../wp-content/plugins/tp-chameleon/assets/tp-chameleon9a8f.js?ver=2.0.5.3"></script>
+<script id="add-to-cart-variation-js" src="../../../../wp-content/plugins/woo-booster-toolkit/assets/lib/add-to-cart/add-to-cart-variation4bf4.js?ver=1.0.3"></script>
+<script id="wcbt-global-js-extra">
+var WCBT_GLOBAL_OBJECT = {"rest_url":"https://edusmart.physcode.com/demo-main/wp-json/","rest_namespace":"wcbt/v1","compare_product_page_url":"https://edusmart.physcode.com/demo-main/compare/","user_id":"","is_multisite":"1","blog_id":"9","currency_symbol":"$","decimal_separator":".","thousand_separator":",","decimals":"2","price_format":"left","is_shop_page":"","is_product_taxonomy_page":""};
+var WCBT_TRANSLATION_OBJECT = {"compare_added_msg":"Product Compare added","compare_removed_msg":"Product Compare removed","all_ratings":"All ratings","wishlist_added_msg":"Product WishList added","wishlist_removed_msg":"Product WishList removed","clear_all":"Clear All"};
+var WCBT_VARIATION_OBJECT = {"mode":"on","display_on_product_list":"","show_selected_name":"on"};
+var WCBT_WISHLIST_OBJECT = {"enable":"1","tooltip_enable":"1","add_wishlist_tooltip_text":"Add Wishlist","remove_wishlist_tooltip_text":"Remove Wishlist"};
+var WCBT_COMPARE_OBJECT = {"enable":"1","tooltip_enable":"1","add_compare_tooltip_text":"Add Compare","remove_compare_tooltip_text":"Remove Compare"};
+//# sourceURL=wcbt-global-js-extra
+</script>
+<script id="wcbt-global-js" src="../../../../wp-content/plugins/woo-booster-toolkit/assets/dist/js/frontend/wcbt-global.min4bf4.js?ver=1.0.3"></script>
+<script id="wp-util-js-extra">
+var _wpUtilSettings = {"ajax":{"url":"/demo-main/wp-admin/admin-ajax.php"}};
+//# sourceURL=wp-util-js-extra
+</script>
+<script id="wp-util-js" src="../../../../wp-includes/js/wp-util.min42a0.js?ver=7.0.2"></script>
+<script id="backbone-js" src="../../../../wp-includes/js/backbone.min51a2.js?ver=1.6.1"></script>
+<script id="wpems-modal-js-js" src="../../../../wp-content/plugins/wp-events-manager/assets/dist/js/frontend/wpems-modal.mincc91.js?ver=2.1.8"></script>
+<script id="wpems-carousel-js-js" src="../../../../wp-content/plugins/wp-events-manager/assets/dist/js/frontend/wpems-carousel.mincc91.js?ver=2.1.8"></script>
+<script id="phys-core-cookie-consent-js-extra">
+var physCookieCfg = {"endpoint":"https://edusmart.physcode.com/demo-main/wp-json/phys-core/v1/banner","cookie_list":{"necessary":[{"id":"lp_session_guest","domain":"edusmart.physcode.com/demo-main","duration":"Session","desc":"When they buy/enroll a course, checkout knows which course they are buying.","src":""},{"id":"sbjs_migrations","domain":".edusmart.physcode.com/demo-main","duration":"Session","desc":"Used internally by Sourcebuster JS to manage migration logic between different versions of the library","src":""}],"analytics":[{"id":"sbjs_current","domain":".edusmart.physcode.com/demo-main","duration":"30 minutes to 2 hours","desc":"Stores information about the user\\'s current visit source, including UTM parameters, referrer, or search engine.","src":""},{"id":"sbjs_first","domain":".edusmart.physcode.com/demo-main","duration":"6 months","desc":"Records the first source of the user\\'s very first visit to the website. Used for first-touch attribution","src":""},{"id":"sbjs_session","domain":".edusmart.physcode.com/demo-main","duration":"Session","desc":"Tracks whether the current session is new or ongoing. Helps determine session boundaries for source tracking.","src":""},{"id":"sbjs_udata","domain":".edusmart.physcode.com/demo-main","duration":"6 months","desc":"Stores device-related data like browser, OS, timezone, and optionally IP address (if enabled).","src":""}]}};
+//# sourceURL=phys-core-cookie-consent-js-extra
+</script>
+<script id="phys-core-cookie-consent-js" src="../../../../wp-content/plugins/phys-core/assets/js/cookie-consent.min431f.js?ver=2.1.2"></script>
+<script id="sourcebuster-js-js" src="../../../../wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.mine54b.js?ver=10.9.4"></script>
+<script id="wc-order-attribution-js-extra">
+var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"https://edusmart.physcode.com/demo-main/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
+//# sourceURL=wc-order-attribution-js-extra
+</script>
+<script id="wc-order-attribution-js" src="../../../../wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.mine54b.js?ver=10.9.4"></script>
+<script id="theia-sticky-sidebar-js" src="../../../../wp-content/themes/edusmart/assets/js/theia-sticky-sidebarce14.js?ver=1.0.8"></script>
+<script id="custom-script-js-extra">
+var physc_global_js_var = {"IsSwitchLayout":"","IsWooActive":"1","IsMenuEffect":"1","ajax_url":"https://edusmart.physcode.com/demo-main/wp-admin/admin-ajax.php","nonce":"2133b81903"};
+//# sourceURL=custom-script-js-extra
+</script>
+<script id="custom-script-js" src="../../../../wp-content/themes/edusmart/assets/js/custom-script.mince14.js?ver=1.0.8"></script>
+<script id="react-js" src="../../../../wp-includes/js/dist/vendor/react.mine1ab.js?ver=18.3.1.1"></script>
+<script id="react-dom-js" src="../../../../wp-includes/js/dist/vendor/react-dom.mine1ab.js?ver=18.3.1.1"></script>
+<script id="wp-escape-html-js" src="../../../../wp-includes/js/dist/escape-html.minaf01.js?ver=3f093e5cca67aa0f8b56"></script>
+<script id="wp-element-js" src="../../../../wp-includes/js/dist/element.minc5e8.js?ver=15ba804677f72a8db97b"></script>
+<script id="react-jsx-runtime-js" src="../../../../wp-includes/js/dist/vendor/react-jsx-runtime.mincb06.js?ver=18.3.1"></script>
+<script id="wp-deprecated-js" src="../../../../wp-includes/js/dist/deprecated.min3b9c.js?ver=990e85f234fee8f7d446"></script>
+<script id="wp-dom-js" src="../../../../wp-includes/js/dist/dom.min6c57.js?ver=66a6cf58e0c4cd128af0"></script>
+<script id="wp-is-shallow-equal-js" src="../../../../wp-includes/js/dist/is-shallow-equal.minf5d9.js?ver=5d84b9f3cb50d2ce7d04"></script>
+<script id="wp-keycodes-js" src="../../../../wp-includes/js/dist/keycodes.min373f.js?ver=aa1a141e3468afe7f852"></script>
+<script id="wp-priority-queue-js" src="../../../../wp-includes/js/dist/priority-queue.minff74.js?ver=1f0e89e247bc0bd3f9b9"></script>
+<script id="wp-undo-manager-js" src="../../../../wp-includes/js/dist/undo-manager.min6d4e.js?ver=27bb0ae036a2c9d4a1b5"></script>
+<script id="wp-compose-js" src="../../../../wp-includes/js/dist/compose.minf496.js?ver=fbe37f6b46750554f947"></script>
+<script id="wp-private-apis-js" src="../../../../wp-includes/js/dist/private-apis.min9a9f.js?ver=835912f0086b9e59aed4"></script>
+<script id="wp-redux-routine-js" src="../../../../wp-includes/js/dist/redux-routine.min328c.js?ver=64f9f5001aabc046c605"></script>
+<script id="wp-data-js" src="../../../../wp-includes/js/dist/data.min5bad.js?ver=1756b6a2676c1b3369ab"></script>
+<script id="wp-data-js-after">
+( function() {
+	var userId = 0;
+	var storageKey = "WP_DATA_USER_" + userId;
+	wp.data
+		.use( wp.data.plugins.persistence, { storageKey: storageKey } );
+} )();
+//# sourceURL=wp-data-js-after
+</script>
+<script id="lodash-js" src="../../../../wp-includes/js/dist/vendor/lodash.min7f9d.js?ver=4.18.1"></script>
+<script id="lodash-js-after">
+window.lodash = _.noConflict();
+//# sourceURL=lodash-js-after
+</script>
+<script data-wp-strategy="defer" defer id="lp-single-curriculum-js" src="../../../../wp-content/plugins/learnpress/assets/js/dist/frontend/single-curriculum.mincb20.js?ver=4.4.3"></script>
+<script id="wc-add-to-cart-variation-js-extra">
+var wc_add_to_cart_variation_params = {"wc_ajax_url":"/demo-main/?wc-ajax=%%endpoint%%","i18n_no_matching_variations_text":"Sorry, no products matched your selection. Please choose a different combination.","i18n_make_a_selection_text":"Please select some product options before adding this product to your cart.","i18n_unavailable_text":"Sorry, this product is unavailable. Please choose a different combination.","i18n_reset_alert_text":"Your selection has been reset. Please select some product options before adding this product to your cart."};
+//# sourceURL=wc-add-to-cart-variation-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="wc-add-to-cart-variation-js" src="../../../../wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart-variation.mine54b.js?ver=10.9.4"></script>
+<script async data-wp-strategy="async" id="lp-course-wishlist-script-js" src="../../../../wp-content/plugins/learnpress-wishlist/assets/dist/js/lp-wishlist.min0235.js?ver=4.1.1"></script>
+<script id="elementor-webpack-runtime-js" src="../../../../wp-content/plugins/elementor/assets/js/webpack.runtime.min50fa.js?ver=4.2.1"></script>
+<script id="elementor-frontend-modules-js" src="../../../../wp-content/plugins/elementor/assets/js/frontend-modules.min50fa.js?ver=4.2.1"></script>
+<script id="jquery-ui-core-js" src="../../../../wp-includes/js/jquery/ui/core.minb37e.js?ver=1.13.3"></script>
+<script id="elementor-frontend-js-before">
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Share on Facebook","shareOnX":"Share on X","pinIt":"Pin it","download":"Download","downloadImage":"Download image","fullscreen":"Fullscreen","zoom":"Zoom","share":"Share","playVideo":"Play Video","previous":"Previous","next":"Next","close":"Close","a11yCarouselPrevSlideMessage":"Previous slide","a11yCarouselNextSlideMessage":"Next slide","a11yCarouselFirstSlideMessage":"This is the first slide","a11yCarouselLastSlideMessage":"This is the last slide","a11yCarouselPaginationBulletMessage":"Go to slide"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Mobile Portrait","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Mobile Landscape","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet Portrait","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet Landscape","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Laptop","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Widescreen","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},"hasCustomBreakpoints":false},"version":"4.2.1","is_static":false,"experimentalFeatures":{"e_font_icon_svg":true,"additional_custom_breakpoints":true,"container":true,"e_panel_promotions":true,"nested-elements":true,"global_classes_should_enforce_capabilities":true,"e_variables":true,"e_opt_in_v4_page":true,"e_components":true,"e_interactions":true,"e_widget_creation":true,"import-export-customization":true},"urls":{"assets":"https:\/\/edusmart.physcode.com\/demo-main\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/edusmart.physcode.com\/demo-main\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/edusmart.physcode.com\/demo-main\/wp-content\/uploads\/sites\/9"},"nonces":{"floatingButtonsClickTracking":"0fe8f1da8a","atomicFormsSendForm":"44b105f982"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description"},"post":{"id":33506,"title":"Create%20an%20LMS%20Website%20with%20LearnPress%20%E2%86%92%20Lesson%203%3A%20Variables%20-%20Demo%20Main","excerpt":"A series of Videos from ThimPress, give you a detailed tutorial to create an LMS Website with LearnPress - LMS & Education WordPress Plugin.\t","featuredImage":"https:\/\/edusmart.physcode.com\/demo-main\/wp-content\/uploads\/sites\/9\/2024\/12\/create-an-lms-website-with-learnpress-5-1-1-1024x683.jpg"}};
+//# sourceURL=elementor-frontend-js-before
+</script>
+<script id="elementor-frontend-js" src="../../../../wp-content/plugins/elementor/assets/js/frontend.min50fa.js?ver=4.2.1"></script>
+<script id="mc4wp-forms-api-js" defer src="../../../../wp-content/plugins/mailchimp-for-wp/assets/js/forms3940.js?ver=4.13.1"></script>
+<script id="font-awesome-4-shim-js" src="../../../../wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min50fa.js?ver=4.2.1"></script>
+<script data-wp-strategy="defer" defer id="thim-ekit-frontend-js" src="../../../../wp-content/plugins/thim-elementor-kit/build/frontend47a7.js?ver=1.4.5"></script>
+<script id="thim-ekit-widgets-js-extra">
+var ekits_script = {"ajax_url":"https://edusmart.physcode.com/demo-main/wp-admin/admin-ajax.php","text_minutes":"\u00a0minutes","text_second":"\u00a0second"};
+//# sourceURL=thim-ekit-widgets-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="thim-ekit-widgets-js" src="../../../../wp-content/plugins/thim-elementor-kit/build/widgets9b2d.js?ver=c58f75f9ccf9323e83ec"></script>
+<div class="lp-overlay" style="display: none">
+<div class="lp-modal-dialog">
+	<div class="lp-modal-content">
+		<div class="lp-modal-header">
+			<h3 class="modal-title">Modal title</h3>
+		</div>
+		<div class="lp-modal-body">
+			<div class="main-content">Main Content</div>
+		</div>
+		<div class="lp-modal-footer">
+			<button type="button" class="lp-button btn-no">No</button>
+			<button type="button" class="lp-button btn-yes">Yes</button>
+		</div>
+	</div>
+</div>
+</div><script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://edusmart.physcode.com/demo-main/wp-includes/js/wp-emoji-release.min.js?ver=7.0.2"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=https://edusmart.physcode.com/demo-main/wp-includes/js/wp-emoji-loader.min.js
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"e5b67894212849e9aa27db559430d1b3","r":1}' crossorigin="anonymous"></script>
+</body>
+
+<!-- Mirrored from edusmart.physcode.com/demo-main/courses/create-an-lms-website-with-learnpress/lessons/lesson-3-variables/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Aug 2026 10:44:43 GMT -->
+</html>
+
+<!-- Page supported by LiteSpeed Cache 7.8.1 on 2026-08-04 10:22:09 -->
