@@ -7,6 +7,20 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+
+  // The old site was a set of static .html pages at the root. Keep any existing
+  // bookmarks / external links working by mapping them to the new app routes.
+  // (Works on Netlify and Vercel alike — no _redirects file needed.)
+  async redirects() {
+    return [
+      { source: "/admin.html", destination: "/admin", permanent: true },
+      { source: "/login.html", destination: "/admin/login", permanent: true },
+      { source: "/course-registration.html", destination: "/register", permanent: true },
+      { source: "/brochure.html", destination: "/brochure", permanent: true },
+      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/old-index.html", destination: "/", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
