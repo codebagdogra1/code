@@ -14,7 +14,9 @@
     "home:extract": "python3 scripts/extract-home-snippets.py",
     "build-home": "python3 scripts/build-home.py",
     "build-home:check": "python3 scripts/build-home.py --check",
-    "split-home": "python3 scripts/split-home.py"
+    "split-home": "python3 scripts/split-home.py",
+    "split-pages": "python3 scripts/split-pages.py",
+    "fetch-page-assets": "python3 scripts/fetch-missing-assets.py"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

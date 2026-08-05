@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname),
   },
 
+  // This app has two root layouts (route groups (edu) and (main)), so there is no
+  // single layout to compose a 404 from. `global-not-found` handles unmatched URLs
+  // app-wide with its own <html>/<body> — we render the EduSmart 404 mirror there.
+  experimental: {
+    globalNotFound: true,
+  },
+
   // The old site was a set of static .html pages at the root. Keep any existing
   // bookmarks / external links working by mapping them to the new app routes.
   // (Works on Netlify and Vercel alike — no _redirects file needed.)

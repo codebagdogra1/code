@@ -1,0 +1,72 @@
+{
+  "contact": {
+    "source": "contact/index.html",
+    "standalone": false,
+    "bodyClass": "wp-singular page-template page-template-elementor_header_footer page page-id-261 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js elementor-default elementor-template-full-width elementor-kit-9 elementor-page elementor-page-261",
+    "title": "Contact &#8211; Demo Main",
+    "bytes": 13828,
+    "headResources": 2,
+    "assetsReferenced": 3,
+    "assetsMissing": 1
+  },
+  "about": {
+    "source": "about-us/index.html",
+    "standalone": false,
+    "bodyClass": "wp-singular page-template page-template-elementor_header_footer page page-id-259 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js elementor-default elementor-template-full-width elementor-kit-9 elementor-page elementor-page-259",
+    "title": "About us &#8211; Demo Main",
+    "bytes": 41718,
+    "headResources": 2,
+    "assetsReferenced": 41,
+    "assetsMissing": 2
+  },
+  "courses": {
+    "source": "courses/index.html",
+    "standalone": false,
+    "bodyClass": "archive post-type-archive post-type-archive-lp_course wp-embed-responsive wp-theme-edusmart theme-edusmart edusmart learnpress learnpress-page woocommerce-no-js hfeed elementor-default elementor-kit-9",
+    "title": "All Courses - Demo Main",
+    "bytes": 52390,
+    "headResources": 3,
+    "assetsReferenced": 4,
+    "assetsMissing": 2
+  },
+  "blog": {
+    "source": "category/education/index.html",
+    "standalone": false,
+    "bodyClass": "archive category category-education category-54 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js hfeed elementor-default elementor-kit-9",
+    "title": "Education &#8211; Demo Main",
+    "bytes": 26978,
+    "headResources": 3,
+    "assetsReferenced": 12,
+    "assetsMissing": 2
+  },
+  "blog-post": {
+    "source": "how-online-courses-changed-my-life/index.html",
+    "standalone": false,
+    "bodyClass": "wp-singular post-template-default single single-post postid-33727 single-format-standard wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js elementor-default elementor-kit-9",
+    "title": "How Online Courses Changed My Life &#8211; Demo Main",
+    "bytes": 20785,
+    "headResources": 3,
+    "assetsReferenced": 43,
+    "assetsMissing": 2
+  },
+  "not-found": {
+    "source": "404-page.html",
+    "standalone": false,
+    "bodyClass": "error404 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js hfeed elementor-default elementor-kit-9",
+    "title": "Page not found &#8211; Demo Main",
+    "bytes": 490,
+    "headResources": 3,
+    "assetsReferenced": 5,
+    "assetsMissing": 2
+  },
+  "coming-soon": {
+    "source": "maintenance/index.html",
+    "standalone": true,
+    "bodyClass": "wp-singular page-template page-template-elementor_canvas page page-id-33715 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js elementor-default elementor-template-canvas elementor-kit-9 elementor-page elementor-page-33715",
+    "title": "Maintenance &#8211; Demo Main",
+    "bytes": 6580,
+    "headResources": 2,
+    "assetsReferenced": 11,
+    "assetsMissing": 2
+  }
+}
