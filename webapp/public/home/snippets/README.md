@@ -1,24 +1,59 @@
 # Homepage snippets
 
-Reusable, self-balanced HTML partials extracted from `../index.html` (the static
-EduSmart homepage mirror served at `/`). These are **copy/paste** partials — the
-page is a plain `.html` file served via a Next.js rewrite, so there is no runtime
-include. Regenerate them any time with:
+Reusable, self-balanced HTML partials for the static EduSmart homepage mirror
+served at `/`. The page is a plain `.html` file served via a Next.js rewrite, so
+there is no runtime include — instead a **build step** stitches these partials
+into `../index.html` at author time, which makes `header.html` and `footer.html`
+the single source of truth for the site chrome.
+
+## Build flow (source of truth → page)
 
 ```
-python3 webapp/scripts/extract-home-snippets.py
+snippets/header.html ─┐
+                      ├─►  build-home.py  ─►  index.html   (the served page)
+snippets/footer.html ─┤
+page.shell.html      ─┘   (page <head>, sections, scripts,
+                           with @@HEADER@@ / @@FOOTER@@ markers)
 ```
 
-The extractor uses tag-depth counting, so each file is a complete, balanced
-element (no truncated Elementor nesting).
+Edit `header.html`, `footer.html`, or `../page.shell.html`, then regenerate:
+
+```
+npm run build-home            # from webapp/  (or: python3 scripts/build-home.py)
+npm run build-home:check      # CI/pre-commit: fail if index.html is stale
+```
+
+`build-home.py` substitutes the two markers in `page.shell.html` with the header
+and footer snippets. The nav lives **inside** `header.html`, so it is not injected
+separately.
+
+## Regenerating the snippets themselves
+
+The partials were originally sliced out of `index.html` by the extractor, which
+uses tag-depth counting so each file is a complete, balanced element (no truncated
+Elementor nesting):
+
+```
+npm run home:extract          # (or: python3 scripts/extract-home-snippets.py)
+```
+
+Run this only to re-derive the snippets from the page — e.g. after a bulk edit
+made directly in `index.html`. In the normal flow the snippets are the source and
+`index.html` is the output, so you edit the snippets and run `build-home`, not the
+other way around. `nav.html` is a read-only sub-extract of `header.html` produced
+by this extractor; nothing consumes it at build time.
 
 ## Partials
 
 | File          | Source element                         | Notes |
 |---------------|----------------------------------------|-------|
-| `header.html` | `<header id="masthead">…</header>`     | Full site header: logo, top bar, primary nav. **Contains `nav.html`.** |
-| `nav.html`    | `<nav class="width-navigation …">`     | Primary navigation only (a sub-slice of the header). |
-| `footer.html` | `<div class="thim-ekit__footer">…</div>` | Site footer: logo, link columns, social icons, app-store badges. |
+| `header.html` | `<header id="masthead">…</header>`     | Full site header: logo, top bar, primary nav. **Contains `nav.html`.** Injected at `@@HEADER@@`. |
+| `nav.html`    | `<nav class="width-navigation …">`     | Primary navigation only (a sub-slice of the header). Read-only extract; not injected. |
+| `footer.html` | `<div class="thim-ekit__footer">…</div>` | Site footer: logo, link columns, social icons, app-store badges. Injected at `@@FOOTER@@`. |
+
+The remaining page content (the `<head>`, all body sections, and the closing
+scripts) lives in [`../page.shell.html`](../page.shell.html) with `<!-- @@HEADER@@ -->`
+and `<!-- @@FOOTER@@ -->` markers where the two partials are spliced in.
 
 ## Asset dependencies
 
