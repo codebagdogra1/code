@@ -41,12 +41,40 @@ export function EduScripts({ scripts }: { scripts: ScriptDesc[] }) {
     if (w.__eduScriptsLoaded) return; // guard React StrictMode double-mount in dev
     w.__eduScriptsLoaded = true;
 
+    // Warm every external script into the HTTP cache in parallel up front. The
+    // execution loop below is deliberately ordered (each library depends on the
+    // one before it) and blocks on each script's `load` — without pre-warming
+    // that means ~50 serial round-trips, which delays every downstream animation
+    // and slider init. Preloading lets the browser fetch them concurrently so the
+    // ordered execution then runs back-to-back from cache.
+    for (const desc of scripts) {
+      if (desc.type === "src") {
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "script";
+        link.href = desc.src;
+        document.head.appendChild(link);
+      }
+    }
+
     let cancelled = false;
     (async () => {
       for (const desc of scripts) {
         if (cancelled) return;
         await loadOne(desc);
       }
+      if (cancelled) return;
+      // The original page runs this JS *during* document load, so the browser
+      // fires DOMContentLoaded and window.load *after* the scripts have attached
+      // their handlers. Here the scripts are replayed post-hydration — long after
+      // those native events already fired — so anything bound to them (Elementor's
+      // background lazy-load, which un-gates the `background-image: none !important`
+      // rule by adding `.e-lazyloaded`; the reveal-animation observers; jQuery
+      // `$(window).on('load')` handlers) would otherwise never run, leaving section
+      // gradients/images blank and animations un-triggered. Re-dispatch the
+      // lifecycle events once every script has executed to reproduce that sequence.
+      document.dispatchEvent(new Event("DOMContentLoaded", { bubbles: true, cancelable: false }));
+      window.dispatchEvent(new Event("load"));
     })();
 
     return () => {
