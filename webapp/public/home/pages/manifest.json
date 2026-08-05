@@ -17,14 +17,14 @@
     "bytes": 41718,
     "headResources": 2,
     "assetsReferenced": 41,
-    "assetsMissing": 2
+    "assetsMissing": 1
   },
   "courses": {
     "source": "courses/index.html",
     "standalone": false,
     "bodyClass": "archive post-type-archive post-type-archive-lp_course wp-embed-responsive wp-theme-edusmart theme-edusmart edusmart learnpress learnpress-page woocommerce-no-js hfeed elementor-default elementor-kit-9",
     "title": "All Courses - Demo Main",
-    "bytes": 52390,
+    "bytes": 52882,
     "headResources": 3,
     "assetsReferenced": 4,
     "assetsMissing": 2
@@ -67,6 +67,16 @@
     "bytes": 6580,
     "headResources": 2,
     "assetsReferenced": 11,
+    "assetsMissing": 2
+  },
+  "gallery": {
+    "source": "events/index.html",
+    "standalone": false,
+    "bodyClass": "archive post-type-archive post-type-archive-tp_event wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js hfeed elementor-default elementor-kit-9",
+    "title": "Events &#8211; Demo Main",
+    "bytes": 13406,
+    "headResources": 3,
+    "assetsReferenced": 16,
     "assetsMissing": 2
   }
 }

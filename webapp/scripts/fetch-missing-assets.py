@@ -30,10 +30,14 @@ SIZE_RE = re.compile(r"^(?P<stem>.+)-(?P<w>\d+)x(?P<h>\d+)(?P<ext>\.[a-zA-Z]+)$"
 
 def missing_refs() -> set[tuple[str, str]]:
     out: set[tuple[str, str]] = set()
-    for content in PAGES_DIR.glob("*/content.html"):
-        for bucket, name in REF.findall(content.read_text(encoding="utf-8")):
-            if not (ASSETS / bucket / name).exists():
-                out.add((bucket, name))
+    # Scan both the page content AND its head.json: per-page inline styles carry
+    # asset URLs too (e.g. Elementor section background-image url()s like faq-bg),
+    # and those are just as "missing" as content images if never localized.
+    for pat in ("*/content.html", "*/head.json"):
+        for f in PAGES_DIR.glob(pat):
+            for bucket, name in REF.findall(f.read_text(encoding="utf-8")):
+                if not (ASSETS / bucket / name).exists():
+                    out.add((bucket, name))
     return out
 
 

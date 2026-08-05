@@ -55,6 +55,11 @@ PAGES = {
     "blog-post":   ("how-online-courses-changed-my-life/index.html", False),
     "not-found":   ("404-page.html", False),
     "coming-soon": ("maintenance/index.html", True),
+    # The Gallery route reuses the demo's *Events* archive template (a static,
+    # server-rendered grid of image cards — unlike Courses, no AJAX). We relabel
+    # its "Events" chrome to "Gallery" and neutralize the per-event detail /
+    # pagination links, since those routes don't exist here. See retitle_gallery.
+    "gallery":     ("events/index.html", False),
 }
 
 FOOTER_OPEN = '<div class="thim-ekit__footer">'
@@ -182,6 +187,118 @@ def inject_courses_grid(content: str) -> str:
     return content[:span[0]] + replacement + content[span[1]:]
 
 
+# Equal-height course cards. The spliced LearnPress grid stretches each grid
+# *cell* (.thim-ekits-course__item), but the visible card inside it
+# (li.course > .course-item) is height:auto, so cards with a shorter title end up
+# visibly shorter than their row-mates. Force the whole nesting chain to fill the
+# cell and pin the price/meta footer to the bottom so every card lines up.
+COURSE_CARD_CSS = """
+<style id="code-course-card-equal-height">
+.lp-list-courses-default .thim-ekits-course__item,
+.lp-list-courses-default li.course,
+.lp-list-courses-default .course-item,
+.lp-list-courses-default .course-content{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+.lp-list-courses-default li.course,
+.lp-list-courses-default .course-item,
+.lp-list-courses-default .course-content{
+  flex:1 1 auto;
+}
+.lp-list-courses-default .course-content .course-price{
+  margin-top:auto;
+}
+</style>
+"""
+
+
+def equalize_course_cards(content: str) -> str:
+    """Append the equal-height stylesheet after the spliced course grid."""
+    return content + COURSE_CARD_CSS
+
+
+# The demo Events archive's grid layout (`.tp-list-event.columns-4`) lives in the
+# theme's `theme.min.css`, which the homepage build never localized — so without
+# this the cards stack in a single full-width column. We also repurpose the
+# archive as a *gallery*, so the event-transaction chrome (status filter tabs and
+# the "Get ticket" / "Expired" buttons) is hidden; the images, titles, dates and
+# locations read as gallery captions.
+GALLERY_CSS = """
+<style id="code-gallery-grid">
+.list-tab-event .nav-tabs{display:none!important;}
+.tp-list-event.columns-4{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+@media (max-width:1200px){.tp-list-event.columns-4{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:900px){.tp-list-event.columns-4{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.tp-list-event.columns-4{grid-template-columns:1fr;}}
+.tp-list-event .item-event{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  margin:0;
+  background:#fff;
+  border:1px solid #ececf1;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 18px 50px -30px rgb(11 33 74 / 0.28);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.tp-list-event .item-event:hover{
+  transform:translateY(-4px);
+  box-shadow:0 26px 60px -28px rgb(11 33 74 / 0.35);
+}
+.tp-list-event .item-event .image{overflow:hidden;line-height:0;}
+.tp-list-event .item-event .image img{
+  width:100%;height:210px;object-fit:cover;display:block;
+  transition:transform .5s ease;
+}
+.tp-list-event .item-event:hover .image img{transform:scale(1.06);}
+.tp-list-event .item-event .event-wrapper{
+  display:flex;flex-direction:column;flex:1 1 auto;padding:20px 22px 24px;gap:6px;
+}
+.tp-list-event .item-event .time-from{font-size:13px;color:#6b7280;}
+.tp-list-event .item-event .title{margin:2px 0 4px;font-size:18px;line-height:1.35;}
+.tp-list-event .item-event .location{font-size:14px;color:#6b7280;}
+/* Gallery: hide the ticket / expired action buttons. */
+.tp-list-event .item-event .view-detail,
+.tp-list-event .item-event a > .button,
+.tp-list-event .item-event .event_button_disable{display:none!important;}
+.event-pagination,.tp-event-results .pagination{display:none!important;}
+</style>
+"""
+
+
+def retitle_gallery(content: str) -> str:
+    """Turn the demo Events archive into our Gallery page: relabel the visible
+    "Events" chrome to "Gallery", neutralize the per-event detail and pagination
+    links (those routes don't exist on our site — the archive is used purely as a
+    static image grid), and append the grid/caption styling the un-localized
+    theme.min.css would otherwise provide."""
+    # Breadcrumb "Home" points at the demo home; send it to our root.
+    content = content.replace('<a href="../index.html">Home</a>', '<a href="/">Home</a>')
+    # Visible page chrome.
+    content = content.replace('<li>Events</li>', '<li>Gallery</li>')
+    content = content.replace(
+        '<h1 class="page-title">Events</h1>', '<h1 class="page-title">Gallery</h1>'
+    )
+    content = content.replace(
+        "Events that help beginner designers become true unicorns.",
+        "A look inside CODE — moments from our classrooms, workshops and events.",
+    )
+    # Every remaining "<slug>/index.html" (event detail pages) and "page/N/index.html"
+    # (archive pagination) leads nowhere here → collapse to a no-op anchor.
+    content = re.sub(r'href="[^"]*?index\.html"', 'href="#"', content)
+    return content + GALLERY_CSS
+
+
 def collect_head_styles(head_html: str, referenced: set[str]) -> list[dict]:
     """Inline <style> blocks from a page <head>, asset URLs (fonts / background
     images inside url()) rewritten to /home/assets. We deliberately IGNORE
@@ -260,6 +377,11 @@ def main() -> None:
         # the homepage's real static course cards so the page is populated.
         if slug == "courses":
             content = inject_courses_grid(content)
+            content = equalize_course_cards(content)
+        # Gallery reuses the Events archive template; relabel it and neutralize
+        # the dead per-event / pagination links before asset URLs are rewritten.
+        if slug == "gallery":
+            content = retitle_gallery(content)
         referenced: set[str] = set()
         content = rewrite_assets(content, referenced)
 
