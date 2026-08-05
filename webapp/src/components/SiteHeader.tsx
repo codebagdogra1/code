@@ -1,33 +1,35 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/site";
 
+// Matches the homepage navbar (public/home/snippets/header.html): Categories is
+// rendered as a separate pill, and Contact is the WhatsApp CTA button — so it's
+// intentionally not in this list.
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/courses", label: "Courses" },
-  { href: "/brochure", label: "Brochure" },
-  { href: "/contact", label: "Contact" },
+  { href: "/events", label: "Events" },
+  { href: "/blog", label: "Blog" },
 ];
 
-// EduSmart-style logo: a graduation-cap-in-lightbulb glyph in a blue→plum
-// gradient, next to the two-tone "CODE" wordmark.
+// The CODE wordmark logo, shared with the homepage header/footer.
 function BrandMark() {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-[var(--edu-primary)] to-[#7b3ff2] text-white shadow-[0_10px_22px_-8px_rgba(1,113,241,0.8)]">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path d="M12 3 2 8l10 5 8-4v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M6 11v4c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </span>
-      <span className="text-2xl font-extrabold leading-none tracking-tight text-[var(--edu-ink)]">
-        CODE
-        <span className="text-[var(--edu-primary)]">.</span>
-      </span>
+    <Link href="/" className="flex items-center" aria-label="CODE — Computer & Digital Excellence">
+      <Image
+        src="/home/assets/images/logo.png"
+        alt="CODE — Computer & Digital Excellence"
+        width={132}
+        height={48}
+        priority
+        className="h-10 w-auto sm:h-11"
+      />
     </Link>
   );
 }
@@ -91,7 +93,7 @@ export function SiteHeader() {
             rel="noopener noreferrer"
             className="edu-btn hidden !px-6 !py-2.5 sm:inline-flex"
           >
-            Enroll now
+            Contact
           </a>
 
           {/* Mobile toggle */}
@@ -140,7 +142,7 @@ export function SiteHeader() {
                 className="edu-btn flex-1"
                 onClick={() => setOpen(false)}
               >
-                Enroll on WhatsApp
+                Contact on WhatsApp
               </a>
               <Link href="/admin" className="edu-btn-outline !px-4" onClick={() => setOpen(false)}>
                 Admin

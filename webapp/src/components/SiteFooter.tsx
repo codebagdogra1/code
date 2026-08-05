@@ -115,7 +115,18 @@ export function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-white/55 sm:flex-row">
-          <p>© {new Date().getFullYear()} CODE Coding Institute. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Computer &amp; Digital Excellence. All rights reserved.
+            {" · "}Site designed by{" "}
+            <a
+              href="https://vibhora.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white/80 transition-colors hover:text-white"
+            >
+              Vibhora
+            </a>
+          </p>
           <div className="flex items-center gap-5">
             <a
               href={whatsappLink()}
