@@ -56,7 +56,6 @@ OUT.mkdir(parents=True, exist_ok=True)
 jobs = [
     # (output file, opening-marker to seek, tag to balance)
     ("header.html", '<header id="masthead"', "header"),
-    ("nav.html", '<nav class="width-navigation main-navigation', "nav"),
     ("footer.html", '<div class="thim-ekit__footer">', "div"),
 ]
 

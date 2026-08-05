@@ -79,15 +79,14 @@ npm run home:extract          # (or: python3 scripts/extract-home-snippets.py)
 Run this only to re-derive the snippets from the page — e.g. after a bulk edit
 made directly in `index.html`. In the normal flow the snippets are the source and
 `index.html` is the output, so you edit the snippets and run `build-home`, not the
-other way around. `nav.html` is a read-only sub-extract of `header.html` produced
-by this extractor; nothing consumes it at build time.
+other way around. The primary nav lives inside `header.html`; there is no separate
+nav snippet.
 
 ## Partials
 
 | File          | Source element                         | Notes |
 |---------------|----------------------------------------|-------|
-| `header.html` | `<header id="masthead">…</header>`     | Full site header: logo, top bar, primary nav. **Contains `nav.html`.** Injected at `@@HEADER@@`. |
-| `nav.html`    | `<nav class="width-navigation …">`     | Primary navigation only (a sub-slice of the header). Read-only extract; not injected. |
+| `header.html` | `<header id="masthead">…</header>`     | Full site header: logo, top bar, primary nav. Injected at `@@HEADER@@`. |
 | `footer.html` | `<div class="thim-ekit__footer">…</div>` | Site footer: logo, link columns, social icons, app-store badges. Injected at `@@FOOTER@@`. |
 
 The remaining page content (the `<head>`, all body sections, and the closing

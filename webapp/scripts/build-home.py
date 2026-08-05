@@ -19,8 +19,8 @@ Edit a snippet or the shell, then run this to regenerate index.html:
 
     python3 webapp/scripts/build-home.py      (or: npm run build-home)
 
-nav.html is a read-only sub-extract of header.html (see extract-home-snippets.py);
-it is not injected separately — the header already contains the nav.
+The primary nav lives inside header.html and is injected with it; there is no
+separate nav snippet.
 """
 from __future__ import annotations
 
