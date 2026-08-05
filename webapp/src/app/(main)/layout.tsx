@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Archivo, DM_Sans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 // Inter is the base UI typeface (admin login and any non-worlded surface);
 // self-hosted by next/font so there's no Google Fonts CDN request blocking paint.

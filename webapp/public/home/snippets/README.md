@@ -1,10 +1,49 @@
 # Homepage snippets
 
+Reusable, self-balanced HTML partials for the EduSmart homepage.
+
+## Current: the React route (`src/app/(edu)`)
+
+`/` is now a **real React route**, not a static file — the EduSmart monolith
+ported into `src/app/(edu)/` (its own root layout, isolated from the main app's
+Tailwind). `scripts/split-home.py` is the source-of-truth → snippets step:
+
+```
+page.shell.html ─┐
+snippets/header.html ─┼─► split-home.py ─► head.json · body-class.txt
+snippets/footer.html ─┘                    sections/01..12.html · scripts.json
+                                            │
+                              src/app/(edu)/page.tsx reads them at build,
+                              injects header + 12 sections + footer, and
+                              EduScripts.tsx replays scripts.json in order.
+```
+
+```
+npm run split-home            # from webapp/  (regenerate after editing the shell/snippets)
+```
+
+Outputs consumed by the route (all in this folder):
+
+| File              | Consumed by            | Contents |
+|-------------------|------------------------|----------|
+| `head.json`       | `(edu)/EduHead.tsx`    | Ordered `<head>` CSS: 38 stylesheets + 11 inline `<style>` + icons. React 19 hoists them into `<head>`. |
+| `sections/NN.html`| `(edu)/page.tsx`       | The 12 top-level Elementor `.e-con.e-parent` sections; injected as direct children of `.elementor-10`. |
+| `scripts.json`    | `(edu)/EduScripts.tsx` | 54 runtime scripts (jQuery → Elementor → swiper → custom-script) in exact WP order, replayed client-side after mount. |
+| `body-class.txt`  | `(edu)/layout.tsx`     | The original `<body>` class list. |
+| `header.html` / `footer.html` | `(edu)/page.tsx` | Site chrome (below). |
+
+## Legacy: the static `index.html` build (`build-home.py`)
+
+The section below documents the **previous** static-mirror flow. `../index.html`
+is no longer served (the `/` → `/home/index.html` rewrite was removed), so
+`build-home.py` is vestigial — kept for history / re-deriving the shell. Editing
+snippets now feeds `split-home.py`, above.
+
 Reusable, self-balanced HTML partials for the static EduSmart homepage mirror
-served at `/`. The page is a plain `.html` file served via a Next.js rewrite, so
-there is no runtime include — instead a **build step** stitches these partials
-into `../index.html` at author time, which makes `header.html` and `footer.html`
-the single source of truth for the site chrome.
+that used to be served at `/`. The page was a plain `.html` file served via a
+Next.js rewrite, so there was no runtime include — instead a **build step**
+stitched these partials into `../index.html` at author time, which made
+`header.html` and `footer.html` the single source of truth for the site chrome.
 
 ## Build flow (source of truth → page)
 

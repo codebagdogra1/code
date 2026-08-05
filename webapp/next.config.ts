@@ -24,17 +24,10 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Homepage is an exact static mirror of the EduSmart demo, living in
-  // public/home/ (index.html + its full CSS/JS/image/font asset graph, all
-  // referenced by absolute /home/... paths). A `beforeFiles` rewrite serves it
-  // at "/" and, per Next's routing order, overrides app/page.tsx for the root.
-  async rewrites() {
-    return {
-      beforeFiles: [{ source: "/", destination: "/home/index.html" }],
-      afterFiles: [],
-      fallback: [],
-    };
-  },
+  // The homepage is now a real React route (src/app/(edu)/page.tsx): the
+  // EduSmart page ported into components/snippets, with its CSS/JS/image/font
+  // asset graph still served from /home/assets/... The old static-mirror rewrite
+  // (/, -> /home/index.html) has been removed so "/" is rendered by the app.
 };
 
 export default nextConfig;

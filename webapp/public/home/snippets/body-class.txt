@@ -1,0 +1,1 @@
+home wp-singular page-template page-template-elementor_header_footer page page-id-10 wp-embed-responsive wp-theme-edusmart theme-edusmart woocommerce-no-js elementor-default elementor-template-full-width elementor-kit-9 elementor-page elementor-page-10
