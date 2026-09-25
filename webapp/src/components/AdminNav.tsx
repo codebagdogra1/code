@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon } from "@/components/ro/Icon";
-import { LogoutButton } from "@/components/LogoutButton";
 
 // Numbered file-spine tabs. The active tab reads as a cream file pulled out of the
 // steel rail (see `.ro-spine--active`).
@@ -45,8 +44,8 @@ export function AdminNav() {
 }
 
 // The whole mobile top bar: engraved logo + a hamburger that reveals the file-spine
-// nav (and who's on duty + sign-out) in a drawer. The steel rail is hidden < md.
-export function MobileMenu({ username }: { username: string }) {
+// nav in a drawer. The steel rail is hidden < md.
+export function MobileMenu() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -90,14 +89,13 @@ export function MobileMenu({ username }: { username: string }) {
             ))}
           </nav>
 
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
             <div className="flex min-w-0 items-center gap-2">
               <span className="grid h-7 w-7 flex-none place-items-center rounded-sm bg-[var(--ro-steel-hi)] text-[var(--ro-steel-ink)]">
                 <Icon name="user" size={15} />
               </span>
-              <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">{username}</p>
+              <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">Records office</p>
             </div>
-            <LogoutButton />
           </div>
         </div>
       )}

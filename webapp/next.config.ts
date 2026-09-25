@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/admin.html", destination: "/admin", permanent: true },
-      { source: "/login.html", destination: "/admin/login", permanent: true },
+      { source: "/login.html", destination: "/admin", permanent: true },
       // The public site no longer self-registers students (admin-only now) — send
       // the old registration URL to the course listing instead.
       { source: "/course-registration.html", destination: "/courses", permanent: true },

@@ -1,8 +1,5 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
 import { AdminNav, MobileMenu } from "@/components/AdminNav";
-import { LogoutButton } from "@/components/LogoutButton";
 import { Icon } from "@/components/ro/Icon";
 
 // Direction contract for THE RECORDS OFFICE — emitted as a real HTML comment so it
@@ -24,12 +21,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   review, the verdict, and DESIGN.md.
 -->`;
 
-// Authenticated admin shell. The proxy already blocks unauthenticated access, but
-// we read the session here too so we can show the user and fail safe.
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getSession();
-  if (!session) redirect("/admin/login");
-
+// The register is intentionally open while login is paused.
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="ro flex min-h-screen">
       <div hidden dangerouslySetInnerHTML={{ __html: DIRECTION_CONTRACT }} />
@@ -53,7 +46,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         <AdminNav />
 
-        <div className="mt-auto space-y-3 pt-4">
+        <div className="mt-auto pt-4">
           <div className="flex items-center gap-2 rounded border border-white/10 bg-black/20 px-2.5 py-2">
             <span className="grid h-7 w-7 flex-none place-items-center rounded-sm bg-[var(--ro-steel-hi)] text-[var(--ro-steel-ink)]">
               <Icon name="user" size={15} />
@@ -63,17 +56,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 On duty
               </p>
               <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">
-                {session.username}
+                Records office
               </p>
             </div>
           </div>
-          <LogoutButton full />
         </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Mobile steel top bar + hamburger drawer (the rail is hidden < md) */}
-        <MobileMenu username={session.username} />
+        <MobileMenu />
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-8 sm:py-9">{children}</main>
       </div>
