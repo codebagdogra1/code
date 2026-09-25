@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           orderBy: { monthNumber: "asc" },
         });
         const minMonth = Math.min(...selected.map((s) => s.monthNumber));
-        const unpaidPrevious = await prisma.monthlyInstallment.findMany({
+        const previousMonths = await prisma.monthlyInstallment.findMany({
           where: {
             registrationId: registration.id,
             courseId: mp.course_id,
@@ -70,6 +70,12 @@ export async function POST(req: Request) {
           },
           orderBy: { monthNumber: "asc" },
         });
+        // A zero-value month is a fee waiver, not an unpaid debt. Older records
+        // can retain PENDING after a waiver, so use the remaining amount as the
+        // source of truth for this warning.
+        const unpaidPrevious = previousMonths.filter(
+          (month) => D(month.installmentAmount).gt(month.paidAmount ?? D(0)),
+        );
         if (unpaidPrevious.length > 0) {
           const courseName = selected[0]?.course?.name || "Unknown Course";
           warnings.push(

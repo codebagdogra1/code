@@ -40,6 +40,7 @@ export async function GET(
       total_amount: reg.totalAmount,
       admission_fees: reg.admissionFees,
       discount_amount: reg.discountAmount,
+      payable_amount: Math.max(0, reg.totalAmount - (reg.discountAmount ?? 0)),
       paid_amount: reg.paidAmount,
       due_amount: reg.dueAmount,
       payment_method: reg.paymentMethod,

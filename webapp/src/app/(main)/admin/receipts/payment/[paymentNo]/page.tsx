@@ -87,7 +87,7 @@ export default async function PaymentReceiptPage({
           <div className="receipt-ledger">
             <div className="row">
               <span>Total payable</span>
-              <span className="amt">{formatRupees(p.registration.total_amount)}</span>
+              <span className="amt">{formatRupees(p.registration.payable_amount)}</span>
             </div>
             <div className="row">
               <span>Paid to date</span>

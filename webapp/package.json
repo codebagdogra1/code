@@ -11,6 +11,7 @@
     "db:pull": "prisma db pull",
     "db:studio": "prisma studio",
     "create-admin": "tsx scripts/create-admin.ts",
+    "waive-installments": "tsx scripts/waive-installments.ts",
     "home:extract": "python3 scripts/extract-home-snippets.py",
     "build-home": "python3 scripts/build-home.py",
     "build-home:check": "python3 scripts/build-home.py --check",

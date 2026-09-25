@@ -90,7 +90,7 @@ export default async function RegistrationReceiptPage({
             )}
             <div className="row">
               <span>Total payable</span>
-              <span className="amt">{formatRupees(r.total_amount)}</span>
+              <span className="amt">{formatRupees(r.payable_amount)}</span>
             </div>
             <div className="row">
               <span>Paid</span>

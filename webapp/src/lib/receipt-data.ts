@@ -12,6 +12,7 @@ export type RegistrationReceipt = {
   total_amount: number;
   admission_fees: number;
   discount_amount: number;
+  payable_amount: number;
   paid_amount: number;
   due_amount: number;
   student: {
@@ -48,6 +49,7 @@ export async function getRegistrationReceipt(
     total_amount: reg.totalAmount,
     admission_fees: reg.admissionFees ?? 0,
     discount_amount: reg.discountAmount ?? 0,
+    payable_amount: Math.max(0, reg.totalAmount - (reg.discountAmount ?? 0)),
     paid_amount: reg.paidAmount,
     due_amount: reg.dueAmount,
     student: {
@@ -81,6 +83,8 @@ export type PaymentReceipt = {
   // Registration balance as it stands now (after this and any later payments).
   registration: {
     total_amount: number;
+    discount_amount: number;
+    payable_amount: number;
     paid_amount: number;
     due_amount: number;
     payment_status: string;
@@ -136,6 +140,11 @@ export async function getPaymentReceipt(paymentNo: string): Promise<PaymentRecei
     },
     registration: {
       total_amount: payment.registration?.totalAmount ?? 0,
+      discount_amount: payment.registration?.discountAmount ?? 0,
+      payable_amount: Math.max(
+        0,
+        (payment.registration?.totalAmount ?? 0) - (payment.registration?.discountAmount ?? 0),
+      ),
       paid_amount: payment.registration?.paidAmount ?? 0,
       due_amount: payment.registration?.dueAmount ?? 0,
       payment_status: payment.registration?.paymentStatus ?? "PAID",
