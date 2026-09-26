@@ -1,3 +1,5 @@
+// Standalone scripts do not get Next.js's automatic `.env` loading.
+import "dotenv/config";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../src/lib/db";
 
