@@ -139,6 +139,79 @@ const PAGES_DIR = join(process.cwd(), "public", "home", "pages");
 export const getPageContent = (slug: string): string =>
   codeContent(readFileSync(join(PAGES_DIR, slug, "content.html"), "utf8"));
 
+// A verified snapshot of the public Google Maps listing, collected 2026-09-27.
+// It is intentionally rendered as visible page content (not Review schema):
+// Google doesn't show self-serving review rich results for an organization's
+// own testimonials. Update this snapshot from the Business Profile when new
+// reviews need to be featured.
+const GOOGLE_REVIEWS_SECTION = `
+  <section class="code-google-reviews" aria-labelledby="google-reviews-title">
+    <div class="code-google-reviews__inner">
+      <div class="code-google-reviews__heading">
+        <div class="code-google-reviews__place">
+          <img class="code-google-reviews__place-image" src="https://lh3.googleusercontent.com/grass-cs/ACvplmP2e6BWzuidvzlaofWY1QC5BRNpwMzsih532f6NRujnKiyDu4ELxeL3n7Ms5AZoZEVzmEJXpXaH4CghU5hfGFRpjFGy7GPNiXvrOvR2M8_Io-GBlpUfBlTciWMm1KDIytFjks-xk4WlUsw=w408-h306-k-no" alt="Computer and Digital Excellence - CODE in Bagdogra" loading="lazy" />
+          <div>
+            <p class="code-google-reviews__eyebrow"><span aria-hidden="true" class="code-google-reviews__google">G</span> GOOGLE MAPS REVIEWS</p>
+            <h2 id="google-reviews-title">Computer and Digital Excellence - CODE</h2>
+            <p class="code-google-reviews__category">Software Training Institute · Bagdogra</p>
+            <p class="code-google-reviews__rating"><strong>5.0</strong> <span class="code-google-reviews__stars" aria-label="5 out of 5 stars">★★★★★</span> <a href="https://www.google.com/maps/place/Computer+and+Digital+Excellence+-+CODE/@26.7005581,88.3334188,17z/data=!3m1!4b1!4m6!3m5!1s0x39e4474778f7c643:0x8d332693e200adc8!8m2!3d26.7005581!4d88.3334188!16s%2Fg%2F11xp0kv4xc?entry=ttu" target="_blank" rel="noopener noreferrer">43 Google reviews</a></p>
+          </div>
+        </div>
+        <a class="code-google-reviews__button" href="https://www.google.com/maps/place/Computer+and+Digital+Excellence+-+CODE/@26.7005581,88.3334188,17z/data=!3m1!4b1!4m6!3m5!1s0x39e4474778f7c643:0x8d332693e200adc8!8m2!3d26.7005581!4d88.3334188!16s%2Fg%2F11xp0kv4xc?entry=ttu" target="_blank" rel="noopener noreferrer">See all reviews on Google <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="code-google-reviews__cards">
+        <article class="code-google-reviews__card">
+          <header class="code-google-reviews__reviewer"><img src="https://lh3.googleusercontent.com/a-/ALV-UjVeVcyFMjCQ0tkwDF0D-k0FQOjVsf0KIJIuKNR8AN76vN4UVBU7=w72-h72-p-rp-mo-br100" alt="Deepak Bagoriya" loading="lazy" /><div><strong>Deepak Bagoriya</strong><span>5 reviews · 3 photos</span></div></header>
+          <p class="code-google-reviews__review-meta"><span class="code-google-reviews__stars" aria-label="5 out of 5 stars">★★★★★</span> <span>a year ago</span></p>
+          <blockquote>I would highly recommend to anyone looking to build or advance a career in technology. Whether you're a student, working professional, or a career switcher, this is a great place to start your journey.</blockquote>
+          <p class="code-google-reviews__owner-reply"><strong>Response from the owner · a year ago</strong>Thank you so much for your kind words. We are glad that you liked our courses and centre.</p>
+        </article>
+        <article class="code-google-reviews__card">
+          <header class="code-google-reviews__reviewer"><img src="https://lh3.googleusercontent.com/a/ACg8ocKsv9paeyU6ec5f6PsFZxyTOl0B4F3ZzOpjjLOhFynhR20FmQ=w72-h72-p-rp-mo-br100" alt="Kashish Choudhary" loading="lazy" /><div><strong>Kashish Choudhary</strong><span>1 review</span></div></header>
+          <p class="code-google-reviews__review-meta"><span class="code-google-reviews__stars" aria-label="5 out of 5 stars">★★★★★</span> <span>10 months ago</span></p>
+          <blockquote>I am currently pursuing a Diploma in Computer, and my experience so far has been very good and knowledgeable. This course has helped me learn a lot about computers and technology.</blockquote>
+          <p class="code-google-reviews__owner-reply"><strong>Response from the owner · 9 months ago</strong>Thank you for your lovely feedback. We are more than glad to know what our students thought about us. Keep growing.</p>
+        </article>
+        <article class="code-google-reviews__card">
+          <header class="code-google-reviews__reviewer"><img src="https://lh3.googleusercontent.com/a-/ALV-UjXAEdbXdMO12u4CxSkVJtv4EK4onfK2ljpkmAFCW1JuSQbzFhA=w72-h72-p-rp-mo-br100" alt="Debjit Ghosh" loading="lazy" /><div><strong>Debjit Ghosh</strong><span>1 review</span></div></header>
+          <p class="code-google-reviews__review-meta"><span class="code-google-reviews__stars" aria-label="5 out of 5 stars">★★★★★</span> <span>3 months ago</span></p>
+          <blockquote>The class is very clean. Trainer is supportive; all the things are explained properly.</blockquote>
+          <p class="code-google-reviews__owner-reply"><strong>Response from the owner · a month ago</strong>Thank you Debjit. You are always a smart and disciplined student we have.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+  <style>
+    .code-google-reviews { background: #f7f9fc; padding: 88px 20px; }
+    .code-google-reviews__inner { max-width: 1200px; margin: 0 auto; }
+    .code-google-reviews__heading { align-items: center; display: flex; gap: 32px; justify-content: space-between; margin: 0 auto 42px; max-width: 1000px; }
+    .code-google-reviews__place { align-items: center; display: flex; gap: 22px; }
+    .code-google-reviews__place-image { border-radius: 12px; height: 112px; object-fit: cover; width: 148px; }
+    .code-google-reviews__eyebrow { color: #5f6368; font-size: 12px; font-weight: 700; letter-spacing: .08em; margin: 0 0 8px; }
+    .code-google-reviews__google { color: #4285f4; font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0; margin-right: 5px; }
+    .code-google-reviews h2 { color: #202124; font-size: clamp(26px, 3.5vw, 38px); line-height: 1.15; margin: 0; }
+    .code-google-reviews__category { color: #5f6368; font-size: 15px; margin: 7px 0; }
+    .code-google-reviews__rating { align-items: center; color: #3c4043; display: flex; flex-wrap: wrap; font-size: 15px; gap: 8px; margin: 0; }
+    .code-google-reviews__rating strong { font-size: 20px; }
+    .code-google-reviews__rating a { color: #1a73e8; text-decoration: none; }
+    .code-google-reviews__rating a:hover { text-decoration: underline; }
+    .code-google-reviews__button { border: 1px solid #dadce0; border-radius: 4px; color: #1a73e8; display: inline-block; font-weight: 600; padding: 12px 18px; text-decoration: none; transition: background .2s ease, box-shadow .2s ease; white-space: nowrap; }
+    .code-google-reviews__button:hover, .code-google-reviews__button:focus-visible { background: #f1f7fe; box-shadow: 0 1px 2px rgba(60,64,67,.2); color: #1a73e8; }
+    .code-google-reviews__cards { display: grid; gap: 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .code-google-reviews__card { background: #fff; border: 1px solid #dadce0; border-radius: 8px; padding: 24px; }
+    .code-google-reviews__reviewer { align-items: center; display: flex; gap: 12px; }
+    .code-google-reviews__reviewer img { border-radius: 50%; height: 42px; object-fit: cover; width: 42px; }
+    .code-google-reviews__reviewer strong, .code-google-reviews__reviewer span { display: block; }
+    .code-google-reviews__reviewer strong { color: #202124; font-size: 15px; }
+    .code-google-reviews__reviewer span, .code-google-reviews__review-meta > span:last-child { color: #5f6368; font-size: 13px; }
+    .code-google-reviews__review-meta { align-items: center; display: flex; gap: 9px; margin: 18px 0 12px; }
+    .code-google-reviews__stars { color: #f9ab00; font-size: 16px; letter-spacing: 1px; white-space: nowrap; }
+    .code-google-reviews__card blockquote { color: #3c4043; font-size: 15px; line-height: 1.62; margin: 0; }
+    .code-google-reviews__owner-reply { border-left: 2px solid #dadce0; color: #5f6368; font-size: 13px; line-height: 1.55; margin: 20px 0 0; padding-left: 13px; }
+    .code-google-reviews__owner-reply strong { color: #3c4043; display: block; font-size: 13px; margin-bottom: 4px; }
+    @media (max-width: 767px) { .code-google-reviews { padding: 64px 18px; } .code-google-reviews__heading { align-items: flex-start; flex-direction: column; gap: 22px; } .code-google-reviews__place { align-items: flex-start; } .code-google-reviews__place-image { height: 84px; width: 104px; } .code-google-reviews__cards { grid-template-columns: 1fr; } }
+  </style>`;
+
 // The page's own inline <style> delta (mainly `.elementor-kit-9` globals and any
 // per-page Elementor styles the shared homepage head doesn't already carry).
 export const getPageHead = (slug: string): HeadResource[] =>
@@ -158,6 +231,8 @@ export const getPageBodyClass = (slug: string): string =>
 // children of the `.elementor-10` wrapper so Elementor's :nth-of-type / direct-child
 // CSS and its JS selectors keep matching exactly as in the original page.
 export const getSections = (): string =>
-  codeContent(Array.from({ length: 12 }, (_, i) =>
-    read(`sections/${String(i + 1).padStart(2, "0")}.html`).trim(),
-  ).join("\n"));
+  codeContent(
+    Array.from({ length: 12 }, (_, i) => read(`sections/${String(i + 1).padStart(2, "0")}.html`).trim())
+      .flatMap((section, index) => index === 7 ? [GOOGLE_REVIEWS_SECTION] : [section])
+      .join("\n"),
+  );
