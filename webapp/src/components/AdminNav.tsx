@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon } from "@/components/ro/Icon";
+import { LogoutButton } from "@/components/LogoutButton";
 
 // Numbered file-spine tabs. The active tab reads as a cream file pulled out of the
 // steel rail (see `.ro-spine--active`).
@@ -96,6 +97,9 @@ export function MobileMenu() {
               </span>
               <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">Records office</p>
             </div>
+          </div>
+          <div className="mt-2">
+            <LogoutButton full />
           </div>
         </div>
       )}

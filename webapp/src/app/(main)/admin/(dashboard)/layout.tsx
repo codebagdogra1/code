@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AdminNav, MobileMenu } from "@/components/AdminNav";
 import { Icon } from "@/components/ro/Icon";
+import { LogoutButton } from "@/components/LogoutButton";
 
 // Direction contract for THE RECORDS OFFICE — emitted as a real HTML comment so it
 // survives the production build and can be grepped/audited (seed 23faa872).
@@ -21,7 +22,6 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   review, the verdict, and DESIGN.md.
 -->`;
 
-// The register is intentionally open while login is paused.
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="ro flex min-h-screen">
@@ -59,6 +59,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 Records office
               </p>
             </div>
+          </div>
+          <div className="mt-2">
+            <LogoutButton full />
           </div>
         </div>
       </aside>
