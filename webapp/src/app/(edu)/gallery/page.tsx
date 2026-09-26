@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { EduPage } from "../EduPage";
 
 export const dynamic = "force-static";
-export const metadata: Metadata = { title: "Gallery — CODE" };
+export const metadata: Metadata = {
+  title: "Gallery — CODE",
+  alternates: { canonical: "/gallery" },
+  robots: { index: false, follow: true },
+};
 
 export default function GalleryPage() {
   return <EduPage slug="gallery" />;

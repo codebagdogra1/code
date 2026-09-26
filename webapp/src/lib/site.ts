@@ -7,7 +7,13 @@ export const PHONE_DISPLAY = "+91 96358 09537";
 export const PHONE_TEL = "+919635809537";
 export const WHATSAPP_NUMBER = "919635809537";
 export const EMAIL = "code.bagdogra@gmail.com";
-export const ADDRESS = "Lokenath Nagar, Bagdogra, West Bengal 734014";
+export const BUSINESS_NAME = "CODE — Computer & Digital Excellence";
+export const STREET_ADDRESS = "Lokenath Nagar, near K1 Fitness Gym";
+export const LOCALITY = "Bagdogra";
+export const REGION = "West Bengal";
+export const POSTAL_CODE = "734014";
+export const COUNTRY_CODE = "IN";
+export const ADDRESS = `${STREET_ADDRESS}, ${LOCALITY}, ${REGION} ${POSTAL_CODE}`;
 export const HOURS = "Mon-Sat, 11:00 AM - 9:00 PM";
 
 // Pre-filled WhatsApp enquiry link. Pass a course/topic to seed the message.

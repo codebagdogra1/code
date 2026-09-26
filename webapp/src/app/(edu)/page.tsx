@@ -1,5 +1,7 @@
 import { EduScripts } from "./EduScripts";
 import { getFooter, getHeader, getScripts, getSections } from "./_snippets";
+import { JsonLd } from "@/components/JsonLd";
+import { faqSchema, organizationSchema } from "@/lib/seo";
 
 // The EduSmart homepage, ported from the static monolith into a React route.
 // It is assembled from snippet files (header + 12 sections + footer, generated
@@ -22,6 +24,8 @@ export default function EduHome() {
 
   return (
     <>
+      <JsonLd data={organizationSchema()} />
+      <JsonLd data={faqSchema()} />
       {/* display:contents keeps these from introducing a layout box, so the
           injected chrome behaves as if it were a direct child of <body>. */}
       <div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: bodyHtml }} />

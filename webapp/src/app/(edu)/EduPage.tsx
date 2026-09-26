@@ -1,4 +1,5 @@
 import { EduBodyClass } from "./EduBodyClass";
+import { EduContactForm } from "./EduContactForm";
 import { EduHead } from "./EduHead";
 import { EduScripts } from "./EduScripts";
 import {
@@ -46,6 +47,7 @@ export function EduPage({
       <EduHead resources={getPageHead(slug)} idPrefix={`edu-${slug}`} />
       {!standalone && <EduBodyClass className={getPageBodyClass(slug)} />}
       <div style={{ display: "contents" }} dangerouslySetInnerHTML={{ __html: bodyHtml }} />
+      {slug === "contact" && <EduContactForm />}
       <EduScripts scripts={getScripts()} />
     </>
   );
