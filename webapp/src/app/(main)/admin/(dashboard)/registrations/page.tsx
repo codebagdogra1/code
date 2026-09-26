@@ -13,12 +13,15 @@ export default function RegistrationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
-  const load = useCallback(async (p: number) => {
+  const load = useCallback(async (p: number, selectedStatus: string) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/admin/registrations?page=${p}&limit=12`);
+      const params = new URLSearchParams({ page: String(p), limit: "12" });
+      if (selectedStatus) params.set("status", selectedStatus);
+      const res = await fetch(`/api/admin/registrations?${params}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load");
       setItems(data.registrations);
@@ -32,8 +35,13 @@ export default function RegistrationsPage() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- data fetch on param change
-    load(page);
-  }, [page, load]);
+    load(page, statusFilter);
+  }, [page, statusFilter, load]);
+
+  function changeStatus(nextStatus: string) {
+    setPage(1);
+    setStatusFilter(nextStatus);
+  }
 
   async function remove(receiptNo: string, name: string) {
     if (
@@ -43,14 +51,18 @@ export default function RegistrationsPage() {
     )
       return;
     const res = await fetch(`/api/admin/registrations/${receiptNo}`, { method: "DELETE" });
-    if (res.ok) load(page);
+    if (res.ok) load(page, statusFilter);
     else alert("Failed to delete registration.");
   }
 
   // Student left midway / cancelled the course. Parks unpaid months (they stop
   // counting as overdue) while keeping recorded payments; ACTIVE reverses it.
-  async function setStatus(receiptNo: string, name: string, status: "CANCELLED" | "ACTIVE") {
-    const cancelling = status === "CANCELLED";
+  async function updateRegistrationStatus(
+    receiptNo: string,
+    name: string,
+    nextStatus: "CANCELLED" | "ACTIVE",
+  ) {
+    const cancelling = nextStatus === "CANCELLED";
     const msg = cancelling
       ? `Mark ${receiptNo} (${name}) as cancelled? Remaining unpaid months stop counting as overdue. Payments already recorded are kept.`
       : `Restore ${receiptNo} (${name}) to active?`;
@@ -58,9 +70,9 @@ export default function RegistrationsPage() {
     const res = await fetch(`/api/admin/registrations/${receiptNo}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status: nextStatus }),
     });
-    if (res.ok) load(page);
+    if (res.ok) load(page, statusFilter);
     else alert(`Failed to ${cancelling ? "cancel" : "restore"} registration.`);
   }
 
@@ -93,6 +105,19 @@ export default function RegistrationsPage() {
               aria-label="Filter registrations on this page"
             />
           </div>
+          <select
+            className="ro-input py-1.5 text-sm"
+            value={statusFilter}
+            onChange={(e) => changeStatus(e.target.value)}
+            aria-label="Filter registrations by status"
+          >
+            <option value="">All statuses</option>
+            <option value="PAID">Paid</option>
+            <option value="PARTIAL">Partial</option>
+            <option value="DUE">Due</option>
+            <option value="OVERDUE">Overdue</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
           <Link href="/admin/registrations/new" className="ro-btn ro-btn--primary">
             <Icon name="new" size={15} />
             New
@@ -124,7 +149,13 @@ export default function RegistrationsPage() {
             {loading ? (
               <SpanRow>Reading the register…</SpanRow>
             ) : rows.length === 0 ? (
-              <SpanRow>{q ? "No match on this page." : "No registrations on file yet."}</SpanRow>
+              <SpanRow>
+                {q
+                  ? "No match on this page."
+                  : statusFilter
+                    ? "No registrations match this status."
+                    : "No registrations on file yet."}
+              </SpanRow>
             ) : (
               rows.map((r) => (
                 <tr key={r.id}>
@@ -202,14 +233,14 @@ export default function RegistrationsPage() {
                       {r.course_count > 1 ? null : r.payment_status?.toUpperCase() ===
                         "CANCELLED" ? (
                         <button
-                          onClick={() => setStatus(r.receipt_no, r.full_name, "ACTIVE")}
+                          onClick={() => updateRegistrationStatus(r.receipt_no, r.full_name, "ACTIVE")}
                           className="ro-btn ro-btn--ghost px-2.5 py-1 text-[0.7rem]"
                         >
                           Restore
                         </button>
                       ) : (
                         <button
-                          onClick={() => setStatus(r.receipt_no, r.full_name, "CANCELLED")}
+                          onClick={() => updateRegistrationStatus(r.receipt_no, r.full_name, "CANCELLED")}
                           className="ro-btn ro-btn--ghost px-2 py-1 text-[var(--ro-ochre)]"
                           aria-label={`Cancel registration ${r.receipt_no}`}
                           title="Student left / cancelled the course"
