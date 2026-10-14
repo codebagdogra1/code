@@ -58,16 +58,28 @@ export async function POST(req: Request) {
     );
   }
 
+  // Sign the session before touching the DB so a misconfigured AUTH_SECRET fails
+  // loudly (and before lastLogin is updated) instead of surfacing as an empty 500.
+  let token: string;
+  try {
+    token = await createSessionToken({
+      id: user.id,
+      username: user.username,
+      userType: user.userType,
+    });
+  } catch (err) {
+    console.error("[auth/login] Could not create session token:", err);
+    return NextResponse.json(
+      { error: "Sign-in is misconfigured on the server (AUTH_SECRET is missing). Contact the site admin." },
+      { status: 500 },
+    );
+  }
+
   await prisma.user.update({
     where: { id: user.id },
     data: { failedAttempts: 0, lockedUntil: null, lastLogin: new Date() },
   });
 
-  const token = await createSessionToken({
-    id: user.id,
-    username: user.username,
-    userType: user.userType,
-  });
   await setSessionCookie(token);
 
   return NextResponse.json({
