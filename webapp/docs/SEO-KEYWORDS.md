@@ -10,6 +10,7 @@ Rules that still apply: one page per intent (no doorway pages per town), no fees
 
 | Query shape | Example queries | Page that answers it |
 |---|---|---|
+| Locality long-tail | computer course in shibmandir · computer centre near nbu · computer class matigara · computer institute near medical siliguri · computer course upper bagdogra / bihar more / bhujiapani / kestopur / gossaipur · computer course near naxalbari | `/areas/<slug>` (H1 "Computer courses near X", TL;DR with distance, 4 local FAQs); hub `/areas` |
 | Institute + place | computer institute in bagdogra · computer centre bagdogra · computer training centre siliguri · computer classes near bagdogra airport · computer institute near matigara / naxalbari | `/` (H1, local section, 10 local FAQs), `/contact` ("How to reach CODE"), `/about`; GBP primary category *Computer Training School* |
 | Course + place | dca course in siliguri · adca course bagdogra · web design course siliguri · digital marketing course bagdogra · ecommerce course siliguri · ai course siliguri · basic computer course bagdogra | the nine `/courses/[slug]` pages (titles "… Course in Bagdogra — …") |
 | Price intent | computer course fees siliguri · dca course fees bagdogra · computer course with monthly fees | `/guides/computer-course-fees-and-monthly-plans`, course FAQ "Can I pay monthly?" |

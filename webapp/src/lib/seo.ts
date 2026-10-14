@@ -1,3 +1,4 @@
+import { AREAS } from "./areas";
 import { MAPS_PHOTOS } from "./maps-photos";
 import {
   AREAS_SERVED,
@@ -23,6 +24,9 @@ import {
 } from "./site";
 
 const fallbackSiteUrl = "https://codebagdogra.netlify.app";
+
+// Every locality the centre serves: the short home-page list plus the area pages.
+const AREA_NAMES = Array.from(new Set<string>([...AREAS_SERVED, ...AREAS.map((a) => a.name)]));
 
 /** The one public origin used in canonicals, sitemaps, Open Graph, and JSON-LD. */
 export function siteUrl(): string {
@@ -64,7 +68,7 @@ export function organizationSchema() {
         hasMap: GOOGLE_MAPS_URL,
         sameAs: SAME_AS,
         geo: { "@type": "GeoCoordinates", latitude: MAP_LAT, longitude: MAP_LNG },
-        areaServed: AREAS_SERVED.map((name) => ({ "@type": "City", name })),
+        areaServed: AREA_NAMES.map((name) => ({ "@type": "City", name })),
         knowsLanguage: [...LANGUAGE_CODES],
         knowsAbout: [
           "Computer fundamentals",
@@ -99,7 +103,7 @@ export function organizationSchema() {
           email: EMAIL,
           contactType: "admissions",
           availableLanguage: [...LANGUAGE_CODES],
-          areaServed: AREAS_SERVED.map((name) => ({ "@type": "City", name })),
+          areaServed: AREA_NAMES.map((name) => ({ "@type": "City", name })),
         },
       },
       {

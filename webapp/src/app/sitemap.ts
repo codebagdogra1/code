@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCourses } from "@/lib/content";
 import { COURSE_CONTENT_UPDATED } from "@/lib/course-content";
+import { AREAS, AREAS_UPDATED } from "@/lib/areas";
 import { GLOSSARY_UPDATED, GUIDES } from "@/lib/guides";
 import { siteUrl } from "@/lib/seo";
 import { SITE_CONTENT_UPDATED } from "@/lib/site";
@@ -32,6 +33,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     })),
     { url: `${base}/glossary`, lastModified: new Date(GLOSSARY_UPDATED), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/areas`, lastModified: new Date(AREAS_UPDATED), changeFrequency: "monthly", priority: 0.6 },
+    ...AREAS.map((a) => ({
+      url: `${base}/areas/${a.slug}`,
+      lastModified: new Date(a.updated),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: `${base}/offers`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${base}/events`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${base}/gallery`, changeFrequency: "monthly", priority: 0.5 },

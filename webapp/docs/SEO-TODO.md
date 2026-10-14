@@ -35,6 +35,13 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 - [x] The temporary `dev-reviews-tmp` page (eighteen invented reviews, indexable) is gone
 - [x] [SEO-KEYWORDS.md](./SEO-KEYWORDS.md): query cluster → page map, and how to use Search Console data monthly
 
+### Shipped 14 Oct — fourth pass (area pages, local long-tail)
+- [x] **Area hub + 10 area pages** (`src/lib/areas.ts`, `/areas`, `/areas/[slug]`): Upper Bagdogra · Bihar More · Bhujiapani (Airport More) · Kestopur · Gossaipur · Shibmandir (NBU) · Medical (Sushrutanagar / NBMC) · Matigara · Siliguri · Naxalbari. Each page: one honest TL;DR ("one centre, in Bagdogra, N km away"), route in, who joins from there, batch-time advice, 3 recommended courses, 4 area-specific FAQs, Bengali + Hindi line, `WebPage` + `FAQPage` + `BreadcrumbList` schema with real dates, `keywords` with spelling variants (Shivmandir, Bhujia Pani, Bihar Mor, Gossainpur…)
+- [x] Doorway-page guardrails: no fake branch/address per area (one `LocalBusiness`, `areaServed` extended instead); every page states "CODE has one centre"; no two pages share a body paragraph; distances are straight-line and marked so; no fees, placements, counts or competitor names
+- [x] Linked from `/contact` ("How to reach CODE") and `/about`; area pages cross-link; in sitemap and `/llms.txt`. **Deliberately not linked from the home page or nav** (owner decision) — if Search Console shows the pages are crawled but not indexed after 4–6 weeks, add an "Areas we serve" link in the footer
+- [ ] **Owner:** confirm the four local facts I could not verify from here — Kestopur is on the Matigara side of the Siliguri road; Bhujiapani ≈ 2 km (by Airport More); Gossaipur ≈ 3 km; Bihar More is "a few minutes" from Lokenath Nagar Road. Edit `distance`/`travel`/`route` in `src/lib/areas.ts` if wrong
+- [ ] **Owner:** in Google Business Profile → *Service areas*, add the same localities (Upper Bagdogra, Bihar More, Bhujiapani, Shibmandir, Matigara, Siliguri, Naxalbari) so GBP and the site agree
+
 ### Open — engineering
 - [ ] Add verified profile URLs to `sameAs` (`src/lib/site.ts` → `SAME_AS`) as the owner claims them (Justdial, Facebook, Instagram, YouTube, Bing Places, Apple)
 - [ ] Embed the first YouTube videos on matching course pages + `VideoObject` schema (after Owner #7)
@@ -44,7 +51,7 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 
 ### Deliberately not done
 - No `AggregateRating`/`Review` schema on our own pages: Google treats self-serving review markup on `LocalBusiness`/`Organization` as ineligible. The rating is shown as visible text and linked to Google instead.
-- No "computer courses in Siliguri / Matigara / Naxalbari" location pages for a single-location business: doorway-page risk. The home page, contact page and FAQ carry the area copy instead.
+- ~~No location pages~~ **Revised 14 Oct (fourth pass):** area pages shipped at `/areas/*` — see below. The doorway risk is managed by content, not avoided by omission.
 - No fees online (owner decision); the fees guide explains how plans work without amounts.
 - No competitor comparison pages.
 

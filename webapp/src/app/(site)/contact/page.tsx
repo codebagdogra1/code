@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactForm } from "@/components/site/ContactForm";
 import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
@@ -107,6 +108,13 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
               </dl>
               <p className="mt-4 text-sm text-[var(--s-body)]">
                 Students reach us from {AREAS_SERVED.slice(0, -1).join(", ")} and {AREAS_SERVED[AREAS_SERVED.length - 1]} by bus, auto or bike. Look for K1 Fitness Gym on Lokenath Nagar Road; the centre is beside it.
+              </p>
+              <p className="mt-3 text-sm text-[var(--s-body)]">
+                Coming from Shibmandir, Medical, Matigara, Siliguri or Naxalbari?{" "}
+                <Link href="/areas" className="font-semibold text-[var(--s-ink)] underline decoration-[var(--s-accent)] decoration-2 underline-offset-4">
+                  Route, travel time and batch advice for your area
+                </Link>
+                .
               </p>
             </div>
           </div>

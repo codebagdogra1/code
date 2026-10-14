@@ -59,7 +59,12 @@ export default async function AboutPage() {
               fee and a monthly plan, and every payment gets a printed receipt.
             </p>
             <p>
-              The centre is open Monday to Saturday from 11 AM to 9 PM, so batches fit around school, college and work.
+              The centre is open Monday to Saturday from 11 AM to 9 PM, so batches fit around school, college and work. Students
+              travel in from Upper Bagdogra, Bihar More, Shibmandir, Medical, Matigara, Siliguri and Naxalbari —{" "}
+              <Link href="/areas" className="font-semibold text-[var(--s-ink)] underline decoration-[var(--s-accent)] decoration-2 underline-offset-4">
+                see the route and batch advice for your area
+              </Link>
+              .
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               <Link href="/courses" className="s-btn">

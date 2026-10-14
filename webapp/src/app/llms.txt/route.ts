@@ -1,3 +1,4 @@
+import { AREAS } from "@/lib/areas";
 import { getCourses } from "@/lib/content";
 import { FAQ } from "@/lib/course-content";
 import { GLOSSARY, GUIDES, guideContext } from "@/lib/guides";
@@ -70,6 +71,8 @@ export async function GET() {
     `- [Gallery](${base}/gallery): photos of the lab, classes and students`,
     `- [About](${base}/about): how the centre teaches`,
     `- [Contact & directions](${base}/contact): phone, WhatsApp, email, map, hours`,
+    `- [Areas](${base}/areas): one centre in Bagdogra; distance, route and batch advice for students from nearby areas`,
+    ...AREAS.map((a) => `  - [${a.name}](${base}/areas/${a.slug}): ${a.distance}, ${a.travel}`),
     "",
     "## Frequently asked questions",
     "",
