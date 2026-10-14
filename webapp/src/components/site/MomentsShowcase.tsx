@@ -128,7 +128,6 @@ export function MomentsShowcase({ photos = MAPS_PHOTOS, eyebrow = "From our Goog
                   key={p.src}
                   className={`s-stage__slide ${i === active ? "is-active" : ""}`}
                   aria-hidden={i !== active}
-                  role="group"
                   aria-roledescription="slide"
                   aria-label={`${i + 1} of ${count}`}
                 >
