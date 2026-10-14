@@ -126,7 +126,6 @@ export function courseSchema(course: {
   slug: string;
   summary: string;
   duration: string | null;
-  fullPrice: number | null;
 }) {
   return {
     "@context": "https://schema.org",
@@ -141,17 +140,6 @@ export function courseSchema(course: {
       location: { "@id": organizationId() },
       ...(course.duration ? { courseWorkload: course.duration } : {}),
     },
-    ...(course.fullPrice != null
-      ? {
-          offers: {
-            "@type": "Offer",
-            price: course.fullPrice,
-            priceCurrency: "INR",
-            availability: "https://schema.org/InStock",
-            url: absoluteUrl(`/courses/${course.slug}`),
-          },
-        }
-      : {}),
   };
 }
 

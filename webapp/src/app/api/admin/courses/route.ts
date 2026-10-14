@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
 
 // Admin: list ALL courses (including inactive) for management.
 export async function GET() {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   try {
     const courses = await prisma.course.findMany({ orderBy: { name: "asc" } });
     return NextResponse.json(serialize(courses));
@@ -15,6 +19,9 @@ export async function GET() {
 
 // Admin: create a course.
 export async function POST(req: Request) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   let body: {
     name?: string;
     duration?: string;

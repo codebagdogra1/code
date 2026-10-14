@@ -271,7 +271,7 @@ export const FAQ = [
   },
   {
     q: "Can I pay the fee monthly?",
-    a: "Yes. Every course has a full-payment price and a monthly plan. The monthly amount and number of installments are shown on each course page, and you get a printed receipt for every payment.",
+    a: "Yes. Every course can be paid in full or through a monthly plan. Ask at the desk or on WhatsApp for the current fee and installment schedule, and you get a printed receipt for every payment.",
   },
   {
     q: "Do you give a certificate after the course?",

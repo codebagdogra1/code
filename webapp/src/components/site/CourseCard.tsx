@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { PublicCourse } from "@/lib/content";
-import { formatRupees } from "@/lib/format";
 
 const TRACK_STYLE: Record<PublicCourse["content"]["track"], string> = {
   "Computer Applications": "bg-[var(--s-sky)] text-[var(--s-ink-2)]",
@@ -36,24 +35,11 @@ export function CourseCard({ course, index }: { course: PublicCourse; index: num
         </div>
       </dl>
 
-      <div className="mt-4 flex min-h-[3.25rem] items-end justify-between">
-        <div>
-          {course.perMonth != null ? (
-            <>
-              <p className="s-display text-2xl font-bold text-[var(--s-ink)]">
-                {formatRupees(course.perMonth)}
-                <span className="text-sm font-medium text-[var(--s-muted)]">/month</span>
-              </p>
-              {course.fullPrice != null && (
-                <p className="text-xs text-[var(--s-muted)]">or {formatRupees(course.fullPrice)} full payment</p>
-              )}
-            </>
-          ) : course.fullPrice != null ? (
-            <p className="s-display text-2xl font-bold text-[var(--s-ink)]">{formatRupees(course.fullPrice)}</p>
-          ) : (
-            <p className="font-semibold text-[var(--s-ink)]">Ask for fees</p>
-          )}
-        </div>
+      <div className="mt-4 flex min-h-[2.5rem] items-end justify-between">
+        <p className="text-sm font-semibold text-[var(--s-ink)]">
+          View syllabus
+          <span className="block text-xs font-normal text-[var(--s-muted)]">Monthly fee plans available</span>
+        </p>
         <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--s-ink)] text-white transition-colors group-hover:bg-[var(--s-accent)]" aria-hidden>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />

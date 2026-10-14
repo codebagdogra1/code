@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
 
@@ -7,6 +8,9 @@ import { serialize } from "@/lib/serialize";
 // student and prefill their details instead of retyping (and silently overwriting)
 // them at enrolment.
 export async function GET(req: NextRequest) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   const phone = (req.nextUrl.searchParams.get("phone") || "").trim();
   if (phone.length < 3) {
     return NextResponse.json({ students: [] });

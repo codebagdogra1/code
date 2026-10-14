@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GoogleReviews } from "@/components/site/GoogleReviews";
 import { MediaImage } from "@/components/site/MediaImage";
+import { PhotoCollage } from "@/components/site/PhotoCollage";
+import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getGallery } from "@/lib/content";
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
 
 const VALUES = [
   { title: "Practice over theory", text: "A lesson is not finished until you have done it yourself on the machine in front of you." },
-  { title: "Honest fees", text: "The price on the website is the price at the desk. Monthly plans, printed receipts, no surprises." },
+  { title: "Honest fees", text: "One clear fee quoted at the desk, monthly plans, printed receipts, no surprises." },
   { title: "Local and reachable", text: "We are in Lokenath Nagar, Bagdogra. Drop in, call, or message on WhatsApp — a real person answers." },
   { title: "Skills that get used", text: "Courses are built around what students, shop owners and job seekers in Siliguri actually need." },
 ];
@@ -75,21 +77,12 @@ export default async function AboutPage() {
               ))}
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {VALUES.map((v, i) => (
-                <div key={v.title} className="s-card p-5">
-                  <span className="s-mono text-xs text-[var(--s-accent)]">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="mt-2 text-lg">{v.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-[var(--s-body)]">{v.text}</p>
-                </div>
-              ))}
-            </div>
+            <PhotoCollage variant="grid" start={1} className="self-start" />
           )}
         </div>
       </section>
 
-      {photos.length > 0 && (
-        <section className="bg-[var(--s-paper-2)]">
+      <section className="bg-[var(--s-paper-2)]">
           <div className="s-container py-14 sm:py-20">
             <SectionHeading eyebrow="How we work" title="What you can expect" />
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -103,7 +96,8 @@ export default async function AboutPage() {
             </div>
           </div>
         </section>
-      )}
+
+      <PhotoMarquee eyebrow="Life at CODE" title="The people behind the reviews" start={2} className="bg-white" />
 
       <section>
         <div className="s-container py-14 sm:py-20">

@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CourseCard } from "@/components/site/CourseCard";
+import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourseBySlug, getCourses } from "@/lib/content";
 import { COURSE_CONTENT } from "@/lib/course-content";
-import { formatRupees } from "@/lib/format";
 import { breadcrumbSchema, courseSchema } from "@/lib/seo";
 import { PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/site";
 
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course not found" };
-  const title = `${course.content.displayName} in Bagdogra — Fees & Syllabus`;
+  const title = `${course.content.displayName} in Bagdogra — Syllabus & Duration`;
   return {
     title,
     description: course.content.summary,
@@ -47,7 +47,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           { name: c.displayName, path: `/courses/${slug}` },
         ])}
       />
-      <JsonLd data={courseSchema({ name: c.displayName, slug, summary: c.summary, duration: course.duration, fullPrice: course.fullPrice })} />
+      <JsonLd data={courseSchema({ name: c.displayName, slug, summary: c.summary, duration: course.duration })} />
 
       <section className="s-grid--dark text-white">
         <div className="s-container py-14 sm:py-20">
@@ -69,42 +69,25 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
               </div>
             </div>
 
-            {/* Fee card */}
+            {/* Course facts card */}
             <div className="s-card s-card--lift h-fit p-6 text-[var(--s-ink)] sm:p-7">
-              <p className="s-eyebrow">Fees &amp; duration</p>
+              <p className="s-eyebrow">At a glance</p>
               <dl className="mt-4 space-y-4">
                 <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--s-line-2)] pb-3">
                   <dt className="text-sm text-[var(--s-muted)]">Duration</dt>
                   <dd className="s-display text-lg font-bold">{course.duration ?? "Ask us"}</dd>
                 </div>
-                {course.perMonth != null && (
-                  <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--s-line-2)] pb-3">
-                    <dt className="text-sm text-[var(--s-muted)]">Monthly plan</dt>
-                    <dd className="text-right">
-                      <span className="s-display text-2xl font-bold">{formatRupees(course.perMonth)}</span>
-                      <span className="text-sm text-[var(--s-muted)]">/month</span>
-                      <span className="block text-xs text-[var(--s-muted)]">
-                        {course.monthlyInstallments} installments · {formatRupees(course.monthlyPrice ?? 0)} total
-                      </span>
-                    </dd>
-                  </div>
-                )}
-                {course.fullPrice != null && (
-                  <div className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm text-[var(--s-muted)]">Full payment</dt>
-                    <dd className="text-right">
-                      <span className="s-display text-2xl font-bold">{formatRupees(course.fullPrice)}</span>
-                      {course.monthlyPrice != null && course.monthlyPrice > course.fullPrice && (
-                        <span className="block text-xs font-semibold text-[var(--s-mint-ink)]">
-                          Save {formatRupees(course.monthlyPrice - course.fullPrice)} vs monthly
-                        </span>
-                      )}
-                    </dd>
-                  </div>
-                )}
+                <div className="flex items-baseline justify-between gap-4 border-b border-dashed border-[var(--s-line-2)] pb-3">
+                  <dt className="text-sm text-[var(--s-muted)]">Level</dt>
+                  <dd className="s-display text-lg font-bold">{c.level}</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="text-sm text-[var(--s-muted)]">Payment</dt>
+                  <dd className="text-right font-semibold">Full or monthly plan</dd>
+                </div>
               </dl>
               <p className="mt-5 text-xs leading-relaxed text-[var(--s-muted)]">
-                Printed receipt for every payment. Fees as per the current catalogue; confirm the batch and start date at the desk or call{" "}
+                Printed receipt for every payment. For the current fee, batch and start date, ask at the desk or call{" "}
                 <a href={`tel:${PHONE_TEL}`} className="font-semibold text-[var(--s-ink)]">{PHONE_DISPLAY}</a>.
               </p>
             </div>
@@ -152,8 +135,10 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         </div>
       </section>
 
+      <PhotoMarquee eyebrow="Your batch" title="You learn with a small batch, and a trainer who knows your name." start={3} />
+
       {(next || related.length > 0) && (
-        <section className="bg-[var(--s-paper-2)]">
+        <section className="bg-white">
           <div className="s-container py-14 sm:py-20">
             {next && (
               <div className="s-card mb-10 flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">

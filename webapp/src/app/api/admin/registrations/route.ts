@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
 
 // Admin: paginated list of registrations with student info and an overdue-months
 // count. Ported from netlify/functions/registrations.js (GET list).
 export async function GET(req: NextRequest) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   try {
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1", 10);
     const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10", 10);

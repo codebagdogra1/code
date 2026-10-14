@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { GoogleBadge } from "@/components/site/GoogleBadge";
+import { getGoogleReviews } from "@/lib/google-reviews";
 import {
   ADDRESS_LINES,
   EMAIL,
-  GOOGLE_MAPS_URL,
-  GOOGLE_RATING,
-  GOOGLE_REVIEW_COUNT,
   HOURS,
   HOURS_CLOSED,
   PHONE_DISPLAY,
@@ -22,7 +21,8 @@ const LINKS = [
   { href: "/contact", label: "Contact & directions" },
 ];
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const google = await getGoogleReviews();
   return (
     <footer className="s-grid--dark mt-auto text-white/80">
       <div className="s-container grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
@@ -34,15 +34,7 @@ export function SiteFooter() {
             A computer training centre in Bagdogra, West Bengal. Small batches, hands-on practice
             and monthly fee plans for CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI.
           </p>
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/20 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-white/10"
-          >
-            <span aria-hidden className="text-[#fbbc04]">★★★★★</span>
-            {GOOGLE_RATING} on Google · {GOOGLE_REVIEW_COUNT} reviews
-          </a>
+          <GoogleBadge size="sm" tone="dark" rating={google.rating} count={google.count} href={google.mapsUrl} className="mt-5" />
         </div>
 
         <div>
@@ -92,11 +84,8 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="s-container flex flex-col gap-2 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="s-container py-5 text-xs text-white/60">
           <p>© {new Date().getFullYear()} CODE — Computer &amp; Digital Excellence, Bagdogra. All rights reserved.</p>
-          <Link href="/admin" className="s-mono hover:text-white">
-            Staff sign in
-          </Link>
         </div>
       </div>
     </footer>

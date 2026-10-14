@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseCard } from "@/components/site/CourseCard";
+import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourses } from "@/lib/content";
-import { formatRupees } from "@/lib/format";
 import { breadcrumbSchema, courseListSchema } from "@/lib/seo";
 import { PHONE_DISPLAY, whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Computer Courses & Fees in Bagdogra",
+  title: "Computer Courses in Bagdogra",
   description:
-    "All courses at CODE Bagdogra with duration and fees: CCA, DCA, ADCA, Web Design, Ecommerce Expert, Digital Marketing and AI Prompt Engineering. Monthly installment plans available.",
+    "All courses at CODE Bagdogra with duration and syllabus: CCA, DCA, ADCA, Web Design, Ecommerce Expert, Digital Marketing and AI Prompt Engineering. Monthly installment plans available.",
   alternates: { canonical: "/courses" },
-  openGraph: { url: "/courses", title: "Computer Courses & Fees in Bagdogra | CODE" },
+  openGraph: { url: "/courses", title: "Computer Courses in Bagdogra | CODE" },
 };
 
 export default async function CoursesPage() {
@@ -37,8 +37,8 @@ export default async function CoursesPage() {
         <div className="s-container py-14 sm:py-20">
           <SectionHeading
             eyebrow="Courses"
-            title="Every course, every fee, in one place"
-            lead="Prices are the live catalogue prices used at the admission desk. Each course can be paid in full or monthly."
+            title="Every course in one place"
+            lead="Pick a track, compare durations and read the syllabus. Ask at the desk or on WhatsApp for the current fee and batch."
           />
           {tracks.length > 1 && (
             <div className="mt-6 flex flex-wrap gap-2">
@@ -76,18 +76,20 @@ export default async function CoursesPage() {
         </div>
       </section>
 
+      <PhotoMarquee eyebrow="Life at CODE" title="Every course is taught at a computer, with the batch around you." start={1} />
+
       {courses.length > 0 && (
-        <section className="bg-[var(--s-paper-2)]">
+        <section className="bg-white">
           <div className="s-container py-14 sm:py-20">
-            <SectionHeading eyebrow="Fee table" title="Compare at a glance" />
+            <SectionHeading eyebrow="Overview" title="Compare at a glance" />
             <div className="s-card mt-8 overflow-x-auto">
               <table className="w-full min-w-[40rem] text-sm">
                 <thead>
                   <tr className="border-b border-[var(--s-line)] text-left text-xs uppercase tracking-wide text-[var(--s-muted)]">
                     <th className="px-5 py-3 font-semibold">Course</th>
+                    <th className="px-5 py-3 font-semibold">Track</th>
+                    <th className="px-5 py-3 font-semibold">Level</th>
                     <th className="px-5 py-3 font-semibold">Duration</th>
-                    <th className="px-5 py-3 text-right font-semibold">Full payment</th>
-                    <th className="px-5 py-3 text-right font-semibold">Monthly plan</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -98,17 +100,9 @@ export default async function CoursesPage() {
                           {c.content.displayName}
                         </Link>
                       </td>
+                      <td className="px-5 py-3">{c.content.track}</td>
+                      <td className="px-5 py-3">{c.content.level}</td>
                       <td className="px-5 py-3">{c.duration ?? "—"}</td>
-                      <td className="s-mono px-5 py-3 text-right">{c.fullPrice != null ? formatRupees(c.fullPrice) : "—"}</td>
-                      <td className="s-mono px-5 py-3 text-right">
-                        {c.perMonth != null ? (
-                          <>
-                            {formatRupees(c.perMonth)} <span className="text-[var(--s-muted)]">× {c.monthlyInstallments}</span>
-                          </>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -116,10 +110,10 @@ export default async function CoursesPage() {
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="s-btn s-btn--accent">
-                Ask about a course
+                Ask about fees &amp; batches
               </a>
-              <Link href="/brochure" className="s-btn s-btn--outline">
-                Printable brochure
+              <Link href="/contact" className="s-btn s-btn--outline">
+                Request a call back
               </Link>
             </div>
           </div>

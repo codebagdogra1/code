@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
@@ -11,6 +12,9 @@ type MonthlyPayment = { course_id: number; month_ids: number[]; amount: number }
 // Admin: record a payment. Ported from netlify/functions/record-payment.js.
 // Supports both a monthly-installment breakdown and a legacy flat payment.
 export async function POST(req: Request) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   let body: {
     registration_receipt_no?: string;
     payment_amount?: number;
@@ -165,6 +169,9 @@ export async function POST(req: Request) {
 
 // Admin: quick "add payment" against a registration. Ported from update-payment.js.
 export async function PUT(req: Request) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   let body: { receipt_no?: string; additional_payment?: number; payment_method?: string };
   try {
     body = await req.json();
@@ -206,6 +213,9 @@ export async function PUT(req: Request) {
 
 // Admin: GET payment history or grouped monthly-installment status.
 export async function GET(req: NextRequest) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   const receiptNo = req.nextUrl.searchParams.get("receipt_no");
   const action = req.nextUrl.searchParams.get("action");
   if (!receiptNo) {

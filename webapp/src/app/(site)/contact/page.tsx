@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/site/ContactForm";
+import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourses } from "@/lib/content";
@@ -34,9 +35,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
       <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }])} />
       <JsonLd data={{ "@context": "https://schema.org", "@type": "ContactPage", url: `${siteUrl()}/contact`, mainEntity: { "@id": organizationId() } }} />
 
-      <section className="s-grid s-grid-fade">
-        <div className="s-container py-14 sm:py-20">
-          <SectionHeading eyebrow="Contact" title="Talk to us" lead="Ask about a course, fees, batch timings or directions. WhatsApp is fastest; the form reaches the same desk." />
+      <section className="s-grid s-grid-fade overflow-hidden">
+        <div className="s-container grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <SectionHeading eyebrow="Contact" title="Talk to us" lead="Ask about a course, fees, batch timings or directions. WhatsApp is fastest; the form reaches the same desk." />
+          </div>
+          <PhotoCollage variant="fan" start={0} className="mt-2 lg:mt-0" />
         </div>
       </section>
 

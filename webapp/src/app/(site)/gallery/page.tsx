@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GalleryGrid } from "@/components/site/GalleryGrid";
+import { MomentsShowcase } from "@/components/site/MomentsShowcase";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getGallery } from "@/lib/content";
@@ -25,6 +26,7 @@ export default async function GalleryPage() {
           <SectionHeading eyebrow="Gallery" title="Inside the centre" lead="The lab, the classes and the people. Tap any photo to view it larger." />
         </div>
       </section>
+      <MomentsShowcase eyebrow="Student moments" />
       <section>
         <div className="s-container pb-16">
           {images.length === 0 ? (

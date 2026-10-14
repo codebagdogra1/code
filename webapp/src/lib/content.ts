@@ -9,10 +9,6 @@ export type PublicCourse = {
   id: number;
   name: string;
   duration: string | null;
-  fullPrice: number | null;
-  monthlyPrice: number | null;
-  monthlyInstallments: number;
-  perMonth: number | null;
   content: CourseContent;
 };
 
@@ -62,27 +58,15 @@ export async function getCourses(): Promise<PublicCourse[]> {
         id: true,
         name: true,
         duration: true,
-        fullPrice: true,
-        monthlyPrice: true,
-        monthlyInstallments: true,
       },
     });
-    const courses = rows.map((c) => {
-      const monthlyPrice = c.monthlyPrice != null ? Number(c.monthlyPrice) : null;
-      return {
-        id: c.id,
-        name: c.name,
-        duration: c.duration,
-        fullPrice: c.fullPrice != null ? Number(c.fullPrice) : null,
-        monthlyPrice,
-        monthlyInstallments: c.monthlyInstallments,
-        perMonth:
-          monthlyPrice != null && c.monthlyInstallments > 0
-            ? Math.ceil(monthlyPrice / c.monthlyInstallments)
-            : null,
-        content: contentFor(c.name),
-      };
-    });
+    // Fees are deliberately not exposed to the public site — ask at the desk.
+    const courses = rows.map((c) => ({
+      id: c.id,
+      name: c.name,
+      duration: c.duration,
+      content: contentFor(c.name),
+    }));
     // Beginner → advanced reads better than alphabetical for someone choosing.
     const order: Record<string, number> = { Beginner: 0, Intermediate: 1, Advanced: 2, Specialist: 3 };
     return courses.sort(

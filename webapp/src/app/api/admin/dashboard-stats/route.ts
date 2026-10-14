@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
 
 // Admin: dashboard summary. Ported from netlify/functions/dashboard-stats.js.
 export async function GET() {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   try {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);

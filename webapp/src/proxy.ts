@@ -6,11 +6,16 @@ import { NextRequest, NextResponse } from "next/server";
 const SESSION_COOKIE = "code_session";
 
 function unauthorized(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
-  }
+  const response = request.nextUrl.pathname.startsWith("/api/")
+    ? NextResponse.json({ error: "Authentication required" }, { status: 401 })
+    : NextResponse.redirect(new URL("/admin/login", request.url));
 
-  return NextResponse.redirect(new URL("/admin/login", request.url));
+  // Drop a cookie we could not verify. Without this, a token the login page
+  // accepts but the proxy rejects (e.g. the edge runtime seeing a different
+  // AUTH_SECRET) bounces /admin -> /admin/login -> /admin forever and the
+  // browser ends up on a blank page instead of the sign-in form.
+  if (request.cookies.has(SESSION_COOKIE)) response.cookies.delete(SESSION_COOKIE);
+  return response;
 }
 
 export async function proxy(request: NextRequest) {
@@ -18,9 +23,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
   const secret = process.env.AUTH_SECRET;
-  if (!token || !secret || secret.length < 16) return unauthorized(request);
+  if (!secret || secret.length < 16) {
+    // The edge runtime only sees env vars captured at deploy time. If it has no
+    // usable secret we cannot verify anything here, so let the request through to
+    // the server-side guards (requireAdminPage / denyUnlessAdmin), which run in the
+    // function runtime and do the real check. Rejecting here instead would loop:
+    // /admin -> /admin/login (which sees a valid session) -> /admin -> ...
+    console.error("[proxy] AUTH_SECRET is missing at the edge; deferring to server guards");
+    return NextResponse.next();
+  }
+
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  if (!token) return unauthorized(request);
 
   try {
     const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));

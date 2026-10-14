@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { EventCard } from "@/components/site/EventCard";
+import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getEvents } from "@/lib/content";
@@ -24,13 +25,16 @@ export default async function EventsPage() {
         <JsonLd key={e.id} data={eventSchema({ ...e, imageUrl: e.image?.url ?? null })} />
       ))}
 
-      <section className="s-grid s-grid-fade">
-        <div className="s-container py-14 sm:py-20">
-          <SectionHeading
+      <section className="s-grid s-grid-fade overflow-hidden">
+        <div className="s-container grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <SectionHeading
             eyebrow="Events"
             title="Events at the centre"
             lead="Free demo classes, workshops, certificate days and student meet-ups. Message us to reserve a seat."
           />
+          </div>
+          <PhotoCollage variant="fan" start={2} className="mt-2 lg:mt-0" />
         </div>
       </section>
 

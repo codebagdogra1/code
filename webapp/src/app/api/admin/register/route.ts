@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { generateReceiptNo } from "@/lib/receipts";
 
@@ -31,6 +32,9 @@ type PaymentDetails = {
 };
 
 export async function POST(req: Request) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   let body: {
     studentData?: StudentData;
     selectedCourses?: SelectedCourse[];

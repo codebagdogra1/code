@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 import { getSession, type SessionUser } from "@/lib/auth";
 
 // Defence in depth. src/proxy.ts gates /admin and /api/admin/* at the edge; these
@@ -21,4 +22,15 @@ export async function requireAdminPage(): Promise<SessionUser> {
     redirect("/admin/login");
   }
   return session;
+}
+
+/** For /api/admin route handlers: returns a 401 response to send when there is no
+ *  admin session, or null when the caller may proceed. Mirrors src/proxy.ts so the
+ *  API stays closed even if the edge proxy cannot verify sessions. */
+export async function denyUnlessAdmin(): Promise<NextResponse | null> {
+  const session = await getSession();
+  if (!session || session.userType !== "admin") {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+  return null;
 }

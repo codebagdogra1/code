@@ -3,19 +3,21 @@ import Link from "next/link";
 import { CourseCard } from "@/components/site/CourseCard";
 import { EventCard } from "@/components/site/EventCard";
 import { Faq } from "@/components/site/Faq";
+import { GoogleBadge } from "@/components/site/GoogleBadge";
 import { GoogleReviews } from "@/components/site/GoogleReviews";
 import { MediaImage } from "@/components/site/MediaImage";
+import { MomentsShowcase } from "@/components/site/MomentsShowcase";
+import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { OfferCard } from "@/components/site/OfferCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getActiveOffers, getCourses, getEvents, getGallery } from "@/lib/content";
+import { getGoogleReviews } from "@/lib/google-reviews";
 import { FAQ } from "@/lib/course-content";
 import { courseListSchema, faqSchema, organizationSchema } from "@/lib/seo";
 import {
   ADDRESS_LINES,
   GOOGLE_MAPS_URL,
-  GOOGLE_RATING,
-  GOOGLE_REVIEW_COUNT,
   HOURS,
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -57,11 +59,12 @@ const WHY = [
 ];
 
 export default async function HomePage() {
-  const [courses, offers, { upcoming }, gallery] = await Promise.all([
+  const [courses, offers, { upcoming }, gallery, google] = await Promise.all([
     getCourses(),
     getActiveOffers(),
     getEvents(),
     getGallery(5),
+    getGoogleReviews(),
   ]);
   const courseNames = courses.map((c) => c.content.displayName);
   const heroPhotos = gallery.slice(0, 3);
@@ -99,14 +102,12 @@ export default async function HomePage() {
               </a>
             </div>
 
-            <dl className="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-5 border-t border-white/15 pt-6 sm:grid-cols-3">
-              <div>
-                <dt className="s-mono text-[0.65rem] uppercase tracking-widest text-white/60">Google rating</dt>
-                <dd className="s-display mt-1 text-2xl font-bold">
-                  {GOOGLE_RATING} <span className="text-base text-[#fbbc04]">★</span>
-                  <span className="block text-xs font-normal text-white/60">{GOOGLE_REVIEW_COUNT} reviews</span>
-                </dd>
-              </div>
+            {/* Google rating badge — the trust signal local visitors recognise. */}
+            <div className="mt-8">
+              <GoogleBadge size="lg" rating={google.rating} count={google.count} href={google.mapsUrl} tone="dark" />
+            </div>
+
+            <dl className="mt-8 grid max-w-xl grid-cols-2 gap-x-6 gap-y-5 border-t border-white/15 pt-6">
               <div>
                 <dt className="s-mono text-[0.65rem] uppercase tracking-widest text-white/60">Courses</dt>
                 <dd className="s-display mt-1 text-2xl font-bold">
@@ -114,7 +115,7 @@ export default async function HomePage() {
                   <span className="block text-xs font-normal text-white/60">beginner to job-ready</span>
                 </dd>
               </div>
-              <div className="col-span-2 sm:col-span-1">
+              <div>
                 <dt className="s-mono text-[0.65rem] uppercase tracking-widest text-white/60">Open</dt>
                 <dd className="s-display mt-1 text-2xl font-bold">
                   Mon–Sat
@@ -124,8 +125,8 @@ export default async function HomePage() {
             </dl>
           </div>
 
-          {/* Right: real photos from the gallery when the owner has uploaded some,
-              otherwise a "course ticket" that still says something true. */}
+          {/* Right: photos uploaded through /admin when there are any, otherwise a
+              tilted stack of the Google Maps photos of students at the centre. */}
           <div className="relative">
             {heroPhotos.length >= 1 ? (
               <div className="grid grid-cols-2 gap-3">
@@ -140,29 +141,7 @@ export default async function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className="s-card s-card--lift rotate-[-1.5deg] p-6 text-[var(--s-ink)] sm:p-8">
-                <div className="flex items-center justify-between">
-                  <span className="s-eyebrow">Admission open</span>
-                  <span className="s-mono text-xs text-[var(--s-muted)]">EST. BAGDOGRA</span>
-                </div>
-                <p className="s-display mt-4 text-2xl font-bold leading-tight">
-                  Pick a course. Start this month.
-                </p>
-                <ul className="mt-5 space-y-2.5 text-sm">
-                  {courses.slice(0, 6).map((c) => (
-                    <li key={c.id} className="flex items-center justify-between gap-4 border-b border-dashed border-[var(--s-line-2)] pb-2.5">
-                      <span className="font-medium">{c.content.displayName}</span>
-                      <span className="s-mono shrink-0 text-xs text-[var(--s-muted)]">{c.duration}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-5 flex items-center justify-between">
-                  <span className="text-xs text-[var(--s-muted)]">Monthly plans on every course</span>
-                  <Link href="/courses" className="text-sm font-semibold text-[var(--s-accent)]">
-                    Full list →
-                  </Link>
-                </div>
-              </div>
+              <PhotoCollage variant="stack" className="lg:ml-auto" />
             )}
           </div>
         </div>
@@ -209,7 +188,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow={`${offers.length > 0 ? "02" : "01"} · Courses`}
               title="Courses for every starting point"
-              lead="Begin with the basics or go straight to a specialist skill. Fees shown are the current catalogue prices."
+              lead="Begin with the basics or go straight to a specialist skill. Ask us for the current fee and batch timing."
             />
             <Link href="/courses" className="s-btn s-btn--outline s-btn--sm">
               Compare all courses
@@ -228,6 +207,9 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+
+      {/* REAL MOMENTS — photos from the Google Maps listing */}
+      <MomentsShowcase />
 
       {/* WHY */}
       <section className="s-grid s-grid-fade">

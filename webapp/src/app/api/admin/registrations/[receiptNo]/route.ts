@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { denyUnlessAdmin } from "@/lib/admin-guard";
 import { prisma } from "@/lib/db";
 import { serialize } from "@/lib/serialize";
 
@@ -8,6 +9,9 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ receiptNo: string }> },
 ) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   const { receiptNo } = await params;
   try {
     const reg = await prisma.registration.findUnique({
@@ -101,6 +105,9 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ receiptNo: string }> },
 ) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   const { receiptNo } = await params;
 
   let body: { status?: string; course_id?: number };
@@ -196,6 +203,9 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ receiptNo: string }> },
 ) {
+  const denied = await denyUnlessAdmin();
+  if (denied) return denied;
+
   const { receiptNo } = await params;
   try {
     const result = await prisma.$transaction(async (tx) => {
