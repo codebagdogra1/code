@@ -1,107 +1,91 @@
-import { PublicLayout } from "@/components/PublicLayout";
-import { prisma } from "@/lib/db";
-import { formatCurrency } from "@/lib/format";
-import { whatsappLink } from "@/lib/site";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { PrintButton } from "@/components/site/PrintButton";
+import { getCourses } from "@/lib/content";
+import { formatRupees } from "@/lib/format";
+import { ADDRESS, EMAIL, HOURS, PHONE_DISPLAY, whatsappLink } from "@/lib/site";
 
-// Prerender and revalidate every 5 minutes (ISR) — the brochure is public and
-// changes only when courses do, so there's no need to query the DB per request.
+// Printable one-page fee brochure (ISR, refreshed every 5 minutes).
 export const revalidate = 300;
 
-export const metadata = {
-  title: "CODE — Brochure",
-  description: "Courses, durations and fees at CODE.",
+export const metadata: Metadata = {
+  title: "Course Brochure & Fee List",
+  description: "Printable list of all courses, durations and fees at CODE, Bagdogra.",
+  alternates: { canonical: "/brochure" },
+  robots: { index: false, follow: true },
 };
 
 export default async function BrochurePage() {
-  let courses: {
-    id: number;
-    name: string;
-    duration: string | null;
-    fullPrice: number | null;
-    monthlyPrice: number | null;
-    monthlyInstallments: number;
-  }[] = [];
-  try {
-    const rows = await prisma.course.findMany({
-      where: { isActive: true },
-      orderBy: { name: "asc" },
-    });
-    courses = rows.map((c) => ({
-      id: c.id,
-      name: c.name,
-      duration: c.duration,
-      fullPrice: c.fullPrice != null ? Number(c.fullPrice) : null,
-      monthlyPrice: c.monthlyPrice != null ? Number(c.monthlyPrice) : null,
-      monthlyInstallments: c.monthlyInstallments,
-    }));
-  } catch {
-    courses = [];
-  }
+  const courses = await getCourses();
+  const printed = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Kolkata" });
 
   return (
-    <PublicLayout>
-      <section className="bg-gradient-to-b from-[var(--edu-tint)] to-white">
-        <div className="mx-auto w-full max-w-4xl px-4 py-14 text-center sm:py-16">
-          <span className="edu-eyebrow mx-auto w-fit">Brochure</span>
-          <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">Course brochure</h1>
-          <p className="mx-auto mt-3 max-w-xl text-[var(--body)]">
-            Everything we offer, with durations and flexible payment plans.
-          </p>
+    <section>
+      <div className="s-container max-w-4xl py-10 sm:py-14">
+        <div className="s-noprint mb-6 flex flex-wrap items-center justify-between gap-3">
+          <Link href="/courses" className="text-sm font-semibold text-[var(--s-ink)]">← Back to courses</Link>
+          <PrintButton />
         </div>
-      </section>
 
-      <div className="mx-auto w-full max-w-4xl px-4 py-12">
-        <div className="edu-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[36rem] border-collapse text-sm">
-              <thead>
-                <tr className="bg-[var(--edu-tint)] text-left text-[var(--edu-ink)]">
-                  <th className="px-5 py-4 font-bold">Course</th>
-                  <th className="px-5 py-4 font-bold">Duration</th>
-                  <th className="px-5 py-4 font-bold">Full price</th>
-                  <th className="px-5 py-4 font-bold">Monthly plan</th>
+        <div className="s-card p-6 sm:p-10">
+          <header className="flex flex-wrap items-start justify-between gap-6 border-b border-[var(--s-line)] pb-6">
+            <div>
+              <Image src="/logo.png" alt="CODE — Computer & Digital Excellence" width={272} height={99} className="h-12 w-auto" />
+              <p className="mt-3 text-sm text-[var(--s-body)]">{ADDRESS}</p>
+              <p className="text-sm text-[var(--s-body)]">{PHONE_DISPLAY} · {EMAIL}</p>
+              <p className="text-sm text-[var(--s-body)]">{HOURS}</p>
+            </div>
+            <div className="text-right">
+              <p className="s-eyebrow">Course brochure</p>
+              <p className="s-mono mt-2 text-xs text-[var(--s-muted)]">Fees as on {printed}</p>
+            </div>
+          </header>
+
+          <table className="mt-6 w-full text-sm">
+            <thead>
+              <tr className="border-b-2 border-[var(--s-ink)] text-left text-xs uppercase tracking-wide text-[var(--s-muted)]">
+                <th className="py-2 pr-3 font-semibold">Course</th>
+                <th className="py-2 pr-3 font-semibold">Duration</th>
+                <th className="py-2 pr-3 text-right font-semibold">Full payment</th>
+                <th className="py-2 text-right font-semibold">Monthly plan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.map((c) => (
+                <tr key={c.id} className="border-b border-[var(--s-line)] align-top">
+                  <td className="py-3 pr-3">
+                    <span className="font-semibold text-[var(--s-ink)]">{c.content.displayName}</span>
+                    <span className="block text-xs text-[var(--s-muted)]">{c.content.track} · {c.content.level}</span>
+                  </td>
+                  <td className="py-3 pr-3">{c.duration ?? "—"}</td>
+                  <td className="s-mono py-3 pr-3 text-right">{c.fullPrice != null ? formatRupees(c.fullPrice) : "—"}</td>
+                  <td className="s-mono py-3 text-right">
+                    {c.perMonth != null ? (
+                      <>
+                        {formatRupees(c.perMonth)} × {c.monthlyInstallments}
+                        <span className="block text-xs text-[var(--s-muted)]">= {formatRupees(c.monthlyPrice ?? 0)}</span>
+                      </>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {courses.map((c) => (
-                  <tr key={c.id} className="border-t border-[var(--border)]">
-                    <td className="px-5 py-4 font-semibold text-[var(--edu-ink)]">{c.name}</td>
-                    <td className="px-5 py-4 text-[var(--muted)]">{c.duration || "—"}</td>
-                    <td className="px-5 py-4 font-semibold">
-                      {c.fullPrice != null ? formatCurrency(c.fullPrice) : "—"}
-                    </td>
-                    <td className="px-5 py-4 text-[var(--body)]">
-                      {c.monthlyPrice != null
-                        ? `${formatCurrency(
-                            Math.ceil(c.monthlyPrice / c.monthlyInstallments),
-                          )}/mo × ${c.monthlyInstallments} = ${formatCurrency(c.monthlyPrice)}`
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
-                {courses.length === 0 && (
-                  <tr>
-                    <td colSpan={4} className="px-5 py-10 text-center text-[var(--muted)]">
-                      No courses to show yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              ))}
+              {courses.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-[var(--s-muted)]">Course list unavailable — please call {PHONE_DISPLAY}.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="edu-btn px-8 py-3.5 text-base"
-          >
-            Enroll on WhatsApp
-          </a>
+          <footer className="mt-6 text-xs leading-relaxed text-[var(--s-muted)]">
+            Monthly plan = installment amount × number of months. A printed receipt is issued for every payment. Fees may be revised; the price
+            quoted at admission applies for the course duration. Enquiries: {PHONE_DISPLAY} · WhatsApp {whatsappLink().replace("https://wa.me/", "+")}
+          </footer>
         </div>
       </div>
-    </PublicLayout>
+    </section>
   );
 }

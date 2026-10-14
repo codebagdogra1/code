@@ -1,8 +1,9 @@
-# CODE — Course Registration + Admin (Next.js)
+# CODE — Website + Admin (Next.js)
 
-A single Next.js 16 app that combines the **public website** (course registration,
-brochure) and the **admin backend** (dashboard, registrations, payments, courses).
-It talks to the same PostgreSQL database as the old Netlify-functions version.
+A single Next.js 16 app that combines the **public website** for the computer centre
+(home, courses, offers, events, gallery, about, contact, printable brochure) and the
+**admin backend** (dashboard, registrations, payments, receipts, courses, plus the
+website content: enquiries, offers, events and gallery photos). One PostgreSQL database.
 
 ## Stack
 
@@ -16,18 +17,39 @@ It talks to the same PostgreSQL database as the old Netlify-functions version.
 ```
 src/
   app/
-    page.tsx / register / brochure       → public site
+    layout.tsx                           → the one root layout (fonts, globals.css)
+    (site)/                              → public website (`.site` design world)
+      page.tsx, courses, courses/[slug], offers, events, gallery, about, contact, brochure
     admin/login                          → admin sign-in (outside the shell)
-    admin/(dashboard)/                    → protected: dashboard, registrations, courses
+    admin/(dashboard)/                   → protected: dashboard, registrations, courses,
+                                           enquiries, offers, events, gallery
+    admin/(dashboard)/site-actions.ts    → server actions for website content
     api/
       auth/login | auth/logout           → public
-      courses                            → public (active courses)
-      register                           → public (create a registration)
-      admin/*                            → protected (registrations, payments, dashboard, courses)
-  lib/       db (Prisma), auth (JWT), serialize, format, receipts, types
+      courses                            → public (active courses, JSON)
+      contact                            → public (saves an enquiry)
+      media/[id]                         → public (serves uploaded images)
+      admin/*                            → protected (registrations, payments, courses, register)
+  components/site/                       → public website components
+  components/admin/                      → website-content managers (offers, events, gallery, enquiries)
+  lib/
+    site.ts            contact details, hours, map links (single source of truth)
+    course-content.ts  per-course copy (summary, syllabus, outcomes) keyed by catalogue name
+    content.ts         read models for the public pages
+    seo.ts             canonical URL + JSON-LD builders
   proxy.ts   route guard for /admin and /api/admin/* (Next 16 renamed middleware→proxy)
-prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map
+prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
+                       site_media, gallery_images, offers, site_events, enquiries
 ```
+
+## Editing website content
+
+- **Offers / events / gallery / enquiries** — from `/admin` (nav items 05–08). Public pages
+  are cached for 5 minutes and also refreshed immediately after every admin save.
+- **Course descriptions & FAQ** — `src/lib/course-content.ts` (keyed by the course name in
+  the admin catalogue). Prices, duration and installments always come from the database.
+- **Phone, address, hours, map** — `src/lib/site.ts`.
+- **Google reviews** — `src/components/site/GoogleReviews.tsx` (verbatim from the listing).
 
 ## Setup
 
@@ -40,13 +62,12 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map
    - `DATABASE_URL` — your Postgres connection string (use a **pooled** URL for
      serverless, e.g. Neon's pooler). This is the same database the old app used.
    - `AUTH_SECRET` — a long random string: `openssl rand -base64 32`
+   - `NEXT_PUBLIC_SITE_URL` — the public origin (used for canonicals, sitemap, JSON-LD)
 
-3. **Sync Prisma with the live database** (recommended, since the schema here was
-   reconstructed from the old SQL). This overwrites `schema.prisma` from the real DB:
+3. **Create / update the tables** (additive — safe to re-run):
    ```bash
-   npm run db:pull && npx prisma generate
+   npm run db:push
    ```
-   Skip this only if you're creating the database fresh from `schema.prisma`.
 
 4. **Create an admin user** (needed to sign in):
    ```bash
@@ -61,13 +82,13 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map
 ## Deploy on Netlify
 
 - Push this repo. In the Netlify site settings set **Base directory = `webapp`**.
-- Add `DATABASE_URL` and `AUTH_SECRET` as environment variables.
+- Add `DATABASE_URL`, `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL` as environment variables.
 - The official Next.js runtime plugin (in `netlify.toml`) handles the rest.
 
 ## Moving to Vercel later
 
-Import the repo in Vercel, set **Root Directory = `webapp`**, add the same two env
-vars. No code changes — Prisma's pg adapter and the App Router work as-is.
+Import the repo in Vercel, set **Root Directory = `webapp`**, add the same three env
+vars. No code changes — uploaded images live in Postgres, not on the host.
 
 ## What changed vs. the old system
 

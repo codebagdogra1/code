@@ -13,6 +13,11 @@ export const NAV_LINKS = [
   { href: "/admin/registrations/new", label: "New entry", icon: "new", no: "02" },
   { href: "/admin/registrations", label: "Registrations", icon: "registrations", no: "03" },
   { href: "/admin/courses", label: "Courses", icon: "courses", no: "04" },
+  // Website content — what visitors see on the public site.
+  { href: "/admin/enquiries", label: "Enquiries", icon: "inbox", no: "05" },
+  { href: "/admin/offers", label: "Offers", icon: "tag", no: "06" },
+  { href: "/admin/events", label: "Events", icon: "calendar", no: "07" },
+  { href: "/admin/gallery", label: "Gallery", icon: "image", no: "08" },
 ] as const;
 
 function isActive(pathname: string, href: string) {

@@ -1,9 +1,11 @@
-# The live site IS the Next.js app in `webapp/`. Netlify builds from that base
-# directory so the public marketing site, /register, /brochure AND the /admin
-# dashboard all deploy as one site on one domain.
+# The live site IS the Next.js app in `webapp/`: the public website (/, /courses,
+# /offers, /events, /gallery, /about, /contact), the admin dashboard (/admin) and
+# the API all deploy as one site on one domain.
 #
-# Required env vars on the Netlify site: DATABASE_URL, AUTH_SECRET.
-# The old static root site now lives in `legacy-site/` (reference only).
+# Required env vars on the Netlify site:
+#   DATABASE_URL          Neon pooled Postgres URL
+#   AUTH_SECRET           long random string (openssl rand -base64 32)
+#   NEXT_PUBLIC_SITE_URL  the public origin, e.g. https://www.codebagdogra.in
 [build]
   base = "webapp"
   command = "npm run build"

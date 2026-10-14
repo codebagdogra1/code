@@ -1,33 +1,28 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Archivo, DM_Sans } from "next/font/google";
-import "../globals.css";
+import { Inter, JetBrains_Mono, Archivo, Space_Grotesk } from "next/font/google";
+import { siteUrl } from "@/lib/seo";
+import "./globals.css";
 
-// Inter is the base UI typeface (admin login and any non-worlded surface);
-// self-hosted by next/font so there's no Google Fonts CDN request blocking paint.
-const inter = Inter({
-  variable: "--font-inter",
+// One root layout for the whole app. The public site (`.site` world), the admin
+// Records Office (`.ro` world) and the receipts all hang off this <html>/<body>;
+// each world scopes its own tokens in globals.css so they never bleed.
+
+// Inter — body text for the public site and the base UI typeface.
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+
+// Space Grotesk — the public site's display face: geometric, slightly technical,
+// fits a computer centre without reading as a generic SaaS landing page.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-grotesk",
   subsets: ["latin"],
   display: "swap",
 });
 
-// DM Sans is the public marketing site's typeface — it's the font the EduSmart
-// template ships with, and the `.edu` world in globals.css maps to it.
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
+// Archivo — the admin Records Office voice (label plates, headings, body).
+const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"], display: "swap" });
 
-// Archivo — an industrial grotesque — is the voice of the admin "Records Office"
-// world: label plates, headings, and body. Scoped to the admin subtree via `.ro`.
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Monospace for receipt numbers, rupee figures, and the punch-card month grid —
-// tabular numerals so money lines up in columns.
+// JetBrains Mono — rupee figures and receipt numbers in admin; small technical
+// labels ("// 01 courses") on the public site.
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-mono-code",
   subsets: ["latin"],
@@ -35,19 +30,29 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CODE — Course Registration",
-  description: "Enroll in CODE courses and manage registrations & payments.",
+  metadataBase: new URL(siteUrl()),
+  title: {
+    default: "CODE — Computer & Digital Excellence, Bagdogra",
+    template: "%s | CODE Bagdogra",
+  },
+  description:
+    "Computer training centre in Bagdogra, West Bengal. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering courses with monthly fee plans.",
+  applicationName: "CODE Bagdogra",
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: "CODE — Computer & Digital Excellence",
+    images: [{ url: "/CODE%20Logo.png", alt: "CODE — Computer & Digital Excellence, Bagdogra" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/CODE%20Logo.png"] },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
-      className={`${inter.variable} ${dmSans.variable} ${archivo.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      lang="en-IN"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${archivo.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

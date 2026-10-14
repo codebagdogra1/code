@@ -1,9 +1,13 @@
 import {
-  ADDRESS,
   BUSINESS_NAME,
+  CLOSES,
   COUNTRY_CODE,
   EMAIL,
+  GOOGLE_MAPS_URL,
   LOCALITY,
+  MAP_LAT,
+  MAP_LNG,
+  OPENS,
   PHONE_DISPLAY,
   PHONE_TEL,
   POSTAL_CODE,
@@ -17,7 +21,6 @@ const fallbackSiteUrl = "https://codebagdogra.netlify.app";
 export function siteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (!configured) return fallbackSiteUrl;
-
   try {
     return new URL(configured).origin;
   } catch {
@@ -29,36 +32,29 @@ export function absoluteUrl(path = "/"): string {
   return new URL(path, `${siteUrl()}/`).toString();
 }
 
-export const COURSE_NAMES = [
-  "CCA — Certificate in Computer Application",
-  "DCA — Diploma in Computer Application",
-  "ADCA — Advanced Diploma in Computer Application",
-  "Web Design Basic",
-  "Web Design Advanced",
-  "Ecommerce Expert — Industry Level",
-  "Ecommerce Expert — Job Ready",
-  "A.I. Prompt Engineering",
-] as const;
+export function organizationId(): string {
+  return `${siteUrl()}/#organization`;
+}
 
 export function organizationSchema() {
   const url = siteUrl();
-  const organizationId = `${url}/#organization`;
-
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": ["EducationalOrganization", "LocalBusiness"],
-        "@id": organizationId,
+        "@id": organizationId(),
         name: BUSINESS_NAME,
         alternateName: "CODE",
         url,
         logo: absoluteUrl("/logo.png"),
         image: absoluteUrl("/CODE%20Logo.png"),
         description:
-          "Practical computer and digital-skills courses for learners in Bagdogra, West Bengal.",
+          "Computer training centre in Bagdogra, West Bengal offering CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering courses.",
         telephone: PHONE_TEL,
         email: EMAIL,
+        hasMap: GOOGLE_MAPS_URL,
+        geo: { "@type": "GeoCoordinates", latitude: MAP_LAT, longitude: MAP_LNG },
         address: {
           "@type": "PostalAddress",
           streetAddress: STREET_ADDRESS,
@@ -70,15 +66,15 @@ export function organizationSchema() {
         openingHoursSpecification: {
           "@type": "OpeningHoursSpecification",
           dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-          opens: "11:00",
-          closes: "21:00",
+          opens: OPENS,
+          closes: CLOSES,
         },
         contactPoint: {
           "@type": "ContactPoint",
           telephone: PHONE_DISPLAY,
           email: EMAIL,
           contactType: "admissions",
-          availableLanguage: ["en", "hi"],
+          availableLanguage: ["en", "hi", "bn"],
         },
       },
       {
@@ -86,7 +82,7 @@ export function organizationSchema() {
         "@id": `${url}/#website`,
         url,
         name: BUSINESS_NAME,
-        publisher: { "@id": organizationId },
+        publisher: { "@id": organizationId() },
         inLanguage: "en-IN",
       },
     ],
@@ -106,55 +102,92 @@ export function breadcrumbSchema(items: ReadonlyArray<{ name: string; path: stri
   };
 }
 
-export function coursesSchema() {
+export function courseListSchema(courses: ReadonlyArray<{ name: string; slug: string; summary: string }>) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Computer and digital-skills courses at CODE",
-    itemListElement: COURSE_NAMES.map((name, index) => ({
+    name: "Computer and digital-skills courses at CODE, Bagdogra",
+    itemListElement: courses.map((c, index) => ({
       "@type": "ListItem",
       position: index + 1,
       item: {
         "@type": "Course",
-        name,
-        url: absoluteUrl("/courses"),
-        provider: { "@id": `${siteUrl()}/#organization` },
+        name: c.name,
+        description: c.summary,
+        url: absoluteUrl(`/courses/${c.slug}`),
+        provider: { "@id": organizationId() },
       },
     })),
   };
 }
 
-export function faqSchema() {
+export function courseSchema(course: {
+  name: string;
+  slug: string;
+  summary: string;
+  duration: string | null;
+  fullPrice: number | null;
+}) {
   return {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Which computer course is best for beginners?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "CCA is a good starting point for learners who want computer fundamentals, MS Office and everyday digital skills. Contact CODE to discuss the course that suits your goal.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "What is the difference between DCA and ADCA?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "DCA provides a more structured computer-application path, while ADCA is for learners ready to build broader, more advanced digital skills. Ask CODE about the current batch and course fee.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How can I confirm course fees and timings?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Contact CODE in Bagdogra for the current batch schedule, course fees and guidance on the right learning path.",
-        },
-      },
-    ],
+    "@type": "Course",
+    name: course.name,
+    description: course.summary,
+    url: absoluteUrl(`/courses/${course.slug}`),
+    provider: { "@id": organizationId() },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "Onsite",
+      location: { "@id": organizationId() },
+      ...(course.duration ? { courseWorkload: course.duration } : {}),
+    },
+    ...(course.fullPrice != null
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: course.fullPrice,
+            priceCurrency: "INR",
+            availability: "https://schema.org/InStock",
+            url: absoluteUrl(`/courses/${course.slug}`),
+          },
+        }
+      : {}),
   };
 }
 
-export const localBusinessFacts = { ADDRESS, PHONE_DISPLAY, EMAIL };
+export function faqSchema(items: ReadonlyArray<{ q: string; a: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
+export function eventSchema(e: {
+  title: string;
+  description: string;
+  startsAt: string;
+  endsAt: string | null;
+  venue: string | null;
+  imageUrl: string | null;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: e.title,
+    description: e.description,
+    startDate: e.startsAt,
+    ...(e.endsAt ? { endDate: e.endsAt } : {}),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: e.venue
+      ? { "@type": "Place", name: e.venue, address: { "@id": organizationId() } }
+      : { "@id": organizationId() },
+    organizer: { "@id": organizationId() },
+    ...(e.imageUrl ? { image: absoluteUrl(e.imageUrl) } : {}),
+  };
+}

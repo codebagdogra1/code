@@ -18,9 +18,47 @@ type IconName =
   | "cancel"
   | "menu"
   | "printer"
-  | "x";
+  | "x"
+  | "inbox"
+  | "tag"
+  | "calendar"
+  | "image"
+  | "globe";
 
 const PATHS: Record<IconName, React.ReactNode> = {
+  // in-tray
+  inbox: (
+    <>
+      <path d="M4 13.5V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7.5" />
+      <path d="M4 13.5h4.5l1.5 2.5h4l1.5-2.5H20v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-5Z" />
+    </>
+  ),
+  // price tag
+  tag: (
+    <>
+      <path d="M3.5 12.5V4.5h8l8.5 8.5-8 8-8.5-8.5Z" />
+      <circle cx="8" cy="9" r="1.2" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3.5" y="5" width="17" height="15" rx="1" />
+      <path d="M3.5 10h17M8 3v4M16 3v4" />
+    </>
+  ),
+  image: (
+    <>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1" />
+      <path d="m3.5 16 5-5 4 4 2.5-2.5 5.5 5.5" />
+      <circle cx="16" cy="9" r="1.5" />
+    </>
+  ),
+  globe: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17" />
+    </>
+  ),
   // a stack of files / drawer
   dashboard: (
     <>

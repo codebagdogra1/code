@@ -12,12 +12,8 @@
     "db:studio": "prisma studio",
     "create-admin": "tsx scripts/create-admin.ts",
     "waive-installments": "tsx scripts/waive-installments.ts",
-    "home:extract": "python3 scripts/extract-home-snippets.py",
-    "build-home": "python3 scripts/build-home.py",
-    "build-home:check": "python3 scripts/build-home.py --check",
-    "split-home": "python3 scripts/split-home.py",
-    "split-pages": "python3 scripts/split-pages.py",
-    "fetch-page-assets": "python3 scripts/fetch-missing-assets.py"
+    "db:push": "prisma db push",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

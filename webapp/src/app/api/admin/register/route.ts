@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { generateReceiptNo } from "@/lib/receipts";
 
-// Public: create a registration from the course-registration form.
+// Admin-only (guarded by proxy.ts): create a registration from the New entry form.
 // Ported from netlify/functions/registrations.js (POST) — same transactional flow:
 // upsert student, create registration + course rows, generate monthly installments
 // for monthly plans, and record the initial payment.
