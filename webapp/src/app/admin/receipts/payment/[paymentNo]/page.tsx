@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { requireAdminPage } from "@/lib/admin-guard";
 import { getPaymentReceipt } from "@/lib/receipt-data";
 import { formatRupees, formatDate, statusLabel } from "@/lib/format";
 import { ReceiptToolbar } from "@/components/receipt/ReceiptToolbar";
@@ -11,6 +12,7 @@ export default async function PaymentReceiptPage({
 }: {
   params: Promise<{ paymentNo: string }>;
 }) {
+  await requireAdminPage();
   const { paymentNo } = await params;
   const p = await getPaymentReceipt(decodeURIComponent(paymentNo));
   if (!p) notFound();

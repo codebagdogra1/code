@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { requireAdminPage } from "@/lib/admin-guard";
 import { getRegistrationReceipt } from "@/lib/receipt-data";
 import { formatRupees, formatDate, statusLabel } from "@/lib/format";
 import { ReceiptToolbar } from "@/components/receipt/ReceiptToolbar";
@@ -11,6 +12,7 @@ export default async function RegistrationReceiptPage({
 }: {
   params: Promise<{ receiptNo: string }>;
 }) {
+  await requireAdminPage();
   const { receiptNo } = await params;
   const r = await getRegistrationReceipt(decodeURIComponent(receiptNo));
   if (!r) notFound();
