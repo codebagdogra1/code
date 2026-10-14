@@ -22,10 +22,10 @@ export function CourseCard({ course, index }: { course: PublicCourse; index: num
         <span className={`s-chip ${TRACK_STYLE[c.track]}`}>{c.track}</span>
       </div>
 
-      <h3 className="mt-4 text-xl leading-snug group-hover:text-[var(--s-accent)]">{c.displayName}</h3>
-      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--s-body)]">{c.summary}</p>
+      <h3 className="mt-4 line-clamp-2 min-h-[2.75em] text-xl leading-snug group-hover:text-[var(--s-accent)]">{c.displayName}</h3>
+      <p className="mt-2 mb-5 line-clamp-3 flex-1 text-sm leading-relaxed text-[var(--s-body)]">{c.summary}</p>
 
-      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-[var(--s-line)] pt-4 text-sm">
+      <dl className="mt-auto grid grid-cols-2 gap-3 border-t border-[var(--s-line)] pt-4 text-sm">
         <div>
           <dt className="text-xs uppercase tracking-wide text-[var(--s-muted)]">Duration</dt>
           <dd className="mt-0.5 font-semibold text-[var(--s-ink)]">{course.duration ?? "Ask us"}</dd>
@@ -36,7 +36,7 @@ export function CourseCard({ course, index }: { course: PublicCourse; index: num
         </div>
       </dl>
 
-      <div className="mt-4 flex items-end justify-between">
+      <div className="mt-4 flex min-h-[3.25rem] items-end justify-between">
         <div>
           {course.perMonth != null ? (
             <>
