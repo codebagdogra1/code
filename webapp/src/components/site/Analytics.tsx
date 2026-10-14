@@ -1,17 +1,15 @@
 "use client";
 
 import Script from "next/script";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { trackPixel } from "@/components/site/MetaPixel";
 
-// Enquiry measurement for the public site. The business's conversion is a tap
-// on WhatsApp, the phone number or the email address, not a form submit, so
-// those taps are the events worth counting: GA4 `contact_click` (when a
-// measurement ID is configured) and Meta Pixel `Contact` (always, the pixel
-// is already on every public page).
-
-const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "";
+// Google tag (gtag.js) for the public site, exactly as issued by Google
+// Analytics, plus enquiry measurement. The business's conversion is a tap on
+// WhatsApp, the phone number or the email address, not a form submit, so those
+// taps are the events worth counting: GA4 `contact_click` and Meta Pixel
+// `Contact`. Page views, including client-side navigations, are handled by
+// GA4's own enhanced measurement.
 
 declare global {
   interface Window {
@@ -29,19 +27,6 @@ function channelFor(href: string): "whatsapp" | "phone" | "email" | "maps" | nul
 }
 
 export function Analytics() {
-  const pathname = usePathname();
-  const first = useRef(true);
-
-  // GA4 page views on client-side navigation (the config call covers the first).
-  useEffect(() => {
-    if (!GA_ID) return;
-    if (first.current) {
-      first.current = false;
-      return;
-    }
-    window.gtag?.("event", "page_view", { page_path: pathname });
-  }, [pathname]);
-
   // One delegated listener: any anchor to WhatsApp / tel / mailto / Maps.
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -57,16 +42,16 @@ export function Analytics() {
     return () => document.removeEventListener("click", onClick, { capture: true });
   }, []);
 
-  if (!GA_ID) return null;
   return (
     <>
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
-      <Script id="ga4-init" strategy="afterInteractive">
+      {/* Google tag (gtag.js) */}
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-WCTDWGECN7" />
+      <Script id="google-tag">
         {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-window.gtag = gtag;
-gtag('js', new Date());
-gtag('config', '${GA_ID}', { anonymize_ip: true });`}
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WCTDWGECN7');`}
       </Script>
     </>
   );

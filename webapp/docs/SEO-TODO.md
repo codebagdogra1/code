@@ -24,7 +24,7 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 - [x] Sitemap: guides + glossary; honest `lastmod` (content dates, not build time)
 - [x] `/llms.txt` lists guides + glossary
 - [x] Search Console / Bing verification via env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `NEXT_PUBLIC_BING_SITE_VERIFICATION`)
-- [x] Enquiry measurement: WhatsApp / call / email clicks fire GA4 `contact_click` (when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set) and Meta Pixel `Contact`
+- [x] Enquiry measurement: WhatsApp / call / email clicks fire GA4 `contact_click` and Meta Pixel `Contact`
 
 ### Shipped 14 Oct — third pass (keywords, languages, reviews, AI mirror)
 - [x] **Five more guides** for the highest-volume course-name and decision queries: DCA course details (full form, syllabus, eligibility, jobs, govt-recognition answer, DCA vs CCC/BCA) · ADCA course details · Basic computer course for beginners (CCA; home-makers, seniors, shop staff) · Computer courses for office, data-entry and computer-operator jobs (skills checklist) · Best computer courses to learn in 2026 (no salary/placement claims). 10 guides total, all with Article + FAQPage + BreadcrumbList schema and real dates
@@ -61,7 +61,8 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 - [x] **Search Console**: URL-prefix property `https://codebagdogra.netlify.app/` verified via HTML tag and `sitemap.xml` submitted (14 Oct 2026)
 - [ ] **Search Console — request indexing**: URL Inspection → *Request indexing* for `/`, `/courses`, `/guides`, `/glossary`, `/about`, `/contact`, the 9 course URLs and the `/areas/*` pages (quota ~10/day, spread over a few days)
 - [ ] **Bing Webmaster Tools**: import from Search Console (one click) or paste token into `NEXT_PUBLIC_BING_SITE_VERIFICATION`; submit sitemap
-- [ ] **GA4**: create property, paste `G-XXXX` into `NEXT_PUBLIC_GA_MEASUREMENT_ID`; mark `contact_click` as a key event
+- [x] **GA4**: Google tag `G-WCTDWGECN7` installed in `Analytics.tsx` on every public page (14 Oct 2026)
+- [ ] **GA4 — key event**: Admin → Events → mark `contact_click` as a key event once the first taps arrive
 - [ ] **Google Business Profile** — apply [GBP-KIT.md](./GBP-KIT.md): categories, 750-char description, every course as a Service, hours, 20+ photos, website link with `?utm_source=gbp`
 - [ ] **Review engine**: QR + WhatsApp script from the kit; target 3–5 real reviews/month; reply to every review within 48 h
 - [ ] **GBP Q&A**: seed the 10 questions from the kit from the owner account
