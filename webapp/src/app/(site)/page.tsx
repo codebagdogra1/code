@@ -14,11 +14,14 @@ import { JsonLd } from "@/components/JsonLd";
 import { getActiveOffers, getCourses, getEvents, getGallery } from "@/lib/content";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import { FAQ } from "@/lib/course-content";
-import { courseListSchema, faqSchema, organizationSchema } from "@/lib/seo";
+import { OG_IMAGE, courseListSchema, faqSchema, organizationSchema } from "@/lib/seo";
 import {
   ADDRESS_LINES,
+  AREAS_SERVED,
   GOOGLE_MAPS_URL,
   HOURS,
+  LANDMARKS,
+  LANGUAGES,
   PHONE_DISPLAY,
   PHONE_TEL,
   whatsappLink,
@@ -28,11 +31,12 @@ import {
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Computer Courses in Bagdogra | CODE — Computer & Digital Excellence",
+  // Absolute: the layout template would otherwise append a second "CODE Bagdogra".
+  title: { absolute: "Computer Courses in Bagdogra & Siliguri | CODE — Computer & Digital Excellence" },
   description:
     "CODE is a computer training centre in Bagdogra, Siliguri. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering with monthly fee plans. Rated 5.0 on Google.",
   alternates: { canonical: "/" },
-  openGraph: { url: "/", title: "Computer Courses in Bagdogra | CODE" },
+  openGraph: { ...OG_IMAGE, url: "/", title: "Computer Courses in Bagdogra & Siliguri | CODE" },
 };
 
 const WHY = [
@@ -87,7 +91,7 @@ export default async function HomePage() {
           <div>
             <p className="s-eyebrow s-eyebrow--light">Computer training centre · Bagdogra</p>
             <h1 className="mt-4 text-4xl leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-              Learn computers the practical way.
+              Computer courses in Bagdogra, taught the practical way.
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/80">
               From your first click to job-ready skills in web design, ecommerce, digital marketing and
@@ -272,11 +276,47 @@ export default async function HomePage() {
       )}
 
       {/* REVIEWS */}
-      <section>
-        <div className="s-container py-14 sm:py-20">
+      <section id="reviews">
+        <div className="s-container pt-14 sm:pt-20">
           <SectionHeading eyebrow="Reviews" title="What students say on Google" align="center" />
-          <div className="mt-10">
-            <GoogleReviews />
+        </div>
+        <div className="pb-14 sm:pb-20">
+          <GoogleReviews />
+        </div>
+      </section>
+
+      {/* LOCAL — who and where the centre is for, in plain sentences a search or answer engine can quote. */}
+      <section className="bg-white" id="bagdogra">
+        <div className="s-container grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <SectionHeading
+              eyebrow="Bagdogra · Siliguri"
+              title="A computer institute in Bagdogra, within reach of Siliguri"
+              lead={`CODE is on Lokenath Nagar Road in Bagdogra, ${LANDMARKS[0].distance} from ${LANDMARKS[0].name} and ${LANDMARKS[1].distance} from ${LANDMARKS[1].name}. Students come from across Bagdogra and the Siliguri side, and classes are explained in ${LANGUAGES.join(", ")}.`}
+            />
+            <p className="s-eyebrow mt-8">Areas we serve</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {AREAS_SERVED.map((a) => (
+                <li key={a} className="s-chip border border-[var(--s-line-2)] bg-white text-[var(--s-ink)]">
+                  {a}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="s-card h-fit p-6">
+            <p className="s-eyebrow">Getting here</p>
+            <dl className="mt-4 divide-y divide-[var(--s-line)]">
+              {LANDMARKS.map((l) => (
+                <div key={l.name} className="flex items-baseline justify-between gap-4 py-2.5 text-sm">
+                  <dt className="text-[var(--s-body)]">{l.name}</dt>
+                  <dd className="shrink-0 font-semibold text-[var(--s-ink)]">{l.distance}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-[var(--s-muted)]">Straight-line distances. Buses, autos and bikes reach the centre from all of these.</p>
+            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="s-btn s-btn--outline s-btn--sm mt-5">
+              Open in Google Maps
+            </a>
           </div>
         </div>
       </section>

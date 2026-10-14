@@ -36,16 +36,16 @@ export const metadata: Metadata = {
     template: "%s | CODE Bagdogra",
   },
   description:
-    "Computer training centre in Bagdogra, West Bengal. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering courses with monthly fee plans.",
+    "Computer training centre in Bagdogra, Siliguri (West Bengal). CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering courses with monthly fee plans.",
   applicationName: "CODE Bagdogra",
+  // Share images come from app/opengraph-image.tsx and app/twitter-image.tsx.
   openGraph: {
     type: "website",
     locale: "en_IN",
     siteName: "CODE — Computer & Digital Excellence",
-    images: [{ url: "/CODE%20Logo.png", alt: "CODE — Computer & Digital Excellence, Bagdogra" }],
   },
-  twitter: { card: "summary_large_image", images: ["/CODE%20Logo.png"] },
-  robots: { index: true, follow: true },
+  twitter: { card: "summary_large_image" },
+  robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,18 +1,24 @@
+import { MAPS_PHOTOS } from "./maps-photos";
 import {
+  AREAS_SERVED,
   BUSINESS_NAME,
   CLOSES,
   COUNTRY_CODE,
   EMAIL,
   GOOGLE_MAPS_URL,
+  LANGUAGE_CODES,
   LOCALITY,
   MAP_LAT,
   MAP_LNG,
+  ONE_LINER,
   OPENS,
   PHONE_DISPLAY,
   PHONE_TEL,
   POSTAL_CODE,
   REGION,
+  SHORT_NAME,
   STREET_ADDRESS,
+  TAGLINE,
 } from "./site";
 
 const fallbackSiteUrl = "https://codebagdogra.netlify.app";
@@ -45,16 +51,33 @@ export function organizationSchema() {
         "@type": ["EducationalOrganization", "LocalBusiness"],
         "@id": organizationId(),
         name: BUSINESS_NAME,
-        alternateName: "CODE",
+        alternateName: [SHORT_NAME, "CODE Bagdogra", "Computer and Digital Excellence"],
+        slogan: TAGLINE,
         url,
-        logo: absoluteUrl("/logo.png"),
-        image: absoluteUrl("/CODE%20Logo.png"),
-        description:
-          "Computer training centre in Bagdogra, West Bengal offering CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering courses.",
+        logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png"), width: 2724, height: 993 },
+        // Real photos of the centre and its students first; the logo last.
+        image: [...MAPS_PHOTOS.map((p) => absoluteUrl(p.src)), absoluteUrl("/CODE%20Logo.png")],
+        description: ONE_LINER,
         telephone: PHONE_TEL,
         email: EMAIL,
         hasMap: GOOGLE_MAPS_URL,
+        sameAs: [GOOGLE_MAPS_URL],
         geo: { "@type": "GeoCoordinates", latitude: MAP_LAT, longitude: MAP_LNG },
+        areaServed: AREAS_SERVED.map((name) => ({ "@type": "City", name })),
+        knowsLanguage: [...LANGUAGE_CODES],
+        knowsAbout: [
+          "Computer fundamentals",
+          "MS Office",
+          "Certificate in Computer Application (CCA)",
+          "Diploma in Computer Application (DCA)",
+          "Advanced Diploma in Computer Application (ADCA)",
+          "Web design (HTML, CSS, JavaScript, WordPress)",
+          "Ecommerce (Shopify, Amazon, Flipkart, Meesho)",
+          "Digital marketing (Meta Ads, Google Business Profile, WhatsApp marketing)",
+          "AI prompt engineering (ChatGPT, Gemini)",
+        ],
+        currenciesAccepted: "INR",
+        publicAccess: true,
         address: {
           "@type": "PostalAddress",
           streetAddress: STREET_ADDRESS,
@@ -74,14 +97,18 @@ export function organizationSchema() {
           telephone: PHONE_DISPLAY,
           email: EMAIL,
           contactType: "admissions",
-          availableLanguage: ["en", "hi", "bn"],
+          availableLanguage: [...LANGUAGE_CODES],
+          areaServed: AREAS_SERVED.map((name) => ({ "@type": "City", name })),
         },
       },
       {
+        // Google's site-name signal: must sit on the home page and agree with
+        // og:site_name and the <title>. Keeps "Netlify" from being shown as the site.
         "@type": "WebSite",
         "@id": `${url}/#website`,
         url,
         name: BUSINESS_NAME,
+        alternateName: ["CODE Bagdogra", SHORT_NAME],
         publisher: { "@id": organizationId() },
         inLanguage: "en-IN",
       },
@@ -121,24 +148,54 @@ export function courseListSchema(courses: ReadonlyArray<{ name: string; slug: st
   };
 }
 
+/** "6 months" → "P6M", "8 weeks" → "P8W", "1 year" → "P1Y"; null when unparseable. */
+export function isoDuration(text: string | null | undefined): string | null {
+  if (!text) return null;
+  const m = text.trim().match(/^(\d+)\s*(day|week|month|year)s?$/i);
+  if (!m) return null;
+  const unit = { day: "D", week: "W", month: "M", year: "Y" }[m[2].toLowerCase() as "day" | "week" | "month" | "year"];
+  return `P${m[1]}${unit}`;
+}
+
 export function courseSchema(course: {
   name: string;
   slug: string;
   summary: string;
   duration: string | null;
+  level?: string;
+  modules?: ReadonlyArray<string>;
+  outcomes?: ReadonlyArray<string>;
+  prerequisites?: string;
+  whoFor?: string;
 }) {
+  const iso = isoDuration(course.duration);
   return {
     "@context": "https://schema.org",
     "@type": "Course",
+    "@id": absoluteUrl(`/courses/${course.slug}#course`),
     name: course.name,
     description: course.summary,
     url: absoluteUrl(`/courses/${course.slug}`),
     provider: { "@id": organizationId() },
+    inLanguage: [...LANGUAGE_CODES],
+    ...(course.level ? { educationalLevel: course.level } : {}),
+    ...(course.prerequisites ? { coursePrerequisites: course.prerequisites } : {}),
+    ...(course.whoFor ? { audience: { "@type": "EducationalAudience", audienceType: course.whoFor } } : {}),
+    ...(course.outcomes?.length ? { teaches: [...course.outcomes] } : {}),
+    ...(course.modules?.length
+      ? { syllabusSections: course.modules.map((m) => ({ "@type": "Syllabus", name: m })) }
+      : {}),
+    ...(iso ? { timeRequired: iso } : {}),
+    educationalCredentialAwarded: `Certificate from ${BUSINESS_NAME}`,
+    // Paid course; the fee is quoted at the desk, so no price is published.
+    offers: { "@type": "Offer", category: "Paid", priceCurrency: "INR", availability: "https://schema.org/InStock" },
     hasCourseInstance: {
       "@type": "CourseInstance",
       courseMode: "Onsite",
       location: { "@id": organizationId() },
+      instructor: { "@id": organizationId() },
       ...(course.duration ? { courseWorkload: course.duration } : {}),
+      ...(iso ? { duration: iso } : {}),
     },
   };
 }
@@ -179,3 +236,18 @@ export function eventSchema(e: {
     ...(e.imageUrl ? { image: absoluteUrl(e.imageUrl) } : {}),
   };
 }
+
+/**
+ * Pages that set their own `openGraph` replace the layout's object wholesale,
+ * which also drops the file-based card. Spread this in to keep the image.
+ */
+export const OG_IMAGE: { images: { url: string; width: number; height: number; alt: string }[] } = {
+  images: [
+    {
+      url: "/opengraph-image",
+      width: 1200,
+      height: 630,
+      alt: "CODE — Computer & Digital Excellence, computer training centre in Bagdogra",
+    },
+  ],
+};

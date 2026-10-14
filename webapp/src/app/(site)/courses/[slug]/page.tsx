@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CourseCard } from "@/components/site/CourseCard";
+import { Faq } from "@/components/site/Faq";
 import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourseBySlug, getCourses } from "@/lib/content";
 import { COURSE_CONTENT } from "@/lib/course-content";
-import { breadcrumbSchema, courseSchema } from "@/lib/seo";
-import { PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/site";
+import { OG_IMAGE, breadcrumbSchema, courseSchema, faqSchema } from "@/lib/seo";
+import { LANGUAGES, LOCALITY, PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -19,12 +20,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course not found" };
-  const title = `${course.content.displayName} in Bagdogra — Syllabus & Duration`;
+  const c = course.content;
+  const title = c.seoTitle ?? `${c.shortName ?? c.displayName} Course in Bagdogra — Syllabus & Duration`;
+  const description = c.definition ?? c.summary;
   return {
-    title,
-    description: course.content.summary,
+    // The template would append "| CODE Bagdogra"; these titles already carry the place.
+    title: { absolute: `${title} | CODE` },
+    description,
     alternates: { canonical: `/courses/${slug}` },
-    openGraph: { url: `/courses/${slug}`, title: `${title} | CODE` },
+    openGraph: { ...OG_IMAGE, url: `/courses/${slug}`, title: `${title} | CODE`, description },
   };
 }
 
@@ -37,6 +41,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const all = await getCourses();
   const related = all.filter((o) => o.id !== course.id && (o.content.track === c.track || o.name === c.idealNext)).slice(0, 3);
   const next = c.idealNext ? all.find((o) => o.name === c.idealNext) : undefined;
+  const short = c.shortName ?? c.displayName;
+  const faq = c.faq ?? [];
 
   return (
     <>
@@ -47,7 +53,20 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           { name: c.displayName, path: `/courses/${slug}` },
         ])}
       />
-      <JsonLd data={courseSchema({ name: c.displayName, slug, summary: c.summary, duration: course.duration })} />
+      <JsonLd
+        data={courseSchema({
+          name: c.displayName,
+          slug,
+          summary: c.definition ?? c.summary,
+          duration: course.duration,
+          level: c.level,
+          modules: c.modules,
+          outcomes: c.outcomes,
+          prerequisites: c.prerequisites,
+          whoFor: c.whoFor,
+        })}
+      />
+      {faq.length > 0 && <JsonLd data={faqSchema(faq)} />}
 
       <section className="s-grid--dark text-white">
         <div className="s-container py-14 sm:py-20">
@@ -95,11 +114,41 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         </div>
       </section>
 
+      {/* Answer-first definition: one quotable paragraph an assistant or snippet can lift whole. */}
+      {c.definition && (
+        <section className="border-b border-[var(--s-line)] bg-white">
+          <div className="s-container py-10 sm:py-12">
+            <h2 className="text-2xl sm:text-3xl">What is {short}?</h2>
+            <p className="mt-4 max-w-3xl text-lg leading-relaxed text-[var(--s-ink)]">{c.definition}</p>
+            <dl className="mt-6 grid max-w-3xl gap-4 text-sm sm:grid-cols-3">
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-[var(--s-muted)]">Where</dt>
+                <dd className="mt-0.5 font-semibold text-[var(--s-ink)]">In person at CODE, {LOCALITY}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-[var(--s-muted)]">Taught in</dt>
+                <dd className="mt-0.5 font-semibold text-[var(--s-ink)]">{LANGUAGES.join(", ")}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-[var(--s-muted)]">Fee</dt>
+                <dd className="mt-0.5 font-semibold text-[var(--s-ink)]">Full or monthly plan, quoted at the desk</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+      )}
+
       <section>
         <div className="s-container grid gap-12 py-14 sm:py-20 lg:grid-cols-[1fr_1fr]">
           <div>
             <p className="s-eyebrow">Who it&apos;s for</p>
             <p className="mt-3 text-lg leading-relaxed text-[var(--s-ink)]">{c.whoFor}</p>
+            {c.prerequisites && (
+              <>
+                <p className="s-eyebrow mt-8">Before you join</p>
+                <p className="mt-3 text-[var(--s-body)]">{c.prerequisites}.</p>
+              </>
+            )}
 
             {c.outcomes.length > 0 && (
               <>
@@ -134,6 +183,29 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           )}
         </div>
       </section>
+
+      {faq.length > 0 && (
+        <section className="bg-[var(--s-paper-2)]">
+          <div className="s-container grid gap-10 py-14 sm:py-20 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="s-eyebrow">FAQ</p>
+              <h2 className="mt-3 text-3xl sm:text-4xl">Questions about {short}</h2>
+              <p className="mt-3 text-[var(--s-body)]">
+                Anything else? Ask on WhatsApp or call {PHONE_DISPLAY} — a trainer answers, not a bot.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={whatsappLink(c.displayName)} target="_blank" rel="noopener noreferrer" className="s-btn s-btn--accent s-btn--sm">
+                  Ask on WhatsApp
+                </a>
+                <Link href="/courses" className="s-btn s-btn--outline s-btn--sm">
+                  Compare courses
+                </Link>
+              </div>
+            </div>
+            <Faq items={faq} />
+          </div>
+        </section>
+      )}
 
       <PhotoMarquee eyebrow="Your batch" title="You learn with a small batch, and a trainer who knows your name." start={3} />
 

@@ -4,14 +4,16 @@ import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourses } from "@/lib/content";
-import { breadcrumbSchema, organizationId, siteUrl } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema, organizationId, siteUrl } from "@/lib/seo";
 import {
   ADDRESS_LINES,
+  AREAS_SERVED,
   EMAIL,
   GOOGLE_MAPS_EMBED_URL,
   GOOGLE_MAPS_URL,
   HOURS,
   HOURS_CLOSED,
+  LANDMARKS,
   PHONE_DISPLAY,
   PHONE_TEL,
   whatsappLink,
@@ -20,10 +22,10 @@ import {
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Contact & Directions",
-  description: "Contact CODE computer centre in Bagdogra: phone, WhatsApp, email, address, map and opening hours. Send an enquiry about courses, fees and batches.",
+  title: "Contact & Directions — Lokenath Nagar Road, Bagdogra",
+  description: "Contact CODE computer centre in Bagdogra: phone +91 96358 09537, WhatsApp, email, address near K1 Fitness Gym, map, hours Mon–Sat 11 AM–9 PM. Enquire about courses, fees and batches.",
   alternates: { canonical: "/contact" },
-  openGraph: { url: "/contact", title: "Contact CODE Bagdogra" },
+  openGraph: { ...OG_IMAGE, url: "/contact", title: "Contact CODE Bagdogra" },
 };
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ course?: string }> }) {
@@ -91,6 +93,21 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                   Open in Google Maps
                 </a>
               </div>
+            </div>
+
+            <div className="s-card p-6">
+              <h2 className="text-xl">How to reach CODE</h2>
+              <dl className="mt-3 divide-y divide-[var(--s-line)]">
+                {LANDMARKS.map((l) => (
+                  <div key={l.name} className="flex items-baseline justify-between gap-4 py-2 text-sm">
+                    <dt className="text-[var(--s-body)]">From {l.name}</dt>
+                    <dd className="shrink-0 font-semibold text-[var(--s-ink)]">{l.distance}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-4 text-sm text-[var(--s-body)]">
+                Students reach us from {AREAS_SERVED.slice(0, -1).join(", ")} and {AREAS_SERVED[AREAS_SERVED.length - 1]} by bus, auto or bike. Look for K1 Fitness Gym on Lokenath Nagar Road; the centre is beside it.
+              </p>
             </div>
           </div>
         </div>

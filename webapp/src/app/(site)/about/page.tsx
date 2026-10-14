@@ -7,7 +7,7 @@ import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getGallery } from "@/lib/content";
-import { breadcrumbSchema, organizationId, siteUrl } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema, organizationId, siteUrl } from "@/lib/seo";
 import { whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     "CODE (Computer & Digital Excellence) is a computer training centre in Bagdogra, Siliguri, teaching practical computer, web, ecommerce, marketing and AI skills in small batches.",
   alternates: { canonical: "/about" },
-  openGraph: { url: "/about", title: "About CODE Bagdogra" },
+  openGraph: { ...OG_IMAGE, url: "/about", title: "About CODE Bagdogra" },
 };
 
 const VALUES = [
@@ -99,12 +99,12 @@ export default async function AboutPage() {
 
       <PhotoMarquee eyebrow="Life at CODE" title="The people behind the reviews" start={2} className="bg-white" />
 
-      <section>
-        <div className="s-container py-14 sm:py-20">
+      <section id="reviews">
+        <div className="s-container pt-14 sm:pt-20">
           <SectionHeading eyebrow="Reviews" title="In students' words" align="center" />
-          <div className="mt-10">
-            <GoogleReviews />
-          </div>
+        </div>
+        <div className="pb-14 sm:pb-20">
+          <GoogleReviews />
         </div>
       </section>
     </>

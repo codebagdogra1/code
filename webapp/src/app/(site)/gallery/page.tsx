@@ -4,7 +4,7 @@ import { MomentsShowcase } from "@/components/site/MomentsShowcase";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getGallery } from "@/lib/content";
-import { breadcrumbSchema } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema } from "@/lib/seo";
 import { GOOGLE_MAPS_URL } from "@/lib/site";
 
 export const revalidate = 300;
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Gallery — Inside CODE Computer Centre",
   description: "Photos of the classrooms, computer lab, classes and events at CODE, Bagdogra.",
   alternates: { canonical: "/gallery" },
-  openGraph: { url: "/gallery", title: "Gallery | CODE Bagdogra" },
+  openGraph: { ...OG_IMAGE, url: "/gallery", title: "Gallery | CODE Bagdogra" },
 };
 
 export default async function GalleryPage() {

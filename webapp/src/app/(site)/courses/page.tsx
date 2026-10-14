@@ -5,7 +5,7 @@ import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourses } from "@/lib/content";
-import { breadcrumbSchema, courseListSchema } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema, courseListSchema } from "@/lib/seo";
 import { PHONE_DISPLAY, whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description:
     "All courses at CODE Bagdogra with duration and syllabus: CCA, DCA, ADCA, Web Design, Ecommerce Expert, Digital Marketing and AI Prompt Engineering. Monthly installment plans available.",
   alternates: { canonical: "/courses" },
-  openGraph: { url: "/courses", title: "Computer Courses in Bagdogra | CODE" },
+  openGraph: { ...OG_IMAGE, url: "/courses", title: "Computer Courses in Bagdogra | CODE" },
 };
 
 export default async function CoursesPage() {

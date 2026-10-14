@@ -5,7 +5,7 @@ import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getActiveOffers } from "@/lib/content";
-import { breadcrumbSchema } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema } from "@/lib/seo";
 import { whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Current Offers & Admission Discounts",
   description: "Limited-period admission offers, fee discounts and free demo classes at CODE computer centre, Bagdogra.",
   alternates: { canonical: "/offers" },
-  openGraph: { url: "/offers", title: "Current Offers | CODE Bagdogra" },
+  openGraph: { ...OG_IMAGE, url: "/offers", title: "Current Offers | CODE Bagdogra" },
 };
 
 export default async function OffersPage() {

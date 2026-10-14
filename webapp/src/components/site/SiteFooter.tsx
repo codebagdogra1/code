@@ -7,6 +7,7 @@ import {
   EMAIL,
   HOURS,
   HOURS_CLOSED,
+  ONE_LINER,
   PHONE_DISPLAY,
   PHONE_TEL,
   whatsappLink,
@@ -30,10 +31,7 @@ export async function SiteFooter() {
           <div className="inline-block rounded-xl bg-white px-4 py-3">
             <Logo className="h-9 w-auto" />
           </div>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed">
-            A computer training centre in Bagdogra, West Bengal. Small batches, hands-on practice
-            and monthly fee plans for CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI.
-          </p>
+          <p className="mt-5 max-w-sm text-sm leading-relaxed">{ONE_LINER}</p>
           <GoogleBadge size="sm" tone="dark" rating={google.rating} count={google.count} href={google.mapsUrl} className="mt-5" />
         </div>
 

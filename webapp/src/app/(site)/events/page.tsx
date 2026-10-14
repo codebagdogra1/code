@@ -4,7 +4,7 @@ import { PhotoCollage } from "@/components/site/PhotoCollage";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { getEvents } from "@/lib/content";
-import { breadcrumbSchema, eventSchema } from "@/lib/seo";
+import { OG_IMAGE, breadcrumbSchema, eventSchema } from "@/lib/seo";
 import { whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Events, Workshops & Demo Classes",
   description: "Upcoming demo classes, workshops and student events at CODE computer centre in Bagdogra.",
   alternates: { canonical: "/events" },
-  openGraph: { url: "/events", title: "Events & Workshops | CODE Bagdogra" },
+  openGraph: { ...OG_IMAGE, url: "/events", title: "Events & Workshops | CODE Bagdogra" },
 };
 
 export default async function EventsPage() {

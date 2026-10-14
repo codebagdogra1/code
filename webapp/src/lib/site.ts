@@ -45,3 +45,34 @@ export function whatsappLink(topic?: string): string {
     : "Hi CODE, I'd like to know more about your courses.";
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
+
+// One consistent description of the business, reused verbatim in meta tags,
+// JSON-LD, llms.txt and the footer so search and answer engines see one entity.
+export const ONE_LINER =
+  "CODE — Computer & Digital Excellence is a computer training centre in Bagdogra, Siliguri (West Bengal) teaching CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI prompt engineering in small, hands-on batches with monthly fee plans.";
+
+// Languages classes are explained in. Mirrors the JSON-LD contact point.
+export const LANGUAGES = ["Bengali", "Hindi", "English"] as const;
+export const LANGUAGE_CODES = ["bn", "hi", "en"] as const;
+
+// Places the centre realistically serves. Used for areaServed in JSON-LD and
+// the "areas we serve" copy. Keep to genuine commuting distance.
+export const AREAS_SERVED = [
+  "Bagdogra",
+  "Upper Bagdogra",
+  "Bihar More",
+  "Gossaipur",
+  "Matigara",
+  "Naxalbari",
+  "Siliguri",
+] as const;
+
+// Straight-line distances from the centre (MAP_LAT/MAP_LNG) to landmarks a
+// visitor would navigate from. Rounded; computed from public coordinates.
+export const LANDMARKS = [
+  { name: "Bagdogra railway station", distance: "about 1.5 km" },
+  { name: "Bagdogra Airport (IXB)", distance: "about 2 km" },
+  { name: "Matigara", distance: "about 5 km" },
+  { name: "Siliguri Junction", distance: "about 10 km" },
+  { name: "Naxalbari", distance: "about 12 km" },
+] as const;
