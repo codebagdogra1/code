@@ -170,6 +170,7 @@ body {
   --s-line-2: #c9d1e2;
   --s-accent: #d93a14; /* signal red-orange: CTAs, highlights (4.6:1 with white) */
   --s-accent-2: #b52d0c;
+  --s-accent-text: #c43110; /* small accent text: 5.1:1 on paper-2, 5.5:1 on white */
   --s-accent-tint: #fdeae4;
   --s-sky: #e8efff; /* pale navy tint for chips/cards */
   --s-sky-2: #d6e1ff;
@@ -264,7 +265,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--s-accent);
+  color: var(--s-accent-text);
 }
 .s-eyebrow::before {
   content: "//";

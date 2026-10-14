@@ -276,12 +276,12 @@ function ReviewCard({ review, index, total, focused, reduced }: { review: Google
   return (
     <figure
       className={`s-card flex h-full flex-col p-6 ${
-        focused ? "opacity-100 shadow-[var(--s-shadow-lg)] ring-1 ring-[var(--s-ink)]/10" : "opacity-55 shadow-none"
+        focused ? "bg-white shadow-[var(--s-shadow-lg)] ring-1 ring-[var(--s-ink)]/10" : "bg-[var(--s-paper-2)] shadow-none"
       }`}
       style={{
         transform: focused ? "scale(1)" : "scale(0.94)",
         transformOrigin: "center",
-        transition: reduced ? "none" : "transform 560ms cubic-bezier(0.22, 1, 0.36, 1), opacity 560ms ease, box-shadow 560ms ease",
+        transition: reduced ? "none" : "transform 560ms cubic-bezier(0.22, 1, 0.36, 1), background-color 560ms ease, box-shadow 560ms ease",
       }}
       aria-roledescription="slide"
       aria-label={`${index + 1} of ${total}`}
