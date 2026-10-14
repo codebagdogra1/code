@@ -607,9 +607,10 @@ export default function RegistrationDetailPage({
           <section className="ro-panel p-5">
             <span className="ro-plate ro-plate--ink">Ledger</span>
             <dl className="mt-4 space-y-2.5">
-              <Row label="Total" value={formatRupees(reg.total_amount)} />
+              <Row label="Original total" value={formatRupees(reg.total_amount)} />
               <Row label="Admission fee" value={formatRupees(reg.admission_fees)} />
               <Row label="Discount" value={reg.discount_amount ? `− ${formatRupees(reg.discount_amount)}` : "—"} />
+              <Row label="Total payable" value={formatRupees(reg.payable_amount)} />
               <Row label="Paid" value={formatRupees(reg.paid_amount)} tone="green" />
               <div className="mt-1 border-t border-[var(--ro-line-2)] pt-2.5">
                 <Row

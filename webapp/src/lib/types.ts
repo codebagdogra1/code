@@ -62,6 +62,7 @@ export type RegistrationDetail = {
   total_amount: number;
   admission_fees: number;
   discount_amount: number;
+  payable_amount: number;
   paid_amount: number;
   due_amount: number;
   payment_method: string | null;

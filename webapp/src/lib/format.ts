@@ -82,3 +82,43 @@ export function formatRupees(value: number | string | null | undefined): string 
   const n = Math.round(Number(value ?? 0));
   return "₹" + new Intl.NumberFormat("en-IN").format(n);
 }
+
+// --- Public site (events, offers) -------------------------------------------
+// Always format in the centre's timezone so server render and client hydrate
+// agree regardless of where the function runs.
+const IST = "Asia/Kolkata";
+
+export function formatEventDate(value: string | Date): string {
+  return new Date(value).toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: IST,
+  });
+}
+
+export function formatEventTime(value: string | Date): string {
+  return new Date(value).toLocaleTimeString("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: IST,
+  });
+}
+
+export function formatDayMonth(value: string | Date): { day: string; month: string } {
+  const d = new Date(value);
+  return {
+    day: d.toLocaleDateString("en-IN", { day: "2-digit", timeZone: IST }),
+    month: d.toLocaleDateString("en-IN", { month: "short", timeZone: IST }).toUpperCase(),
+  };
+}
+
+export function formatLongDate(value: string | Date): string {
+  return new Date(value).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: IST,
+  });
+}

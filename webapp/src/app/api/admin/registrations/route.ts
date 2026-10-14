@@ -10,12 +10,15 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(req.nextUrl.searchParams.get("limit") || "10", 10);
     const skip = (page - 1) * limit;
     const now = new Date();
+    const status = req.nextUrl.searchParams.get("status")?.toUpperCase();
 
-    const [rows, totalRecords] = await Promise.all([
+    const [rows, allTotalRecords] = await Promise.all([
       prisma.registration.findMany({
         orderBy: { registrationDate: "desc" },
-        skip,
-        take: limit,
+        // A written-off course can change the status displayed in this list
+        // without changing Registration.paymentStatus. When filtering, load the
+        // result set first so selection follows that displayed, derived status.
+        ...(status ? {} : { skip, take: limit }),
         include: {
           student: { select: { fullName: true, phoneNumber: true, email: true } },
           // Per-course write-off parks a single course's months as CANCELLED but
@@ -107,11 +110,18 @@ export async function GET(req: NextRequest) {
       };
     });
 
+    const matchingRegistrations = status
+      ? registrations.filter((r) => matchesStatus(r.payment_status, status, r.overdue_months))
+      : registrations;
+    const totalRecords = status ? matchingRegistrations.length : allTotalRecords;
+    const paginatedRegistrations = status
+      ? matchingRegistrations.slice(skip, skip + limit)
+      : matchingRegistrations;
     const totalPages = Math.ceil(totalRecords / limit) || 1;
 
     return NextResponse.json(
       serialize({
-        registrations,
+        registrations: paginatedRegistrations,
         pagination: {
           currentPage: page,
           totalPages,
@@ -124,5 +134,23 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Error listing registrations:", error);
     return NextResponse.json({ error: "Failed to fetch registrations" }, { status: 500 });
+  }
+}
+
+function matchesStatus(paymentStatus: string | null, filter: string, overdueMonths: number) {
+  const value = paymentStatus?.toUpperCase();
+  switch (filter) {
+    case "PAID":
+      return value === "PAID" || value === "COMPLETED";
+    case "PARTIAL":
+      return value === "PARTIAL";
+    case "DUE":
+      return value === "PENDING" || value === "DUE";
+    case "OVERDUE":
+      return overdueMonths > 0;
+    case "CANCELLED":
+      return value === "CANCELLED";
+    default:
+      return true;
   }
 }

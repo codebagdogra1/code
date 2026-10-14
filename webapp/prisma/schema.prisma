@@ -142,3 +142,97 @@ model PaymentInstallmentMapping {
   @@index([paymentHistoryId], map: "idx_payment_mapping_payment")
   @@map("payment_installment_mapping")
 }
+
+// ---------------------------------------------------------------------------
+// Public website content, managed from /admin. Additive tables only — nothing
+// here touches the registration / fee ledger above.
+// ---------------------------------------------------------------------------
+
+// Uploaded images (gallery photos, offer/event artwork). Stored in Postgres so
+// the site is host-portable (Netlify today, Vercel later) with no object store
+// to configure. Images are resized in the browser before upload (<= 1600px,
+// JPEG/WebP) so each row stays well under 1 MB, and served by /api/media/[id]
+// with immutable cache headers.
+model SiteMedia {
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(255)
+  mimeType  String   @map("mime_type") @db.VarChar(100)
+  size      Int
+  width     Int
+  height    Int
+  alt       String?  @db.VarChar(255)
+  data      Bytes
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  galleryImages GalleryImage[]
+  offers        Offer[]
+  events        SiteEvent[]
+
+  @@map("site_media")
+}
+
+model GalleryImage {
+  id          Int       @id @default(autoincrement())
+  mediaId     Int       @map("media_id")
+  caption     String?   @db.VarChar(255)
+  sortOrder   Int       @default(0) @map("sort_order")
+  isPublished Boolean   @default(true) @map("is_published")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  media       SiteMedia @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@index([sortOrder], map: "idx_gallery_sort")
+  @@map("gallery_images")
+}
+
+model Offer {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(160)
+  highlight   String?    @db.VarChar(60) // short badge text, e.g. "10% OFF" or "Free demo class"
+  description String
+  validFrom   DateTime?  @map("valid_from") @db.Date
+  validUntil  DateTime?  @map("valid_until") @db.Date
+  isActive    Boolean    @default(true) @map("is_active")
+  sortOrder   Int        @default(0) @map("sort_order")
+  mediaId     Int?       @map("media_id")
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  media       SiteMedia? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+
+  @@index([isActive, sortOrder], map: "idx_offers_active")
+  @@map("offers")
+}
+
+model SiteEvent {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(160)
+  description String
+  startsAt    DateTime   @map("starts_at") @db.Timestamp(6)
+  endsAt      DateTime?  @map("ends_at") @db.Timestamp(6)
+  venue       String?    @db.VarChar(255)
+  isPublished Boolean    @default(true) @map("is_published")
+  mediaId     Int?       @map("media_id")
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  media       SiteMedia? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+
+  @@index([startsAt], map: "idx_site_events_starts")
+  @@map("site_events")
+}
+
+// Enquiries submitted through the public contact form. Status is a plain string
+// (NEW / CONTACTED / CLOSED) so the desk can work the list from /admin/enquiries.
+model Enquiry {
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(160)
+  phone          String?  @db.VarChar(30)
+  email          String?  @db.VarChar(255)
+  courseInterest String?  @map("course_interest") @db.VarChar(160)
+  message        String
+  status         String   @default("NEW") @db.VarChar(20)
+  notes          String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@index([status, createdAt], map: "idx_enquiries_status")
+  @@map("enquiries")
+}

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* CODE design system — derived from the public site's navy/gold identity but tuned
-   for calm, dense, accessible operations work (see docs/14-Design-System.md).
+/* Base tokens (admin login, receipts, any un-worlded surface). The public site
+   (`.site`) and the admin Records Office (`.ro`) each scope their own world below.
    Principles: calm over decorative, density with breathing room, status is never
    colour-only (icon + label + colour), keyboard-first, one token set for both
    themes and both public + internal surfaces. */
@@ -91,11 +91,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  color: var(--foreground);
+/* Layered so utility classes (e.g. `text-white` on a dark band) can override. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--foreground);
+  }
 }
 
 @layer components {
@@ -143,6 +146,213 @@ h4 {
     border-radius: 9999px;
     background: currentColor;
     opacity: 0.85;
+  }
+}
+
+/* ============================================================================
+   THE SITE — public website (scoped to `.site`)
+   The centre's own world: logo navy as ink, bright paper, a single signal-red
+   accent for actions, Space Grotesk display type, and small monospace labels
+   that nod to what the place teaches. Dot-grid grounds instead of stock photos.
+   Light only — a prospective student on a phone in daylight. Scoped so it never
+   touches the admin Records Office tokens below.
+   ========================================================================= */
+.site {
+  --s-ink: #0b1437; /* navy, sampled from the logo */
+  --s-ink-2: #1b2a5e;
+  --s-ink-3: #2e3f7a;
+  --s-body: #3a4157;
+  --s-muted: #68708a;
+  --s-paper: #ffffff;
+  --s-paper-2: #f4f6fb;
+  --s-paper-3: #e9edf7;
+  --s-line: #dfe4ee;
+  --s-line-2: #c9d1e2;
+  --s-accent: #d93a14; /* signal red-orange: CTAs, highlights (4.6:1 with white) */
+  --s-accent-2: #b52d0c;
+  --s-accent-tint: #fdeae4;
+  --s-sky: #e8efff; /* pale navy tint for chips/cards */
+  --s-sky-2: #d6e1ff;
+  --s-mint: #d9f5e6;
+  --s-mint-ink: #10693b;
+  --s-amber: #fff1d6;
+  --s-amber-ink: #8a5a00;
+  --s-whatsapp: #25d366;
+
+  --s-radius: 14px;
+  --s-radius-sm: 8px;
+  --s-shadow: 0 1px 2px rgb(11 20 55 / 0.05), 0 12px 32px -18px rgb(11 20 55 / 0.25);
+  --s-shadow-lg: 0 24px 60px -28px rgb(11 20 55 / 0.35);
+
+  /* Repoint shared role tokens for the public subtree. */
+  --background: var(--s-paper);
+  --surface: var(--s-paper);
+  --surface-2: var(--s-paper-2);
+  --foreground: var(--s-ink);
+  --body: var(--s-body);
+  --muted: var(--s-muted);
+  --border: var(--s-line);
+  --accent: var(--s-accent);
+  --accent-hover: var(--s-accent-2);
+  --accent-fg: #ffffff;
+  --link: var(--s-ink-3);
+  --brand: var(--s-ink);
+
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  background: var(--s-paper);
+  color: var(--s-body);
+  font-variant-numeric: tabular-nums;
+}
+
+/* In @layer base so Tailwind utilities (e.g. `text-white` on a dark band) win. */
+@layer base {
+  .site h1,
+  .site h2,
+  .site h3,
+  .site h4 {
+    color: var(--s-ink);
+    font-family: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+}
+.site ::selection {
+  background: var(--s-ink);
+  color: #fff;
+}
+.site a:focus-visible,
+.site button:focus-visible,
+.site input:focus-visible,
+.site select:focus-visible,
+.site textarea:focus-visible {
+  outline: 2px solid var(--s-accent);
+  outline-offset: 2px;
+}
+
+/* Dot-grid ground: the "graph paper" of a lab notebook. */
+.s-grid {
+  background-color: var(--s-paper-2);
+  background-image: radial-gradient(rgb(11 20 55 / 0.13) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.s-grid--dark {
+  background-color: var(--s-ink);
+  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+/* Fade the grid out towards the bottom so content sections sit cleanly below. */
+.s-grid-fade {
+  position: relative;
+}
+.s-grid-fade::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 7rem;
+  background: linear-gradient(to bottom, transparent, var(--s-paper));
+  pointer-events: none;
+}
+
+/* Small monospace label: "// 02  Courses" */
+.s-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono-code), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--s-accent);
+}
+.s-eyebrow::before {
+  content: "//";
+  color: var(--s-ink-3);
+  opacity: 0.6;
+}
+.s-eyebrow--light {
+  color: #ffb39e;
+}
+.s-eyebrow--light::before {
+  color: rgb(255 255 255 / 0.5);
+}
+
+.s-mono {
+  font-family: var(--font-mono-code), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.s-display {
+  font-family: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+@layer components {
+  .s-container {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  /* Buttons — navy solid is the default; accent for the one action that matters
+     on a page; outline for secondary; white for dark bands. */
+  .s-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-[var(--s-ink)] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--s-ink-2)] disabled:pointer-events-none disabled:opacity-50;
+  }
+  .s-btn--accent {
+    @apply bg-[var(--s-accent)] hover:bg-[var(--s-accent-2)];
+  }
+  .s-btn--outline {
+    @apply border border-[var(--s-line-2)] bg-white text-[var(--s-ink)] hover:border-[var(--s-ink)] hover:bg-white;
+  }
+  .s-btn--white {
+    @apply bg-white text-[var(--s-ink)] hover:bg-[var(--s-sky)];
+  }
+  .s-btn--ghost-light {
+    @apply border border-white/30 bg-transparent text-white hover:bg-white/10;
+  }
+  .s-btn--sm {
+    @apply px-4 py-2 text-[0.8rem];
+  }
+  .s-card {
+    @apply rounded-[var(--s-radius)] border border-[var(--s-line)] bg-white;
+  }
+  .s-card--lift {
+    @apply shadow-[var(--s-shadow)];
+  }
+  .s-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold;
+  }
+  .s-input {
+    @apply w-full rounded-[var(--s-radius-sm)] border border-[var(--s-line-2)] bg-white px-3.5 py-2.5 text-sm text-[var(--s-ink)] outline-none transition-shadow placeholder:text-[var(--s-muted)] focus:border-[var(--s-ink)] focus:ring-2 focus:ring-[var(--s-ink)]/15;
+  }
+  .s-label {
+    @apply mb-1.5 block text-sm font-semibold text-[var(--s-ink)];
+  }
+}
+
+/* Marquee strip of course names under the hero. */
+@keyframes s-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.s-marquee {
+  animation: s-marquee 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-marquee {
+    animation: none;
+  }
+}
+
+/* Printable brochure */
+@media print {
+  .s-noprint {
+    display: none !important;
+  }
+  .site {
+    background: #fff;
   }
 }
 

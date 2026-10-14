@@ -13,6 +13,11 @@ export const NAV_LINKS = [
   { href: "/admin/registrations/new", label: "New entry", icon: "new", no: "02" },
   { href: "/admin/registrations", label: "Registrations", icon: "registrations", no: "03" },
   { href: "/admin/courses", label: "Courses", icon: "courses", no: "04" },
+  // Website content — what visitors see on the public site.
+  { href: "/admin/enquiries", label: "Enquiries", icon: "inbox", no: "05" },
+  { href: "/admin/offers", label: "Offers", icon: "tag", no: "06" },
+  { href: "/admin/events", label: "Events", icon: "calendar", no: "07" },
+  { href: "/admin/gallery", label: "Gallery", icon: "image", no: "08" },
 ] as const;
 
 function isActive(pathname: string, href: string) {
@@ -45,8 +50,8 @@ export function AdminNav() {
 }
 
 // The whole mobile top bar: engraved logo + a hamburger that reveals the file-spine
-// nav (and who's on duty + sign-out) in a drawer. The steel rail is hidden < md.
-export function MobileMenu({ username }: { username: string }) {
+// nav in a drawer. The steel rail is hidden < md.
+export function MobileMenu() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -90,14 +95,16 @@ export function MobileMenu({ username }: { username: string }) {
             ))}
           </nav>
 
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
             <div className="flex min-w-0 items-center gap-2">
               <span className="grid h-7 w-7 flex-none place-items-center rounded-sm bg-[var(--ro-steel-hi)] text-[var(--ro-steel-ink)]">
                 <Icon name="user" size={15} />
               </span>
-              <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">{username}</p>
+              <p className="ro-mono truncate text-xs text-[var(--ro-steel-ink)]">Records office</p>
             </div>
-            <LogoutButton />
+          </div>
+          <div className="mt-2">
+            <LogoutButton full />
           </div>
         </div>
       )}

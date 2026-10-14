@@ -10,7 +10,10 @@
     "postinstall": "prisma generate",
     "db:pull": "prisma db pull",
     "db:studio": "prisma studio",
-    "create-admin": "tsx scripts/create-admin.ts"
+    "create-admin": "tsx scripts/create-admin.ts",
+    "waive-installments": "tsx scripts/waive-installments.ts",
+    "db:push": "prisma db push",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

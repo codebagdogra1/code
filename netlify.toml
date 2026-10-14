@@ -1,8 +1,15 @@
+# The live site IS the Next.js app in `webapp/`: the public website (/, /courses,
+# /offers, /events, /gallery, /about, /contact), the admin dashboard (/admin) and
+# the API all deploy as one site on one domain.
+#
+# Required env vars on the Netlify site:
+#   DATABASE_URL          Neon pooled Postgres URL
+#   AUTH_SECRET           long random string (openssl rand -base64 32)
+#   NEXT_PUBLIC_SITE_URL  the public origin, e.g. https://www.codebagdogra.in
 [build]
-  publish = "."
-  functions = "netlify/functions"
+  base = "webapp"
+  command = "npm run build"
+  publish = ".next"          # relative to base ("webapp/.next")
 
-[dev]
-  publish = "."
-  functions = "netlify/functions"
-  framework = "#static"
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
