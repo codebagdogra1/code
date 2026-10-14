@@ -43,6 +43,10 @@ Expect the snippet to update within 2–7 days of the indexing request; the site
 | Verification | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION` env → `<meta>` tags. | Owner can verify Search Console and Bing without a code change. |
 | Measurement | `Analytics` component: GA4 (when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set) with `contact_click` events for WhatsApp / call / email / Maps taps; Meta Pixel `Contact` on the same taps. | The north-star KPI is enquiries, not sessions. |
 | Entity | `SAME_AS` in `src/lib/site.ts` is the single list for `Organization.sameAs`. | Add Justdial, Facebook, Instagram, YouTube URLs here as they go live. |
+| AEO content (3rd pass) | Five more guides for the highest-volume course-name queries — DCA details, ADCA details, basic computer course for beginners, courses for office/data-entry jobs, best courses for 2026 — plus 14 glossary terms (Tally, data entry, CCC, BCA, Python…). Query → page map in [`SEO-KEYWORDS.md`](./SEO-KEYWORDS.md). | "dca full form", "jobs after dca", "basic computer course", "computer operator course" are the queries parents and students type most; the site now has a quotable, dated answer for each. |
+| Languages | Every course page carries the same summary in Bengali and Hindi (`lang="bn"`/`"hi"`), the home page a bilingual line, the Organization Bengali/Hindi alternate names. | Many local searches are typed in Bengali or Hindi; classes are explained in those languages, so the page should say so in them. |
+| Reviews | `src/data/google-reviews.json` — every public review on the listing, refreshed with `npm run google:reviews`; shown newest first. No Google API or key involved. | Real review text is user-generated keyword content ("best computer centre in bagdogra") and the trust signal visitors recognise. |
+| GEO | `/llms-full.txt` mirrors every course page, guide and glossary term as one Markdown file. | Assistants that fetch one file get everything quotable. |
 
 Nothing above states a fee, a placement claim, a student count or a rating that is not already on the Google listing.
 

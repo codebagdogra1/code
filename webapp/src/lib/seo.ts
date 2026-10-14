@@ -52,7 +52,7 @@ export function organizationSchema() {
         "@type": ["EducationalOrganization", "LocalBusiness"],
         "@id": organizationId(),
         name: BUSINESS_NAME,
-        alternateName: [SHORT_NAME, "CODE Bagdogra", "Computer and Digital Excellence"],
+        alternateName: [SHORT_NAME, "CODE Bagdogra", "Computer and Digital Excellence", "CODE Computer Centre Bagdogra", "কোড বাগডোগরা", "कोड बागडोगरा"],
         slogan: TAGLINE,
         url,
         logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png"), width: 2724, height: 993 },
@@ -111,7 +111,8 @@ export function organizationSchema() {
         name: BUSINESS_NAME,
         alternateName: ["CODE Bagdogra", SHORT_NAME],
         publisher: { "@id": organizationId() },
-        inLanguage: "en-IN",
+        // English pages with Bengali and Hindi course summaries.
+        inLanguage: ["en-IN", "bn", "hi"],
       },
     ],
   };

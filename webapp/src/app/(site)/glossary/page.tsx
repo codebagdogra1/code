@@ -3,7 +3,7 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { JsonLd } from "@/components/JsonLd";
 import { contentFor } from "@/lib/course-content";
-import { GLOSSARY, GLOSSARY_UPDATED, formatDate, termId } from "@/lib/guides";
+import { GLOSSARY, GLOSSARY_UPDATED, formatDate, guideBySlug, termId } from "@/lib/guides";
 import { OG_IMAGE, breadcrumbSchema, definedTermSetSchema, webPageSchema } from "@/lib/seo";
 import { whatsappLink } from "@/lib/site";
 
@@ -57,6 +57,7 @@ export default function GlossaryPage() {
           <dl className="divide-y divide-[var(--s-line)]">
             {terms.map((t) => {
               const course = t.course ? contentFor(t.course) : null;
+              const guide = t.guide ? guideBySlug(t.guide) : undefined;
               return (
                 <div key={t.term} id={termId(t.term)} className="grid scroll-mt-28 gap-3 py-7 md:grid-cols-[16rem_1fr]">
                   <dt>
@@ -65,11 +66,18 @@ export default function GlossaryPage() {
                   </dt>
                   <dd className="max-w-3xl">
                     <p className="leading-relaxed text-[var(--s-body)]">{t.definition}</p>
-                    {course && (
-                      <Link href={`/courses/${course.slug}`} className="mt-3 inline-block text-sm font-semibold text-[var(--s-ink)] underline decoration-[var(--s-accent)] decoration-2 underline-offset-4 hover:text-[var(--s-accent)]">
-                        Taught in {course.displayName} →
-                      </Link>
-                    )}
+                    <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm font-semibold">
+                      {course && (
+                        <Link href={`/courses/${course.slug}`} className="text-[var(--s-ink)] underline decoration-[var(--s-accent)] decoration-2 underline-offset-4 hover:text-[var(--s-accent)]">
+                          Taught in {course.displayName} →
+                        </Link>
+                      )}
+                      {guide && (
+                        <Link href={`/guides/${guide.slug}`} className="text-[var(--s-ink)] underline decoration-[var(--s-accent)] decoration-2 underline-offset-4 hover:text-[var(--s-accent)]">
+                          Read the guide →
+                        </Link>
+                      )}
+                    </div>
                   </dd>
                 </div>
               );

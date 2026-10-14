@@ -1,7 +1,7 @@
 # Local SEO · AEO · GEO — status board
 
 **Goal:** be the computer institute Google's map pack, AI Overviews, ChatGPT, Perplexity and Gemini name for Bagdogra / Siliguri queries.
-**Updated:** 14 October 2026. Companion docs: [playbook](./SEO-LOCAL-AEO-GEO-PLAYBOOK.md) (what the site does + why), [GBP kit](./GBP-KIT.md) (paste-ready owner text), [strategy](./SEO-STRATEGY.md), [forensic](./LOCAL-SEO-FORENSIC.md).
+**Updated:** 14 October 2026 (third pass). Companion docs: [playbook](./SEO-LOCAL-AEO-GEO-PLAYBOOK.md) (what the site does + why), [keyword map](./SEO-KEYWORDS.md) (query → page), [GBP kit](./GBP-KIT.md) (paste-ready owner text), [strategy](./SEO-STRATEGY.md), [forensic](./LOCAL-SEO-FORENSIC.md).
 
 Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the business owner's accounts.
 
@@ -26,11 +26,20 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 - [x] Search Console / Bing verification via env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `NEXT_PUBLIC_BING_SITE_VERIFICATION`)
 - [x] Enquiry measurement: WhatsApp / call / email clicks fire GA4 `contact_click` (when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set) and Meta Pixel `Contact`
 
+### Shipped 14 Oct — third pass (keywords, languages, reviews, AI mirror)
+- [x] **Five more guides** for the highest-volume course-name and decision queries: DCA course details (full form, syllabus, eligibility, jobs, govt-recognition answer, DCA vs CCC/BCA) · ADCA course details · Basic computer course for beginners (CCA; home-makers, seniors, shop staff) · Computer courses for office, data-entry and computer-operator jobs (skills checklist) · Best computer courses to learn in 2026 (no salary/placement claims). 10 guides total, all with Article + FAQPage + BreadcrumbList schema and real dates
+- [x] **Glossary** 20 → 34 terms (Tally, data entry, computer operator, typing speed/WPM, MS Excel, Python, C, domain & hosting, front-end framework, UI/UX, Canva, ChatGPT & Gemini, CCC (NIELIT), BCA); terms now link to the guide that explains them in depth
+- [x] **Bengali + Hindi summaries on every course page** (`summaryBn`/`summaryHi`, rendered with `lang="bn"`/`lang="hi"`, duration from the DB) and a bilingual line on the home page; Organization `alternateName` adds "কোড বাগডোগরা" / "कोड बागडोगरा"; WebSite `inLanguage` en-IN/bn/hi. **Owner: proof-read the translations once.**
+- [x] **Real Google reviews, all of them** — `src/data/google-reviews.json` is a static snapshot of every public review on the listing (43, 34 with text, captured 14 Oct), refreshed with `npm run google:reviews`; the Google API code is gone. Review text with "Bagdogra", "Siliguri", "North Bengal", "programming", "Diploma" is now on the home and about pages
+- [x] `/llms-full.txt` — full Markdown text of every course page, guide and glossary term for assistants that fetch one file; linked from `/llms.txt`
+- [x] The temporary `dev-reviews-tmp` page (eighteen invented reviews, indexable) is gone
+- [x] [SEO-KEYWORDS.md](./SEO-KEYWORDS.md): query cluster → page map, and how to use Search Console data monthly
+
 ### Open — engineering
 - [ ] Add verified profile URLs to `sameAs` (`src/lib/site.ts` → `SAME_AS`) as the owner claims them (Justdial, Facebook, Instagram, YouTube, Bing Places, Apple)
 - [ ] Embed the first YouTube videos on matching course pages + `VideoObject` schema (after Owner #7)
 - [ ] Real success stories page (only with written student consent) — `Person`-free, course + outcome
-- [ ] Bengali/Hindi summaries per course (`inLanguage` already lists bn/hi) — content decision
+- [ ] Bengali/Hindi: extend from course summaries to the guide TL;DRs once the owner has proof-read the course summaries
 - [ ] After the real domain is live: set `NEXT_PUBLIC_SITE_URL`, re-verify Search Console, Change of Address
 
 ### Deliberately not done
@@ -67,7 +76,7 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 |---|---|---|
 | Google reviews | GBP | +12 real reviews, rating held ≥ 4.9 |
 | Map pack for "computer centre in bagdogra" (phone, in Bagdogra, logged out) | manual | #1 |
-| Indexed URLs | Search Console | all public URLs incl. 5 guides + glossary |
+| Indexed URLs | Search Console | all public URLs incl. 10 guides + glossary |
 | `contact_click` key events / month | GA4 | tracked, rising month on month |
 | AI mentions (15-query audit) | log | named in ≥ 5 queries on ≥ 2 engines |
 | Referrals from chatgpt.com / perplexity.ai / gemini | GA4 | non-zero and rising |

@@ -312,6 +312,12 @@ export default async function HomePage() {
               title="A computer institute in Bagdogra, within reach of Siliguri"
               lead={`CODE is on Lokenath Nagar Road in Bagdogra, ${LANDMARKS[0].distance} from ${LANDMARKS[0].name} and ${LANDMARKS[1].distance} from ${LANDMARKS[1].name}. Students come from across Bagdogra and the Siliguri side, and classes are explained in ${LANGUAGES.join(", ")}.`}
             />
+            <p lang="bn" className="mt-6 max-w-xl leading-relaxed text-[var(--s-ink)]">
+              বাগডোগরা ও শিলিগুড়ির ছাত্রছাত্রীদের জন্য কম্পিউটার কোর্স — CCA, DCA, ADCA, ওয়েব ডিজাইন, ই-কমার্স, ডিজিটাল মার্কেটিং ও AI। ক্লাস বাংলা, হিন্দি বা ইংরেজিতে বোঝানো হয়; মাসিক ফি প্ল্যান আছে।
+            </p>
+            <p lang="hi" className="mt-3 max-w-xl leading-relaxed text-[var(--s-ink)]">
+              बागडोगरा और सिलीगुड़ी के छात्रों के लिए कंप्यूटर कोर्स — CCA, DCA, ADCA, वेब डिज़ाइन, ई-कॉमर्स, डिजिटल मार्केटिंग और AI। क्लास बांग्ला, हिंदी या अंग्रेज़ी में समझाई जाती है; मासिक फीस प्लान उपलब्ध।
+            </p>
             <p className="s-eyebrow mt-8">Areas we serve</p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {AREAS_SERVED.map((a) => (

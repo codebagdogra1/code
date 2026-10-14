@@ -28,6 +28,10 @@ export type CourseContent = {
   prerequisites?: string;
   /** Course-specific questions, shown on the page and emitted as FAQPage JSON-LD. */
   faq?: FaqItem[];
+  /** Short summary in Bengali, shown on the course page with lang="bn". No durations — those come from the database. */
+  summaryBn?: string;
+  /** Short summary in Hindi, shown on the course page with lang="hi". No durations — those come from the database. */
+  summaryHi?: string;
 };
 
 export type FaqItem = { q: string; a: string };
@@ -345,6 +349,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Most students continue to DCA (Diploma in Computer Application), the six-month diploma that adds advanced Office, accounting basics and an introduction to programming.",
       },
     ],
+    summaryBn:
+      "CCA (সার্টিফিকেট ইন কম্পিউটার অ্যাপ্লিকেশন) একেবারে শুরু থেকে শেখার বেসিক কম্পিউটার কোর্স: কম্পিউটারের মূল বিষয়, টাইপিং, MS Word, Excel, PowerPoint, ইমেল, ইন্টারনেট ও অনলাইন নিরাপত্তা। স্কুল-কলেজের ছাত্রছাত্রী, গৃহিণী ও কর্মজীবী—যাঁরা শূন্য থেকে শুরু করছেন, তাঁদের জন্য। বাগডোগরায় CODE-এ ছোট ব্যাচে, হাতে-কলমে, মাসিক ফি প্ল্যানে।",
+    summaryHi:
+      "CCA (सर्टिफिकेट इन कंप्यूटर एप्लीकेशन) बिल्कुल शुरुआत से सीखने का बेसिक कंप्यूटर कोर्स है: कंप्यूटर की बुनियादी बातें, टाइपिंग, MS Word, Excel, PowerPoint, ईमेल, इंटरनेट और ऑनलाइन सुरक्षा। स्कूल-कॉलेज के छात्र, गृहिणियां और कामकाजी लोग—जो शून्य से शुरू कर रहे हैं, उनके लिए। बागडोगरा में CODE पर छोटे बैच में, प्रैक्टिकल तरीके से, मासिक फीस प्लान के साथ।",
   },
   DCA: {
     shortName: "DCA",
@@ -373,6 +381,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Yes. DCA can be paid in full or through a monthly plan, with a printed receipt for every payment. Ask at the desk or on WhatsApp for the current fee and schedule.",
       },
     ],
+    summaryBn:
+      "DCA (ডিপ্লোমা ইন কম্পিউটার অ্যাপ্লিকেশন) অফিসের কাজের স্ট্যান্ডার্ড কম্পিউটার ডিপ্লোমা: অ্যাডভান্সড MS Office, কম্পিউটারাইজড অ্যাকাউন্টিংয়ের বেসিক, ইন্টারনেট ও ক্লাউড টুল, প্রোগ্রামিংয়ের পরিচয় এবং প্রজেক্ট। অফিস, ক্লারিক্যাল ও ডেটা এন্ট্রি চাকরিতে যে যোগ্যতা সবচেয়ে বেশি চাওয়া হয়। ক্লাস টেন পাশের পর যে কেউ ভর্তি হতে পারেন।",
+    summaryHi:
+      "DCA (डिप्लोमा इन कंप्यूटर एप्लीकेशन) ऑफिस के काम का स्टैंडर्ड कंप्यूटर डिप्लोमा है: एडवांस्ड MS Office, कंप्यूटराइज़्ड अकाउंटिंग की बुनियाद, इंटरनेट और क्लाउड टूल, प्रोग्रामिंग का परिचय और प्रोजेक्ट। ऑफिस, क्लेरिकल और डेटा एंट्री नौकरियों में सबसे ज़्यादा मांगी जाने वाली योग्यता। दसवीं पास के बाद कोई भी दाखिला ले सकता है।",
   },
   ADCA: {
     shortName: "ADCA",
@@ -397,6 +409,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "ADCA gives a broad technical foundation across software, web and data. Graduates use it for computer-operator, technical-support and data roles, or continue into the Web Design track at CODE to specialise.",
       },
     ],
+    summaryBn:
+      "ADCA (অ্যাডভান্সড ডিপ্লোমা ইন কম্পিউটার অ্যাপ্লিকেশন) CODE-এর সবচেয়ে সম্পূর্ণ প্রোগ্রাম: DCA-র সব কিছুর সঙ্গে C/Python প্রোগ্রামিং, ডেটাবেস ও SQL, HTML ও CSS, গ্রাফিক্স, এবং অপারেটিং সিস্টেম, নেটওয়ার্কিং ও হার্ডওয়্যারের বেসিক। শেষে ফাইনাল প্রজেক্ট ও ভাইভা। টেকনিক্যাল কেরিয়ারের ভিত্তি; DCA আগে করা জরুরি নয়।",
+    summaryHi:
+      "ADCA (एडवांस्ड डिप्लोमा इन कंप्यूटर एप्लीकेशन) CODE का सबसे पूरा प्रोग्राम है: DCA की हर चीज़ के साथ C/Python प्रोग्रामिंग, डेटाबेस और SQL, HTML और CSS, ग्राफ़िक्स, और ऑपरेटिंग सिस्टम, नेटवर्किंग व हार्डवेयर की बुनियाद। अंत में फाइनल प्रोजेक्ट और वाइवा। टेक्निकल करियर की नींव; पहले DCA करना ज़रूरी नहीं।",
   },
   "Web Design Basic": {
     shortName: "Web Design Basic",
@@ -421,6 +437,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Web Design — Advanced, which adds modern JavaScript, a front-end framework, WordPress sites and a client project from brief to launch.",
       },
     ],
+    summaryBn:
+      "ওয়েব ডিজাইন — বেসিক-এ আপনি HTML, CSS ও সামান্য JavaScript দিয়ে নিজের হাতে রেসপন্সিভ ওয়েবসাইট বানাবেন, হোস্টিং ও ডোমেন কীভাবে কাজ করে শিখবেন, আর কোর্স শেষে নিজের পোর্টফোলিও সাইট অনলাইনে প্রকাশ করবেন। আগে থেকে কোডিং জানার দরকার নেই।",
+    summaryHi:
+      "वेब डिज़ाइन — बेसिक में आप HTML, CSS और थोड़े JavaScript से अपने हाथों से रिस्पॉन्सिव वेबसाइट बनाएंगे, होस्टिंग और डोमेन कैसे काम करते हैं सीखेंगे, और कोर्स के अंत में अपनी पोर्टफोलियो साइट ऑनलाइन पब्लिश करेंगे। पहले से कोडिंग जानना ज़रूरी नहीं।",
   },
   "Web Design Advanced": {
     shortName: "Web Design Advanced",
@@ -446,6 +466,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "In person at the centre in Bagdogra, at a computer, in a small batch with the trainer in the room. Monthly fee plans are available.",
       },
     ],
+    summaryBn:
+      "ওয়েব ডিজাইন — অ্যাডভান্সড-এ HTML/CSS জানা শিক্ষার্থীরা ক্লায়েন্টের কাজ করার মতো দক্ষতা পান: মডার্ন JavaScript, একটি ফ্রন্ট-এন্ড ফ্রেমওয়ার্ক, WordPress সাইট, UI/UX, পারফরম্যান্স ও SEO-র বেসিক, আর ব্রিফ থেকে লঞ্চ পর্যন্ত একটি আসল ক্লায়েন্ট প্রজেক্ট। ফ্রিল্যান্সিং বা জুনিয়র ডেভেলপার কাজের জন্য।",
+    summaryHi:
+      "वेब डिज़ाइन — एडवांस्ड में HTML/CSS जानने वाले छात्र क्लाइंट का काम करने लायक हुनर पाते हैं: मॉडर्न JavaScript, एक फ्रंट-एंड फ्रेमवर्क, WordPress साइट, UI/UX, परफ़ॉर्मेंस और SEO की बुनियाद, और ब्रीफ़ से लॉन्च तक एक असली क्लाइंट प्रोजेक्ट। फ्रीलांसिंग या जूनियर डेवलपर की नौकरी के लिए।",
   },
   "Ecommerce Expert (Industry Level)": {
     shortName: "Ecommerce Expert (Industry Level)",
@@ -470,6 +494,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Industry Level covers store setup and operations. Job Ready is the longer eight-month programme that adds Meta and Google ads, SEO, retention marketing, reporting, live client projects and interview preparation.",
       },
     ],
+    summaryBn:
+      "ই-কমার্স এক্সপার্ট — ইন্ডাস্ট্রি লেভেল-এ শিখবেন Shopify স্টোর তৈরি, Amazon, Flipkart ও Meesho-তে বিক্রি, প্রোডাক্ট ফটোগ্রাফি ও লিস্টিং, আর অর্ডার, ইনভেন্টরি ও কাস্টমার সামলানো। শিলিগুড়ি-বাগডোগরার দোকানদার, যাঁরা অনলাইনে বিক্রি শুরু করতে চান, তাঁদের জন্য তৈরি। নিজের প্রোডাক্ট বা ওয়েবসাইট থাকা জরুরি নয়।",
+    summaryHi:
+      "ई-कॉमर्स एक्सपर्ट — इंडस्ट्री लेवल में सीखेंगे Shopify स्टोर बनाना, Amazon, Flipkart और Meesho पर बेचना, प्रोडक्ट फ़ोटोग्राफ़ी और लिस्टिंग, और ऑर्डर, इन्वेंटरी व कस्टमर संभालना। सिलीगुड़ी-बागडोगरा के दुकानदार जो ऑनलाइन बेचना शुरू करना चाहते हैं, उनके लिए बना है। अपना प्रोडक्ट या वेबसाइट होना ज़रूरी नहीं।",
   },
   "Ecommerce Expert (Job Ready)": {
     shortName: "Ecommerce Expert (Job Ready)",
@@ -494,6 +522,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Yes. The programme ends with live client projects and interview preparation, so you leave with a working portfolio and practice answering real interview questions.",
       },
     ],
+    summaryBn:
+      "ই-কমার্স এক্সপার্ট — জব রেডি হল CODE-এর সম্পূর্ণ ই-কমার্স প্রোগ্রাম: ইন্ডাস্ট্রি লেভেলের সব কিছুর সঙ্গে Meta ও Google বিজ্ঞাপন, প্রোডাক্ট পেজের SEO, ইমেল ও WhatsApp মার্কেটিং, রিপোর্টিং, লাইভ ক্লায়েন্ট প্রজেক্ট ও ইন্টারভিউ প্রস্তুতি। ই-কমার্স এক্সিকিউটিভ, স্টোর ম্যানেজার বা এজেন্সির চাকরির লক্ষ্যে।",
+    summaryHi:
+      "ई-कॉमर्स एक्सपर्ट — जॉब रेडी CODE का पूरा ई-कॉमर्स प्रोग्राम है: इंडस्ट्री लेवल की हर चीज़ के साथ Meta और Google विज्ञापन, प्रोडक्ट पेज का SEO, ईमेल व WhatsApp मार्केटिंग, रिपोर्टिंग, लाइव क्लाइंट प्रोजेक्ट और इंटरव्यू की तैयारी। ई-कॉमर्स एग्ज़िक्यूटिव, स्टोर मैनेजर या एजेंसी की नौकरी के लक्ष्य से।",
   },
   "Digital Marketing Basics": {
     shortName: "Digital Marketing Basics",
@@ -518,6 +550,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Yes. Google Business Profile, local SEO basics and WhatsApp marketing are exactly the channels a local shop uses to get found and get enquiries.",
       },
     ],
+    summaryBn:
+      "ডিজিটাল মার্কেটিং — বেসিকস হল অনলাইনে ব্যবসা প্রচারের দ্রুত পরিচয়: Instagram ও Facebook মার্কেটিং, Meta Ads, Google Business Profile ও লোকাল SEO-র বেসিক, Canva, আর WhatsApp মার্কেটিং ও লিড সামলানো। ব্যবসার মালিক, ছাত্রছাত্রী ও চাকরিপ্রার্থী—সবার জন্য। নিজের ব্যবসা না থাকলেও ভর্তি হওয়া যায়।",
+    summaryHi:
+      "डिजिटल मार्केटिंग — बेसिक्स ऑनलाइन बिज़नेस प्रमोशन का तेज़ परिचय है: Instagram और Facebook मार्केटिंग, Meta Ads, Google Business Profile और लोकल SEO की बुनियाद, Canva, और WhatsApp मार्केटिंग व लीड संभालना। बिज़नेस मालिक, छात्र और नौकरी ढूंढने वाले—सबके लिए। अपना बिज़नेस न हो तब भी दाखिला ले सकते हैं।",
   },
   "A.I. Prompt Engineering": {
     shortName: "AI Prompt Engineering",
@@ -542,6 +578,10 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
         a: "Yes. Privacy, fact-checking and responsible use are a dedicated module, so you know what to trust and what to verify.",
       },
     ],
+    summaryBn:
+      "AI প্রম্পট ইঞ্জিনিয়ারিং-এ শিখবেন ChatGPT, Gemini ও ইমেজ টুল দিয়ে লেখা, রিসার্চ, পড়াশোনা, অফিসের কাজ ও ডিজাইন দ্রুত করা: প্রম্পটের গঠন, কাজ অটোমেট করা, আর দায়িত্বশীল ও যাচাই করে ব্যবহার। ছাত্রছাত্রী, শিক্ষক, অফিস কর্মী ও ব্যবসায়ীদের জন্য। কোডিং লাগে না।",
+    summaryHi:
+      "AI प्रॉम्प्ट इंजीनियरिंग में सीखेंगे ChatGPT, Gemini और इमेज टूल से लिखना, रिसर्च, पढ़ाई, ऑफिस का काम और डिज़ाइन तेज़ी से करना: प्रॉम्प्ट की बनावट, काम ऑटोमेट करना, और ज़िम्मेदारी से व जांच-परख कर इस्तेमाल। छात्रों, शिक्षकों, ऑफिस कर्मचारियों और व्यापारियों के लिए। कोडिंग नहीं चाहिए।",
   },
 };
 

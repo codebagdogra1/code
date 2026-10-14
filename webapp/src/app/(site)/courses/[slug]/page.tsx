@@ -145,6 +145,36 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         </section>
       )}
 
+      {/* The same summary in Bengali and Hindi — the languages classes are explained in and
+          the languages many local searches are typed in. Durations come from the database. */}
+      {(c.summaryBn || c.summaryHi) && (
+        <section className="border-b border-[var(--s-line)] bg-[var(--s-paper-2)]">
+          <div className="s-container py-10 sm:py-12">
+            <p className="s-eyebrow">বাংলায় · हिंदी में</p>
+            <div className="mt-4 grid gap-8 md:grid-cols-2">
+              {c.summaryBn && (
+                <div lang="bn">
+                  <h2 className="text-xl">সংক্ষেপে বাংলায়</h2>
+                  <p className="mt-2 leading-relaxed text-[var(--s-ink)]">{c.summaryBn}</p>
+                  <p className="mt-2 text-sm text-[var(--s-body)]">
+                    মেয়াদ: <strong className="text-[var(--s-ink)]">{course.duration ?? "ডেস্কে জানুন"}</strong> · ফি: ডেস্কে বা WhatsApp-এ জানুন · ক্লাস বাংলা, হিন্দি বা ইংরেজিতে
+                  </p>
+                </div>
+              )}
+              {c.summaryHi && (
+                <div lang="hi">
+                  <h2 className="text-xl">संक्षेप में हिंदी में</h2>
+                  <p className="mt-2 leading-relaxed text-[var(--s-ink)]">{c.summaryHi}</p>
+                  <p className="mt-2 text-sm text-[var(--s-body)]">
+                    अवधि: <strong className="text-[var(--s-ink)]">{course.duration ?? "डेस्क पर पूछें"}</strong> · फीस: डेस्क पर या WhatsApp पर पूछें · क्लास बांग्ला, हिंदी या अंग्रेज़ी में
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section>
         <div className="s-container grid gap-12 py-14 sm:py-20 lg:grid-cols-[1fr_1fr]">
           <div>
