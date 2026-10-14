@@ -40,7 +40,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
       <section className="s-grid s-grid-fade overflow-hidden">
         <div className="s-container grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <SectionHeading eyebrow="Contact" title="Talk to us" lead="Ask about a course, fees, batch timings or directions. WhatsApp is fastest; the form reaches the same desk." />
+            <SectionHeading as="h1" eyebrow="Contact" title="Talk to us" lead="Ask about a course, fees, batch timings or directions. WhatsApp is fastest; the form reaches the same desk." />
           </div>
           <PhotoCollage variant="fan" start={0} className="mt-2 lg:mt-0" />
         </div>

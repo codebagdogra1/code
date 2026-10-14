@@ -544,3 +544,8 @@ export const COURSE_ANSWERS: Record<string, Partial<CourseContent>> = {
     ],
   },
 };
+
+// Last significant edit to the course copy above. Shown on every course page,
+// sent as WebPage.dateModified and used as the sitemap lastmod. Bump it when
+// the words change, not on deploy.
+export const COURSE_CONTENT_UPDATED = "2026-10-14";

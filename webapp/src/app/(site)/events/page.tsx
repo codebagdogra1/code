@@ -29,6 +29,7 @@ export default async function EventsPage() {
         <div className="s-container grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <SectionHeading
+            as="h1"
             eyebrow="Events"
             title="Events at the centre"
             lead="Free demo classes, workshops, certificate days and student meet-ups. Message us to reserve a seat."

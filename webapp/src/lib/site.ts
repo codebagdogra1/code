@@ -76,3 +76,12 @@ export const LANDMARKS = [
   { name: "Siliguri Junction", distance: "about 10 km" },
   { name: "Naxalbari", distance: "about 12 km" },
 ] as const;
+
+// Verified public profiles of this exact business, for Organization.sameAs.
+// Add a URL only after the listing is live and its name, address and phone
+// match the strings above byte for byte (see docs/SEO-TODO.md, Owner P1).
+export const SAME_AS: string[] = [GOOGLE_MAPS_URL];
+
+// Last significant edit to the static page copy (home, about, contact,
+// courses hub). Sent as sitemap lastmod — change it only when words change.
+export const SITE_CONTENT_UPDATED = "2026-10-14";

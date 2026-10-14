@@ -1,6 +1,6 @@
 # Local SEO, AEO and GEO playbook — CODE, Bagdogra
 
-**Date:** 14 October 2026 · **Companion docs:** [`SEO-STRATEGY.md`](./SEO-STRATEGY.md) (site audit), [`LOCAL-SEO-FORENSIC.md`](./LOCAL-SEO-FORENSIC.md) (map-pack analysis), [`SEO-AEO-GEO-HANDOFF.md`](./SEO-AEO-GEO-HANDOFF.md) (previous release notes).
+**Date:** 14 October 2026 (updated same day with the guides/glossary/measurement layer) · **Status board:** [`SEO-TODO.md`](./SEO-TODO.md) · **Owner kit:** [`GBP-KIT.md`](./GBP-KIT.md) · **Companion docs:** [`SEO-STRATEGY.md`](./SEO-STRATEGY.md) (site audit), [`LOCAL-SEO-FORENSIC.md`](./LOCAL-SEO-FORENSIC.md) (map-pack analysis), [`SEO-AEO-GEO-HANDOFF.md`](./SEO-AEO-GEO-HANDOFF.md) (previous release notes).
 
 This file records what the website now does for local search, answer engines (Google AI Overviews, featured snippets) and generative engines (ChatGPT, Perplexity, Gemini, Copilot, Claude), and the work only the owner can do. The split matters: for a one-branch institute, the map pack and AI answers are decided mostly **off** the website (Google Business Profile, reviews, listings, mentions). The website's job is to be the clean, quotable, consistent source those systems bind to.
 
@@ -36,6 +36,13 @@ Expect the snippet to update within 2–7 days of the indexing request; the site
 | Titles | Home title no longer doubles "CODE Bagdogra"; course titles are now "DCA Course in Bagdogra — Diploma in Computer Application \| CODE" style; contact title carries the street. | Click-through and query match. |
 | Sharing | Generated 1200×630 Open Graph / Twitter card with the headline, course list, address and phone. | WhatsApp and Facebook previews were showing a 4600×2600 logo PNG. |
 | Sitemap | `lastmod` on every URL. | Recrawl priority. |
+| Guides (AEO/GEO) | `/guides` hub + five cornerstone guides (`src/lib/guides.ts`): DCA vs ADCA, which course after Class 10/12, how to choose an institute, how fees and monthly plans work, courses for shop owners who sell online. Each opens with a quotable "short answer", uses question-shaped H2s and comparison tables, ends with its own FAQ, and emits `Article` + `FAQPage` + `BreadcrumbList` with the organisation as author and real published/updated dates. Durations are injected from the database so a guide can never contradict a course page. | These are the pages assistants and AI Overviews quote for informational queries; course pages alone only answer commercial ones. |
+| Glossary | `/glossary` — 20 one-sentence definitions (CCA, DCA, ADCA, SQL, HTML/CSS, Shopify, Meta Ads, GBP, prompt engineering…) as `DefinedTermSet`/`DefinedTerm`, each linked to the course that teaches it. | Definition-shaped passages are the easiest thing for an engine to lift. |
+| Freshness | Visible "updated" dates on course pages and guides; `WebPage.dateModified`; sitemap `lastmod` now comes from content dates (`SITE_CONTENT_UPDATED`, `COURSE_CONTENT_UPDATED`, per-guide `updated`), never the build time. | Google only trusts `lastmod` when it is verifiably accurate; recency lifts AI citation. Bump the constants when words change. |
+| Internal links | Guides in header nav and footer; "Helpful guides" block on every course page; "Read before you choose" strip on the home page; glossary terms link to courses; guides link to courses. | Hub-and-spoke so no answer page is an orphan. |
+| Verification | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION` env → `<meta>` tags. | Owner can verify Search Console and Bing without a code change. |
+| Measurement | `Analytics` component: GA4 (when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set) with `contact_click` events for WhatsApp / call / email / Maps taps; Meta Pixel `Contact` on the same taps. | The north-star KPI is enquiries, not sessions. |
+| Entity | `SAME_AS` in `src/lib/site.ts` is the single list for `Organization.sameAs`. | Add Justdial, Facebook, Instagram, YouTube URLs here as they go live. |
 
 Nothing above states a fee, a placement claim, a student count or a rating that is not already on the Google listing.
 

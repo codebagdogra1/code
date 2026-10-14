@@ -13,7 +13,8 @@
     "create-admin": "tsx scripts/create-admin.ts",
     "waive-installments": "tsx scripts/waive-installments.ts",
     "db:push": "prisma db push",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "google:reviews-setup": "tsx scripts/google-reviews-setup.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

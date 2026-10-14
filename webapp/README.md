@@ -64,11 +64,13 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
    - `AUTH_SECRET` — a long random string: `openssl rand -base64 32`
    - `NEXT_PUBLIC_SITE_URL` — the public origin (used for canonicals, sitemap, JSON-LD)
    - `GOOGLE_MAPS_API_KEY` (optional) — a Google Cloud key with **Places API (New)**
-     enabled. Powers the live Google rating badge and the reviews slider (reviewer
-     names, photos, stars). Without it the site shows the curated reviews in
-     `src/lib/google-reviews.ts` and the rating constants in `src/lib/site.ts`.
+     enabled. Powers the live Google rating badge and gives the reviews slider the
+     five "most relevant" reviews with links. Without it the site shows the curated
+     reviews in `src/lib/google-reviews.ts` and the rating constants in `src/lib/site.ts`.
    - `GOOGLE_PLACE_ID` (optional) — pins the listing's Place ID; otherwise it is
      looked up once by text search and cached.
+   - `GOOGLE_BUSINESS_*` (optional, five values) — **all** reviews on the listing via
+     the Business Profile API. See "All Google reviews" below.
 
 3. **Create / update the tables** (additive — safe to re-run):
    ```bash
@@ -89,8 +91,38 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
 
 - Push this repo. In the Netlify site settings set **Base directory = `webapp`**.
 - Add `DATABASE_URL`, `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL` as environment variables
-  (plus `GOOGLE_MAPS_API_KEY` for live Google reviews).
+  (plus `GOOGLE_MAPS_API_KEY` and the `GOOGLE_BUSINESS_*` values for live Google reviews).
 - The official Next.js runtime plugin (in `netlify.toml`) handles the rest.
+
+## All Google reviews
+
+Google's public Places API returns at most **five** reviews per listing, so the slider
+can only show every review through the **Business Profile API**, which is available to
+the listing's owner. One-time setup:
+
+1. In [Google Cloud Console](https://console.cloud.google.com/) (the same project as
+   the Places key) request Business Profile API access via the
+   [prerequisites page](https://developers.google.com/my-business/content/prereqs).
+   Google approves this manually; it can take a few days and the quota stays at zero
+   until then.
+2. **APIs & Services → Library**: enable *Google My Business API*, *My Business Account
+   Management API* and *My Business Business Information API*.
+3. **OAuth consent screen**: External. Add the Google account that owns the Business
+   Profile as a test user, then **publish** the app (while an app is in "testing",
+   its refresh tokens expire after seven days).
+4. **Credentials → Create credentials → OAuth client ID → Desktop app.** Copy the
+   client ID and secret.
+5. From `webapp/` run:
+   ```bash
+   npm run google:reviews-setup
+   ```
+   It opens a Google sign-in (use the owner account), finds the account and location
+   IDs, confirms the review count, and prints the five `GOOGLE_BUSINESS_*` lines to
+   add to `.env` and to Netlify's environment variables.
+
+Reviews are cached for six hours. Rating-only reviews (no text) are not shown as cards
+but still count towards the total. The curated reviews in `src/lib/google-reviews.ts`
+remain the fallback when neither API is configured or Google is unreachable.
 
 ## Moving to Vercel later
 

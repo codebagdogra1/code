@@ -36,6 +36,7 @@ export default async function CoursesPage() {
       <section className="s-grid s-grid-fade">
         <div className="s-container py-14 sm:py-20">
           <SectionHeading
+            as="h1"
             eyebrow="Courses"
             title="Every course in one place"
             lead="Pick a track, compare durations and read the syllabus. Ask at the desk or on WhatsApp for the current fee and batch."

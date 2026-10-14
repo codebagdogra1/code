@@ -14,6 +14,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { getActiveOffers, getCourses, getEvents, getGallery } from "@/lib/content";
 import { getGoogleReviews } from "@/lib/google-reviews";
 import { FAQ } from "@/lib/course-content";
+import { GUIDES } from "@/lib/guides";
 import { OG_IMAGE, courseListSchema, faqSchema, organizationSchema } from "@/lib/seo";
 import {
   ADDRESS_LINES,
@@ -232,6 +233,28 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* GUIDES — the questions people ask a search box before they ask us. */}
+      <section className="bg-white" id="guides">
+        <div className="s-container py-14 sm:py-20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading eyebrow="Guides" title="Read before you choose" lead="DCA or ADCA? Which course after Class 12? How do the monthly plans work? Short, honest answers from the trainers." />
+            <Link href="/guides" className="s-btn s-btn--outline s-btn--sm">
+              All guides
+            </Link>
+          </div>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {GUIDES.slice(0, 3).map((g) => (
+              <li key={g.slug}>
+                <Link href={`/guides/${g.slug}`} className="s-card block h-full p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--s-shadow)]">
+                  <span className="font-semibold leading-snug text-[var(--s-ink)]">{g.title}</span>
+                  <span className="mt-2 block text-sm text-[var(--s-body)]">{g.description}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

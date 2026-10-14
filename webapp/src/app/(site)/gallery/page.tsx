@@ -23,7 +23,7 @@ export default async function GalleryPage() {
       <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Gallery", path: "/gallery" }])} />
       <section className="s-grid s-grid-fade">
         <div className="s-container py-14 sm:py-20">
-          <SectionHeading eyebrow="Gallery" title="Inside the centre" lead="The lab, the classes and the people. Tap any photo to view it larger." />
+          <SectionHeading as="h1" eyebrow="Gallery" title="Inside the centre" lead="The lab, the classes and the people. Tap any photo to view it larger." />
         </div>
       </section>
       <MomentsShowcase eyebrow="Student moments" />

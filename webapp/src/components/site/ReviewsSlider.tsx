@@ -4,26 +4,36 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { GoogleReview } from "@/lib/google-reviews";
 import { GoogleG, Stars } from "@/components/site/GoogleBadge";
 
-const AUTOPLAY_MS = 6000;
+const AUTOPLAY_MS = 5000;
 const CLAMP_CHARS = 220;
 const GAP = 16;
 const CONTAINER_MAX = 1152; // matches .s-container (max-w-6xl)
 const SWIPE_PX = 40;
+const MAX_DOTS = 8;
+// Cards rendered either side of the focused one; the rest are empty spacers.
+const RENDER_WINDOW = 6;
 
-// Full-bleed, infinitely looping carousel of Google reviews. The track is a
-// translateX strip of the reviews repeated a few times; after each slide the
-// index silently re-centres into the middle copy, so it loops both ways even
-// when every review already fits on screen. One card per view on phones,
-// two on tablets, three on desktop, with the active card aligned to the page
-// container's left edge and neighbours peeking at both sides.
+// Full-bleed, infinitely looping, centre-focused carousel of Google reviews.
+// The focused card sits in the middle of the viewport at full strength and
+// its neighbours peek out on both sides, dimmed and slightly smaller. The
+// track is a translateX strip of the reviews repeated several times; after
+// each slide the index silently re-centres into the middle copy, so it loops
+// both ways no matter how few or many reviews there are.
 //
-// Autoplay pauses on hover, focus, drag, hidden tab and off-screen;
-// prefers-reduced-motion disables autoplay and the slide animation.
+// Autoplay rotates every few seconds and pauses while the pointer is over
+// the cards, while a card has focus, during a drag, in a hidden tab and when
+// the slider is off screen. prefers-reduced-motion disables autoplay and the
+// slide animation.
 export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
   const count = reviews.length;
+  // Copies of the list on each side of the "home" copy. Enough that the
+  // widest viewport never sees past the end of the strip.
+  const reps = Math.max(2, Math.ceil(6 / Math.max(count, 1)));
+  const home = reps * count;
+
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [layout, setLayout] = useState({ cardW: 360, padLeft: 16, perView: 1 });
-  const [index, setIndex] = useState(count);
+  const [layout, setLayout] = useState({ cardW: 360, viewW: 0 });
+  const [index, setIndex] = useState(home);
   const [anim, setAnim] = useState(true);
   const [paused, setPaused] = useState(false);
   const [inView, setInView] = useState(false);
@@ -31,12 +41,12 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
   const drag = useRef<{ startX: number; dx: number; active: boolean; moved: boolean; touch: boolean }>({ startX: 0, dx: 0, active: false, moved: false, touch: false });
   const [dragX, setDragX] = useState(0);
 
-  const copies = Math.max(4, layout.perView * 2 + 2);
-  const items = Array.from({ length: copies * count }, (_, i) => reviews[i % count]);
+  const total = (2 * reps + 1) * count;
   const step = layout.cardW + GAP;
 
-  // Measure: how many cards fit, how wide each is, and where the page
-  // container's left edge sits so the active card lines up with it.
+  // Measure the viewport and size the cards: one wide card on phones, and on
+  // larger screens the width that lets three cards sit inside the page
+  // container, so the focused card is flanked by two full neighbours.
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -44,9 +54,8 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
       const w = el.clientWidth;
       const pad = w >= 640 ? 24 : 16;
       const inner = Math.min(w - pad * 2, CONTAINER_MAX);
-      const perView = w < 640 ? 1 : w < 1024 ? 2 : 3;
-      const cardW = perView === 1 ? Math.round(inner * 0.88) : Math.floor((inner - GAP * (perView - 1)) / perView);
-      setLayout({ cardW, padLeft: Math.round((w - inner) / 2), perView });
+      const cardW = w < 640 ? Math.round(inner * 0.86) : w < 1024 ? Math.floor((inner - GAP) / 1.8) : Math.floor((inner - GAP * 2) / 3);
+      setLayout({ cardW, viewW: w });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -65,7 +74,7 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.3 });
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.25 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -77,13 +86,18 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
     return () => cancelAnimationFrame(id);
   }, [anim]);
 
-  const go = useCallback((i: number) => setIndex(i), []);
+  // With reduced motion there is no slide (and so no transitionend to
+  // re-centre on), so jump straight to the equivalent card in the home copy.
+  const go = useCallback(
+    (i: number) => setIndex(reduced ? home + ((((i - home) % count) + count) % count) : i),
+    [count, home, reduced],
+  );
 
-  const onTransitionEnd = () => {
-    if (index >= 2 * count) {
+  const recentre = () => {
+    if (index >= home + count) {
       setAnim(false);
       setIndex(index - count);
-    } else if (index < count) {
+    } else if (index < home) {
       setAnim(false);
       setIndex(index + count);
     }
@@ -137,9 +151,11 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
 
   if (count === 0) return null;
 
-  const x = -(index * step) + layout.padLeft + dragX;
-  const transition = anim && !reduced && dragX === 0 ? "transform 520ms cubic-bezier(0.22, 1, 0.36, 1)" : "none";
+  // Place the focused card in the middle of the viewport.
+  const x = Math.round(layout.viewW / 2 - layout.cardW / 2) - index * step + dragX;
+  const transition = anim && !reduced && dragX === 0 ? "transform 560ms cubic-bezier(0.22, 1, 0.36, 1)" : "none";
   const active = ((index % count) + count) % count;
+  const showDots = count <= MAX_DOTS;
 
   return (
     <div
@@ -153,10 +169,11 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
       onBlurCapture={() => setPaused(false)}
     >
       <div
-        className="overflow-hidden py-2 select-none"
+        className="overflow-hidden py-3 select-none"
         role="region"
         aria-roledescription="carousel"
         aria-label="Google reviews"
+        aria-live={paused ? "polite" : "off"}
         style={{ touchAction: "pan-y", cursor: dragX !== 0 ? "grabbing" : "grab" }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -169,14 +186,27 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
           className="flex items-stretch will-change-transform"
           style={{ gap: GAP, transform: `translate3d(${x}px, 0, 0)`, transition }}
           onTransitionEnd={(e) => {
-            if (e.target === e.currentTarget && e.propertyName === "transform") onTransitionEnd();
+            if (e.target === e.currentTarget && e.propertyName === "transform") recentre();
           }}
         >
-          {items.map((r, i) => {
-            const isActive = i >= index && i < index + layout.perView;
+          {Array.from({ length: total }, (_, i) => {
+            const distance = Math.abs(i - index);
+            if (distance > RENDER_WINDOW) {
+              return <div key={`spacer-${i}`} style={{ width: layout.cardW }} className="shrink-0" aria-hidden />;
+            }
+            const r = reviews[i % count];
+            const isActive = i === index;
             return (
-              <div key={`${r.id}-${i}`} style={{ width: layout.cardW }} className="shrink-0" aria-hidden={!isActive}>
-                <ReviewCard review={r} index={i % count} total={count} inert={!isActive} />
+              <div
+                key={`${r.id}-${i}`}
+                style={{ width: layout.cardW }}
+                className="shrink-0 cursor-pointer"
+                aria-hidden={!isActive}
+                onClick={() => {
+                  if (!isActive && !drag.current.moved) go(i);
+                }}
+              >
+                <ReviewCard review={r} index={i % count} total={count} focused={isActive} reduced={reduced} />
               </div>
             );
           })}
@@ -195,24 +225,32 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
               <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
-          <div className="flex items-center gap-2" role="tablist" aria-label="Choose review">
-            {reviews.map((r, i) => (
-              <button
-                key={r.id}
-                type="button"
-                role="tab"
-                aria-selected={i === active}
-                aria-label={`Review ${i + 1} by ${r.author}`}
-                onClick={() => {
-                  // Move the shortest way round the loop.
-                  const base = Math.floor(index / count) * count;
-                  const candidates = [base + i - count, base + i, base + i + count];
-                  go(candidates.reduce((best, c) => (Math.abs(c - index) < Math.abs(best - index) ? c : best)));
-                }}
-                className={`h-2.5 rounded-full transition-all ${i === active ? "w-8 bg-[var(--s-accent)]" : "w-2.5 bg-[var(--s-line-2)] hover:bg-[var(--s-ink-3)]"}`}
-              />
-            ))}
-          </div>
+
+          {showDots ? (
+            <div className="flex items-center gap-2" role="tablist" aria-label="Choose review">
+              {reviews.map((r, i) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === active}
+                  aria-label={`Review ${i + 1} by ${r.author}`}
+                  onClick={() => {
+                    // Move the shortest way round the loop.
+                    const base = Math.floor(index / count) * count;
+                    const candidates = [base + i - count, base + i, base + i + count];
+                    go(candidates.reduce((best, c) => (Math.abs(c - index) < Math.abs(best - index) ? c : best)));
+                  }}
+                  className={`h-2.5 rounded-full transition-all ${i === active ? "w-8 bg-[var(--s-accent)]" : "w-2.5 bg-[var(--s-line-2)] hover:bg-[var(--s-ink-3)]"}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <span className="min-w-[4.5rem] text-center text-sm tabular-nums text-[var(--s-muted)]" aria-live="polite">
+              <strong className="font-semibold text-[var(--s-ink)]">{active + 1}</strong> / {count}
+            </span>
+          )}
+
           <button
             type="button"
             onClick={() => go(index + 1)}
@@ -229,15 +267,22 @@ export function ReviewsSlider({ reviews }: { reviews: GoogleReview[] }) {
   );
 }
 
-function ReviewCard({ review, index, total, inert }: { review: GoogleReview; index: number; total: number; inert: boolean }) {
+function ReviewCard({ review, index, total, focused, reduced }: { review: GoogleReview; index: number; total: number; focused: boolean; reduced: boolean }) {
   const [open, setOpen] = useState(false);
   const long = review.text.length > CLAMP_CHARS;
   const text = long && !open ? `${review.text.slice(0, CLAMP_CHARS).trimEnd()}…` : review.text;
-  const tab = inert ? -1 : undefined;
+  const tab = focused ? undefined : -1;
 
   return (
     <figure
-      className={`s-card flex h-full flex-col p-6 transition-opacity duration-500 ${inert ? "opacity-60" : "opacity-100 shadow-[var(--s-shadow)]"}`}
+      className={`s-card flex h-full flex-col p-6 ${
+        focused ? "opacity-100 shadow-[var(--s-shadow-lg)] ring-1 ring-[var(--s-ink)]/10" : "opacity-55 shadow-none"
+      }`}
+      style={{
+        transform: focused ? "scale(1)" : "scale(0.94)",
+        transformOrigin: "center",
+        transition: reduced ? "none" : "transform 560ms cubic-bezier(0.22, 1, 0.36, 1), opacity 560ms ease, box-shadow 560ms ease",
+      }}
       aria-roledescription="slide"
       aria-label={`${index + 1} of ${total}`}
     >
@@ -258,7 +303,16 @@ function ReviewCard({ review, index, total, inert }: { review: GoogleReview; ind
       <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-[var(--s-body)]">
         {text}
         {long && (
-          <button type="button" tabIndex={tab} onClick={() => setOpen((o) => !o)} className="ml-1 font-semibold text-[var(--s-ink)] underline underline-offset-4" aria-expanded={open}>
+          <button
+            type="button"
+            tabIndex={tab}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen((o) => !o);
+            }}
+            className="ml-1 font-semibold text-[var(--s-ink)] underline underline-offset-4"
+            aria-expanded={open}
+          >
             {open ? "Show less" : "Read more"}
           </button>
         )}

@@ -26,6 +26,7 @@ export default async function OffersPage() {
         <div className="s-container grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <SectionHeading
+            as="h1"
             eyebrow="Offers"
             title="Current offers"
             lead="Admission offers running at the centre right now. Mention the offer on WhatsApp or at the desk to claim it."

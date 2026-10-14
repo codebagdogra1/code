@@ -1,0 +1,73 @@
+# Local SEO · AEO · GEO — status board
+
+**Goal:** be the computer institute Google's map pack, AI Overviews, ChatGPT, Perplexity and Gemini name for Bagdogra / Siliguri queries.
+**Updated:** 14 October 2026. Companion docs: [playbook](./SEO-LOCAL-AEO-GEO-PLAYBOOK.md) (what the site does + why), [GBP kit](./GBP-KIT.md) (paste-ready owner text), [strategy](./SEO-STRATEGY.md), [forensic](./LOCAL-SEO-FORENSIC.md).
+
+Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the business owner's accounts.
+
+## Engineering (website)
+
+### Shipped 14 Oct — foundation
+- [x] metadataBase, unique titles/descriptions, canonicals, OG/Twitter cards, generated share image
+- [x] robots.txt with named AI crawlers; sitemap; `/llms.txt`
+- [x] `EducationalOrganization`+`LocalBusiness` JSON-LD with geo, hours, areaServed, knowsAbout, languages
+- [x] Per-course pages with `Course` schema, "What is X?" definition, course FAQ (`FAQPage`)
+- [x] Home: local section (areas served, landmark distances), 10 local FAQs; contact: "How to reach CODE"
+- [x] Real favicon/icons; one-liner reused everywhere (entity consistency)
+
+### Shipped 14 Oct — this pass (AEO/GEO content + measurement)
+- [x] **Guides hub** `/guides` + 5 cornerstone guides with `Article` + `FAQPage` schema, TL;DR, comparison tables, visible published/updated dates
+  - DCA vs ADCA · Which course after Class 10/12 · How to choose a computer institute · How fees & monthly plans work · Courses for shop owners who want to sell online
+- [x] **Glossary** `/glossary` with `DefinedTermSet` schema; each term links to its course
+- [x] `WebPage` schema with `dateModified` on course pages; visible "Updated" date
+- [x] Course pages link to the relevant guides; home gets a "Read before you choose" strip; Guides in nav + footer
+- [x] Sitemap: guides + glossary; honest `lastmod` (content dates, not build time)
+- [x] `/llms.txt` lists guides + glossary
+- [x] Search Console / Bing verification via env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `NEXT_PUBLIC_BING_SITE_VERIFICATION`)
+- [x] Enquiry measurement: WhatsApp / call / email clicks fire GA4 `contact_click` (when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set) and Meta Pixel `Contact`
+
+### Open — engineering
+- [ ] Add verified profile URLs to `sameAs` (`src/lib/site.ts` → `SAME_AS`) as the owner claims them (Justdial, Facebook, Instagram, YouTube, Bing Places, Apple)
+- [ ] Embed the first YouTube videos on matching course pages + `VideoObject` schema (after Owner #7)
+- [ ] Real success stories page (only with written student consent) — `Person`-free, course + outcome
+- [ ] Bengali/Hindi summaries per course (`inLanguage` already lists bn/hi) — content decision
+- [ ] After the real domain is live: set `NEXT_PUBLIC_SITE_URL`, re-verify Search Console, Change of Address
+
+### Deliberately not done
+- No `AggregateRating`/`Review` schema on our own pages: Google treats self-serving review markup on `LocalBusiness`/`Organization` as ineligible. The rating is shown as visible text and linked to Google instead.
+- No "computer courses in Siliguri / Matigara / Naxalbari" location pages for a single-location business: doorway-page risk. The home page, contact page and FAQ carry the area copy instead.
+- No fees online (owner decision); the fees guide explains how plans work without amounts.
+- No competitor comparison pages.
+
+## Owner (off-site — this is what actually ranks the map)
+
+### P0 — this week
+- [ ] **Search Console**: add property, paste the HTML-tag token into Netlify env `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, redeploy, verify; URL Inspection → *Request indexing* for `/`, `/courses`, `/guides`, `/glossary`, `/about`, `/contact` and the 9 course URLs; submit `sitemap.xml`
+- [ ] **Bing Webmaster Tools**: import from Search Console (one click) or paste token into `NEXT_PUBLIC_BING_SITE_VERIFICATION`; submit sitemap
+- [ ] **GA4**: create property, paste `G-XXXX` into `NEXT_PUBLIC_GA_MEASUREMENT_ID`; mark `contact_click` as a key event
+- [ ] **Google Business Profile** — apply [GBP-KIT.md](./GBP-KIT.md): categories, 750-char description, every course as a Service, hours, 20+ photos, website link with `?utm_source=gbp`
+- [ ] **Review engine**: QR + WhatsApp script from the kit; target 3–5 real reviews/month; reply to every review within 48 h
+- [ ] **GBP Q&A**: seed the 10 questions from the kit from the owner account
+
+### P1 — this month
+- [ ] **Justdial**: claim the existing listing (5.0 · 30 ratings), match NAP byte-for-byte, send the listing URL to engineering for `sameAs`
+- [ ] Facebook Page + Instagram (same one-liner, phone, address) → URLs to engineering
+- [ ] Bing Places, Apple Business Connect, Sulekha, LearnPick, IndiaMART with identical NAP
+- [ ] Weekly GBP Post (new batch / result / demo class / offer)
+- [ ] **YouTube**: 3 shorts — lab walk-through, "DCA vs ADCA", "What you learn in CCA"; say "CODE Bagdogra" + course name in the first 10 s
+- [ ] **Buy the domain** (`codebagdogra.in` or similar) → Netlify primary domain → tell engineering
+
+### P2 — this quarter (GEO: being named by assistants)
+- [ ] Authentic answers on Quora / local Facebook groups for "computer course Siliguri" questions (no fake accounts, no astroturfing)
+- [ ] Ask 3–5 local sites/directories that list Siliguri institutes to include CODE (one honest email each)
+- [ ] Monthly 15-query AI audit (playbook §3) — log who is named and which sources are cited; those sources are next month's targets
+
+## KPIs (review monthly)
+| Signal | Where | Target by Jan 2027 |
+|---|---|---|
+| Google reviews | GBP | +12 real reviews, rating held ≥ 4.9 |
+| Map pack for "computer centre in bagdogra" (phone, in Bagdogra, logged out) | manual | #1 |
+| Indexed URLs | Search Console | all public URLs incl. 5 guides + glossary |
+| `contact_click` key events / month | GA4 | tracked, rising month on month |
+| AI mentions (15-query audit) | log | named in ≥ 5 queries on ≥ 2 engines |
+| Referrals from chatgpt.com / perplexity.ai / gemini | GA4 | non-zero and rising |

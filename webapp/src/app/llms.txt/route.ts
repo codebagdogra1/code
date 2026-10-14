@@ -1,5 +1,6 @@
 import { getCourses } from "@/lib/content";
 import { FAQ } from "@/lib/course-content";
+import { GLOSSARY, GUIDES, guideContext } from "@/lib/guides";
 import { siteUrl } from "@/lib/seo";
 import {
   ADDRESS,
@@ -22,6 +23,7 @@ export const revalidate = 3600;
 export async function GET() {
   const base = siteUrl();
   const courses = await getCourses();
+  const ctx = guideContext(courses);
 
   const lines: string[] = [
     `# ${BUSINESS_NAME}`,
@@ -38,7 +40,7 @@ export async function GET() {
     `- Google Maps: ${GOOGLE_MAPS_URL}`,
     `- Classes explained in: ${LANGUAGES.join(", ")}`,
     `- Areas served: ${AREAS_SERVED.join(", ")}`,
-    "- Mode: in-person classes at the centre; every course has a full-payment and a monthly fee plan; a printed receipt is issued for every payment; a CODE certificate is awarded on completion.",
+    "- Mode: in-person classes at the centre; every course has a full-payment and a monthly fee plan (one installment per month of the course); a printed receipt is issued for every payment; a CODE certificate is awarded on completion.",
     "- Fees are quoted at the desk or on WhatsApp and are not listed online.",
     "",
     "## Courses",
@@ -48,9 +50,20 @@ export async function GET() {
       return `- [${c.content.displayName}](${base}/courses/${c.content.slug})${d}: ${c.content.summary}`;
     }),
     "",
+    "## Guides",
+    "",
+    ...GUIDES.map((g) => `- [${g.title}](${base}/guides/${g.slug}) (updated ${g.updated}): ${g.tldr(ctx)}`),
+    "",
+    "## Glossary",
+    "",
+    `Full list with links: ${base}/glossary`,
+    "",
+    ...GLOSSARY.map((t) => `- ${t.term}${t.aka?.length ? ` (${t.aka.join(", ")})` : ""}: ${t.definition}`),
+    "",
     "## Pages",
     "",
     `- [All courses](${base}/courses): every course with duration, level, syllabus outline and who it is for`,
+    `- [Guides](${base}/guides): DCA vs ADCA, which course after Class 10/12, choosing an institute, how fees work, courses for shop owners`,
     `- [Current offers](${base}/offers): limited-period admission offers`,
     `- [Events](${base}/events): demo classes, workshops and student events`,
     `- [Gallery](${base}/gallery): photos of the lab, classes and students`,

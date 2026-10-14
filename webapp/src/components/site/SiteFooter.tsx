@@ -18,6 +18,8 @@ const LINKS = [
   { href: "/offers", label: "Current offers" },
   { href: "/events", label: "Events" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/guides", label: "Guides" },
+  { href: "/glossary", label: "Glossary" },
   { href: "/about", label: "About the centre" },
   { href: "/contact", label: "Contact & directions" },
 ];

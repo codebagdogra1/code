@@ -6,8 +6,9 @@ import { Faq } from "@/components/site/Faq";
 import { PhotoMarquee } from "@/components/site/PhotoMarquee";
 import { JsonLd } from "@/components/JsonLd";
 import { getCourseBySlug, getCourses } from "@/lib/content";
-import { COURSE_CONTENT } from "@/lib/course-content";
-import { OG_IMAGE, breadcrumbSchema, courseSchema, faqSchema } from "@/lib/seo";
+import { COURSE_CONTENT, COURSE_CONTENT_UPDATED } from "@/lib/course-content";
+import { formatDate, guidesForCourse } from "@/lib/guides";
+import { OG_IMAGE, breadcrumbSchema, courseSchema, faqSchema, webPageSchema } from "@/lib/seo";
 import { LANGUAGES, LOCALITY, PHONE_DISPLAY, PHONE_TEL, whatsappLink } from "@/lib/site";
 
 export const revalidate = 300;
@@ -43,6 +44,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const next = c.idealNext ? all.find((o) => o.name === c.idealNext) : undefined;
   const short = c.shortName ?? c.displayName;
   const faq = c.faq ?? [];
+  const guides = guidesForCourse(course.name);
+  const title = c.seoTitle ?? `${short} Course in Bagdogra`;
 
   return (
     <>
@@ -67,6 +70,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         })}
       />
       {faq.length > 0 && <JsonLd data={faqSchema(faq)} />}
+      <JsonLd data={webPageSchema({ path: `/courses/${slug}`, name: title, description: c.definition ?? c.summary, dateModified: COURSE_CONTENT_UPDATED, type: "ItemPage" })} />
 
       <section className="s-grid--dark text-white">
         <div className="s-container py-14 sm:py-20">
@@ -78,6 +82,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
               <p className="s-eyebrow s-eyebrow--light">{c.track} · {c.level}</p>
               <h1 className="mt-3 text-4xl leading-tight text-white sm:text-5xl">{c.displayName}</h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/80">{c.summary}</p>
+              <p className="s-mono mt-4 text-xs text-white/60">
+                Course information updated <time dateTime={COURSE_CONTENT_UPDATED}>{formatDate(COURSE_CONTENT_UPDATED)}</time>
+              </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a href={whatsappLink(c.displayName)} target="_blank" rel="noopener noreferrer" className="s-btn s-btn--accent">
                   Enquire on WhatsApp
@@ -203,6 +210,32 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
               </div>
             </div>
             <Faq items={faq} />
+          </div>
+        </section>
+      )}
+
+      {guides.length > 0 && (
+        <section className="bg-white">
+          <div className="s-container py-14 sm:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="s-eyebrow">Helpful guides</p>
+                <h2 className="mt-3 text-2xl">Read before you decide on {short}</h2>
+              </div>
+              <Link href="/guides" className="s-btn s-btn--outline s-btn--sm">
+                All guides
+              </Link>
+            </div>
+            <ul className="mt-6 grid gap-4 md:grid-cols-2">
+              {guides.map((g) => (
+                <li key={g.slug}>
+                  <Link href={`/guides/${g.slug}`} className="s-card block h-full p-5 transition-all hover:-translate-y-0.5 hover:shadow-[var(--s-shadow)]">
+                    <span className="font-semibold text-[var(--s-ink)]">{g.title}</span>
+                    <span className="mt-1 block text-sm text-[var(--s-body)]">{g.description}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}

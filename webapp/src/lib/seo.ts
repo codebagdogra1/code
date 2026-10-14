@@ -16,6 +16,7 @@ import {
   PHONE_TEL,
   POSTAL_CODE,
   REGION,
+  SAME_AS,
   SHORT_NAME,
   STREET_ADDRESS,
   TAGLINE,
@@ -61,7 +62,7 @@ export function organizationSchema() {
         telephone: PHONE_TEL,
         email: EMAIL,
         hasMap: GOOGLE_MAPS_URL,
-        sameAs: [GOOGLE_MAPS_URL],
+        sameAs: SAME_AS,
         geo: { "@type": "GeoCoordinates", latitude: MAP_LAT, longitude: MAP_LNG },
         areaServed: AREAS_SERVED.map((name) => ({ "@type": "City", name })),
         knowsLanguage: [...LANGUAGE_CODES],
@@ -251,3 +252,82 @@ export const OG_IMAGE: { images: { url: string; width: number; height: number; a
     },
   ],
 };
+
+/** A page node with honest dates — the freshness signal answer engines read. */
+export function webPageSchema(p: {
+  path: string;
+  name: string;
+  description: string;
+  dateModified: string;
+  datePublished?: string;
+  /** schema.org type, e.g. "WebPage", "CollectionPage", "ItemPage". */
+  type?: string;
+}) {
+  const url = absoluteUrl(p.path);
+  return {
+    "@context": "https://schema.org",
+    "@type": p.type ?? "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: p.name,
+    description: p.description,
+    inLanguage: "en-IN",
+    isPartOf: { "@id": `${siteUrl()}/#website` },
+    about: { "@id": organizationId() },
+    dateModified: p.dateModified,
+    ...(p.datePublished ? { datePublished: p.datePublished } : {}),
+    primaryImageOfPage: { "@type": "ImageObject", url: absoluteUrl("/opengraph-image") },
+  };
+}
+
+/** Guide pages: Article with the organisation as author and publisher. */
+export function articleSchema(a: {
+  path: string;
+  headline: string;
+  description: string;
+  published: string;
+  updated: string;
+  /** Course page URLs the article is about. */
+  aboutCourseSlugs?: ReadonlyArray<string>;
+}) {
+  const url = absoluteUrl(a.path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${url}#article`,
+    headline: a.headline,
+    description: a.description,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    inLanguage: "en-IN",
+    datePublished: a.published,
+    dateModified: a.updated,
+    author: { "@id": organizationId() },
+    publisher: { "@id": organizationId() },
+    image: absoluteUrl("/opengraph-image"),
+    isPartOf: { "@id": `${siteUrl()}/#website` },
+    ...(a.aboutCourseSlugs?.length
+      ? { about: a.aboutCourseSlugs.map((slug) => ({ "@id": absoluteUrl(`/courses/${slug}#course`) })) }
+      : {}),
+  };
+}
+
+/** Glossary: one DefinedTermSet, each term a DefinedTerm with its own anchor. */
+export function definedTermSetSchema(terms: ReadonlyArray<{ id: string; term: string; aka?: ReadonlyArray<string>; definition: string }>) {
+  const url = absoluteUrl("/glossary");
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    "@id": `${url}#terms`,
+    name: "Computer course glossary — CODE, Bagdogra",
+    url,
+    hasDefinedTerm: terms.map((t) => ({
+      "@type": "DefinedTerm",
+      "@id": `${url}#${t.id}`,
+      name: t.term,
+      ...(t.aka?.length ? { alternateName: [...t.aka] } : {}),
+      description: t.definition,
+      inDefinedTermSet: { "@id": `${url}#terms` },
+    })),
+  };
+}

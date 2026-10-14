@@ -37,6 +37,7 @@ export default async function AboutPage() {
       <section className="s-grid s-grid-fade">
         <div className="s-container py-14 sm:py-20">
           <SectionHeading
+            as="h1"
             eyebrow="About"
             title="A computer centre for Bagdogra, run by people who teach"
             lead="CODE — Computer & Digital Excellence — is an independent training centre in Bagdogra, Siliguri. We teach the computer and digital skills people here need: for school and college, for office jobs, for running a shop online, and for building a career in web, ecommerce, marketing or AI."
