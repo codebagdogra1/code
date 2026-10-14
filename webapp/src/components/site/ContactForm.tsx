@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackPixel } from "./MetaPixel";
 
 type Status = { type: "idle" | "loading" | "ok" | "error"; message?: string };
 
@@ -24,6 +25,7 @@ export function ContactForm({ courses, defaultCourse }: { courses: string[]; def
         return;
       }
       form.reset();
+      trackPixel("Lead", { content_name: String(data.course || "general enquiry") });
       setStatus({
         type: "ok",
         message: "Thanks! We've received your enquiry and will call or message you shortly.",
