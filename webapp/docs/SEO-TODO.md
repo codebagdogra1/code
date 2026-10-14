@@ -58,7 +58,8 @@ Legend: `[x]` shipped · `[ ]` open · **Eng** = code · **Owner** = needs the b
 ## Owner (off-site — this is what actually ranks the map)
 
 ### P0 — this week
-- [ ] **Search Console**: URL-prefix property `https://codebagdogra.netlify.app/` added; Google HTML-tag token committed in `layout.tsx` (14 Oct 2026). Deploy, then press Verify; URL Inspection → *Request indexing* for `/`, `/courses`, `/guides`, `/glossary`, `/about`, `/contact` and the 9 course URLs; submit `sitemap.xml`
+- [x] **Search Console**: URL-prefix property `https://codebagdogra.netlify.app/` verified via HTML tag and `sitemap.xml` submitted (14 Oct 2026)
+- [ ] **Search Console — request indexing**: URL Inspection → *Request indexing* for `/`, `/courses`, `/guides`, `/glossary`, `/about`, `/contact`, the 9 course URLs and the `/areas/*` pages (quota ~10/day, spread over a few days)
 - [ ] **Bing Webmaster Tools**: import from Search Console (one click) or paste token into `NEXT_PUBLIC_BING_SITE_VERIFICATION`; submit sitemap
 - [ ] **GA4**: create property, paste `G-XXXX` into `NEXT_PUBLIC_GA_MEASUREMENT_ID`; mark `contact_click` as a key event
 - [ ] **Google Business Profile** — apply [GBP-KIT.md](./GBP-KIT.md): categories, 750-char description, every course as a Service, hours, 20+ photos, website link with `?utm_source=gbp`
