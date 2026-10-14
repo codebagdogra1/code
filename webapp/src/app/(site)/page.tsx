@@ -64,13 +64,8 @@ const WHY = [
 ];
 
 export default async function HomePage() {
-  const [courses, offers, { upcoming }, gallery, google] = await Promise.all([
-    getCourses(),
-    getActiveOffers(),
-    getEvents(),
-    getGallery(5),
-    getGoogleReviews(),
-  ]);
+  const [courses, offers, { upcoming }, gallery] = await Promise.all([getCourses(), getActiveOffers(), getEvents(), getGallery(5)]);
+  const google = getGoogleReviews();
   const courseNames = courses.map((c) => c.content.displayName);
   const heroPhotos = gallery.slice(0, 3);
 

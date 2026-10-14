@@ -1,3 +1,5 @@
+import googleReviews from "@/data/google-reviews.json";
+
 // Single source of truth for CODE's public details, reused across the website
 // (header, footer, contact page, JSON-LD) and the receipts. Enrolment happens at
 // the desk or over phone/WhatsApp — the public site captures enquiries only.
@@ -34,9 +36,10 @@ export const GOOGLE_MAPS_URL =
 export const GOOGLE_MAPS_EMBED_URL =
   "https://www.google.com/maps?q=Computer+and+Digital+Excellence+-+CODE,+Bagdogra&output=embed";
 
-// Public Google rating as shown on the Maps listing. Update when it changes.
-export const GOOGLE_RATING = "5.0";
-export const GOOGLE_REVIEW_COUNT = 43;
+// Public Google rating and review count come from the snapshot in
+// src/data/google-reviews.json (refresh with `npm run google:reviews`).
+export const GOOGLE_RATING: string = googleReviews.rating;
+export const GOOGLE_REVIEW_COUNT: number = googleReviews.count;
 
 // Pre-filled WhatsApp enquiry link. Pass a course/topic to seed the message.
 export function whatsappLink(topic?: string): string {

@@ -14,7 +14,7 @@
     "waive-installments": "tsx scripts/waive-installments.ts",
     "db:push": "prisma db push",
     "typecheck": "tsc --noEmit",
-    "google:reviews-setup": "tsx scripts/google-reviews-setup.ts"
+    "google:reviews": "node scripts/google-reviews-scrape.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

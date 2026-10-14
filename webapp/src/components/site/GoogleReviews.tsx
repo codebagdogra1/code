@@ -2,11 +2,10 @@ import { getGoogleReviews } from "@/lib/google-reviews";
 import { GoogleBadge } from "@/components/site/GoogleBadge";
 import { ReviewsSlider } from "@/components/site/ReviewsSlider";
 
-// Google rating badge + a slider of the centre's Google reviews. Pulls live
-// data from the Places API when a key is configured and falls back to the
-// curated verbatim reviews otherwise (see lib/google-reviews.ts).
-export async function GoogleReviews() {
-  const data = await getGoogleReviews();
+// Google rating badge + a slider of the centre's Google reviews, from the
+// static snapshot in src/data/google-reviews.json (see lib/google-reviews.ts).
+export function GoogleReviews() {
+  const data = getGoogleReviews();
 
   // Badge and footer line sit in the page container; the slider itself is
   // full-bleed, so callers render this directly inside a <section>.
