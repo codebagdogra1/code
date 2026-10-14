@@ -263,21 +263,21 @@ export const AREAS: Area[] = [
     aka: ["Gossainpur", "Gosaipur"],
     nameBn: "গোঁসাইপুর",
     nameHi: "गोसाईपुर",
-    seoTitle: "Computer Course near Gossaipur, Bagdogra — CCA, DCA, ADCA",
+    seoTitle: "Computer Course near Gossaipur (Gossainpur), Bagdogra",
     description:
-      "Computer classes near Gossaipur, Bagdogra: CODE is about 3 km away on Lokenath Nagar Road. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI in small batches with monthly fee plans, Mon–Sat 11 AM–9 PM.",
+      "Computer classes near Gossaipur (also written Gossainpur), Bagdogra: CODE is about 3 km away on Lokenath Nagar Road. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI in small batches with monthly fee plans, Mon–Sat 11 AM–9 PM.",
     distance: "about 3 km",
     travel: "10 minutes by bike or toto",
     route: "Ride into Bagdogra town and ask for K1 Fitness Gym on Lokenath Nagar Road; the centre is beside it.",
     courses: ["CCA", "DCA", "Digital Marketing Basics"],
     tldr: ({ d }) =>
-      `Gossaipur is about 3 km from CODE — Computer & Digital Excellence, the computer training centre on Lokenath Nagar Road in Bagdogra — roughly ten minutes by bike or toto. CODE teaches CCA (${d("CCA")}), DCA (${d("DCA")}), ADCA (${d("ADCA")}), web design, ecommerce, digital marketing and AI prompt engineering in small, hands-on batches, Monday to Saturday, 11 AM to 9 PM, with a monthly fee plan on every course.`,
+      `Gossaipur — also written Gossainpur — is about 3 km from CODE — Computer & Digital Excellence, the computer training centre on Lokenath Nagar Road in Bagdogra — roughly ten minutes by bike or toto. CODE teaches CCA (${d("CCA")}), DCA (${d("DCA")}), ADCA (${d("ADCA")}), web design, ecommerce, digital marketing and AI prompt engineering in small, hands-on batches, Monday to Saturday, 11 AM to 9 PM, with a monthly fee plan on every course.`,
     updated: "2026-10-14",
     body: (ctx) => [
       { type: "h2", text: "Getting to CODE from Gossaipur" },
       {
         type: "p",
-        text: "Gossaipur is on the Bagdogra side, about 3 km from the centre. Totos and bikes make the trip in around ten minutes; buses on the main road drop you in Bagdogra, from where Lokenath Nagar Road is a short walk. Look for K1 Fitness Gym — the centre is beside it.",
+        text: "Gossaipur (Gossainpur on some signboards and forms) is on the Bagdogra side, about 3 km from the centre, with Putimari and the villages of the Gossaipur gram panchayat just beyond it. Totos and bikes make the trip in around ten minutes; buses on the main road drop you in Bagdogra, from where Lokenath Nagar Road is a short walk. Look for K1 Fitness Gym — the centre is beside it.",
       },
       { type: "h2", text: "What Gossaipur students come for" },
       {
@@ -548,6 +548,154 @@ export const AREAS: Area[] = [
           { q: "Does CODE have a branch in Naxalbari?", a: "No. CODE has one centre, in Bagdogra. Students travel from Naxalbari, which is why this page explains the route and batch times." },
           { q: "Is DCA enough for government job forms that ask for a computer course?", a: "Most forms ask for a certificate or diploma in computer applications of a stated duration; DCA from CODE is a six-month diploma with a certificate on completion. Check the exact wording of the notice you are applying under." },
           { q: "Can I come three days a week?", a: "For most courses, yes. Tell the desk and the batch schedule is set accordingly; the course then takes correspondingly longer." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "station-more",
+    name: "Station More",
+    aka: ["Bagdogra Station More", "Bagdogra railway station", "Station Para"],
+    nameBn: "স্টেশন মোড়",
+    nameHi: "स्टेशन मोड़",
+    seoTitle: "Computer Course near Station More, Bagdogra — CCA, DCA",
+    description:
+      "Computer classes near Station More and Bagdogra railway station: CODE is about 1.5 km away on Lokenath Nagar Road. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI in small batches, monthly fee plans, Mon–Sat 11 AM–9 PM.",
+    distance: "about 1.5 km",
+    travel: "5 minutes by toto or bike, 15 on foot",
+    route: "From Station More head into Bagdogra town; the centre is on Lokenath Nagar Road beside K1 Fitness Gym.",
+    courses: ["CCA", "DCA", "Web Design Basic"],
+    tldr: ({ d }) =>
+      `Station More — the junction at Bagdogra railway station — is about 1.5 km from CODE — Computer & Digital Excellence on Lokenath Nagar Road, a five-minute toto ride or a fifteen-minute walk. It is the closest computer training centre to the station side of Bagdogra, teaching CCA (${d("CCA")}), DCA (${d("DCA")}), ADCA (${d("ADCA")}), web design, ecommerce, digital marketing and AI prompt engineering, Monday to Saturday, 11 AM to 9 PM, with a monthly fee plan.`,
+    updated: "2026-10-14",
+    body: (ctx) => [
+      { type: "h2", text: "From Station More to CODE" },
+      {
+        type: "p",
+        text: "Station More is the junction by Bagdogra railway station on the main road. The centre is about 1.5 km into town: five minutes by toto or bike, or a fifteen-minute walk. Students who come in by local train get down at Bagdogra and are at the centre before a bus from Siliguri would have cleared Matigara.",
+      },
+      { type: "h2", text: "Who joins from the station side" },
+      {
+        type: "ul",
+        items: [
+          `School students from the Station Para lanes after Class 10 or 12 — usually ${ctx.c("CCA")} first, then ${ctx.c("DCA")}; the guide on [which course after Class 10 or 12](/guides/which-computer-course-after-class-10-or-12) explains the order.`,
+          `Students arriving by train from stations down the line who want a centre they can walk to from the platform.`,
+          `Traders and transport operators around the station who want to be found on Google Maps and WhatsApp — ${ctx.c("Digital Marketing Basics", "digital marketing")}.`,
+          `Anyone who wants to build a website rather than only use software — ${ctx.c("Web Design Basic", "Web Design")}.`,
+        ],
+      },
+      { type: "h2", text: "Batch times" },
+      {
+        type: "p",
+        text: "With the centre minutes away, students from Station More take whichever slot fits: a late-afternoon batch after school, or 7 PM after the shop shuts. Students timing a batch to a train should say so on WhatsApp; the start time can usually be matched.",
+      },
+      ...HOW_WE_TEACH(ctx),
+      VISIT,
+      {
+        type: "faq",
+        items: [
+          { q: "Is there a computer centre near Bagdogra railway station?", a: "Yes. CODE — Computer & Digital Excellence is about 1.5 km from Station More, on Lokenath Nagar Road beside K1 Fitness Gym — a five-minute toto ride or a fifteen-minute walk from the station." },
+          { q: "Can I walk to CODE from the station?", a: "Yes. It is about 1.5 km in a straight line, roughly fifteen minutes on foot through Bagdogra town. Ask for K1 Fitness Gym on Lokenath Nagar Road." },
+          { q: "Which course should a beginner from Station More start with?", a: "CCA — the Certificate in Computer Application. It starts from the keyboard and mouse and covers Windows, Word, Excel, PowerPoint, email and the internet. DCA follows for an office-ready diploma." },
+          { q: "Can I pay the fee monthly?", a: "Yes. Every course has a full-payment fee and a monthly plan with one installment per month of the course, and a printed receipt for every payment." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "putimari",
+    name: "Putimari",
+    aka: ["Putimari, Gossaipur", "Putimari Bagdogra"],
+    nameBn: "পুটিমারি",
+    nameHi: "पुटिमारी",
+    seoTitle: "Computer Course near Putimari, Bagdogra — CCA, DCA, ADCA",
+    description:
+      "Computer classes near Putimari (Gossaipur gram panchayat, Bagdogra): CODE is about 3 km away on Lokenath Nagar Road. CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI in small batches, Bengali and Hindi explanation, monthly fee plans.",
+    distance: "about 3 km",
+    travel: "10 minutes by bike or toto",
+    route: "Ride towards Upper Bagdogra and into Bagdogra town; ask for K1 Fitness Gym on Lokenath Nagar Road — the centre is beside it.",
+    courses: ["CCA", "DCA", "ADCA"],
+    tldr: ({ d }) =>
+      `Putimari, a village in the Gossaipur gram panchayat on the Bagdogra side, is about 3 km from CODE — Computer & Digital Excellence, the computer training centre on Lokenath Nagar Road in Bagdogra — roughly ten minutes by bike or toto. Students from Putimari join CCA (${d("CCA")}) as a first course, DCA (${d("DCA")}) for an office diploma and ADCA (${d("ADCA")}) for a technical one. Classes are explained in Bengali, Hindi or English, Monday to Saturday, 11 AM to 9 PM, with a monthly fee plan.`,
+    updated: "2026-10-14",
+    body: (ctx) => [
+      { type: "h2", text: "Getting to CODE from Putimari" },
+      {
+        type: "p",
+        text: "Putimari lies about 3 km from the centre, on the Gossaipur side of Upper Bagdogra. Bikes and totos cover it in around ten minutes; the road into Bagdogra town brings you to Lokenath Nagar Road, where the centre sits beside K1 Fitness Gym. There is no need to go to Siliguri for a computer course — Bagdogra is nearer and the batches are smaller.",
+      },
+      { type: "h2", text: "A first computer course for Putimari students" },
+      {
+        type: "ul",
+        items: [
+          `Most students from Putimari have not sat a formal computer class before, so ${ctx.c("CCA")} is the usual start: Windows, Word, Excel, PowerPoint, email and typing, from the first key press. The [beginner's guide](/guides/basic-computer-course-for-beginners) explains what it covers.`,
+          `${ctx.c("DCA")} — the six-month diploma that clerical, data-entry and computer-operator job forms ask for; see the [DCA course guide](/guides/dca-course-details).`,
+          `${ctx.c("ADCA")} — for students who want programming, databases and web basics in one programme after Class 12 or college.`,
+        ],
+      },
+      { type: "h2", text: "Classes in Bengali and Hindi" },
+      {
+        type: "p",
+        text: "Every class is explained in Bengali, Hindi or English, whichever the batch is comfortable in, and the trainer switches when a student asks. Parents are welcome to sit in on the first class. A late-afternoon batch suits school students from Putimari; working adults take 7 PM.",
+      },
+      ...HOW_WE_TEACH(ctx),
+      VISIT,
+      {
+        type: "faq",
+        items: [
+          { q: "Is there a computer training centre near Putimari?", a: "CODE — Computer & Digital Excellence in Bagdogra is about 3 km from Putimari, around ten minutes by bike or toto, on Lokenath Nagar Road beside K1 Fitness Gym." },
+          { q: "Are classes taught in Bengali?", a: "Yes. Classes are explained in Bengali, Hindi or English, whichever the batch is comfortable in." },
+          { q: "Do I need to know anything about computers before joining CCA?", a: "No. CCA starts from the keyboard and mouse and assumes nothing. Every student works at their own computer in the lab during class." },
+          { q: "Can I pay the fee monthly?", a: "Yes. Every course has a full-payment fee and a monthly plan with one installment per month of the course, and a printed receipt for every payment." },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "buribalason",
+    name: "Buribalason",
+    aka: ["Buri Balason", "Buriballavson", "Buri Balason bridge"],
+    nameBn: "বুড়ি বালাসন",
+    nameHi: "बुड़ी बालासन",
+    seoTitle: "Computer Course near Buribalason (Bagdogra–Siliguri Road)",
+    description:
+      "Computer training near Buribalason on the Bagdogra–Siliguri road: CODE in Bagdogra is about 3 km away with CCA, DCA, ADCA, web design, ecommerce, digital marketing and AI classes, monthly fee plans, Mon–Sat 11 AM–9 PM.",
+    distance: "about 3 km",
+    travel: "10 minutes by bike or bus",
+    route: "Take the Bagdogra–Siliguri road west across the Buri Balason bridge into Bagdogra town; in town turn to Lokenath Nagar Road — the centre is beside K1 Fitness Gym.",
+    courses: ["DCA", "CCA", "Ecommerce Expert (Industry Level)"],
+    tldr: ({ d }) =>
+      `Buribalason — the settlement by the Buri Balason river crossing on the Bagdogra–Siliguri road — is about 3 km from CODE — Computer & Digital Excellence in Bagdogra, around ten minutes by bike or bus. Students from the Buribalason side are nearer to Bagdogra than to Siliguri town and join CCA (${d("CCA")}), DCA (${d("DCA")}), ADCA (${d("ADCA")}), web design, ecommerce, digital marketing and AI prompt engineering. Batches run Monday to Saturday, 11 AM to 9 PM, with a monthly fee plan.`,
+    updated: "2026-10-14",
+    body: (ctx) => [
+      { type: "h2", text: "Getting to CODE from Buribalason" },
+      {
+        type: "p",
+        text: "Buribalason sits on the main Bagdogra–Siliguri road on the Bagdogra side of the river, so the trip is a straight ride west: across the bridge, into Bagdogra town and on to Lokenath Nagar Road, beside K1 Fitness Gym. Buses and shared autos on the road stop in Bagdogra; a bike does it in about ten minutes.",
+      },
+      { type: "h2", text: "Courses Buribalason students choose" },
+      {
+        type: "ul",
+        items: [
+          `${ctx.c("DCA")} — the six-month diploma that office, clerical and data-entry notices name; compare it with ADCA in [DCA vs ADCA](/guides/dca-vs-adca).`,
+          `${ctx.c("CCA")} — for beginners and home-makers starting from zero.`,
+          `${ctx.c("Ecommerce Expert (Industry Level)", "Ecommerce")} and ${ctx.c("Digital Marketing Basics", "digital marketing")} — for the shops and small businesses along the highway that want to sell on Amazon, Flipkart, Meesho or WhatsApp; the [guide for shop owners](/guides/computer-courses-for-shop-owners-sell-online) says which to take first.`,
+        ],
+      },
+      { type: "h2", text: "Batch times" },
+      {
+        type: "p",
+        text: "Students on the Siliguri side of Buribalason who attend a college in town take a 5–6 PM batch on the way home; shop owners along the road take a late-morning or 7 PM batch. Ask on WhatsApp for a batch with a seat.",
+      },
+      ...HOW_WE_TEACH(ctx),
+      VISIT,
+      {
+        type: "faq",
+        items: [
+          { q: "Is there a computer institute near Buribalason?", a: "CODE — Computer & Digital Excellence in Bagdogra is about 3 km from Buribalason, around ten minutes by bike or bus along the Bagdogra–Siliguri road, on Lokenath Nagar Road beside K1 Fitness Gym." },
+          { q: "Is Bagdogra or Siliguri closer for a course from Buribalason?", a: "Bagdogra. The centre is about 3 km west along the same road; Siliguri town is further east and busier in the evening." },
+          { q: "Which course should a shop on the highway take to sell online?", a: "The ecommerce course if you want to list on Amazon, Flipkart or Meesho; Digital Marketing Basics if you want more customers for a physical shop through Google Maps and WhatsApp." },
+          { q: "What are the class timings?", a: "Monday to Saturday, 11 AM to 9 PM; Sunday closed." },
         ],
       },
     ],

@@ -9,7 +9,7 @@ import { ADDRESS, HOURS, HOURS_CLOSED, whatsappLink } from "@/lib/site";
 export const revalidate = 300;
 
 const DESCRIPTION =
-  "CODE has one computer training centre, in Bagdogra. These pages are for students travelling from Upper Bagdogra, Bihar More, Bhujiapani, Kestopur, Gossaipur, Shibmandir, Medical, Matigara, Siliguri and Naxalbari: distance, the road in, who joins from there and which batch time fits.";
+  "CODE has one computer training centre, in Bagdogra. These pages are for students travelling from Upper Bagdogra, Station More, Bihar More, Bhujiapani, Putimari, Gossaipur, Buribalason, Kestopur, Shibmandir, Medical, Matigara, Siliguri and Naxalbari: distance, the road in, who joins from there and which batch time fits.";
 
 export const metadata: Metadata = {
   title: "Computer Courses Near You — Bagdogra, Siliguri & Around",
