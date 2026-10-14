@@ -46,10 +46,11 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
-  // Search Console / Bing Webmaster HTML-tag verification, pasted into env so
-  // the owner can verify without a code change.
+  // Search Console / Bing Webmaster HTML-tag verification. Tokens are public
+  // (they ship in the HTML), so the Google one is committed as a default; an
+  // env var still overrides it if the property is ever re-verified.
   verification: {
-    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "yIlToXxRU7xJTgpVL6Z5Kd2NV7A50thqxmupcdIj75M",
     ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
       : {}),
