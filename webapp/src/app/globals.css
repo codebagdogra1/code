@@ -1371,3 +1371,25 @@ html::-webkit-scrollbar-thumb:hover {
 .s-reviews-track::-webkit-scrollbar {
   display: none;
 }
+
+/* Mobile nav drawer (right-hand slide-in with dimmed, blurred backdrop) */
+@keyframes s-drawer-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes s-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.s-drawer-panel {
+  animation: s-drawer-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.s-drawer-backdrop {
+  animation: s-fade-in 0.2s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-drawer-panel,
+  .s-drawer-backdrop {
+    animation: none;
+  }
+}

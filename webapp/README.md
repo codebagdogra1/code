@@ -63,6 +63,12 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
      serverless, e.g. Neon's pooler). This is the same database the old app used.
    - `AUTH_SECRET` — a long random string: `openssl rand -base64 32`
    - `NEXT_PUBLIC_SITE_URL` — the public origin (used for canonicals, sitemap, JSON-LD)
+   - `GOOGLE_MAPS_API_KEY` (optional) — a Google Cloud key with **Places API (New)**
+     enabled. Powers the live Google rating badge and the reviews slider (reviewer
+     names, photos, stars). Without it the site shows the curated reviews in
+     `src/lib/google-reviews.ts` and the rating constants in `src/lib/site.ts`.
+   - `GOOGLE_PLACE_ID` (optional) — pins the listing's Place ID; otherwise it is
+     looked up once by text search and cached.
 
 3. **Create / update the tables** (additive — safe to re-run):
    ```bash
@@ -82,7 +88,8 @@ prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
 ## Deploy on Netlify
 
 - Push this repo. In the Netlify site settings set **Base directory = `webapp`**.
-- Add `DATABASE_URL`, `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL` as environment variables.
+- Add `DATABASE_URL`, `AUTH_SECRET` and `NEXT_PUBLIC_SITE_URL` as environment variables
+  (plus `GOOGLE_MAPS_API_KEY` for live Google reviews).
 - The official Next.js runtime plugin (in `netlify.toml`) handles the rest.
 
 ## Moving to Vercel later
