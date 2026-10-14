@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AdminNav, MobileMenu } from "@/components/AdminNav";
 import { Icon } from "@/components/ro/Icon";
 import { LogoutButton } from "@/components/LogoutButton";
+import { requireAdminPage } from "@/lib/admin-guard";
 
 // Direction contract for THE RECORDS OFFICE — emitted as a real HTML comment so it
 // survives the production build and can be grepped/audited (seed 23faa872).
@@ -22,7 +23,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
   review, the verdict, and DESIGN.md.
 -->`;
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  // Every dashboard page requires a signed admin session (src/proxy.ts checks first).
+  await requireAdminPage();
+
   return (
     <div className="ro flex min-h-screen">
       <div hidden dangerouslySetInnerHTML={{ __html: DIRECTION_CONTRACT }} />

@@ -1,3 +1,5 @@
+// NOTE: this file must live in src/ (next to app/) or Next.js 16 silently ignores
+// it and every /admin page and /api/admin route becomes public.
 import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 

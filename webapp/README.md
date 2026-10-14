@@ -37,7 +37,7 @@ src/
     course-content.ts  per-course copy (summary, syllabus, outcomes) keyed by catalogue name
     content.ts         read models for the public pages
     seo.ts             canonical URL + JSON-LD builders
-  proxy.ts   route guard for /admin and /api/admin/* (Next 16 renamed middleware→proxy)
+  src/proxy.ts  route guard for /admin and /api/admin/* (Next 16 renamed middleware→proxy)
 prisma/schema.prisma   models mapped to the EXISTING tables via @map/@@map, plus
                        site_media, gallery_images, offers, site_events, enquiries
 ```
